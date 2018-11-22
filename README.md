@@ -40,4 +40,4 @@ The key features include:
 Please read the Introduction pdf to provide an orientation to this library.
 
 
-![IDE Screenshot](http://resources/IDE_example.png)
+![IDE Screenshot](https://github.com/PISL/omnis-infra/blob/master/resources/IDE_example.png)
