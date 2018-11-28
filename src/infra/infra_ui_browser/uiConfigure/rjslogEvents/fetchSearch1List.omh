@@ -1,0 +1,3 @@
+Do toValues.$GetTimePeriods() Returns ilSearch1
+;  No blank line for date options - a date range must always be present.
+Do ilSearch1.$search($ref.code='TODAY',1,0,0,0)

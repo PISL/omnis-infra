@@ -1,0 +1,26 @@
+Do inherited
+
+Calculate cnIntervalMonth as 1
+Calculate cnIntervalWeek as 2
+Calculate cnIntervalDays as 3
+
+Calculate idFrom as #D-6     ;; 1 week, Mon-Sun
+Calculate idTo as #D
+Do $DefineList(ilUsers,'infra.tuaUsers')
+Do method $refreshUsers
+
+Do $DefineList(ilLogOfLogins,'infra.tuaLogAccess')
+Do ilLogOfLogins.$cols.$add('duration_s',kInteger,k32bitint)     ;; seconds
+Do ilLogOfLogins.$cols.$add('duration',kCharacter,kSimplechar,100)
+Do ilLogOfLogins.$cols.$add('interval_s',kInteger,k32bitint)     ;; seconds
+Do ilLogOfLogins.$cols.$add('interval',kCharacter,kSimplechar,100)
+
+Do ilLogOfLogins.$WhichDatabase() Returns icConnectedTo
+
+Do toValues.$initLocal('IP_FILTER_BUSHM') Returns ilIpAddressFilter
+
+Calculate inFetchLogOption as 0     ;; within period
+
+Do $cinst.$refresh()
+
+Do $cinst.$behaviour()

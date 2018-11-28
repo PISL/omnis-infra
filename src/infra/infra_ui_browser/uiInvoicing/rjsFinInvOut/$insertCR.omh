@@ -1,0 +1,36 @@
+Calculate inCurrentTab as cnTabHeader
+Calculate $cinst.$objs.TabControl_FOH.$currenttab as 1
+Calculate $cinst.$objs.PagedPane.$currentpage as cnTabHeader
+
+Calculate $cinst.icDisplayMessage as ''
+Calculate $cinst.icMode as 'I'     ;; insert
+
+Do method setStatusChoices (kTrue)     ;; pbIsNew=kTrue
+Calculate ilCustomers.$line as 0
+
+Do irCurrentRecord.$clear()
+Do irCurrentRecord.$NextInvNo(trGroupOrg.GO_NAME_SHORT,kFalse)     ;; fetches the next sequence into FOH_INV_NO without updating the db; done later during the $save in case the user cancels or another user creates an invoice in the meantime
+If irCurrentRecord.irErrorSQL.NativeErrorText<>''
+	Calculate icDisplayMessage as irCurrentRecord.irErrorSQL.NativeErrorText
+End If
+
+Calculate irCurrentRecord.FOH_GO_REF as $ctask.trGroupOrg.GO_SEQ
+Calculate irCurrentRecord.FOH_DATE as #D
+Calculate irCurrentRecord.FOH_STATUS as ilStatusChoice.RFG_VALUE
+;  If ilSearch1.EO_SEQ>0
+;  Do ilCustomers.$search($ref.EO_SEQ=ilSearch1.EO_SEQ,1,0,0,0)
+;  Calculate irCurrentRecord.FOH_EO_REF as ilCustomers.EO_SEQ
+;  Calculate irCurrentRecord.FOH_CUST_NAME as ilCustomers.EO_NAME
+;  Calculate irCurrentRecord.FOH_ADDR_SHIP as ilCustomers.EO_ADDR_SHIP
+;  Calculate irCurrentRecord.FOH_ADDR_BILL as ilCustomers.EO_ADDR_BILL
+;  End If
+
+Do ilChains.$clear()
+Do ilDetails.$clear()
+Calculate ilOriginalDetails as ilDetails
+
+If ilDisplayRecords.$linecount>0
+	Calculate ilDisplayRecords.$line as 0
+End If
+
+Do $cinst.$behaviour()

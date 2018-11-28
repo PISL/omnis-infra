@@ -1,0 +1,32 @@
+;  overloaded to allow for submission and details insert and update
+Calculate icDisplayMessage as ''
+
+If icMode='I'|icMode='E'
+	Do irCurrentRecord.$validation() Returns lbProceed
+	If not(lbProceed)
+		Calculate icDisplayMessage as irCurrentRecord.icValidationMessage
+	Else
+		If $ctask.trGroupOrg.GO_NAME_SHORT='OMNISWORLD'
+			If irCurrentRecord.FOH_CURRENCY<>''
+				;  good
+			Else
+				Do toStrings.$StringTableEntry('MSG_MISSINGCURRENCY',icDisplayMessage,'You must have a currency symbol to present the correct banking details.')
+				Quit method
+			End If
+		End If
+		
+		;  If icMode='I'     ;; insert
+		Do ioRelationshipLogic.$saveParentChild(irCurrentRecord,irOriginalHeader,ilDetails,ilOriginalDetails,irParameters.Delegate) Returns lbOK
+		If lbOK
+			Calculate irOriginalHeader as irCurrentRecord
+			Calculate ilOriginalDetails as ilDetails
+			Calculate icMode as ''
+		Else
+			Calculate icDisplayMessage as ioRelationshipLogic.icLastError
+			Quit method kFalse
+		End If
+	End If
+End If
+
+
+Quit method lbOK

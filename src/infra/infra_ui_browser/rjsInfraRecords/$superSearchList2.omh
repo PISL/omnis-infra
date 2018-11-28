@@ -1,0 +1,21 @@
+If ilSearch2.$linecount>1
+	Calculate $cinst.$objs.ilSearch2.$visible as kTrue
+	Calculate $cinst.$objs.label_ilSearch2.$visible as kTrue
+Else If ilSearch2.icPrimaryKey<>''
+	If not(isclear(ilSearch2.1.[ilSearch1.icPrimaryKey]))
+		Calculate $cinst.$objs.ilSearch2.$visible as kTrue
+		Calculate $cinst.$objs.label_ilSearch2.$visible as kTrue
+	End If
+End If
+
+Calculate $cinst.$objs.label_ilSearch2.$text as pcLabelSearch
+
+If ilSearch2.$colcount
+	Do ilSearch2.$cols.$findname(pcDisplayCols) Returns liColRef
+	If liColRef
+		Calculate $cinst.$objs.ilSearch2.$listcolumn as liColRef.$ident
+	Else
+		Breakpoint
+		Calculate $cinst.$objs.ilSearch2.$listcolumn as 1
+	End If
+End If

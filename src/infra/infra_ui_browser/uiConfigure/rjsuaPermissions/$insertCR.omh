@@ -1,0 +1,3 @@
+;  may be called from pbAdd or enterData
+Do ilRolePermissions.$clear()
+Do inherited

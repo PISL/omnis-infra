@@ -1,0 +1,22 @@
+Do method NewRecord (kTrue)     ;; irCopyNode
+Calculate ilNow as ilPrevious
+;  we maintain a $selected line in ilPrevious for cosmetic reasons but it has no place in ilNow
+Do ilNow.$search(0)     ;; clear selected line, but keep current line
+
+;  the commented out line is so simple but we are getting a problem with the statement object of the list getting "lost"
+;  producing an omnis error when trying to do a $prepare()
+Do ilPrevious.$clear()
+Do ilPrevious.$merge(ilNavCache.[ilNavCache.$linecount].previous)
+;  $merge copies the data but no list attributes like $line or $selected
+
+Calculate lnLineNo as ilNavCache.[ilNavCache.$linecount].currentLineNo
+Calculate ilPrevious.[lnLineNo].$selected as kTrue
+Calculate irParent as ilPrevious.[lnLineNo]
+
+Do ilNavCache.$remove(ilNavCache.$linecount)
+
+Do method SetNavigationPath
+
+Do method ChildNodeCounts
+
+Do method ClickNow     ;; populates irCurrentRow for display on right of screen

@@ -1,0 +1,36 @@
+On evClick     ;; Event Parameters - pRow ( Itemreference )
+	Do $cinst.$behaviour()
+	Do $cinst.$redraw()
+	
+On evDoubleClick
+	Do $windows.wTaskStats.$openonce('*',kWindowNormal) Returns lrefStatsWin
+	Do lrefStatsWin.$init(ilLogOfLogins)
+	
+On evHeaderClick     ;; Event Parameters - pRow ( Itemreference )
+	Calculate lnColNo as pColumnNumber
+	Switch pColumnNumber
+		Case 1     ;; ULA_LOGIN
+			Calculate lcSortCol as 'ULA_LOGIN'
+		Case 2     ;; ULA_LOGOUT
+			Calculate lcSortCol as 'ULA_LOGOUT'
+		Case 3     ;; duration
+			Calculate lcSortCol as 'duration_s'
+		Case 4     ;; interval
+			Calculate lcSortCol as 'interval_s'
+		Case 5     ;; ULA_IP_ADDRESS
+			Calculate lcSortCol as 'ULA_IP_ADDRESS'
+		Default     ;; breakp
+			Breakpoint
+	End Switch
+	
+	If pColumnNumber=lnlastColumnSort
+		Calculate ibSortDescending as not(ibSortDescending)
+	Else
+		Calculate ibSortDescending as kFalse
+	End If
+	
+	Do ilLogOfLogins.$sort($ref.[lcSortCol],ibSortDescending)
+	Calculate lnlastColumnSort as pColumnNumber
+	
+	Do $cinst.$behaviour()
+	Do $cinst.$redraw()

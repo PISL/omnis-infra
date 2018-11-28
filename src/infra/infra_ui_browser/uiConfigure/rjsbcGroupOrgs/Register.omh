@@ -1,0 +1,92 @@
+Calculate icDisplayMessage as ''
+
+Do method RationaliseCorporatePersons
+If icDisplayMessage<>''
+	Quit method
+End If
+
+Do irServiceInfo.$clear()
+
+Switch inRegisterType
+	Case 0     ;; unset
+		;  OK message Invalid submission {User type not specified.}
+		Do toStrings.$StringTableEntry('MSG_INVALIDSUBMISSION',lcMessage,'INVALID SUBMISSION')
+		Calculate icDisplayMessage as con(lcMessage,kCr)
+		Do toStrings.$StringTableEntry('MSG_UNSPECIFIEDUSER',lcMessage,'User type not specified')
+		Calculate icDisplayMessage as con(icDisplayMessage,lcMessage)
+		Quit method
+		
+	Case 1,2     ;; organisation & sole trader
+		;  validate the GO record
+		If inRegisterType=1|inRegisterType=2
+			Do irCurrentRecord.$validateRegistration(inRegisterType) Returns lbProceed
+			If not(lbProceed)
+				;  OK message Invalid submission {[irCurrentRecord.icValidationMessage]}
+				Do toStrings.$StringTableEntry('MSG_INVALIDSUBMISSION',lcMessage,'INVALID SUBMISSION')
+				Calculate icDisplayMessage as con(lcMessage,kCr,irCurrentRecord.icValidationMessage)
+				;  Sound bell
+				Quit method
+			End If
+			Do ilCorporatePerson.$validation() Returns lbProceed
+			If not(lbProceed)
+				;  OK message Invalid submission {[ilCorporatePerson.icValidationMessage]}
+				Do toStrings.$StringTableEntry('MSG_INVALIDSUBMISSION',lcMessage,'INVALID SUBMISSION')
+				Calculate icDisplayMessage as con(lcMessage,kCr,ilCorporatePerson.icValidationMessage)
+				;  Sound bell
+				Quit method
+			End If
+			
+			Calculate irCurrentRecord.UserType as inRegisterType
+			Do oService.$registerOrg(lrResult,irServiceInfo,row(irCurrentRecord,ilCorporatePerson))
+			
+			If irServiceInfo.httpStatusCode=200
+				If lrResult.GO_MEC_ID<>''
+					Do irCurrentRecord.$fetch_pk() Returns lbOK     ;; force re-read before updating
+					If irCurrentRecord.GO_SEQ>0
+						Calculate irCurrentRecord.GO_NAME_FULL as irCurrentRecord.GON_NAME_FULL
+						Calculate irCurrentRecord.GO_MEC_ID as lrResult.GO_MEC_ID
+						Calculate irCurrentRecord.GO_DDN_AP1 as lrResult.GO_DDN_AP1
+						Calculate irCurrentRecord.GO_DDN_AP2 as lrResult.GO_DDN_AP2
+						Calculate irCurrentRecord.GO_RRS as lrResult.RRS
+						Calculate irCurrentRecord.GO_MEC_TYPE as inRegisterType     ;; a FYI column
+						Do irCurrentRecord.$update() Returns lbOK
+						If lbOK
+							Calculate irOriginalRecord as irCurrentRecord
+							Calculate ilDisplayRecords.[ilDisplayRecords.$line] as $cinst.irCurrentRecord
+							Calculate icMode as ''
+						End If
+					End If     ;; irCurrentRecord.GO_SEQ>0
+				End If     ;; lrResult.GO_MEC_ID<>''
+			End If     ;; irServiceInfo.httpStatusCode=200
+			
+		End If     ;; inRegisterType=1|inRegisterType=2
+		
+	Case 3
+		Do irCurrentRecord.$validateRegistration(inRegisterType) Returns lbProceed
+		If not(lbProceed)
+			;  OK message Invalid submission {[irCurrentRecord.icValidationMessage]}
+			Do toStrings.$StringTableEntry('MSG_INVALIDSUBMISSION',lcMessage,'INVALID SUBMISSION')
+			Calculate icDisplayMessage as con(lcMessage,kCr,irCurrentRecord.icValidationMessage)
+			;  Sound bell
+			Quit method
+		End If
+		
+	Default
+		Breakpoint
+		
+End Switch
+
+If irServiceInfo.httpStatusCode=200
+	;  Breakpoint
+	;  OK message Service call success ! {MEC ID = [lrResult.GO_MEC_ID]}
+	Do toStrings.$StringTableEntry('MSG_SERVCALL_SUCCESS',lcMessage,'Service call successful')
+	Calculate icDisplayMessage as con(lcMessage,', MEC ID = ',lrResult.GO_MEC_ID)
+Else
+	Calculate lrHeaderInfo as irServiceInfo.responseHeaders
+	;  OK message Service error {status code [lrServiceInfo.httpStatusCode]:  [lrServiceInfo.httpStatusText][kCr][lrHeaderInfo.omniserror]}
+	Do toStrings.$StringTableEntry('MSG_SERVCALL_FAILED',lcMessage,'Service call FAILURE ! ')
+	Calculate icDisplayMessage as con(lcMessage,kCr,irServiceInfo.httpStatusCode,': ',irServiceInfo.httpStatusText,kCr,lrHeaderInfo.omniserror)
+End If
+
+Do $cinst.$behaviour()
+Do $cinst.$redraw()

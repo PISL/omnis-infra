@@ -1,0 +1,2 @@
+;  this should be overloaded in table classes where auditing is required
+Quit method 0     ;; default is no audit trail

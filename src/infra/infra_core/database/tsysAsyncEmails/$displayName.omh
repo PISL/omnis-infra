@@ -1,0 +1,1 @@
+Calculate $cinst.DisplayName as con($cinst.AE_GO_REF,': ',$cinst.AE_SUBJECT)

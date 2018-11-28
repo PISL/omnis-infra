@@ -1,0 +1,11 @@
+If pnMaxValue>0
+	Calculate inProgressMax as pnMaxValue
+	Calculate $cinst.$objs.ProgressBar.$visible as kTrue
+	Calculate $cinst.$objs.ProgressBar.$::max as inProgressMax
+	Calculate inProgressValue as 0
+	Do $cinst.$clientcommand("lockui",row(kTrue))     ;; lock ui
+	Do $cinst.$objs.ProgressBar.$sendcarryon.$assign(kTrue)
+Else
+	Do $cinst.$clientcommand("lockui",row())     ;; unlock ui
+	Calculate $cinst.$objs.ProgressBar.$visible as kFalse
+End If

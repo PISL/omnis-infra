@@ -1,0 +1,11 @@
+On evClick
+	Calculate icSepThou as ilSepThou.char
+	If icSepThou=icSepDec
+		Do toStrings.$StringTableEntry('MSG_THOUSEPARATOR',icDisplayMessage,'thousands separator')
+		Calculate irefParent.icDisplayMessage as con(icDisplayMessage,' = ')
+		Do toStrings.$StringTableEntry('MSG_DECSEPARATOR',icDisplayMessage,'decimal separator')
+		Calculate irefParent.icDisplayMessage as con(irefParent.icDisplayMessage,icDisplayMessage)
+	Else
+		Calculate irefParent.icDisplayMessage as ''
+	End If
+	Do $cinst.$behaviour()

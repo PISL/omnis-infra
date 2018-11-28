@@ -1,0 +1,9 @@
+Do ilSearch1.$fetchOurCustomers()
+Do ilSearch1.$sort($ref.EO_NAME,0)
+Do toStrings.$StringTableEntry('rm_AllCustomers',lcMessage,'All Customers')
+Do ilSearch1.$addbefore(1,#NULL,#NULL,lcMessage)
+If pnSelect>0
+	Do ilSearch1.$search($ref.EO_SEQ=pnSelect,1,0,0,0)
+Else
+	Calculate ilSearch1.$line as 1
+End If

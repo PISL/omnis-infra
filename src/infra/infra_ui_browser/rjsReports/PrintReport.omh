@@ -1,0 +1,15 @@
+Begin reversible block
+	Calculate iAuthor as 'Platform Independent Systems Ltd'
+	Calculate iTitle as ilDisplayRecords.reportName
+	Calculate iSubject as ilDisplayRecords.reportDesc
+End reversible block
+
+If ilDisplayRecords.reportCode<>''
+	If inPrintDestination<10
+		Do method printPDF
+	Else
+		Do method generateChart
+	End If
+Else
+	Calculate icDisplayMessage as 'ignored'
+End If

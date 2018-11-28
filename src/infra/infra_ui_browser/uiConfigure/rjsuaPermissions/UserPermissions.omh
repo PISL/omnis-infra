@@ -1,0 +1,17 @@
+Do llPrivsUsedInThisForm.$cols.$add('permission',kCharacter,kSimplechar,100)
+Do llPrivsUsedInThisForm.$cols.$add('colName',kCharacter,kSimplechar,100)
+
+Do llPrivsUsedInThisForm.$add('per_insert','canInsert')
+Do llPrivsUsedInThisForm.$add('per_delete','canDelete')
+Do llPrivsUsedInThisForm.$add('per_update','canEdit')
+Do llPrivsUsedInThisForm.$add('rp_insert','canAddRolePermission')
+Do llPrivsUsedInThisForm.$add('rp_delete','canDeleteRolePermission')
+
+Do $cinst.$setPermissions(llPrivsUsedInThisForm)     ;; irUserRights
+
+Do $cinst.$setControlEvent(99)     ;; reset
+Do $cinst.$setControlEvent(irUserRights.canAddRolePermission,nam(ilChoiceOfRoles),evDrag,nam(ilRolePermissions),evDrop)
+Do $cinst.$setControlEvent(irUserRights.canDeleteRolePermission,nam(ilRolePermissions),evDrag,nam(ilChoiceOfRoles),evDrop)
+Do $cinst.$setControlEvent(100)     ;; apply
+
+;  Calculate $cinst.$objs.PER_SU.$visible as trCurrUser.USR_SU

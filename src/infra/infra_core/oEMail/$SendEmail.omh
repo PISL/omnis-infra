@@ -1,0 +1,225 @@
+;  2015-04-30 refactoring - removing from tkSuper/rtSuper
+;  1. pTo     ;; Field ref - char or list
+;  2. pSubj     ;; char(255)
+;  3. pBody     ;; char(10,000,000)
+;  4. pCC     ;; Field ref - char or list
+;  5. pBCC     ;; Field ref - char or list
+;  6. pEnclosure     ;; Field ref - list, 2 cols: filename , full file path
+;  7. pHTML     ;; char(10,000,000)
+;  8. pSendAsync     ;; boolean, default kTrue
+;  9. pVhostRow     ;; row, optional, used when called from $ServerMessage
+
+;  11. pFromAddress     ;; Field ref - char
+;  12. pFromName     ;; Field ref - char
+Calculate lnPos1 as pos('$DynamicSession',pBody)
+Calculate lnPos2 as pos('fail',pBody)
+If lnPos1>0&lnPos2>0&lnPos1<lnPos2
+	;  failed to connect to database
+	Send to trace log {Send email failure:  [lcOutSubject]  [lcOutBody]}
+	Calculate lbNoConnectionToDb as kTrue
+	Do tConstants.$cols.$findname('WebSiteEmail') Returns liColRef
+	If liColRef
+		If tConstants.WebSiteEmail<>''
+			;  this method can proceed
+			If pSendAsync
+				;  via scheduler email - this will fail     ;; because it relies on sending message to ssysAsyncEmails
+				Quit method
+			Else
+				;  direct send using SMTPSend should work
+			End If
+		Else
+			Quit method
+		End If
+	Else
+		Quit method
+	End If
+End If
+
+Calculate ibCaptureEmailProtocolExchange as pbLogProtocolExchange
+Calculate ibVerifyCertificate as kFalse     ;; default
+
+If pcFromCode<>''
+	Do method SetServerFromAttributes (pcFromCode)
+Else If ccOutServer=''
+	Breakpoint
+End If
+
+;  added 23 JUN 17 RSM     ;; these values are default - they may be over written later
+Calculate lcMailFromAddress as ccOutFrom
+Calculate lcMailFromName as ccOutFromName
+
+Do llOutToAddressList.$cols.$add('ADDRESS',kCharacter,kSimplechar,255)
+Calculate llOutCCAddressList as llOutToAddressList
+Calculate llOutBCCAddressList as llOutToAddressList
+Do llOutEnclosureList.$cols.$add('Filename',kCharacter,kSimplechar,255)
+Do llOutEnclosureList.$cols.$add('Pathname',kCharacter,kSimplechar,1000)
+
+Do llOutToAddressList.$clear()
+Do llOutCCAddressList.$clear()
+Do llOutBCCAddressList.$clear()
+
+;  email TO addresses
+If pTo.$type=kCharacter
+	If pTo<>''
+		Do method StringAddresses (pTo,llOutToAddressList)
+	Else If ccStaticTo<>''
+		Do method StringAddresses (ccStaticTo,llOutToAddressList)
+	End If
+Else
+	If pTo.1.C1<>''
+		Do llOutToAddressList.$merge(pTo)
+	End If
+End If
+
+;  CC email addresses
+If pCC.$type=kCharacter
+	If pCC<>''
+		Do method StringAddresses (pCC,llOutCCAddressList)
+	Else If ccStaticCC<>''
+		Do method StringAddresses (ccStaticCC,llOutCCAddressList)
+	End If
+Else
+	If pCC.1.C1<>''
+		Do llOutCCAddressList.$merge(pCC)
+	End If
+End If
+
+;  BCC email addresses
+If pBCC.$type=kCharacter
+	If pBCC<>''
+		Do method StringAddresses (pBCC,llOutBCCAddressList)
+	Else If ccStaticBCC<>''
+		Do method StringAddresses (ccStaticBCC,llOutBCCAddressList)
+	End If
+Else
+	If pBCC.1.C1<>''
+		Do llOutBCCAddressList.$merge(pBCC)
+	End If
+End If
+
+If pEnclosure.$type=kCharacter
+	If pEnclosure<>''
+		;  this is HTML
+		;  Do iOutEnclosureList.$add(pEnclosure)
+	End If
+Else
+	If pEnclosure.1.C1<>''
+		Do llOutEnclosureList.$merge(pEnclosure)
+	End If
+End If
+
+Calculate lcOutStatusCall as
+Calculate lnOutPriority as
+Calculate lcOutSubject as pSubj
+Calculate lcOutBody as pBody
+
+Do llExtraHeaders.$cols.$add('name',kCharacter,kSimplechar,100)
+Do llExtraHeaders.$cols.$add('value',kCharacter,kSimplechar,255)
+;  Breakpoint
+;  If pReplyToAddress=''&ccOutFrom<>''
+;  Calculate pReplyToAddress as ccOutFrom
+;  End If
+;  If pReplyToName=''&ccOutFromName<>''
+;  Calculate pReplyToName as ccOutFromName
+;  End If
+If pReplyToAddress<>''
+	Do llExtraHeaders.$add('Reply-To',con(pReplyToName,'<',pReplyToAddress,'>'))
+End If
+
+If not(lbFromExplicitlySet)
+	;  to avoid notation errors, check that we have a row
+	Do pVhostRow.$cols.$findname('PGS_NAME') Returns liColRef
+	If liColRef
+		;  led by PageSkins
+		If pVhostRow.PGS_NAME<>''
+			;  called from $AsyncEmails
+			If pos('DEV',upp(tConstants.WebSiteName))
+				Calculate lcMailFromName as con(low(pVhostRow.PGS_NAME),' DEV ',)
+			Else
+				If pos('CONSOLE',upp(pVhostRow.PGS_NAME))>0
+					Calculate lcMailFromName as con(low(pVhostRow.PGS_NAME))
+				Else
+					Calculate lcMailFromName as con(low(pVhostRow.PGS_NAME),' CONSOLE ',)
+				End If
+			End If
+			If pVhostRow.PGS_EMAIL2<>''     ;; this is the webmaster email  (pVhostRow.PGS_EMAIL1 is the owner of the website)
+				Calculate lcMailFromAddress as pVhostRow.PGS_EMAIL2
+			Else
+				;  otherwise leave empty for tConstants.WebSiteEmail to carry as default
+			End If
+			
+		Else If pos('DEV',upp(tConstants.WebSiteName))     ;; tConstants.WebSiteEmail
+			Calculate lcMailFromName as con(low(tConstants.WebSiteName),' CONSOLE ',)
+			Calculate lcMailFromAddress as      ;; leave empty for tConstants.WebSiteEmail to carry as default
+		Else
+			Calculate lcMailFromName as con(low(tConstants.WebSiteName),' CONSOLE ',)
+			Calculate lcMailFromAddress as      ;; leave empty for tConstants.WebSiteEmail to carry as default
+		End If
+	Else
+		If trGroupOrg.GO_SEQ>0
+			;  led by entGroupOrganisations
+			Calculate pVhostRow as trGroupOrg
+			Do toValues.$initInherited('EMAIL_FROM',trGroupOrg.GO_SEQ) Returns lrReference
+			If lrReference.RFO_SEQ>0
+				Do ioReadXML.$readAndParseXml(lrReference.RFO_CHAR,llEmail)
+				Do llEmail.$search($ref.path='/xml/name',1,0,0,0)
+				Calculate lcMailFromName as llEmail.value
+				Do llEmail.$search($ref.path='/xml/email',1,0,0,0)
+				Calculate lcMailFromAddress as llEmail.value
+				
+				;  Calculate pReplyToAddress as lcMailFromAddress
+				;  Calculate pReplyToName as lcMailFromName
+			End If
+		Else
+			;  indicator that we have no database connection
+		End If
+	End If
+End If
+
+If pSendAsync
+	Do lrAsyncMessage.$definefromsqlclass('infra.tsysAsyncEmails')     ;; this line defers the error until the $insert, when tMaster throws the notation error on "$ctask.$DynamicSession"
+	
+	If llOutToAddressList.$linecount=0
+		Do toValues.$initInherited('EMAIL','_TO') Returns lrReference
+		If lrReference.RFO_SEQ>0
+			Do llOutToAddressList.$add(lrReference.RFO_CHAR)
+		End If
+	End If
+	Do OJSON.$listorrowtojson(llOutToAddressList,kUniTypeCharacter) Returns lrAsyncMessage.AE_TO
+	Calculate lrAsyncMessage.AE_SUBJECT as con(lcOutSubject,' @ ',dat(#D,'D/M/Y'),' ',tim(#T,'H:N:S'))
+	Calculate lrAsyncMessage.AE_MESSAGE as lcOutBody
+	Do OJSON.$listorrowtojson(llOutCCAddressList,kUniTypeCharacter) Returns lrAsyncMessage.AE_CC
+	Do OJSON.$listorrowtojson(llOutBCCAddressList,kUniTypeCharacter) Returns lrAsyncMessage.AE_BCC
+	Calculate lrAsyncMessage.AE_BCC as llOutBCCAddressList
+	Calculate lrAsyncMessage.AE_PRIORITY as lnOutPriority
+	Do OJSON.$listorrowtojson(llOutEnclosureList,kUniTypeCharacter) Returns lrAsyncMessage.AE_ENCL
+	Calculate lrAsyncMessage.AE_HTML as pHTML
+	Calculate lrAsyncMessage.AE_GO_REF as pVhostRow.GO_SEQ     ;; 2015-05-01 virtual host now also includes the corresponding GO record
+	If pReplyToAddress<>''     ;; save the from address
+		Do OJSON.$listorrowtojson(row(llExtraHeaders.1),kUniTypeCharacter) Returns lrAsyncMessage.AE_FROM
+	End If
+	
+	Do lrAsyncMessage.$insert() Returns lcStatus
+Else
+	Calculate lcEmailProtocolStatus as ''
+	;  If llExtraHeaders.$linecount>0
+	Do $cinst.$sendMessage(llOutToAddressList,lcOutSubject,lcOutBody,llOutCCAddressList,llOutBCCAddressList,lnOutPriority,llOutEnclosureList,llExtraHeaders,lcMailFromAddress,lcMailFromName,pHTML) Returns lcStatus
+	;  Else
+	;  Do $cinst.$sendMessage(llOutToAddressList,lcOutSubject,lcOutBody,llOutCCAddressList,llOutBCCAddressList,lnOutPriority,llOutEnclosureList,#NULL,#NULL,lcMailFromAddress,lcMailFromName,pHTML,pbLogProtocolExchange) Returns lcStatus
+	;  End If
+End If
+
+
+If lcStatus<0
+	Do $cinst.$MailProtocolMessage() Returns lcEmailProtocolStatus     ;; icEmailProtocolStatus
+	Do ioErrors.$GetErrorDesc(lcStatus) Returns lcDesc
+	If pos('WebDevGetSecureError',lcDesc)
+		WebDevGetSecureError  Returns lcSecureMessage
+	End If
+	
+	Do $LogError('EMAIL_FAIL',upp($cmethod().$name),con(lcStatus,' : ',lcDesc,kCr,lcEmailProtocolStatus,kCr,kCr,lcSecureMessage))
+	
+	Calculate icEmailProtocolStatus as con('Failed email with status ',lcStatus,' ( ',lcDesc,' ) ',kCr,kCr,icEmailProtocolStatus,kCr,kCr,lcSecureMessage)
+End If
+
+Quit method lcStatus

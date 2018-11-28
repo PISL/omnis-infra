@@ -1,0 +1,29 @@
+Calculate icDisplayMessage as ''
+If pcOverrideClass<>''
+	Do ilSearch1.$search($ref.RFL_CLASS=pcOverrideClass,1,0,0,0) Returns lbFound
+End If
+
+Do method fetchDisplayList (ilSearch1.RFL_CLASS)
+Calculate ilDisplayRecords.$line as 1
+Calculate irCurrentRecord as ilDisplayRecords
+
+Do method displaySearchCount
+
+If icDisplayMessage=''
+	Do toValues.$initOrg(ilSearch1.RFL_CLASS,#NULL,kTrue,kTrue) Returns llOrg
+	If llOrg.$linecount
+		Calculate icDisplayMessage as con(icDisplayMessage,pick(icDisplayMessage<>'','',kCr),llOrg.$linecount,' corresponding Organisation entries exist')
+		If pcOverrideClass=''
+			Do irefContainer.$preSelectClass('RFO',ilSearch1.RFL_CLASS)
+		End If
+	End If
+	Do toValues.$initGlobal(ilSearch1.RFL_CLASS,#NULL,kTrue,kTrue) Returns llGlobal
+	If llGlobal.$linecount
+		Calculate icDisplayMessage as con(icDisplayMessage,pick(icDisplayMessage<>'','',kCr),llGlobal.$linecount,' corresponding Global entries exist')
+		If pcOverrideClass=''
+			Do irefContainer.$preSelectClass('RFG',ilSearch1.RFL_CLASS)
+		End If
+	End If
+End If
+
+Do $cinst.$behaviour

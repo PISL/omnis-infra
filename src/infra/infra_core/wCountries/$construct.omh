@@ -1,0 +1,14 @@
+;  Do $DynamicSession(tSession,tStatement) Returns lbProceed
+;  If not(lbProceed)
+;  OK message  {No session available from session pool !}
+;  Close window instance $cinst
+;  Quit method
+;  End If
+
+Do $DefineList(ilData,'infra.tCountries')
+;  Do ilData.$SetSession(tSession,tStatement)
+Calculate $cinst.$title as con('default data connection - ',tSession.$hostname)
+
+Do ilData.$RegionList() Returns ilRegions
+Do $cinst.$Refresh()
+Calculate $cinst.$enterable as kTrue

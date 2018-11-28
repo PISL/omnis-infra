@@ -1,0 +1,12 @@
+On evAfter
+	If irCurrentRecord.PID_TAX_BAND<>
+		Do irReference.$fetchClass('VAT_RATE',irCurrentRecord.PID_TAX_BAND)
+	Else
+		Do irReference.$clear()
+	End If
+	
+	Calculate irCurrentRecord.RFL_VALUE as irReference.RFL_VALUE
+	Calculate irCurrentRecord.RFL_DESC as irReference.RFL_DESC
+	Calculate irCurrentRecord.RFL_NUMBER as irReference.RFL_NUMBER
+	
+	Do $cinst.$behaviour()

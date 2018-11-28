@@ -1,0 +1,6 @@
+Calculate icPrefix as 'FOC_'
+Calculate icPrimarykey as 'FOC_SEQ'
+Calculate ibHasSequence as kTrue
+Calculate icForeignKey as 'FOC_FOH_REF_PREV'
+
+Do inherited

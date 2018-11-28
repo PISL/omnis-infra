@@ -1,0 +1,34 @@
+On evClick
+	Do method ClickNow
+	Calculate $cobj.$errortext as pick(isclear(ilNow.ChildNodeNames),ilNow.ChildNodeNames,'')
+	Do $cinst.$behaviour()
+	
+On evDoubleClick
+	If ilNow.GS_TYPE=ilStructureType.[ilStructureType.$linecount].RFO_VALUE
+		;  we are at the bottom of the configured hierarchy so discard the event
+		Quit event handler (Discard event)
+	End If
+	
+	;  on evClick the ilPrevious.$line is cleared
+	;  but now we want it back again before pushing ilPrevious onto the navigation stack
+	Do $cinst.$nextnode()
+	Do $cinst.$behaviour()
+	
+On evCellChanged
+	
+On evHeaderClick
+	
+On evHeadedListDisplayOrderChanged
+	
+On evDrop
+	If pDragField.$name=nam(ilNow)
+		;  line drag and dropped from this list     ;; this is ok
+		Calculate lnLine as      ;; mouseover(kMLine)
+		Calculate irDroppedOn as ilNow.[lnLine]
+		
+		;  Do $cinst.$clientNoYesMsg(con("Do you want to transfer node ",pDragValue.GS_DESC_FULL," down into node ",lrParentOfParent.GS_DESC_FULL ?),'WARNING','$DropOnNow')
+		;  Yes/No message  {Do you want to transfer node "[ilNow.PB_NAME_LONG]" down into node "[lrDroppedOn.PB_NAME_LONG]"?}
+		If flag true
+		End If
+	End If
+End If

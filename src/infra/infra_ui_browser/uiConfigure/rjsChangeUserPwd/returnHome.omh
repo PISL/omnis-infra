@@ -1,0 +1,5 @@
+If inPrevFormID>0
+	Do irefContainer.$navMenuClick(,inPrevFormID)
+Else
+	Do irefContainer.$navMenuClick(icPrevForm)
+End If

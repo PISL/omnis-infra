@@ -1,0 +1,8 @@
+Calculate $cinst.$objs.TabControl_RFG.$currenttab as 1
+Calculate $cinst.$objs.PagedPane.$currentpage as 1
+
+Do inherited
+
+Do irCurrentRecord.$defaults(ilSearch1.RFG_CLASS)
+
+Do $cinst.$behaviour()

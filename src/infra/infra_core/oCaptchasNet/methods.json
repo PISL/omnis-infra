@@ -1,0 +1,170 @@
+[
+	{
+		"name": "$construct",
+		"ident": 1,
+		"order": 1,
+		"pvardefs": [
+
+		],
+		"lvardefs": [
+
+		]
+	},
+	{
+		"name": "$destruct",
+		"ident": 2,
+		"order": 2,
+		"pvardefs": [
+
+		],
+		"lvardefs": [
+
+		]
+	},
+	{
+		"name": "$generateURL",
+		"ident": 0,
+		"order": 3,
+		"notes": "generate a random word and the corresponding CAPTCHA word",
+		"pvardefs": [
+			{
+				"name": "prefGUID",
+				"order": 14,
+				"type": "kFieldreference",
+				"subtype": 0,
+				"sublen": 0,
+				"param": 1
+			},
+			{
+				"name": "prefURL",
+				"order": 7,
+				"type": "kFieldreference",
+				"subtype": 0,
+				"sublen": 0,
+				"param": 2
+			},
+			{
+				"name": "prefWord",
+				"order": 6,
+				"type": "kFieldreference",
+				"subtype": 0,
+				"sublen": 0,
+				"param": 3
+			},
+			{
+				"name": "pcAlphabet",
+				"order": 1,
+				"type": "kCharacter",
+				"subtype": "kSimplechar",
+				"sublen": 36,
+				"param": 4,
+				"initval": "ccDefaultAlphabet",
+				"desc": "should consist of just lowercase letters and digits"
+			},
+			{
+				"name": "pnWordLength",
+				"order": 2,
+				"type": "kInteger",
+				"subtype": "kShortint",
+				"sublen": 0,
+				"param": 5,
+				"initval": "cnDefaultWordLength",
+				"desc": "should be a maximum of 16"
+			},
+			{
+				"name": "pcColour",
+				"order": 9,
+				"type": "kCharacter",
+				"subtype": "kSimplechar",
+				"sublen": 6,
+				"param": 6,
+				"desc": "hex colour value for the CAPTCHA"
+			},
+			{
+				"name": "pnWidth",
+				"order": 12,
+				"type": "kInteger",
+				"subtype": "k32bitint",
+				"sublen": 0,
+				"param": 7,
+				"desc": "CAPTCHA image width   200 <= W <= 500 (200 is sufficient for 6 characters)"
+			},
+			{
+				"name": "pnHeight",
+				"order": 11,
+				"type": "kInteger",
+				"subtype": "kShortint",
+				"sublen": 0,
+				"param": 8,
+				"desc": "CAPTCHA image height  80 <= H <= 240"
+			}
+		],
+		"lvardefs": [
+			{
+				"name": "lcCaptchaAccount",
+				"order": 16,
+				"type": "kCharacter",
+				"subtype": "kSimplechar",
+				"sublen": 100000000,
+				"desc": "user account at captchas.net"
+			},
+			{
+				"name": "lcCaptchaSecret",
+				"order": 17,
+				"type": "kCharacter",
+				"subtype": "kSimplechar",
+				"sublen": 100000000,
+				"desc": "user secret at captchas.net"
+			},
+			{
+				"name": "lcColour",
+				"order": 13,
+				"type": "kCharacter",
+				"subtype": "kSimplechar",
+				"sublen": 6
+			},
+			{
+				"name": "lcMD5",
+				"order": 10,
+				"type": "kCharacter",
+				"subtype": "kSimplechar",
+				"sublen": 100000000
+			},
+			{
+				"name": "lcRandom",
+				"order": 8,
+				"type": "kCharacter",
+				"subtype": "kSimplechar",
+				"sublen": 100000000
+			},
+			{
+				"name": "llKeys",
+				"order": 15,
+				"type": "kList",
+				"subtype": "",
+				"sublen": 0
+			},
+			{
+				"name": "lnCharNo",
+				"order": 5,
+				"type": "kInteger",
+				"subtype": "kShortint",
+				"sublen": 0
+			},
+			{
+				"name": "lnCount",
+				"order": 3,
+				"type": "kInteger",
+				"subtype": "kShortint",
+				"sublen": 0
+			},
+			{
+				"name": "loTM",
+				"order": 4,
+				"type": "kObject",
+				"subtype": ".TMObjs.TMObj",
+				"sublen": 0
+			}
+		]
+	}
+]

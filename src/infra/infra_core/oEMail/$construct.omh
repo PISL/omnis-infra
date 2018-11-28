@@ -1,0 +1,8 @@
+If ccOutServer<>''
+	Calculate ibInitialised as kTrue
+End If
+If clFromCache.$linecount=0
+	Calculate clFromCache as ''
+	Do clFromCache.$cols.$add('code',kCharacter,kSimplechar,15)
+	Do clFromCache.$cols.$add('attributes',kRow)
+End If

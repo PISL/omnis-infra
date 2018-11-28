@@ -1,0 +1,5 @@
+If ilDisplayRecords.$linecount=0
+	Calculate inSearchCount as ilSearch1.$linecount
+Else
+	Calculate inSearchCount as ilDisplayRecords.$linecount
+End If

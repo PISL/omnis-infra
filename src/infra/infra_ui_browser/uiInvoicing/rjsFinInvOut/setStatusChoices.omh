@@ -1,0 +1,18 @@
+Calculate ilStatusChoice as ilStatusAll
+If isnull(pbIsNew)
+	;  do not filter the list
+Else
+	Do ilStatusChoice.$search($ref.RFG_VALUE='INVOICE'|$ref.RFG_VALUE='QUOTE',1,0,1,1)
+	If pbIsNew
+		Do ilStatusChoice.$remove(kListKeepSelected)
+	Else
+		Do ilStatusChoice.$remove(kListDeleteSelected)
+	End If
+End If
+
+If isclear(irCurrentRecord.FOH_STATUS)
+	Calculate ilStatusChoice.$line as 1
+	Calculate irCurrentRecord.FOH_STATUS as ilStatusChoice.RFG_VALUE
+Else
+	Do ilStatusChoice.$search($ref.RFG_VALUE=irCurrentRecord.FOH_STATUS,1,0,0,0)
+End If

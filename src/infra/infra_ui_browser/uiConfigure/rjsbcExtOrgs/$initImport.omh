@@ -1,0 +1,4 @@
+Set reference irefImport to $cinst.$objs.PagedPane.$objs.rfImport.$subinst
+Do irefImport.$init('ioExtOrgs','$importExtOrgs')
+
+Do $cinst.$behaviour()     ;; disable menus

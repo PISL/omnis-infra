@@ -1,0 +1,27 @@
+On evClick
+	If not(left(irCurrentRecord.RFO_CLASS,1)>='A'&left(irCurrentRecord.RFO_CLASS,1)<='Z')
+		Do toStrings.$StringTableEntry('MSG_CLASSFIRSTCHAR',lcMessage,'First character of Classification must be a letter of the alphabet.')
+		Calculate icDisplayMessage as 'First character of Classification must be a letter of the alphabet.'
+	Else
+		If icMode='I'
+			Calculate irCurrentRecord.RFO_GO_REF as trGroupOrg.GO_SEQ
+		End If
+		Do $cinst.$saveData() Returns lbOK     ;; icDisplayMessage and icMode explain the results of $saveData
+		If lbOK
+			If ilSearch1.$search($ref.RFO_CLASS=irCurrentRecord.RFO_CLASS,1,0,0,0)
+				;  Class value entered is already in the list so no need to reload the list
+			Else
+				Do method fetchSearch1List (irCurrentRecord.RFO_CLASS)
+			End If
+			Do method fetchDisplayList (ilSearch1.RFO_CLASS)
+			Do ilDisplayRecords.$search($ref.RFO_SEQ=irCurrentRecord.RFO_SEQ,1,0,0,0)
+			
+			Calculate icMode as ''
+		End If
+	End If
+	
+	Do $cinst.$behaviour()
+	Set reference lrefList to $cinst.$objs.greyBackground
+	If lrefList
+		Do $cinst.$setcurfield(lrefList)
+	End If

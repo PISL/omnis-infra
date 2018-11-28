@@ -1,0 +1,183 @@
+[
+	{
+		"name": "$construct",
+		"ident": 0,
+		"order": 1,
+		"pvardefs": [
+
+		],
+		"lvardefs": [
+
+		]
+	},
+	{
+		"name": "$validation",
+		"ident": 1,
+		"order": 2,
+		"pvardefs": [
+			{
+				"name": "pcContext",
+				"order": 2,
+				"type": "kCharacter",
+				"subtype": "kSimplechar",
+				"sublen": 30,
+				"param": 1
+			}
+		],
+		"lvardefs": [
+			{
+				"name": "lcMessage",
+				"order": 1,
+				"type": "kCharacter",
+				"subtype": "kSimplechar",
+				"sublen": 255
+			}
+		]
+	},
+	{
+		"name": "$Links",
+		"ident": 3,
+		"order": 6,
+		"pvardefs": [
+
+		],
+		"lvardefs": [
+			{
+				"name": "llLinks",
+				"order": 1,
+				"type": "kList",
+				"subtype": "",
+				"sublen": 0
+			},
+			{
+				"name": "lrExtOrg",
+				"order": 3,
+				"type": "kRow",
+				"subtype": "sentExtOrganisations",
+				"sublen": 0
+			},
+			{
+				"name": "lrGroupOrg",
+				"order": 2,
+				"type": "kRow",
+				"subtype": "sentGroupOrganisations",
+				"sublen": 0
+			},
+			{
+				"name": "lrGroupOrgName",
+				"order": 4,
+				"type": "kRow",
+				"subtype": "sentGroupOrgNames",
+				"sublen": 0
+			}
+		]
+	},
+	{
+		"name": "$ForeignKeys",
+		"ident": 2,
+		"order": 7,
+		"pvardefs": [
+
+		],
+		"lvardefs": [
+			{
+				"name": "llForeignKeyList",
+				"order": 1,
+				"type": "kList",
+				"subtype": "",
+				"sublen": 0
+			},
+			{
+				"name": "lrExtOrg",
+				"order": 2,
+				"type": "kRow",
+				"subtype": "sentExtOrganisations",
+				"sublen": 0
+			},
+			{
+				"name": "lrGroupOrg",
+				"order": 3,
+				"type": "kRow",
+				"subtype": "sentGroupOrganisations",
+				"sublen": 0
+			}
+		]
+	},
+	{
+		"name": "$valuesCheck",
+		"ident": 4,
+		"order": 8,
+		"pvardefs": [
+			{
+				"name": "pcContext",
+				"order": 2,
+				"type": "kCharacter",
+				"subtype": "kSimplechar",
+				"sublen": 30,
+				"param": 1
+			}
+		],
+		"lvardefs": [
+			{
+				"name": "lcMessage",
+				"order": 1,
+				"type": "kCharacter",
+				"subtype": "kSimplechar",
+				"sublen": 255
+			}
+		]
+	},
+	{
+		"name": "$fetchCompound",
+		"ident": 5,
+		"order": 9,
+		"pvardefs": [
+			{
+				"name": "pnEO_SEQ",
+				"order": 6,
+				"type": "kInteger",
+				"subtype": "k64bitint",
+				"sublen": 0,
+				"param": 1
+			}
+		],
+		"lvardefs": [
+			{
+				"name": "lbImmediateSession",
+				"order": 5,
+				"type": "kBoolean",
+				"subtype": 0,
+				"sublen": 0,
+				"initval": "kFalse"
+			},
+			{
+				"name": "lbOK",
+				"order": 2,
+				"type": "kBoolean",
+				"subtype": 0,
+				"sublen": 0
+			},
+			{
+				"name": "lnNumber",
+				"order": 1,
+				"type": "kNumber",
+				"subtype": "k0dp",
+				"sublen": 0
+			},
+			{
+				"name": "loSession",
+				"order": 3,
+				"type": "kObject",
+				"subtype": "",
+				"sublen": 0
+			},
+			{
+				"name": "loStatement",
+				"order": 4,
+				"type": "kObject",
+				"subtype": "",
+				"sublen": 0
+			}
+		]
+	}
+]

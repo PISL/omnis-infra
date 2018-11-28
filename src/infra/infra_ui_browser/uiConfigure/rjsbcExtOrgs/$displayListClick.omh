@@ -1,0 +1,11 @@
+Calculate icDisplayMessage as ''
+;  Calculate irCurrentRecord as ilDisplayRecords
+;  Calculate irOrgLink.EOL_GO_REF as trGroupOrg.GO_SEQ
+;  Calculate irOrgLink.EOL_EO_REF as irCurrentRecord.EO_SEQ
+;  Do irOrgLink.$fetch_('where eol_eo_ref = @[$cinst.EOL_EO_REF] and eol_go_ref = @[$cinst.EOL_GO_REF]',kFalse)
+
+Do ioExternalOrgs.$fetch_pk(ilDisplayRecords.EO_SEQ,irCurrentRecord,irOrgLink)
+Do ilCountries.$search($ref.CO_ISO3=irCurrentRecord.EO_CO_ISO3_REF,1,0,0,0)
+
+Do $cinst.$behaviour()
+Do $cinst.$redraw()

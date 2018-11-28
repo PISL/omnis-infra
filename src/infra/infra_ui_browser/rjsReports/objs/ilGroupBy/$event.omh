@@ -1,0 +1,9 @@
+On evClick
+	Calculate $cinst.$objs.PagedPane_REPORTS.$objs.ilSelectList.$errortext as ''
+	
+	Do ilSelectList.$add()
+	Calculate ilSelectList.$line as ilSelectList.$linecount
+	Do ilSelectList.$assignrow(ilGroupBy)
+	Calculate ilSelectList.$line as 0
+	
+	Do ilGroupBy.$remove(ilGroupBy.$line)

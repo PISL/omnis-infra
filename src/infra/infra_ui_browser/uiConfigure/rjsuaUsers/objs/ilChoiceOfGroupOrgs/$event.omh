@@ -1,0 +1,19 @@
+On evClick
+	Calculate ilChoiceOfGroupOrgs.$line as pLineNumber
+	Calculate icDisplayMessage as ''
+	
+	Do $cinst.$behaviour()
+	Do $cinst.$redraw()
+	
+	
+On evDrop
+	If pDragField=nam(ilUserGroupOrgLinks)
+		;  user is REMOVING this group org to users profile
+		;  Breakpoint
+		Do method DeleteGroupOrgFromUser Returns lbOK
+		
+		Do $cinst.$behaviour()
+		Do $cinst.$redraw()
+	Else
+		Calculate icDisplayMessage as 'Invalid drop object'
+	End If

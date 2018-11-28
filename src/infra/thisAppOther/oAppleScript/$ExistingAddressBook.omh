@@ -1,0 +1,239 @@
+Do lrReturn.$cols.$add('AppleScriptResult',kCharacter,kSimplechar,10000)
+Do lrReturn.$cols.$add('AppleScriptError',kCharacter,kSimplechar,255)
+Calculate lrPhones as lrReturn
+Calculate lrEmails as lrReturn
+Calculate lrAddresses as lrReturn
+Do lrReturn.$cols.$add('phones',kCharacter,kSimplechar,1000)
+Do lrReturn.$cols.$add('emails',kCharacter,kSimplechar,1000)
+Do lrReturn.$cols.$add('addresses',kCharacter,kSimplechar,2000)
+;  Finding a Person
+
+;  In some cases, you may not actually want to create a person. Rather, you may want to locate an existing person.
+;  One way to access an existing person is by accessing the selection property of the Address Book application.
+;  This will return a list of any selected people. The following example code demonstrates how to retrieve the selection.
+
+;  set thePeople to selection
+;  --> {person id "778C4D8D-0A22-4918-A5B6-73361FFF8779:ABPerson" of application "Address Book"}
+
+;  However, you may not always want to access the selected person or people. There may be times when you need
+;  to locate a person by name, or by another criteria. The following example code demonstrates how to search for
+;  specific people by retrieving a list of people matching a given last name.
+
+;  set thePeople to every person whose last name = "Waldie"
+;  --> {person id "778C4D8D-0A22-4918-A5B6-73361FFF8779:ABPerson" of application "Address Book"}
+If pcPersonID<>''
+	Begin text block
+	Text: {tell application "Address Book"} (Platform newline)
+	Text: {set thePerson to (first person whose id = "[pcPersonID]")} (Platform newline)
+	Text: {tell thePerson} (Platform newline)
+	Text: {		  set thePersonXML to "<thePerson>" as string} (Platform newline)
+	
+	Text: { 		 	set thePersonXML to thePersonXML & "<person id>" & the id of thePerson & "</person id>"} (Platform newline)
+	Text: { 		 	set thePersonXML to thePersonXML & "<name>" & the name of thePerson & "</name>" } (Platform newline)
+	
+	Text: {        if the title of thePerson exists then𯿿			} (Platform newline)
+	Text: {            set thePersonXML to thePersonXML & "<Title>" & the title of thePerson & "</Title>" } (Platform newline)
+	Text: {        end if} (Platform newline)
+	Text: {        if the first name of thePerson exists then𯿿			} (Platform newline)
+	Text: {            set thePersonXML to thePersonXML & "<FirstName>" & the first name of thePerson & "</FirstName>" } (Platform newline)
+	Text: {        end if} (Platform newline)
+	Text: {        if the middle name of thePerson exists then𯿿			} (Platform newline)
+	Text: {            set thePersonXML to thePersonXML & "<MiddleName>" & the middle name of thePerson & "</MiddleName>" } (Platform newline)
+	Text: {        end if} (Platform newline)
+	Text: {        if the last name of thePerson exists then𯿿			} (Platform newline)
+	Text: {            set thePersonXML to thePersonXML & "<LastName>" & the last name of thePerson & "</LastName>" } (Platform newline)
+	Text: {        end if} (Platform newline)
+	Text: {        if the suffix of thePerson exists then𯿿			} (Platform newline)
+	Text: {            set thePersonXML to thePersonXML & "<Suffix>" & the suffix of thePerson & "</Suffix>" } (Platform newline)
+	Text: {        end if} (Platform newline)
+	Text: {        if the job title of thePerson exists then𯿿			} (Platform newline)
+	Text: {            set thePersonXML to thePersonXML & "<JobTitle>" & the job title of thePerson & "</JobTitle>" } (Platform newline)
+	Text: {        end if} (Platform newline)
+	Text: {        if the department of thePerson exists then𯿿			} (Platform newline)
+	Text: {            set thePersonXML to thePersonXML & "<Department>" & the department of thePerson & "</Department>" } (Platform newline)
+	Text: {        end if} (Platform newline)
+	Text: {        if ((the organization of thePerson exists) and (the company of thePerson is false)) then} (Platform newline)
+	Text: {            set thePersonXML to thePersonXML & "<Organization>" & the organization of thePerson & "</Organization>" } (Platform newline)
+	Text: {        end if} (Platform newline)
+	Text: {        if (note of thePerson is not missing value) then} (Platform newline)
+	Text: {            set thePersonXML to thePersonXML & "<Note>" & the note of thePerson & "</Note>" } (Platform newline)
+	Text: {        end if} (Platform newline)
+	Text: {        set thePersonXML to thePersonXML & "</thePerson>" } (Platform newline)
+	
+	Text: {    return thePersonXML} (Platform newline)
+	Text: {end tell} (Platform newline)
+	Text: {end tell} (Platform newline)
+	End text block
+	Get text block lcApplescript
+	Do $root.$runapplescript(lcApplescript,lrReturn.AppleScriptResult,lrReturn.AppleScriptError)
+	
+	If pos('person id',lrReturn.AppleScriptResult)>0
+		;  Breakpoint
+		;  applescript inspired from this article     ;; http://hints.macworld.com/article.php?story=20050508193551743
+		
+		;  fetch phone numbers
+		Begin text block
+		Text: {tell application "Address Book"} (Platform newline)
+		Text: {set thePerson to (first person whose id = "[pcPersonID]")} (Platform newline)
+		Text: {tell thePerson} (Platform newline)
+		Text: {		  set thePhoneNumbers to "" as string} (Platform newline)
+		Text: {    repeat with yy from 1 to the count of phones in thePerson} (Platform newline)
+		Text: {	     		set phoneLabel to (label of phone yy) as string} (Platform newline)
+		Text: {𯿿		    	set phoneValue to (value of phone yy) as string} (Platform newline)
+		Text: {𯿿	    		set thePhoneNumber to "<" & phoneLabel & ">" & phoneValue & "</" & phoneLabel & ">"} (Platform newline)
+		Text: {		     	set thePhoneNumbers to thePhoneNumbers & thePhoneNumber} (Platform newline)
+		Text: {    end repeat} (Platform newline)
+		Text: {    return thePhoneNumbers} (Platform newline)
+		Text: {end tell} (Platform newline)
+		Text: {end tell} (Platform newline)
+		End text block
+		Get text block lcApplescript
+		Do $root.$runapplescript(lcApplescript,lrPhones.AppleScriptResult,lrPhones.AppleScriptError)
+		
+		;  fetch email addresses
+		Begin text block
+		Text: {tell application "Address Book"} (Platform newline)
+		Text: {set thePerson to (first person whose id = "[pcPersonID]")} (Platform newline)
+		Text: {tell thePerson} (Platform newline)
+		Text: {		  set theEmails to "" as string} (Platform newline)
+		Text: {    repeat with yy from 1 to the count of emails in thePerson} (Platform newline)
+		Text: {	     		set emailLabel to (label of email yy) as string} (Platform newline)
+		Text: {𯿿		    	set emailValue to (value of email yy) as string} (Platform newline)
+		Text: {𯿿	    		set theEmail to "<" & emailLabel & ">" & emailValue & "</" & emailLabel & ">"} (Platform newline)
+		Text: {		     	set theEmails to theEmails & theEmail} (Platform newline)
+		Text: {    end repeat} (Platform newline)
+		Text: {    return theEmails} (Platform newline)
+		Text: {end tell} (Platform newline)
+		Text: {end tell} (Platform newline)
+		End text block
+		Get text block lcApplescript
+		Do $root.$runapplescript(lcApplescript,lrEmails.AppleScriptResult,lrEmails.AppleScriptError)
+		
+		;  fetch postal addresses
+		Begin text block
+		Text: {tell application "Address Book"} (Platform newline)
+		Text: {set thePerson to (first person whose id = "[pcPersonID]")} (Platform newline)
+		Text: {tell thePerson} (Platform newline)
+		Text: {		  set theAddresses to "" as string} (Platform newline)
+		Text:
+		Text: {    repeat with yy from 1 to the count of addresses in thePerson} (Platform newline)
+		Text: {        set addrStreet to "" as string} (Platform newline)
+		Text: {        set addrCity to "" as string} (Platform newline)
+		Text: {        set addrState to "" as string} (Platform newline)
+		Text: {        set addrZip to "" as string} (Platform newline)
+		Text: {        set addrCountry to "" as string} (Platform newline)
+		Text: {        set addrCountryCode to "" as string} (Platform newline)
+		Text:
+		Text: {        set theLabel to label of address yy of thePerson} (Platform newline)
+		Text: {        set formattedAddress to formatted address of address yy of thePerson} (Platform newline)
+		Text:
+		Text: {        if (street of address yy of thePerson is not missing value) then𯿿				} (Platform newline)
+		Text: {            set addrStreet to street of address yy of thePerson } (Platform newline)
+		Text: {        end if} (Platform newline)
+		Text: {        if (city of address yy of thePerson is not missing value) then} (Platform newline)
+		Text: {            set addrCity to city of address yy of thePerson } (Platform newline)
+		Text: {        end if} (Platform newline)
+		Text: {        if (state of address yy of thePerson is not missing value) then} (Platform newline)
+		Text: {            set addrState to state of address yy of thePerson } (Platform newline)
+		Text: {        end if} (Platform newline)
+		Text: {        if (zip of address yy of thePerson is not missing value) then} (Platform newline)
+		Text: {            set addrZip to zip of address yy of thePerson } (Platform newline)
+		Text: {        end if} (Platform newline)
+		Text: {        if (country of address yy of thePerson is not missing value) then} (Platform newline)
+		Text: {            set addrCountry to country of address yy of thePerson } (Platform newline)
+		Text: {        end if} (Platform newline)
+		Text: {        if (country code of address yy of thePerson is not missing value) then} (Platform newline)
+		Text: {            set addrCountryCode to country code of address yy of thePerson } (Platform newline)
+		Text: {        end if} (Platform newline)
+		Text:
+		Text: {	     		set fullAddress to "<Street>" & addrStreet & "</Street>" & "<City>" & addrCity & "</City>" & "<State>" & addrState & "</State>" & "<Zip>" & addrZip & "</Zip>" & "<Country>" & addrCountry & "</Country>" & "<CountryCode>" & addrCountryCode & "</CountryCode>" & "<Formatted>" & formattedAddress & "</Formatted>" as string} (Platform newline)
+		Text:
+		Text: {		     	set theAddresses to theAddresses & "<" & theLabel & ">" & fullAddress & "</" & theLabel & ">"} (Platform newline)
+		Text: {    end repeat} (Platform newline)
+		Text: {    return theAddresses} (Platform newline)
+		Text: {end tell} (Platform newline)
+		Text: {end tell} (Platform newline)
+		End text block
+		Get text block lcApplescript
+		Do $root.$runapplescript(lcApplescript,lrAddresses.AppleScriptResult,lrAddresses.AppleScriptError)
+		
+		If pos(kDq,lrReturn.AppleScriptResult)>0
+			Calculate lrReturn.AppleScriptResult as mid(lrReturn.AppleScriptResult,2,len(lrReturn.AppleScriptResult)-2)     ;; omit first and last "
+		End If
+		Calculate lrReturn.phones as mid(lrPhones.AppleScriptResult,2,len(lrPhones.AppleScriptResult)-2)     ;; omit first and last "
+		Calculate lrReturn.emails as mid(lrEmails.AppleScriptResult,2,len(lrEmails.AppleScriptResult)-2)
+		Calculate lrReturn.addresses as mid(lrAddresses.AppleScriptResult,2,len(lrAddresses.AppleScriptResult)-2)
+	End If
+Else     ;; pcPersonID<>''
+	Begin text block
+	Text: {set peopleCount to (count every person whose last name = "[pRow.LastName]"𯿿and first name = "[pRow.FirstName]"}
+	If pRow.Organisation<>''
+		Calculate lbUseOrganisationValue as kTrue
+		Text: {and organization = "[pRow.Organisation]"}
+	End If
+	Text: {)}
+	End text block
+	Get text block lcCommand
+	;  for some weird reason Omnis is putting a carriage return in the string before the and
+	;  this buggers up the applescript so...
+	Calculate lcCommand as replaceall(lcCommand,kCr,' ')
+	
+	Begin text block
+	Text: {tell application "Address Book"} (Platform newline)
+	Text: {[lcCommand]} (Platform newline)
+	Text: {end tell} (Platform newline)
+	End text block
+	Get text block lcApplescript
+	Do $root.$runapplescript(lcApplescript,lrReturn.AppleScriptResult,lrReturn.AppleScriptError)
+	
+	If lrReturn.AppleScriptResult=0&pRow.Organisation<>''
+		;  try again without the organisation     ;; in case Address Book entry has been made and Organisation has been added here AFTER
+		Calculate lbUseOrganisationValue as kFalse
+		
+		Begin text block
+		Text: {set peopleCount to (count every person whose last name = "[pRow.LastName]"𯿿and first name = "[pRow.FirstName]"}
+		Text: {)}
+		End text block
+		Get text block lcCommand
+		Calculate lcCommand as replaceall(lcCommand,kCr,' ')
+		
+		Begin text block
+		Text: {tell application "Address Book"} (Platform newline)
+		Text: {[lcCommand]} (Platform newline)
+		Text: {end tell} (Platform newline)
+		End text block
+		Get text block lcApplescript
+		Do $root.$runapplescript(lcApplescript,lrReturn.AppleScriptResult,lrReturn.AppleScriptError)
+	End If
+	
+	If lrReturn.AppleScriptResult=1
+		Begin text block
+		Text: {set thePerson to (first person whose last name = "[pRow.LastName]"𯿿and first name = "[pRow.FirstName]"} (Platform newline)
+		If pRow.Organisation<>''&lbUseOrganisationValue
+			Text: {and organization = "[pRow.Organisation]"}
+		End If
+		Text: {)}
+		End text block
+		Get text block lcCommand
+		;  for some weird reason Omnis is putting a carriage return in the string before the and
+		;  this buggers up the applescript so...
+		Calculate lcCommand as replaceall(lcCommand,kCr,' ')
+		
+		Begin text block
+		Text: {tell application "Address Book"} (Platform newline)
+		Text: {[lcCommand]} (Platform newline)
+		Text: {end tell} (Platform newline)
+		End text block
+		Get text block lcApplescript
+		Do $root.$runapplescript(lcApplescript,lrReturn.AppleScriptResult,lrReturn.AppleScriptError)
+	Else
+		;  OK message  {there are [lrReturn.AppleScriptResult] people in the address book with that name}
+		
+	End If
+End If
+Calculate pResult as lrReturn
+
+If pos('person id',lrReturn.AppleScriptResult)>0
+	Quit method kTrue
+End If
+Quit method kFalse

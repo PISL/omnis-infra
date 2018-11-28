@@ -1,0 +1,6 @@
+If inCurrentTab=4
+	Calculate $cinst.$objs.TabControl_RFU.$currenttab as 1
+	Calculate $cinst.$objs.PagedPane.$currentpage as 1
+End If
+
+Do inherited

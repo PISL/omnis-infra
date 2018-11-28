@@ -1,0 +1,8 @@
+Begin reversible block
+	Calculate iAuthor as 'Platform Independent Systems Ltd'
+	Do toStrings.$StringTableEntry('word_invoice',lcMessage,'Invoice')
+	Calculate iTitle as lcMessage
+	Calculate iSubject as ''
+End reversible block
+
+Do method printPDF

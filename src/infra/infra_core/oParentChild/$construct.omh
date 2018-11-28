@@ -1,0 +1,10 @@
+;  Enter your initialization code here
+Do $DefineList(irCustomer,'infra.tentExtOrganisations')
+Do $DefineList(irEOL,'infra.tentOrgLinks')
+Do $DefineList(irChild,'infra.tfinInvoiceOutD')
+Do $DefineList(irHeader,'infra.tfinInvoiceOutH')
+
+If tcCurrentLibrary='CONFERENCE'
+	Do $DefineList(irDIL,'tDelegateInvoiceLinks')
+	Do $DefineList(irPerson,'tPerson')
+End If

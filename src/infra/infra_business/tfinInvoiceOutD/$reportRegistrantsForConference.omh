@@ -1,0 +1,85 @@
+Do llData.$cols.$add($cinst.FOD_FOH_REF)
+Do llData.$cols.$add($cinst.FOD_PRD_REF)
+Do llData.$cols.$add($cinst.FOD_DESC)
+Do llData.$cols.$add($cinst.FOD_UNIT_PRICE)
+Do llData.$cols.$add($cinst.FOD_UNIT_TAX)
+Do llData.$cols.$add($cinst.FOD_QTY)
+Do llData.$cols.$add($cinst.FOD_ORDER)
+
+Do llData.$cols.$add(lrProduct.PRD_INT_PRODCODE)
+Do llData.$cols.$add(lrProduct.PRD_BRAND)
+Do llData.$cols.$add(lrProduct.PRD_NAME)
+Do llData.$cols.$add(lrProduct.PRD_DESC)
+Do llData.$cols.$add(lrProduct.PRD_SIZE)
+Do llData.$cols.$add(lrProduct.PRD_UOS_CODE)
+Do llData.$cols.$add(lrProduct.PRD_UNIT_PRICE)
+Do llData.$cols.$add(lrProduct.PRD_TAX_BAND)
+Do llData.$cols.$add(lrProductInternal.PID_UNIT_PRICE)
+Do llData.$cols.$add(lrProductInternal.PID_TAX_BAND)
+
+Do llData.$cols.$add(lrInvoiceHeader.FOH_GO_REF)
+Do llData.$cols.$add(lrInvoiceHeader.FOH_EO_REF)
+Do llData.$cols.$add(lrInvoiceHeader.FOH_INV_NO)
+Do llData.$cols.$add(lrInvoiceHeader.FOH_DATE)
+Do llData.$cols.$add(lrInvoiceHeader.FOH_STATUS)
+Do llData.$cols.$add(lrInvoiceHeader.FOH_CURRENCY)
+
+Do llData.$cols.$add(lrInvDelegateLink.DIL_FOH_REF)
+Do llData.$cols.$add(lrInvDelegateLink.DIL_DG_REF)
+
+Do llData.$cols.$add(lrDelegate.DG_SEQ)
+Do llData.$cols.$add(lrDelegate.DG_CF_REF)
+Do llData.$cols.$add(lrDelegate.DG_PSN_REF)
+Do llData.$cols.$add(lrDelegate.DG_REG_DATE)
+Do llData.$cols.$add(lrDelegate.DG_OCCUPANCY)
+Do llData.$cols.$add(lrDelegate.DG_GROUP)
+Do llData.$cols.$add(lrDelegate.DG_STATUS)
+Do llData.$cols.$add(lrDelegate.DG_COUNTRY)
+
+Do llData.$cols.$add(lrPerson.PSN_FIRST_NAME)
+Do llData.$cols.$add(lrPerson.PSN_SURNAME)
+
+Do $cinst.$ImmediateSession(loSession,loStatement) Returns lbImmediateSession
+If lbImmediateSession
+	Do $cinst.$SetSession(loSession,loStatement)
+Else If not(ibGoodConnectionToDb)
+	Quit method kFalse
+End If
+
+;  Calculate inID as pnCF_SEQ
+;  If pcExtraCriteria<>''
+;  Do $cinst.$Sql(,con('where DG_CF_REF = @[inID] and ',pcExtraCriteria),0,0)
+;  Else
+;  Do $cinst.$Sql(,con('where DG_CF_REF = @[inID]'),0,0)
+;  End If
+Begin statement
+Sta: {select FOD_FOH_REF, FOD_PRD_REF, FOD_DESC, FOD_UNIT_PRICE, FOD_UNIT_TAX, FOD_QTY, FOD_ORDER}
+Sta: {, PRD_INT_PRODCODE, PRD_BRAND, PRD_NAME, PRD_DESC, PRD_SIZE, PRD_UOS_CODE, PRD_UNIT_PRICE, PRD_TAX_BAND}
+Sta: {, PID_UNIT_PRICE, PID_TAX_BAND}
+Sta: {, FOH_GO_REF, FOH_EO_REF, FOH_INV_NO, FOH_DATE, FOH_STATUS, FOH_CURRENCY}
+Sta: {, DIL_FOH_REF, DIL_DG_REF}
+Sta: {, DG_SEQ, DG_CF_REF, DG_PSN_REF, DG_REG_DATE, DG_OCCUPANCY, DG_GROUP, DG_STATUS, DG_COUNTRY}
+Sta: {, PSN_FIRST_NAME, PSN_SURNAME}
+Sta:
+Sta: {from [$cinst.$servertablenames()]}
+Sta: {join  [lrProduct.$servertablenames] on PRD_SEQ = FOD_PRD_REF}
+;  one to one
+Sta: {join  [lrProductInternal.$servertablenames] on PID_PRD_REF = PRD_SEQ}
+Sta: {join  [lrInvoiceHeader.$servertablenames] on FOH_SEQ = FOD_FOH_REF}
+Sta: {join  [lrInvDelegateLink.$servertablenames]  on DIL_FOH_REF = FOH_SEQ}
+Sta: {join  [lrDelegate.$servertablenames]  on DG_SEQ = DIL_DG_REF}
+Sta: {join  [lrPerson.$servertablenames] on PSN_SEQ = DG_PSN_REF}
+Sta:
+Sta: {where DG_CF_REF = @[pnCF_SEQ]}
+If pcExtraCriteria<>''
+	Sta: {[pcExtraCriteria]}
+End If
+End statement
+
+Do $cinst.$executesqlandfetch(llData) Returns lbOK
+If lbImmediateSession
+	Do $cinst.$SetSession(#NULL,#NULL,kTrue)
+End If
+
+Do $cinst.$sort($ref.DG_REG_DATE,0)
+Quit method llData

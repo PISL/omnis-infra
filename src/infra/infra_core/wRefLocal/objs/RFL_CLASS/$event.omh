@@ -1,0 +1,8 @@
+On evBefore
+	Do $cinst.$behaviour()
+	
+On evAfter     ;; do
+	Do $cinst.$invalidCharCheck($cobj.$contents) Returns lbProceed     ;; displays a message if invalid
+	If not(lbProceed)
+		Quit event handler (Discard event)
+	End If

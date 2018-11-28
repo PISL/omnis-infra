@@ -1,0 +1,4 @@
+Calculate icPrefix as 'IMT_'
+Calculate icPrimarykey as 'IMT_SEQ'
+
+Do inherited

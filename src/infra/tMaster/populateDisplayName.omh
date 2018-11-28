@@ -1,0 +1,10 @@
+Do $cinst.$cols.$findname('DisplayName') Returns loColRef
+If loColRef
+	If $cinst.$type=kRow
+		Do $cinst.$DisplayName()
+	Else
+		While $Loop($cinst)
+			Do $cinst.$DisplayName()
+		End While
+	End If
+End If

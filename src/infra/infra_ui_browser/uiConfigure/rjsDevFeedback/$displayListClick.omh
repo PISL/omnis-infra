@@ -1,0 +1,10 @@
+Calculate icDisplayMessage as ''
+Calculate irCurrentRecord as ilDisplayRecords
+
+Do ilFeedbackType.$search($ref.RFL_VALUE=irCurrentRecord.SF_TYPE,1,0,0,0)
+Do ilResponseType.$search($ref.RFL_VALUE=irCurrentRecord.SF_RESP_TYPE,1,0,0,0)
+
+
+
+
+Do $cinst.$behaviour()

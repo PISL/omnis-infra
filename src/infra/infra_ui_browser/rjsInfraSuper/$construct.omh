@@ -1,0 +1,25 @@
+;  Enter your initialization code here
+Calculate ilAuthorisedForms as tlAuthorisedForms
+Do ilAuthorisedForms.$search($ref.visible=kFalse,1,0,1,1)
+Do ilAuthorisedForms.$remove(kListDeleteSelected)
+
+Set reference irefConsoleTask to $itasks.[$clib().$name]
+
+Do toValues.$initOrg('STB','SUFFIX') Returns irSTBsuffixGO
+
+;  Calculate $cinst.$objs.app_navigation_area.$objs.app_navigation_bar.$visible as binlength(tConstants.topBanner)>0
+If trFormColours.$colcount
+	;  we have already got theem
+Else
+	Do $getFormColours()     ;; 2016-09-30 moved from rtSuper
+End If
+
+Do method $setFormColours
+
+;  initialise TabShortcuts and translations
+Do ilTabShortcuts.$cols.$add('key',kCharacter,kSimplechar,1)
+;  get key press translation row and convert to a string for use in handleShortcutKey
+Do OJSON.$listorrowtojson($getVar(nam($cinst.irKeyTranslations)),kUniTypeCharacter,lcError) Returns icKeyTranslations
+
+Do $getVar(nam(irKeyPress)) Returns $cinst.irKeyPress     ;; get key press values for insert/edit/delete
+Do $getVar(nam(irKeyTranslations)) Returns $cinst.irKeyTranslations     ;; get key press translation values

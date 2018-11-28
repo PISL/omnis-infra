@@ -1,0 +1,4 @@
+On evClick
+	Do method setSchemaColumnColour
+	Calculate inLastSchemaCol as ilSchemaCols.$line
+	Do $cinst.$behaviour()

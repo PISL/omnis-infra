@@ -1,0 +1,8 @@
+On evTabSelected
+	Calculate inCurrentTab as pTabNumber
+	If inCurrentTab=cnTabStructure
+		Do method fetchStructure
+	End If
+	
+	Do $cinst.$behaviour
+	Do $cinst.$redraw()

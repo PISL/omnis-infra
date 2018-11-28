@@ -1,0 +1,23 @@
+If ilSearch1.$linecount>1
+	;  this test catches most situations     ;; >1 because many search lists have a blank first line
+	Calculate $cinst.$objs.ilSearch1.$visible as kTrue
+	Calculate $cinst.$objs.label_ilSearch1.$visible as kTrue
+Else If ilSearch1.icPrimaryKey<>''
+	;  in CONFERENCE where there may be only 1 active conference and no blank lines
+	If not(isclear(ilSearch1.1.[ilSearch1.icPrimaryKey]))
+		Calculate $cinst.$objs.ilSearch1.$visible as kTrue
+		Calculate $cinst.$objs.label_ilSearch1.$visible as kTrue
+	End If
+End If
+
+Calculate $cinst.$objs.label_ilSearch1.$text as pcLabelSearch
+
+If ilSearch1.$colcount
+	Do ilSearch1.$cols.$findname(pcDisplayCols) Returns liColRef
+	If liColRef
+		Calculate $cinst.$objs.ilSearch1.$listcolumn as liColRef.$ident
+	Else
+		Breakpoint
+		Calculate $cinst.$objs.ilSearch1.$listcolumn as 1
+	End If
+End If

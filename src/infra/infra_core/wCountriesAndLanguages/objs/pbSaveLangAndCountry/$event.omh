@@ -1,0 +1,5 @@
+On evClick     ;; Event Parameters - pRow( Itemreference )
+	Do method SaveLanguageAndCountry
+	Calculate icMode as ''
+	Do $cinst.$behaviour()
+	Do $cinst.$redraw()

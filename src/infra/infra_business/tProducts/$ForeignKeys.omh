@@ -1,0 +1,13 @@
+;  Builds a list of foreign keys for the table
+Calculate llForeignKeyList as
+Do llForeignKeyList.$cols.$add('TABLE',kCharacter,kSimplechar,100)
+Do llForeignKeyList.$cols.$add('COLUMN',kCharacter,kSimplechar,100)
+Do llForeignKeyList.$cols.$add('FTABLE',kCharacter,kSimplechar,100)
+Do llForeignKeyList.$cols.$add('FCOLUMN',kCharacter,kSimplechar,100)
+
+Do llForeignKeyList.$add($cinst.$servertablenames,'prd_go_ref',lrGroupOrg.$servertablenames,'go_seq')
+Do llForeignKeyList.$add($cinst.$servertablenames,'prd_eo_ref',lrExtOrg.$servertablenames,'eo_seq')
+Do llForeignKeyList.$add($cinst.$servertablenames,'prd_uos_code',lrUnitSynonyms.$servertablenames,'uos_code')
+Do llForeignKeyList.$add($cinst.$servertablenames,'prd_ecocost_uos_code',lrUnitSynonyms.$servertablenames,'uos_code')
+
+Quit method llForeignKeyList

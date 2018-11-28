@@ -1,0 +1,35 @@
+If ilData.$linecount>0
+	Calculate ilData.$line as 0
+	Do ilData.$search(0)
+	Do ilData.$search(len($ref.RFL_CLASS)=0|len($ref.RFL_VALUE)=0,1,0,1,0)
+	While $Loop(ilData,kTrue)
+		Calculate lRow as ilData
+		If lRow.RFL_SEQ>=0
+			Do lRow.$delete() Returns lbOK
+		End If
+	End While
+	Do ilData.$remove(kListDeleteSelected)
+	
+	While $Loop(ilData)
+		Calculate lbUpdateDB as kFalse
+		Calculate lRow as ilData
+		If lRow.RFL_SEQ>0
+			Do ilOriginal.$search($ref.RFL_SEQ=lRow.RFL_SEQ,1,0,0,0) Returns lbFound
+			If lbFound
+				Do toStrings.$HasRowBeenModified(ilOriginal,lRow) Returns lbModified
+				If lbModified
+					Calculate lbUpdateDB as kTrue
+					Do lRow.$update() Returns lbOK
+				End If
+			End If
+		Else
+			Calculate lbUpdateDB as kTrue
+			Do lRow.$insert() Returns lbOK
+		End If
+		If lbUpdateDB&lbOK
+			Calculate ilData.[ilData.$line] as lRow
+		Else If lbUpdateDB&not(lbOK)
+			OK message  {line [ilData.$line]: [lRow.irErrorSQL.NativeErrorText]}
+		End If
+	End While
+End If

@@ -1,0 +1,75 @@
+If pcUsername<>''
+	;  continue
+Else
+	Quit method kFalse
+End If
+If pcPassword<>''
+	;  continue
+Else
+	Quit method kFalse
+End If
+
+Breakpoint {not tested}
+Do $cinst.$ImmediateSession(loSession,loStatement) Returns lbImmediateSession
+If lbImmediateSession
+	Do $cinst.$SetSession(loSession,loStatement)
+Else If not(ibGoodConnectionToDb)
+	Quit method kFalse
+End If
+
+If $cinst.$sessionobject.$damname='PGSQLDAM'
+	;  CREATE ROLE name
+	;  [ [ WITH ] option [ ... ] ]
+	;  where option can be:
+	;  SUPERUSER | NOSUPERUSER
+	;  | CREATEDB | NOCREATEDB
+	;  | CREATEUSER | NOCREATEUSER
+	;  | INHERIT | NOINHERIT
+	;  | LOGIN | NOLOGIN
+	;  | CONNECTION LIMIT connlimit
+	;  | [ ENCRYPTED | UNENCRYPTED ] PASSWORD 'password'
+	;  | VALID UNTIL 'timestamp'
+	;  | IN ROLE role_name [, ...]
+	;  | IN GROUP role_name [, ...]
+	;  | ROLE role_name [, ...]
+	;  | ADMIN role_name [, ...]
+	;  | USER role_name [, ...]
+	;  | SYSID uid ~
+	;  e.g. CREATE ROLE karen LOGIN ENCRYPTED PASSWORD 'md5d03fd5708c7261362a1a0d7ce8aa0562'    VALID UNTIL 'infinity';
+	;  GRANT regular TO karen;
+	
+	;  CREATE USER foo WITH PASSWORD 'secret';     ;; users and groups are now old hat in postgres - everyone logs in as a role, whether its individual or group
+	;  Calculate lcCommand as con("CREATE ROLE ",low(irCurrentRecord.US_NAME)," LOGIN; ")     ;; ENCRYPTED PASSWORD 'md509958d693edc495add3de1f59dd83277'
+	;  Do irCurrentRecord.$executesqldirect(lcCommand) Returns lbOK
+	;  however its the only way I can create a user with a password
+	If pdDoNotMash
+		Calculate lcRealPassword as pcPassword     ;; for developers only
+	Else
+		Do oSecurity.$MashLogin(pcPassword) Returns lcRealPassword
+	End If
+	OK message  {[jst(pdExpires,'D:CY-M-D H:N:S')]}
+	
+	Begin statement
+	Sta: {CREATE ROLE [low(pcUsername)] LOGIN}
+	If lcRealPassword<>''
+		Sta: {UNENCRYPTED PASSWORD '[lcRealPassword]'}
+	Else
+		;  omit password
+	End If
+	If pdExpires>dat('1 JAN 2010')
+		;  VALID UNTIL '2011-10-08 00:00:00'
+		Sta: {VALID UNTIL '[jst(pdExpires,'D:CY-M-D H:N:S')]'}
+	Else
+		Sta: {VALID UNTIL 'infinity'}
+	End If
+	Sta: {;}
+	Sta: {GRANT regular TO [pcUsername];}
+	End statement
+	Do $cinst.$executesqldirect() Returns lbOK
+Else
+	Breakpoint
+End If
+
+If lbImmediateSession
+	Do $cinst.$SetSession(#NULL,#NULL,kTrue)
+End If

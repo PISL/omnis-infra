@@ -1,0 +1,108 @@
+Set reference irefContainer to $cinst.$container
+Do inherited
+
+;  Enter your initialization code here
+Calculate $cinst.$objs.icFormIntro.$visible as kFalse
+If upp(tcCurrentLibrary)='MEC'
+	Do $libs.[tcCurrentLibrary].$objects.oWebClientApp.$new() Returns oService
+End If
+
+Do $DefineList($cinst.ilDisplayRecords,'infra.tentGroupOrganisations')     ;; GON_NAME_FULL is added in $construct
+Do ilDisplayRecords.$cols.$add('UserType',kInteger,kShortint)
+Calculate irCurrentRecord as ilDisplayRecords
+
+Do $DefineList(ilCurrentOrgAllNames,'infra.tentGroupOrgNames')
+Calculate irCurrentOrgName as ilCurrentOrgAllNames
+
+Do $DefineList(irUserOrgLink,'infra.tuaGroupOrgLinks')
+
+Do method TranslateText     ;; call this here to get the translations before setting superclass labels/values
+
+Calculate icFormHeading as $cell(clLabels,'objName','GO_Heading','label')
+Calculate $cinst.$objs.icFormHeading.$tooltip as $cell(clLabels,'objName','GO_Intro','label')
+
+Do method UserPermissions
+
+;  find correct column number to display in list
+Do ilDisplayRecords.$cols.$findname('GO_NAME_FULL') Returns liColRef
+Calculate lnDisplayListCol as liColRef.$ident
+;  no drop lists needed for this small group of records
+Do $cinst.$superObjects($cell(clLabels,'objName','disp_orgs','label'),lnDisplayListCol,'','')
+
+Do $DefineList(ilCorporatePerson,'infra.tiCorpPerson')
+Do ilCorporatePerson.$cols.$add('id',kInteger,k32bitint)
+
+Calculate ilDeleteCorpPerson as ilCorporatePerson
+If tcCurrentLibrary='CONFERENCE'
+	;  do not ping registration service
+	Calculate $cinst.$objs.TabControl_GO.$selectedtab as 2
+	Calculate $cinst.$objs.TabControl_GO.$tabvisible as kFalse
+Else If tcCurrentLibrary='TIKHOURS'
+	Calculate $cinst.$objs.TabControl_GO.$selectedtab as 2
+	Calculate $cinst.$objs.TabControl_GO.$tabvisible as kFalse
+Else
+	Do toStrings.$StringTableEntry('MSG_CHECKREGSERVER',icDisplayMessage,'Checking registration server...')
+	Do sleep(5)
+	Do oService.$ping($cinst) Returns lrResult
+	;  If lrResult.$colcount>0
+	;  OK message  {Server is present}
+	;  Calculate ibRESTserviceRunning as kTrue
+	;  Calculate tConstants.ExternalIP as lrResult.ip
+	;  End If
+End If
+
+Do $Definelist(ilCountries,'infra.tCountries')
+;  Do ilCountries.$fetch_all()
+Do ilCountries.$FetchRegion("'EUR'")
+
+Do ilCountries.$cols.$findname('CO_NAME') Returns liColRef
+Calculate $cinst.$objs.PagedPane.$objs.GO_ADDR_COUNTRY.$listcolumn as liColRef.$ident
+
+Calculate inCurrentTab as 1
+Calculate $cinst.$objs.TabControl_GO.$currenttab as inCurrentTab
+Calculate $cinst.$objs.PagedPane.$currentpage as inCurrentTab
+
+Do irBusinessDetailSubset.$cols.$add(irCurrentRecord.GO_NAME_FULL)
+Do irBusinessDetailSubset.$cols.$add(irCurrentRecord.GO_ADDR_BUILDING)
+Do irBusinessDetailSubset.$cols.$add(irCurrentRecord.GO_ADDR_STREET)
+Do irBusinessDetailSubset.$cols.$add(irCurrentRecord.GO_ADDR_LOCALITY)
+Do irBusinessDetailSubset.$cols.$add(irCurrentRecord.GO_ADDR_TOWN)
+Do irBusinessDetailSubset.$cols.$add(irCurrentRecord.GO_ADDR_STATE)
+Do irBusinessDetailSubset.$cols.$add(irCurrentRecord.GO_ADDR_POSTCODE)
+Do irBusinessDetailSubset.$cols.$add(irCurrentRecord.GO_COMM_PH)
+Do irBusinessDetailSubset.$cols.$add(irCurrentRecord.GO_COMM_MOB)
+Do irBusinessDetailSubset.$cols.$add(irCurrentRecord.GO_COMM_EMAIL)
+Do irBusinessDetailSubset.$cols.$add(irCurrentRecord.GO_COMPANY_NO)
+Do irBusinessDetailSubset.$cols.$add(irCurrentRecord.GO_VAT_NO)
+Do irBusinessDetailSubset.$cols.$add(irCurrentRecord.GO_SURNAME)
+Do irBusinessDetailSubset.$cols.$add(irCurrentRecord.GO_FIRSTNAMES)
+Do irBusinessDetailSubset.$cols.$add(irCurrentRecord.GO_NAME_LTBC)
+Do irBusinessDetailSubset.$cols.$add(irCurrentRecord.GO_DOB)
+Do irBusinessDetailSubset.$cols.$add(irCurrentRecord.GO_SEX)
+Do irBusinessDetailSubset.$cols.$add(irCurrentRecord.GO_MMN)
+Do irBusinessDetailSubset.$cols.$add(irCurrentRecord.GO_ID_TYPE)
+Do irBusinessDetailSubset.$cols.$add(irCurrentRecord.GO_ID_CODE)
+Do irBusinessDetailSubset.$cols.$add(irCurrentRecord.GO_MEC_TYPE)     ;; not for changing!  required for validate content entry
+Calculate irBusinessDetailSubsetOrig as irBusinessDetailSubset
+
+Do irPrevCell.$addcols('row',kInteger,k32bitint,,'col',kCharacter,kSimplechar,255,'contents',kCharacter,kSimplechar,255)
+
+Do method refreshDisplayList
+
+;  organisation structure
+Do $DefineList(ilNow,'tentGroupOrgStructure')
+Do ilNow.$cols.$add('ChildNodeCount',kInteger,kShortint)
+Do ilNow.$cols.$add('ChildNodeNames',kCharacter,kSimplechar,255)
+Calculate ilPrevious as ilNow
+Calculate irCurrentStructure as ilNow
+
+Do ilNavCache.$cols.$add('previous',kList)
+Do ilNavCache.$cols.$add('currentLineNo',kInteger,k32bitint)
+Do ilNavCache.$cols.$add('pkey',kInteger,k32bitint)
+
+Do toValues.$initInherited('CO_STRUCTURE') Returns ilStructureType
+Do ilStructureType.$cols.$findname('RFO_DESC') Returns liColRef
+Calculate $cinst.$objs.PagedPane.$objs.GS_TYPE.$listcolumn as liColRef.$ident
+
+Calculate ilDisplayRecords.$line as 1
+Do $cinst.$displayListClick()     ;; this will invoke $behaviour

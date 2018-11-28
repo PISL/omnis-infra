@@ -1,0 +1,14 @@
+Do method DetermindWindowPos
+
+Do ilLog.$cols.$add('Interval',kCharacter,kSimplechar,20)
+Do ilLog.$cols.$add('PushPop',kCharacter,kSimplechar,20)
+Do ilLog.$cols.$add('SinceTheBeginning',kCharacter,kSimplechar,20)
+Do ilLog.$cols.$add('Text',kCharacter,kSimplechar,1000)
+Do ilLog.$cols.$add('Timestamp',kDate,kDatetime)
+
+Do ilPushPop.$cols.$add('TicksStart',kInteger,k32bitint)
+
+Calculate $cinst.$top as cnPosnTopAndLeft
+Calculate $cinst.$left as cnPosnTopAndLeft
+
+Calculate $cinst.$title as con('auto console log opened ',#D,' @ ',#T)

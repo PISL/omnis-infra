@@ -1,0 +1,268 @@
+[
+	{
+		"name": "FOH_SEQ",
+		"ident": 32002,
+		"order": 1,
+		"type": "kInteger",
+		"subtype": "k64bitint",
+		"sublen": 0,
+		"properties": {
+			"desc": "primary key (used as invoice number)",
+			"nonull": true,
+			"primarykey": true,
+			"userinfo": ""
+		}
+	},
+	{
+		"name": "FOH_GO_REF",
+		"ident": 32014,
+		"order": 2,
+		"type": "kInteger",
+		"subtype": "k64bitint",
+		"sublen": 0,
+		"properties": {
+			"desc": "foreign key to entGroupOrganisations",
+			"nonull": true,
+			"primarykey": false,
+			"userinfo": ""
+		}
+	},
+	{
+		"name": "FOH_EO_REF",
+		"ident": 32015,
+		"order": 3,
+		"type": "kInteger",
+		"subtype": "k64bitint",
+		"sublen": 0,
+		"properties": {
+			"desc": "foreign key to entExtOrganisations",
+			"nonull": true,
+			"primarykey": false,
+			"userinfo": ""
+		}
+	},
+	{
+		"name": "FOH_INV_NO",
+		"ident": 32019,
+		"order": 4,
+		"type": "kInteger",
+		"subtype": "k64bitint",
+		"sublen": 0,
+		"properties": {
+			"desc": "invoice number",
+			"nonull": true,
+			"primarykey": false,
+			"userinfo": ""
+		}
+	},
+	{
+		"name": "FOH_ADDR_SHIP",
+		"ident": 32003,
+		"order": 5,
+		"type": "kCharacter",
+		"subtype": "kSimplechar",
+		"sublen": 255,
+		"properties": {
+			"desc": "shipping address",
+			"nonull": false,
+			"primarykey": false,
+			"userinfo": ""
+		}
+	},
+	{
+		"name": "FOH_ADDR_BILL",
+		"ident": 32004,
+		"order": 6,
+		"type": "kCharacter",
+		"subtype": "kSimplechar",
+		"sublen": 255,
+		"properties": {
+			"desc": "billing address",
+			"nonull": false,
+			"primarykey": false,
+			"userinfo": ""
+		}
+	},
+	{
+		"name": "FOH_CUST_NAME",
+		"ident": 32005,
+		"order": 7,
+		"type": "kCharacter",
+		"subtype": "kSimplechar",
+		"sublen": 100,
+		"properties": {
+			"desc": "name of customer cloned from EO_NAME",
+			"nonull": false,
+			"primarykey": false,
+			"userinfo": ""
+		}
+	},
+	{
+		"name": "FOH_DATE",
+		"ident": 32006,
+		"order": 8,
+		"type": "kDate",
+		"subtype": "kDate2000",
+		"sublen": 0,
+		"properties": {
+			"desc": "date of invoice",
+			"nonull": false,
+			"primarykey": false,
+			"userinfo": ""
+		}
+	},
+	{
+		"name": "FOH_INSTRUCTIONS",
+		"ident": 32007,
+		"order": 9,
+		"type": "kCharacter",
+		"subtype": "kSimplechar",
+		"sublen": 255,
+		"properties": {
+			"desc": "note to include on invoice - message to customer",
+			"nonull": false,
+			"primarykey": false,
+			"userinfo": ""
+		}
+	},
+	{
+		"name": "FOH_STATUS",
+		"ident": 32020,
+		"order": 10,
+		"type": "kCharacter",
+		"subtype": "kSimplechar",
+		"sublen": 15,
+		"properties": {
+			"desc": "invoice status, eg. QUOTE, ORIGINAL, SUBSTITUTE",
+			"nonull": true,
+			"primarykey": false,
+			"userinfo": ""
+		}
+	},
+	{
+		"name": "FOH_CUST_PO",
+		"ident": 32024,
+		"order": 11,
+		"type": "kCharacter",
+		"subtype": "kSimplechar",
+		"sublen": 10,
+		"properties": {
+			"desc": "customers PO",
+			"nonull": false,
+			"primarykey": false,
+			"userinfo": ""
+		}
+	},
+	{
+		"name": "FOH_CURRENCY",
+		"ident": 32025,
+		"order": 12,
+		"type": "kCharacter",
+		"subtype": "kSimplechar",
+		"sublen": 3,
+		"properties": {
+			"desc": "currency of invoice",
+			"nonull": false,
+			"primarykey": false,
+			"userinfo": ""
+		}
+	},
+	{
+		"name": "FOH_MEC_ID",
+		"ident": 32027,
+		"order": 13,
+		"type": "kCharacter",
+		"subtype": "kSimplechar",
+		"sublen": 20,
+		"properties": {
+			"desc": "myEcoCost user ID",
+			"nonull": false,
+			"primarykey": false,
+			"userinfo": ""
+		}
+	},
+	{
+		"name": "FOH_SWHEN",
+		"ident": 32021,
+		"order": 14,
+		"type": "kDate",
+		"subtype": "kDatetime",
+		"sublen": 7,
+		"properties": {
+			"desc": "submission timestamp (submitted to ecoInvoicing service)",
+			"nonull": false,
+			"primarykey": false,
+			"userinfo": ""
+		}
+	},
+	{
+		"name": "FOH_CWHEN",
+		"ident": 32008,
+		"order": 15,
+		"type": "kDate",
+		"subtype": "kDatetime",
+		"sublen": 7,
+		"properties": {
+			"desc": "creation timestamp",
+			"nonull": false,
+			"primarykey": false,
+			"userinfo": ""
+		}
+	},
+	{
+		"name": "FOH_CBY",
+		"ident": 32009,
+		"order": 16,
+		"type": "kCharacter",
+		"subtype": "kSimplechar",
+		"sublen": 15,
+		"properties": {
+			"desc": "created by",
+			"nonull": true,
+			"primarykey": false,
+			"userinfo": ""
+		}
+	},
+	{
+		"name": "FOH_MWHEN",
+		"ident": 32010,
+		"order": 17,
+		"type": "kDate",
+		"subtype": "kDatetime",
+		"sublen": 7,
+		"properties": {
+			"desc": "modification timestamp",
+			"nonull": true,
+			"primarykey": false,
+			"userinfo": ""
+		}
+	},
+	{
+		"name": "FOH_MBY",
+		"ident": 32011,
+		"order": 18,
+		"type": "kCharacter",
+		"subtype": "kSimplechar",
+		"sublen": 15,
+		"properties": {
+			"desc": "modified by",
+			"nonull": true,
+			"primarykey": false,
+			"userinfo": ""
+		}
+	},
+	{
+		"name": "FOH_MCOUNT",
+		"ident": 32028,
+		"order": 19,
+		"type": "kInteger",
+		"subtype": "k32bitint",
+		"sublen": 0,
+		"properties": {
+			"desc": "modification count",
+			"nonull": false,
+			"primarykey": false,
+			"userinfo": ""
+		}
+	}
+]

@@ -1,0 +1,72 @@
+Send to trace log (Diagnostic message) {$cinst = [$cinst().$name]    $ctask = [$ctask().$name]  owner = [$cinst.$task().$name]}
+Do inherited
+;  be sure to set "loadpagesetup" class property to kTrue
+
+;  if printing from the the PDF worker task, prHeader will be row with a row as the forst column, ie. C1
+If prHeader.$cols.1.$name="C1"
+	Calculate irHeader as prHeader.C1
+Else
+	Calculate irHeader as prHeader
+End If
+
+Calculate icReportTitle as con('INVOICE')
+Calculate $cinst.icReportSubTitle as ''
+
+Do irefTask.$DefineList(ilData,'infra.tfinInvoiceOutD')
+Do ilData.$addLinkedCols('PRD_INT_PRODCODE,PRD_NAME,PRD_DESC,PRD_SIZE,PRD_UOS_CODE,PID_UNIT_PRICE,PID_TAX_BAND')
+Do ilData.$addLinkedCols("RFL_NUMBER")
+Do ilData.$addCalculatedColumns()
+Do ilData.$fetchInvDetails(irHeader.FOH_SEQ)
+
+Do ilData.$cols.$add('priceTotal',kNumber,k2dp)
+Do ilData.$cols.$add('taxTotal',kNumber,k2dp)
+Do ilData.$cols.$add('lineTotal',kNumber,k2dp)
+Calculate ilData.$line as 0
+While irefTask.$Loop(ilData)
+	;  Calculate ilData.FOD_UNIT_TAX as ilData.FOD_UNIT_PRICE*0.175
+	Calculate ilData.priceTotal as ilData.FOD_UNIT_PRICE*ilData.FOD_QTY
+	Calculate ilData.taxTotal as ilData.FOD_UNIT_TAX*ilData.FOD_QTY
+	Calculate ilData.lineTotal as ilData.priceTotal+ilData.taxTotal
+End While
+
+Do irTotal.$cols.$add('price',kNumber,k2dp)
+Do irTotal.$cols.$add('tax',kNumber,k2dp)
+Do irTotal.$cols.$add('total',kNumber,k2dp)
+
+Calculate irTotal.price as ilData.$cols.priceTotal.$total()
+Calculate irTotal.tax as ilData.$cols.taxTotal.$total()
+Calculate irTotal.total as irTotal.price+irTotal.tax
+
+Do irRecipient.$fetch_pk(irHeader.FOH_EO_REF)
+Calculate $cinst.$objs.1258.$visible as irHeader.FOH_ADDR_SHIP<>''     ;; display title only if a shipping address exists
+
+Do toValues.$initOrg('STD_TEXT','INV_TERMS') Returns irTerms
+
+;  Do toValues.$initOrg('IMAGES','LOGO_INV_GIF') Returns irLogo
+Do toValues.$initOrg('IMAGES','LOGO_INV_JPEG') Returns irLogo
+Calculate lcType as pictformat(irLogo.RFO_BIN)
+If lcType='GIF'
+	;  because the control in the report is GIF
+	Calculate $cinst.$objs.RFO_BIN_jpeg.$visible as kFalse
+	Calculate $cinst.$objs.RFO_BIN_gif.$visible as kTrue
+Else If lcType='JPEG'
+	;  because the control in the report is JPEG
+	Calculate $cinst.$objs.RFO_BIN_gif.$visible as kFalse
+	Calculate $cinst.$objs.RFO_BIN_jpeg.$visible as kTrue
+Else
+	;  gif would be better but there is a licencing issue with gifs that produces an OK message so we can't use it.
+	;  so we convert to JPEG
+	Calculate lbinTemp as irLogo.RFO_BIN
+	Calculate irLogo.RFO_BIN as pictconvto(lcType,lbinTemp,'JPEG')
+	Calculate $cinst.$objs.RFO_BIN_gif.$visible as kFalse
+	Calculate $cinst.$objs.RFO_BIN_jpeg.$visible as kTrue
+End If
+
+Do toValues.$initOrg(con('BANK_AC_',irHeader.FOH_CURRENCY)) Returns llBankDetails
+While $Loop(llBankDetails)
+	Calculate icBankAccount as con(icBankAccount,pick(icBankAccount<>'','',kCr),llBankDetails.RFO_DESC)
+End While
+
+While $Loop(ilData)
+	Do $cinst.$printrecord()
+End While

@@ -1,0 +1,5 @@
+On evBefore
+	;  Breakpoint
+	
+On evAfter
+	Do $cinst.$RegistrationFormBehaviour()

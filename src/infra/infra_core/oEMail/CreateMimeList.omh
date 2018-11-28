@@ -1,0 +1,70 @@
+;  use the new 32-bit mime content support added for O$ 2.10
+Do lMimeList.$define(lLevel,lContentType,lContentSubType,lFileName,lCharData,lBinData,lCharSet,lEncoding,lDisposition)
+Calculate lnLevel as 0
+
+If pEnclosureList.$linecount>0&pHTML<>''
+	Do lMimeList.$add(lnLevel,'multipart','mixed')
+	Calculate lnLevel as lnLevel+1
+Else If pEnclosureList.$linecount>0
+	;  if the new e-mail contains enclosures, compose and send as multipart MIME content
+	Do lMimeList.$add(lnLevel,'multipart','mixed')
+	Calculate lnLevel as lnLevel+1
+	Do lMimeList.$add(lnLevel,'multipart','alternative')
+	Calculate lnLevel as lnLevel+1
+End If
+Do pEnclosureList.$redefine(lFileName,lFilePath)
+
+If pHTML<>''
+	Do lMimeList.$add(lnLevel,'multipart','alternative')     ;; alternate implies a fancy html message as well as a plain version of it
+	Calculate lnLevel as lnLevel+1
+	
+	Do lMimeList.$add(lnLevel,'text','plain',,pBody,#NULL,lCharSet,'quoted-printable')
+	Do lMimeList.$add(lnLevel,'text','html',,pHTML,#NULL,lCharSet,'quoted-printable')
+	Calculate lnLevel as lnLevel-1
+Else
+	Do lMimeList.$add(lnLevel,'text','plain',,pBody,#NULL,lCharSet,'quoted-printable')
+	Calculate lnLevel as lnLevel-1
+End If
+
+For lLineInList from 1 to pEnclosureList.$linecount step 1
+	Do pEnclosureList.$line.$assign(lLineInList)
+	;  If a pdf file is being generated which is then going into this email, the pdf writer may still be writing the pdf file.
+	;  While this is happening the file will not be accessible.     ;; Hence the loop.
+	Calculate lbExists as kFalse
+	Calculate lnTicksStart as #CT
+	Repeat
+		Do FileOps.$doesfileexist(pEnclosureList.C2) Returns lbExists
+	Until lbExists|(#CT-lnTicksStart>300)     ;; 300 ticks is about 5 seconds
+	If lbExists
+		Calculate lnSecondsDelay as (#CT-lnTicksStart)/60
+		Do lFileOps.$openfile(pEnclosureList.C2) Returns lbOpened
+		If lbOpened
+			If ibAttachedFileJustWrittenWithPDFwriter
+				;  waste more time so PDF writer can finish its job     ;; its running asynchronously and we don't know when the job will finish
+				Calculate lnCheckCount as 0
+				Calculate lnLastFileSize as -1     ;; this is required in case file size turns out to be zero
+				Calculate lnTicksStart as #CT
+				Repeat
+					Calculate lbTryAgain as kFalse
+					Do sleep(500) Returns #F
+					Do FileOps.$getfileinfo(pEnclosureList.C2,kFileOpsInfoSize+kFileOpsInfoActualSize) Returns lrFileInfo
+					If lrFileInfo.actualsize<>lnLastFileSize
+						Calculate lnLastFileSize as lrFileInfo.actualsize
+						Calculate lbTryAgain as kTrue
+						Calculate lnCheckCount as lnCheckCount+1
+					End If
+				Until lnCheckCount>0&((#CT-lnTicksStart>300)|not(lbTryAgain))     ;; 300 ticks is about 5 seconds
+			End If
+			
+			Do lFileOps.$readfile(lFileBinData)
+			Do lFileOps.$closefile()
+			Do lMimeList.$add(lnLevel,'application','octet-stream',pEnclosureList.C1,,lFileBinData,,'base64')
+		End If
+	Else
+		;  the delay did not get access to the file.  If it is a long report this could easily happen.
+		Calculate lnSecondsDelay as (#CT-lnTicksStart)/60
+		Breakpoint {for a developer}
+	End If
+End For
+
+Quit method lMimeList

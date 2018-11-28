@@ -1,0 +1,24 @@
+If irUserRights.allUsers
+	If len(icSearch)>0
+		Do ilDisplayRecords.$fetchOnString(icSearch)
+	Else
+		Do ilDisplayRecords.$fetch_all()
+	End If
+Else
+	If len(icSearch)>0
+		Do ilDisplayRecords.$fetchOurUsers(icSearch)
+	Else
+		Do ilDisplayRecords.$fetchOurUsers()
+	End If
+End If
+If ilDisplayRecords.irErrorSQL.NativeErrorText<>''
+	Calculate icDisplayMessage as ilDisplayRecords.irErrorSQL.NativeErrorText
+End If
+
+;  While $Loop(ilDisplayRecords)
+;  Do ilDisplayRecords.$DisplayName()
+;  End While
+
+Do ilDisplayRecords.$sort($ref.USR_NAME,0)
+
+Calculate inSearchCount as ilDisplayRecords.$linecount

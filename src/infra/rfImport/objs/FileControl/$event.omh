@@ -1,0 +1,10 @@
+On evFileUploaded
+	Do $cinst.$importLoaded() Returns lbSuccess
+	If not(lbSuccess)
+		Do $cinst.$clientcommand("showloadingoverlay",row(kFalse,''))
+		Do $cinst.$clientcommand("okcancelmessage",row(icDisplayMessage,"Error","$importFailed"))
+	End If
+	
+On evFileUploadDialogClosed
+	Do $cinst.$destruct()
+	Do irefParent.$cancelImport()

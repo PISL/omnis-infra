@@ -1,0 +1,32 @@
+Do oDAO_CoLang.$SaveLangsAndCountries(ilLanguagesAndCountries)
+Quit method
+
+OK message  {this should be handled in oDAO}
+If ilLanguagesAndCountries.$linecount>0
+	Calculate ilLanguagesAndCountries.$line as 0
+	Do ilLanguagesAndCountries.$search(0)
+	Do ilLanguagesAndCountries.$search($ref.LC_LGREF=0|len($ref.LC_CO_REF_ISO3)=0|len($ref.LC_CO_EXONYM)=0,1,0,1,0)
+	While $Loop(ilLanguagesAndCountries,kTrue)
+		Calculate lRow as ilLanguagesAndCountries
+		If lRow.LC_SEQ>0
+			Do lRow.$delete() Returns lbOK
+		End If
+	End While
+	Do ilLanguagesAndCountries.$remove(kListDeleteSelected)
+	
+	While $Loop(ilLanguagesAndCountries)
+		If ilLanguagesAndCountries.$status=kRowUpdated|ilLanguagesAndCountries.$status=kRowInserted
+			Calculate lRow as ilLanguagesAndCountries
+			If lRow.LC_SEQ>0
+				Do lRow.$update() Returns lbOK
+			Else
+				Do lRow.$insert_pk() Returns lbOK
+			End If
+			Calculate ilLanguagesAndCountries.[ilLanguagesAndCountries.$line] as lRow
+		End If
+	End While
+	
+	;  Do ilData.$dowork_()
+	;  Do ilData.$savelistwork()
+End If
+;  no need to save list work because this is called from $Refresh and the list is going to be refreshed

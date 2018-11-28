@@ -1,0 +1,7 @@
+On evClick
+	Calculate irCurrentRecord.FOH_EO_REF as ilCustomers.EO_SEQ
+	Calculate irCurrentRecord.FOH_CUST_NAME as ilCustomers.EO_NAME
+	Calculate irCurrentRecord.FOH_ADDR_SHIP as ilCustomers.EO_ADDR_SHIP
+	Calculate irCurrentRecord.FOH_ADDR_BILL as ilCustomers.EO_ADDR_BILL
+	
+	Do $cinst.$redraw()

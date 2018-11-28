@@ -1,0 +1,14 @@
+;  may be called from pbEdit.$event or enterData
+Calculate $cinst.icDisplayMessage as $cell($cinst.clLabels,'objName','REC_UPDATE','label')     ;; irCurrentRecord
+Calculate $cinst.icMode as 'E'     ;; edit
+
+Do irCurrentRecord.$fetch_pk() Returns lbOK
+
+Do irCurrentRecord.$cols.$findname('DisplayName') Returns liColRef
+If liColRef
+	Do irCurrentRecord.$DisplayName()
+End If
+
+Calculate $cinst.irOriginalRecord as $cinst.irCurrentRecord
+
+Do $cinst.$behaviour()

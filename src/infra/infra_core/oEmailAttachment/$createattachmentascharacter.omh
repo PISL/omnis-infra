@@ -1,0 +1,22 @@
+;  Depending on the presence of fields, pass only as many parameters as are necessary
+ReadBinFile (iPath,lBinary)
+Do utf8tochar(lBinary) Returns lChar     ;; For testing, convert from UTF-8
+If len(iFilename)>0
+	Do pMessage.$createbodypartfromchar(lChar,iMIMEtypeList.type,iCharsetList.iCharsetId,iEncodingList.iEncoding,iDispositionList.iDisposition,iFilename) Returns pBodyPartID
+Else If iDispositionList.$line
+	Do pMessage.$createbodypartfromchar(lChar,iMIMEtypeList.type,iCharsetList.iCharsetId,iEncodingList.iEncoding,iDispositionList.iDisposition) Returns pBodyPartID
+Else If iEncodingList.$line
+	Do pMessage.$createbodypartfromchar(lChar,iMIMEtypeList.type,iCharsetList.iCharsetId,iEncodingList.iEncoding) Returns pBodyPartID
+Else If iCharsetList.iCharsetId
+	Do pMessage.$createbodypartfromchar(lChar,iMIMEtypeList.type,iCharsetList.iCharsetId) Returns pBodyPartID
+Else If len(iMIMEtypeList.type)>0
+	Do pMessage.$createbodypartfromchar(lChar,iMIMEtypeList.type) Returns pBodyPartID
+Else
+	Do pMessage.$createbodypartfromchar(lChar) Returns pBodyPartID
+End If
+If pBodyPartID=0
+	;  OK message  {Error [pMessage.$errorcode] creating character body part for path [iPath]}
+	Calculate icErrorMessage as con('Error ',pMessage.$errorcode,' creating character body part for path ',iPath)
+	Quit method kFalse
+End If
+Quit method kTrue

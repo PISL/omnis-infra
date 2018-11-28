@@ -1,0 +1,8 @@
+Calculate inCurrentTab as 1
+Calculate $cinst.$objs.TabControl_EO.$currenttab as inCurrentTab
+Do irOrgLink.$clear()
+
+Do inherited
+
+Calculate icField as 'EO_NAME'
+Do $cinst.$setcurfield(icField,kTrue)

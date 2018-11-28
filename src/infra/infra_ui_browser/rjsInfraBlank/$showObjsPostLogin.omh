@@ -1,0 +1,9 @@
+Calculate $cinst.$objs.app_navigation_bar.$objs.label_NavigationList.$visible as kTrue
+Calculate $cinst.$objs.app_navigation_bar.$objs.ilAuthorisedForms.$visible as kTrue
+Calculate $cinst.$objs.app_navigation_bar.$objs.ilAuthorisedForms.$enabled as kTrue
+Calculate $cinst.$objs.ilAuthorisedForms.$alpha as pick(icMode='',150,255)     ;; changing $textcolor doesn't seem to work
+
+Calculate $cinst.$objs.app_navigation_bar.$objs.pbFeedback.$visible as kTrue
+Calculate $cinst.$objs.app_navigation_bar.$objs.GO_NAME_SHORT.$visible as kTrue
+
+Calculate icCurrentGroupOrg as trGroupOrg.GO_NAME_SHORT

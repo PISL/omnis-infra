@@ -1,0 +1,23 @@
+;  must be called after connection to the DB     ;; for obvious reasons
+Do $DefineList(trTaskStats,'infra.tsysTaskStats')     ;; trTaskStats is used in $ServerTime
+
+
+
+If tConstants.LogTaskStats
+	Calculate trTaskStats.STS_START as #D
+	Calculate trTaskStats.STS_COUNT_START as 1
+	TCPGetMyAddr  Returns trTaskStats.STS_IP4     ;; IP address of this computer
+	If trTaskStats.STS_IP4="0"
+		;  ### 2018-07-16  for some reason the iMac27 is returning 0 which is causing the geolookup.py script to fail
+		;  tried setting STS_IP4 in Postgres to type INET to throw an error here but then the geolookup script fails because it is expecting STS_IP4 to be text
+		;  so as an interim measure, set the IP to a bogus local network address which will be ignored by geolookup.py
+		Calculate trTaskStats.STS_IP4 as "192.168.0.0"     ;; set so we can use this to find records that have bogus IPs
+	End If
+	Calculate trTaskStats.STS_TYPE as 'F'     ;; (F)at client
+	Calculate trTaskStats.STS_DB_REQUESTS as 0
+	Calculate trTaskStats.STS_FETCHES as 0
+	Calculate trTaskStats.STS_INSERTS as 0
+	Calculate trTaskStats.STS_UPDATES as 0
+	Calculate trTaskStats.STS_DELETES as 0
+	Do trTaskStats.$insert() Returns lbOK
+End If

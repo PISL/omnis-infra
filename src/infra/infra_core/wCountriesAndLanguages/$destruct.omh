@@ -1,0 +1,5 @@
+If ilCountries.$linecount>0
+	Do ilCountries.$dowork()
+End If
+
+;  Do $ReleaseSession(tSession,tStatement)

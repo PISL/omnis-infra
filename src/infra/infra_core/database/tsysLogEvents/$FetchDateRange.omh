@@ -1,0 +1,91 @@
+If pFrom>dat('1 JAN 2010')&pTo>dat('1 JAN 2010')&pFrom<=pTo
+	;  sufficient criteria
+Else If pCode<>''
+	;  sufficient criteria     ;; (not really)
+Else If pcSearchText<>''
+	;  sufficient criteria     ;; (not really)
+Else
+	;  not enough criteria for a modest fetch
+	Calculate icValidationMessage as 'not enough search criteria'
+	Quit method kFalse
+End If
+
+If tlDatabases.DAM='WebService'
+	;  pass parameters to web service
+	;  $callService (pFieldReference, row(TableClassName, CurrentMethodName, p1,...,pn) )     ;; result will be returned in pFieldReference, row() contains the parameters for the call
+	Do ioWeb.$callFetch($cinst,irErrorSQL,row($cinst.$class().$name,$cmethod().$name,row(pFrom,pTo,pCode,pVhostNo),$cinst.$type,0,ilRESTextensions))
+	If ioWeb.irResponse.httpStatusCode=200
+		;  the result should be in this object     ;; however there may be a SQL error
+		If irErrorSQL.NativeErrorText<>''
+			Quit method kFalse
+		End If
+		Quit method kTrue
+	Else
+		Quit method kFalse
+	End If
+End If
+
+If isnumber(pcSearchText)
+	Calculate lbIncludePort as kTrue
+Else
+	Calculate lcTemp as replaceall(pcSearchText,'.','')     ;; may be an IP address being provided
+	If isnumber(lcTemp)
+		Calculate lbIncludeIP as kTrue
+	End If
+End If
+If pos(':',pcSearchText)
+	Calculate lnIncludeTimestamp as kTrue
+End If
+
+If pcSearchText<>''&pos('%',pcSearchText)=0
+	Calculate pcSearchText as con('%',pcSearchText,'%')
+End If
+Calculate lcPredicate as ' where '
+
+Do $cinst.$ImmediateSession(loSession,loStatement) Returns lbImmediateSession
+If lbImmediateSession
+	Do $cinst.$SetSession(loSession,loStatement)
+Else If not(ibGoodConnectionToDb)
+	Quit method kFalse
+End If
+
+Calculate pTo as dadd(kDay,1,pTo)     ;; date col to datetime
+
+Begin statement
+Sta: {select [$cinst.$selectnames()]}
+Sta: {from   [$cinst.$servertablenames()]}
+If pFrom>dat('1 JAN 2010')
+	Sta: {[lcPredicate] SLV_CWHEN between @[pFrom] and @[pTo]}
+	Calculate lcPredicate as ' and '
+End If
+If pCode<>''
+	Sta: {[lcPredicate]     SLV_CODE = @[pCode]}
+	Calculate lcPredicate as ' and '
+End If
+If pcSearchText<>''
+	Sta: {[lcPredicate]   (}
+	Sta: {SLV_MESSAGE ilike @[pcSearchText] or SLV_CODE ilike @[pcSearchText] or SLV_SUBCODE ilike @[pcSearchText]}
+	If lbIncludeIP
+		Sta: {or SLV_SERVER_IP ilike @[pcSearchText]}
+	End If
+	If lbIncludePort
+		Sta: {or  cast ( SLV_SERVER_PORT as varchar(15) ) ilike @[pcSearchText]}
+	End If
+	If lnIncludeTimestamp
+		;  typically detects hour within a day
+		Sta: {or  cast ( SLV_CWHEN as varchar(40) ) ilike @[pcSearchText]}
+	End If
+	Sta: {)}
+	Calculate lcPredicate as ' and '
+End If
+If pVhostNo>0
+	Sta: {[lcPredicate]     SLV_VHOST_REF = @[pVhostNo]}
+	Calculate lcPredicate as ' and '
+End If
+End statement
+Do $cinst.$executesqlandfetch() Returns lbOK
+If lbImmediateSession
+	Do $cinst.$SetSession(#NULL,#NULL,kTrue)
+End If
+
+Quit method lbOK

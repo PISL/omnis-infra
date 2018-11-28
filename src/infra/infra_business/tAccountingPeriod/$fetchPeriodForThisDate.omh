@@ -1,0 +1,72 @@
+If $ctask.trGroupOrg.GO_SEQ>0
+	;  proceed
+Else
+	Quit method kFalse
+End If
+If isclear(pdEvent)
+	Quit method kFalse
+End If
+If isclear(pnSpan)
+	Quit method kFalse
+End If
+
+If $ctask.tlDatabases.DAM='WebService'
+	;  pass parameters to web service
+	;  $callService (pFieldReference, row(TableClassName, CurrentMethodName, p1,...,pn) )     ;; result will be returned in pFieldReference, row() contains the parameters for the call
+	Do ioWeb.$callFetch($cinst,irErrorSQL,row($cinst.$class().$name,$cmethod().$name,row(pdEvent,pnSpan),$cinst.$type,0,ilRESTextensions))
+	If ioWeb.irResponse.httpStatusCode=200
+		;  the result should be in this object     ;; however there may be a SQL error
+		If irErrorSQL.NativeErrorText<>''
+			Quit method kFalse
+		End If
+		Quit method kTrue
+	Else
+		Quit method kFalse
+	End If
+End If
+
+Do $cinst.$clear()
+
+Do $cinst.$ImmediateSession(loSession,loStatement) Returns lbImmediateSession
+If lbImmediateSession
+	Do $cinst.$SetSession(loSession,loStatement)
+Else If not(ibGoodConnectionToDb)
+	Quit method kFalse
+End If
+
+If pdEvent<>''&left(pdEvent,1)<>','
+	Calculate pdEvent as con(',',pdEvent)
+End If
+
+Begin statement
+Sta: {select [$cinst.$selectnames()]}
+Sta: {, [lrPeriodLinks.$selectnames()]}
+Sta: {from [$cinst.$servertablenames]}
+Sta: {join [lrPeriodLinks.$servertablenames()] on ACL_ACP_REF = ACP_SEQ}
+Sta: {where ACL_GO_REF = @[$ctask.trGroupOrg.GO_SEQ]}
+Sta: {and     @[pdEvent] between ACP_FROM and ACP_TO}
+End statement
+Do $cinst.$executesqlandfetch() Returns lbOK
+
+If $cinst.ACP_SEQ>0
+	;  then accounting period and link exist
+Else
+	;  The following fetch could return a number of records, where ACP_SPAN is different.
+	;  If a group company reports monthly then ACP_SPAN will be 12.  If quarterly then ACP_SPAN will be 3.  Monthly = 1.
+	;  If multiple group companies exist at this installation and they have different accounting periods then this confusion will arise.
+	
+	;  Adding the compulsory parameter pnSpan should solve this.
+	Begin statement
+	Sta: {select [$cinst.$selectnames()]}
+	Sta: {from [$cinst.$servertablenames]}
+	Sta: {where @[pdEvent] between ACP_FROM and ACP_TO}
+	Sta: {and    ACP_SPAN = @[pnSpan]}
+	End statement
+	Do $cinst.$executesqlandfetch() Returns lbOK
+End If
+
+If lbImmediateSession
+	Do $cinst.$SetSession(#NULL,#NULL,kTrue)
+End If
+
+Quit method lbOK

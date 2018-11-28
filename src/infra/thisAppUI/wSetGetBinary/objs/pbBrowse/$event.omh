@@ -1,0 +1,19 @@
+On evClick     ;; Event Parameters - pRow( Itemreference )
+	Do FileOps.$getfilename(lcPath,'locate the image file') Returns lbSelected
+	If lbSelected
+		Do loFileOps.$openfile(lcPath) Returns lnFileStatus
+		If lnFileStatus<0
+			Breakpoint
+			Quit method
+		End If
+		Do loFileOps.$readfile(ibinContent) Returns lnFileStatus
+		Do loFileOps.$closefile()
+		
+		Do method TypeOfPicture
+	End If
+	
+	Do $cinst.$behaviour()
+	Do $cinst.$redraw()
+	
+	;  for some reason completing this action is generating an evCancel event
+	Quit event handler (Discard event)

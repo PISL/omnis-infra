@@ -1,0 +1,32 @@
+;  Return true if this form has handled the shortcut key
+
+
+Switch pIdent
+	Case 1101
+		If irUserRights.canInsert&icMode=''     ;; copied from $behaviour()
+			Do $cinst.$insertCR()     ;; because of the complexity of the various tabs, handle validity of call in this method
+		End If
+		Quit method kTrue     ;; tell the parent that we've dealt with it
+		
+	Case 1102
+		If irUserRights.canEdit&irCurrentRecord.PRD_SEQ>0&icMode=''     ;; copied from $behaviour()
+			Do $cinst.$editCR()     ;; because of the complexity of the various tabs, handle validity of call in this method
+		End If
+		Quit method kTrue     ;; tell the parent that we've dealt with it
+		
+	Case 1103
+		If irUserRights.canDelete&irCurrentRecord.PRD_SEQ>0&icMode=''     ;; copied from $behaviour()
+			Do $cinst.$deleteCR()     ;; because of the complexity of the various tabs, handle validity of call in this method
+		End If
+		Quit method kTrue     ;; tell the parent that we've dealt with it
+		
+	Case 1201
+		If irUserRights.canInsert&icMode=''&irCurrentRecord.PRD_SEQ>0     ;; copied from $behaviour()
+			Do $cinst.$duplicateCR()
+		End If
+		Quit method kTrue
+		
+	Default
+		Quit method kFalse
+		
+End Switch

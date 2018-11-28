@@ -1,0 +1,18 @@
+Calculate $cinst.Price as $cinst.FOD_QTY*$cinst.FOD_UNIT_PRICE
+
+Do $cinst.$cols.$findname('RFL_NUMBER') Returns liColRef
+If liColRef
+	;  the invoice is in development and VAT rates need to be applied
+	If isnull($cinst.RFL_NUMBER)
+		Calculate $cinst.FOD_UNIT_TAX as 0
+		Calculate $cinst.Tax as 0
+	Else
+		Calculate $cinst.FOD_UNIT_TAX as $cinst.FOD_UNIT_PRICE*$cinst.RFL_NUMBER/100
+		Calculate $cinst.Tax as $cinst.FOD_QTY*$cinst.FOD_UNIT_TAX
+	End If
+Else
+	;  the invoice is complete and VAT has already been calculated
+	Calculate $cinst.Tax as $cinst.FOD_QTY*$cinst.FOD_UNIT_TAX
+End If
+
+Calculate $cinst.Total as $cinst.Price+$cinst.Tax

@@ -1,0 +1,11 @@
+;  may be called from pbDelete.$event or enterData
+Calculate $cinst.icDisplayMessage as ''
+
+Do irCurrentRecord.$checkChildren() Returns lnCountChildren
+If lnCountChildren=0
+	Do $cinst.$clientNoYesMsg(con($cell($cinst.clLabels,'objName','disp_delete','label'),' ',pcRecordDesc,'?  ',$cell($cinst.clLabels,'objName','disp_confirm','label')),$cell($cinst.clLabels,'objName','disp_respond','label'),pcDeleteMethod)
+Else
+	Do irCurrentRecord.$getTablesWithChildren(kTrue) Returns lcTablesWithChildren
+	Calculate $cinst.icDisplayMessage as con($cell($cinst.clLabels,'objName','disp_child_nodelete','label'),kCr,lcTablesWithChildren)
+	Do $cinst.$behaviour()
+End If

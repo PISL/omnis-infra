@@ -1,0 +1,6 @@
+Calculate icPrefix as 'ACP_'
+Calculate icPrimarykey as 'ACP_SEQ'
+Calculate ibHasSequence as kTrue
+Calculate icForeignKey as ''
+
+Do inherited

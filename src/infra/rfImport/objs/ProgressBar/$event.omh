@@ -1,0 +1,16 @@
+On evCarryOn
+	;  ### not working
+	
+	;  If not(iCancelled)
+	;  Calculate iValue as iValue+5
+	;  Calculate $cinst.$objs.ProgressBar.$visible as kTrue
+	Do method $cinst.$getProgress
+	Do $cinst.$objs.ProgressBar.$::value.$assign(inProgressValue)
+	If inProgressValue<inProgressMax
+		Do $cinst.$objs.ProgressBar.$sendcarryon.$assign(kTrue)
+	Else
+		Do $cinst.$clientcommand("lockui",row())     ;; unlock ui
+		Calculate $cinst.$objs.ProgressBar.$visible as kFalse
+	End If
+	
+	;  End If

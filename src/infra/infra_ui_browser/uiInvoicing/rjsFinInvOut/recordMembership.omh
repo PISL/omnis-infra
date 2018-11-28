@@ -1,0 +1,37 @@
+Calculate icDisplayMessage as ''
+Do ioDelegateInvoice.$fetchDelegatesPaidWithInvoice(irCurrentRecord.FOH_SEQ) Returns llPaid
+If llPaid.$linecount>0
+	Do $DefineList(lrMember,'tMembership')
+	
+	;  only one person is recorded with membership, whether Personal or Corporate
+	;  the difference is that a corporate vote can be assigned to anyoine from that organisation
+	
+	Calculate llPaid.$line as 1
+	Do lrMember.$clear()
+	Calculate lrMember.MB_PSN_REF as llPaid.DG_PSN_REF
+	Calculate lrMember.MB_CURRENCY as irCurrentRecord.FOH_CURRENCY
+	Calculate lrMember.MB_AMOUNT as ilDetails.FOD_QTY*(ilDetails.FOD_UNIT_PRICE+ilDetails.FOD_UNIT_TAX)
+	Calculate lrMember.MB_FROM as dat(irCurrentRecord.FOH_MWHEN)     ;; assuming last change in FOH_STATUS to PAID reflects correct date
+	Calculate lrMember.MB_TO as dim(lrMember.MB_FROM,12)-1
+	If pos('PERSONAL',upp(ilDetails.PRD_DESC))
+		Calculate lrMember.MB_TYPE as 'P'
+	Else If pos('CORPORATE',upp(ilDetails.PRD_DESC))
+		Calculate lrMember.MB_TYPE as 'C'
+	Else
+		Breakpoint
+		;  leave MB_TYPE empty
+	End If
+	Do lrMember.$insert() Returns lbOK
+	If not(lbOK)
+		;  if there is a duplicate key constraint error then return a user friendly message
+		If lrMember.irErrorSQL.NativeErrorCode='23505'
+			Do toStrings.$StringTableEntry('MSG_MEMBRECORDED',lcMessage,'has already had membership recorded')
+			Calculate icDisplayMessage as con(upp(llPaid.PSN_SURNAME),', ',upp(llPaid.PSN_FIRST_NAME),' ',lcMessage)
+		Else
+			Calculate icDisplayMessage as lrMember.irErrorSQL.NativeErrorText
+			If icDisplayMessage=''
+				Calculate icDisplayMessage as lrMember.icValidationMessage
+			End If
+		End If
+	End If
+End If

@@ -1,0 +1,27 @@
+;  ohReviewH records are created with this record so they will need to be deleted first
+;  after checking for ohReviewProps
+Do $DefineList(llReviewHeaders,'tohReviewH')
+Do llReviewHeaders.$fetch_fk($cinst.ACL_SEQ,'ORH_ACL_REF')
+If llReviewHeaders.$linecount>0
+	While $Loop(llReviewHeaders)
+		Do llReviewHeaders.$checkChildren() Returns lnCount
+		If lnCount>0
+			Break to end of loop
+		End If
+	End While
+End If
+
+If lnCount>0
+	Calculate irErrorSQL.NativeErrorText as 'Overhead review records exist for this period'
+	Quit method kFalse
+Else
+	;  delete the review headers as no children exist
+	Do llReviewHeaders.$delete_fk($cinst.ACL_SEQ,'ORH_ACL_REF') Returns lbOK
+	If lbOK
+		Do inherited Returns lbOK
+	Else
+		Calculate irErrorSQL as llReviewHeaders.irErrorSQL
+	End If
+End If
+
+Quit method lbOK

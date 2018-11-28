@@ -1,0 +1,29 @@
+If irUserRights.canDelete&irCurrentRecord.FOH_SEQ>0&isclear(irCurrentRecord.FOH_SWHEN)&icMode=''
+	Calculate icDisplayMessage as ''
+	
+	Do irCurrentRecord.$checkChildren() Returns lnCountChildren
+	If lnCountChildren=0
+		Do ioRelationshipLogic.$deleteParentChild(irCurrentRecord,ilDetails) Returns lbOK
+		If not(lbOK)
+			Calculate icDisplayMessage as irCurrentRecord.irErrorSQL.NativeErrorText
+		Else
+			Do ilDisplayRecords.$remove(ilDisplayRecords.$line)
+			Do irCurrentRecord.$clear()
+			Calculate ilDisplayRecords.$line as 0
+			Do ilDetails.$clear()
+		End If
+		
+		Do irCurrentRecord.$delete_pk() Returns lbOK
+		If not(lbOK)
+			Calculate icDisplayMessage as irCurrentRecord.irErrorSQL.NativeErrorText
+		Else
+			Do ilDisplayRecords.$remove(ilDisplayRecords.$line)
+			Do irCurrentRecord.$clear()
+			Calculate ilDisplayRecords.$line as 0
+		End If
+	Else
+		Do toStrings.$StringTableEntry('ERR_NODEL_CHILDREN',icDisplayMessage,'record has associated child records, delete those first')
+	End If
+	
+	Do $cinst.$behaviour()
+End If

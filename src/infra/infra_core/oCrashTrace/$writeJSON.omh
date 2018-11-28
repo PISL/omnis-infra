@@ -1,0 +1,6 @@
+Do OJSON.$listorrowtojson(prContent,kUniTypeUTF8,lcError) Returns lbinContent
+If len(lcError)
+	Calculate lbinContent as con("Error converting prContent:",kCr,lcError)
+End If
+Do oFileOps.$writefile(lbinContent) Returns lbOK
+Quit method lbOK

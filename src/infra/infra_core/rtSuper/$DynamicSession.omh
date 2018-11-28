@@ -1,0 +1,78 @@
+If pSessObj.$state=kSessionStateLoggedOn&pStateObj.$state=kSessionStateLoggedOn
+	Quit method kTrue
+Else If pSessObj.$state=kSessionStateLoggedOn
+	Do pSessObj.$newstatement('STMT') Returns pStateObj
+	Quit method kTrue
+End If
+
+Do $sessionpools.$findname(pSource) Returns lrefSessionPool
+;  8 APR 2015 workaround for changing default name of sessionpool away from $clib().$name
+If isnull(lrefSessionPool)
+	If upp(pSource)=upp(tcCurrentLibrary)&irConfigFile.Name<>''
+		Do $sessionpools.$findname(irConfigFile.Name) Returns lrefSessionPool
+		If lrefSessionPool
+			Calculate pSource as irConfigFile.Name
+		End If
+	End If
+End If
+
+;  2016-09-15 REPORTER uses multiple DB connections so there was no default DB connection
+;       ;; after putting this code in place, we created a reporter database but let's leave it here just in case
+If isclear(pSource)
+	;  no point in $SendMail because we don't have a DB connection
+	Do method $ProcedureStack Returns lcDiagnosticInfo
+	Send to trace log {pSource is blank.  Method cannot succeed.}
+	Sound bell
+	Send to trace log {[lcDiagnosticInfo]}
+	Sound bell
+	Quit method kFalse
+End If
+
+If lrefSessionPool     ;; lbFound
+	;  Set reference lrefSessionPool to $sessionpools.[pSource].$ref
+	Do lrefSessionPool.$new(2) Returns pSessObj
+	If pSessObj.$state=kSessionStateLoggedOn
+		Do pSessObj.$newstatement('STMT') Returns pStateObj
+		Quit method kTrue
+	Else
+		;  Do $AppError(con('$DynamicSession ',pSource,' failed - no sessions available'))
+		;  Open window instance wMessage_e/* (con($clib().$name,' ',sys(85),' ',pSource,' failed - no sessions available'))
+		Send to trace log {[con(tcCurrentLibrary,' ',sys(85),' ',pSource,' failed - no sessions available')]}
+		Do method $ProcedureStack Returns lcDiagnosticInfo
+		;  Do method sendEmailBackground (tConstants.EmailAddressWebmaster,con(tcCurrentLibrary,' ',sys(85),' Web App Error - no sessions available'),con('$DynamicSession ',pSource,' failed - it did not exist',kCr,kCr,lcDiagnosticInfo))
+		Calculate lrError as row(con(tcCurrentLibrary,' ',sys(85),' Web App Error - no sessions available'),con('$DynamicSession ',pSource,' failed - it did not exist',kCr,kCr,lcDiagnosticInfo))
+		Do $libs.infra.$objects.oCrashTrace.$new(con(tConstants.TraceLogDirectory,"DynamicSession"),lrError) Returns loCrashTrace     ;; passing in the TraceLogDirectory parameter tells oCrashTrace to open a file, write to it and close it, second parameter is a 2 column row with email subject and message
+	End If
+	
+Else
+	;  the problem here is that $AppError will attempt to Log this error, which it can't do because we have already failed to a session !
+	;  mind you, we could pass a param to NOT log the error, but sending emails is now asyncronously, going to file to be sent later!
+	;  Do $AppError(con('$DynamicSession ',pSource,' failed - it did not exist'))
+	;  Open window instance wMessage_e/* (con($clib().$name,' ',sys(85),' ',pSource,' failed - it did not exist'))
+	Send to trace log {[con(tcCurrentLibrary,' ',sys(85),' ',pSource,' failed - it did not exist')]}
+	;  send an email message?     ;; yes
+	Do method $ProcedureStack Returns lcDiagnosticInfo
+	;  Do method sendEmailBackground (tConstants.EmailAddressWebmaster,con(tcCurrentLibrary,' ',sys(85),' Web App Error - dynamic session failure'),con('$DynamicSession ',pSource,' failed - it did not exist',kCr,kCr,lcDiagnosticInfo))
+	Calculate lrError as row(con(tcCurrentLibrary,' ',sys(85),' Web App Error - dynamic session failure'),con('$DynamicSession ',pSource,' failed - it did not exist',kCr,kCr,lcDiagnosticInfo))
+	Do $libs.infra.$objects.oCrashTrace.$new(con(tConstants.TraceLogDirectory,"DynamicSession"),lrError) Returns loCrashTrace     ;; passing in the TraceLogDirectory parameter tells oCrashTrace to open a file, write to it and close it, second parameter is a 2 column row with email subject and message
+End If
+
+;  if we are here then something has gone wrong above.
+;  Appropriate messages have been sent but its now time to resurrect our db connection.
+Do $itasks.[tcCurrentLibrary].$ResurrectSessionPool(pSource) Returns lbOK
+If lbOK
+	;  2nd attempt for session
+	Set reference lrefSessionPool to $sessionpools.[pSource].$ref
+	Do lrefSessionPool.$new(2) Returns pSessObj
+	If pSessObj.$state=kSessionStateLoggedOn
+		Do pSessObj.$newstatement('STMT') Returns pStateObj
+		Quit method kTrue
+	Else
+		;  Open window instance wMessage_e/* (con($clib().$name,' ',sys(85),' ',pSource," failed 2nd time - we're fucked!"))
+		Send to trace log {[con(tcCurrentLibrary,' ',sys(85),' ',pSource," failed 2nd time - we're fucked!")]}
+		;  Do method sendEmailBackground (tConstants.EmailAddressWebmaster,con(tcCurrentLibrary,' ',sys(85),' Web App Error - no sessions available'),con('$DynamicSession ',pSource," failed 2nd time - we're fucked!"))
+		Calculate lrError as row(con(tcCurrentLibrary,' ',sys(85),' Web App Error - no sessions available'),con('$DynamicSession ',pSource," failed 2nd time - we're fucked!"))
+		Do $libs.infra.$objects.oCrashTrace.$new(con(tConstants.TraceLogDirectory,"DynamicSession"),lrError) Returns loCrashTrace     ;; passing in the TraceLogDirectory parameter tells oCrashTrace to open a file, write to it and close it, second parameter is a 2 column row with email subject and message
+	End If
+End If
+Quit method kFalse

@@ -1,0 +1,8 @@
+;  Breakpoint
+Calculate icFileName as con("/tmp/",OWEB.$makeuuid(),mid(icFileName,rpos(".",icFileName)))     ;; replace the file name with a UUID to avoid clashes with other imports
+Do oFileOps.$createfile(icFileName,'XXXX','OM$8')
+Do oFileOps.$openfile(icFileName)
+Do oFileOps.$writefile(tbinFileUpload) Returns lbSuccess
+Do oFileOps.$closefile()
+
+Quit method lbSuccess

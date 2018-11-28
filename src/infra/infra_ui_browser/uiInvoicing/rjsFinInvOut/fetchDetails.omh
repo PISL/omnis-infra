@@ -1,0 +1,81 @@
+;  populate the invoice details list
+Calculate icDisplayMessage as ''
+
+Calculate ibInvoiceHasItemsThatHaveEcoCostPublished as kFalse
+Do ilDetails.$fetchInvDetails(irCurrentRecord.FOH_SEQ)
+;  Do ilDetails.$sendall($ref.ItemTotal.$assign(ilDetails.FOD_QTY*(ilDetails.FOD_UNIT_PRICE+ilDetails.FOD_UNIT_TAX)))
+Calculate ilDetails.$line as 0
+While $loop(ilDetails)
+	Do ilDetails.$calculatedValues()
+	
+	If tcCurrentLibrary='CONFERENCE'
+		;  ignore ecoCost stuff
+	Else
+		If ilDetails.PEP_SEQ>0
+			Calculate ibInvoiceHasItemsThatHaveEcoCostPublished as kTrue
+		End If
+	End If
+End While
+Calculate ilOriginalDetails as ilDetails
+If irCurrentRecord.FOH_SWHEN>dat('i JAN 2010')
+	Do toStrings.$StringTableEntry('MSG_ECOINVSUBMIT',icDisplayMessage,'ecoInvoice was submitted')
+	Calculate icDisplayMessage as con(icDisplayMessage,' ',dat(irCurrentRecord.FOH_SWHEN,'D/M/Y H:N'))
+Else If not(ibInvoiceHasItemsThatHaveEcoCostPublished)
+	If tcCurrentLibrary='CONFERENCE'
+		;  ignore ecoCost stuff
+	Else
+		Do toStrings.$StringTableEntry('MSG_CANNOTSUBMITECOINV',icDisplayMessage,'Invoice cannot be submitted to ecoInvoice because no product has a published ecoCost.')
+	End If
+End If
+
+Do method calculateTotals
+
+If tcCurrentLibrary='CONFERENCE'
+	;  which conference is being referred to?     ;; We cannot tell from the FOH record.
+	;  To do that we need to link to the delegate record.
+	Do ilDelegatesRelatingToThisInvoice.$fetchDelegatesFromInvoice($cinst.irCurrentRecord.FOH_SEQ)
+	If ilDelegatesRelatingToThisInvoice.$linecount>0
+		;  as of 4 AUG 2016 we have DIL_PRIMARY to denote primary delegate amongst multiple     ;; but what order?
+		Do ilDelegatesRelatingToThisInvoice.$sort($ref.DIL_PRIMARY,0,$ref.DIL_SEQ,0)     ;; order they went inserted into db
+		
+		Do ilDelegatesRelatingToThisInvoice.$search(1)     ;; select all lines to display checked
+		If ilAllUninvoicedDelegates.1.DG_CF_REF=ilDelegatesRelatingToThisInvoice.1.DG_CF_REF
+			;  then we have all the records we need
+		Else If ilDelegatesRelatingToThisInvoice.$linecount>0
+			Do ilAllUninvoicedDelegates.$fetchForConference(ilDelegatesRelatingToThisInvoice.1.DG_CF_REF,#NULL,con("DG_ROLE <> 'SPEAKER' and not exists (select 'x' from conf.delegateInvoicelinks where DIL_DG_REF = DG_SEQ )"))
+		Else If irConference.CF_SEQ>0
+			Do ilAllUninvoicedDelegates.$fetchForConference(irConference.CF_SEQ,#NULL,con("DG_ROLE <> 'SPEAKER' and not exists (select 'x' from conf.delegateInvoicelinks where DIL_DG_REF = DG_SEQ )"))
+		Else
+			Do ilAllUninvoicedDelegates.$clear()
+		End If
+		Do ilAllUninvoicedDelegates.$sort($ref.PSN_SURNAME,0,$ref.PSN_FIRST_NAME,0)
+	Else
+		Do ilAllUninvoicedDelegates.$clear()
+	End If
+	
+	;  now merge the linked and delegates not assigned to an invoice into a single list
+	If ilAllUninvoicedDelegates.$linecount>0
+		Calculate ilAllUninvoicedDelegates.$line as 0
+		While $Loop(ilAllUninvoicedDelegates)
+			Do ilDelegatesRelatingToThisInvoice.$search($ref.PSN_SEQ=ilAllUninvoicedDelegates.PSN_SEQ,1,0,0,0) Returns lbFound
+			If lbFound
+				;  in theory this should hardly ever happen.  Not impossible but certainly rare.
+				Calculate ilDelegatesRelatingToThisInvoice.[ilDelegatesRelatingToThisInvoice.$line].$selected as kTrue
+			Else
+				;  put the other delegates name in the list but it remains unselected
+				Do ilDelegatesRelatingToThisInvoice.$add()
+				Calculate ilDelegatesRelatingToThisInvoice.$line as ilDelegatesRelatingToThisInvoice.$linecount
+				Do ilDelegatesRelatingToThisInvoice.$assignrow(ilAllUninvoicedDelegates,kTrue)
+			End If
+			
+			;  Do ilDelegatesRelatingToThisInvoice.$displayName(1)
+		End While
+	End If
+	Calculate ilDelegatesRelatingToThisInvoice.$line as 0
+	While $Loop(ilDelegatesRelatingToThisInvoice)
+		Do ilDelegatesRelatingToThisInvoice.$displayName(1)
+	End While
+	
+	Calculate ilDelegatesRelatingToThisInvoice.$line as 0     ;; leave selected but don't have a current line
+	Calculate ilSaveLastSelection as ilDelegatesRelatingToThisInvoice
+End If

@@ -1,0 +1,1 @@
+Do $cinst.$warnDelete(irCurrentRecord.ROL_NAME,'$deleteProceed')

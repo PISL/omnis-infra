@@ -1,0 +1,198 @@
+{
+	"classtype": "kWindow",
+	"internalversion": 7,
+	"superclass": "wBase",
+	"designtaskname": "Startup_Task",
+	"nextident": 1028,
+	"lastgroupident": 0,
+	"cvardefs": [
+
+	],
+	"ivardefs": [
+		{
+			"name": "ibAutoRefresh",
+			"order": 6,
+			"type": "kBoolean",
+			"subtype": 0,
+			"sublen": 0,
+			"initval": "kFalse"
+		},
+		{
+			"name": "ibSpeakAppName",
+			"order": 5,
+			"type": "kBoolean",
+			"subtype": 0,
+			"sublen": 0,
+			"initval": "kFalse"
+		},
+		{
+			"name": "icNameOfApplication",
+			"order": 16,
+			"type": "kCharacter",
+			"subtype": "kSimplechar",
+			"sublen": 100
+		},
+		{
+			"name": "icPathForLostConnection",
+			"order": 13,
+			"type": "kCharacter",
+			"subtype": "kSimplechar",
+			"sublen": 1000
+		},
+		{
+			"name": "icPathForNewConnection",
+			"order": 14,
+			"type": "kCharacter",
+			"subtype": "kSimplechar",
+			"sublen": 500
+		},
+		{
+			"name": "icTimeLapse",
+			"order": 4,
+			"type": "kCharacter",
+			"subtype": "kSimplechar",
+			"sublen": 40
+		},
+		{
+			"name": "idtRefresh",
+			"order": 3,
+			"type": "kDate",
+			"subtype": "kDatetime",
+			"sublen": 7,
+			"initval": "#NULL"
+		},
+		{
+			"name": "ilRemoteForms",
+			"order": 2,
+			"type": "kList",
+			"subtype": "",
+			"sublen": 0
+		},
+		{
+			"name": "ilRemoteTasks",
+			"order": 1,
+			"type": "kList",
+			"subtype": "",
+			"sublen": 0
+		},
+		{
+			"name": "inTimerSeconds",
+			"order": 9,
+			"type": "kInteger",
+			"subtype": "kShortint",
+			"sublen": 0
+		},
+		{
+			"name": "ioApplescript",
+			"order": 15,
+			"type": "kObject",
+			"subtype": "oAppleScript",
+			"sublen": 0
+		},
+		{
+			"name": "ioAutoTimer",
+			"order": 8,
+			"type": "kObject",
+			"subtype": "oTimerAutoRefresh",
+			"sublen": 0
+		},
+		{
+			"name": "ioPlayWav",
+			"order": 12,
+			"type": "kObject",
+			"subtype": ".WAV Library.WavPlay",
+			"sublen": 0
+		},
+		{
+			"name": "irWinPosition",
+			"order": 10,
+			"type": "kRow",
+			"subtype": "",
+			"sublen": 0
+		}
+	],
+	"properties": {
+		"aligntogrid": false,
+		"alpha": 255,
+		"backcolor": "kColor3DFace",
+		"backgroundskin": 0,
+		"backgroundskinalign": "kPALtopLeft",
+		"backgroundtheme": "kBGThemeWindow",
+		"backpattern": 0,
+		"bringinfront": false,
+		"clickbehind": true,
+		"closebox": true,
+		"collectperformancedata": false,
+		"componenticon": 0,
+		"componenttype": "kCompStoreHidden",
+		"contextmenu": "",
+		"createdate": "2017-10-27 11:20:37",
+		"desc": "",
+		"dockingedge": "kBorderChisel",
+		"dropmode": "kAcceptNone",
+		"edgefloat": "kEFnone",
+		"editor": "",
+		"editordata": "",
+		"effect": "kBorderNone",
+		"enablemenuandtoolbars": true,
+		"external": true,
+		"forecolor": "kColor3DFace",
+		"growbox": true,
+		"hasmenus": false,
+		"hasstatusbar": false,
+		"height": 250,
+		"helpbutton": false,
+		"helpfile": 0,
+		"horzgrid": 8,
+		"horzscroll": false,
+		"inheritedorder": 1,
+		"issubwindow": false,
+		"issupercomponent": false,
+		"keepclicks": true,
+		"left": 7,
+		"menuedge": "kBorderChisel",
+		"menunames": "",
+		"minimizebox": false,
+		"minimizeiconid": 2006,
+		"moddate": "2017-10-31 14:25:05",
+		"modelessdata": true,
+		"showascheckedout": false,
+		"showcommands": false,
+		"showgrid": false,
+		"showtitle": false,
+		"sizetogrid": false,
+		"startfield": 0,
+		"statusbarpos": "kSBPosBottom",
+		"statusedge": "kBorderChisel",
+		"style": "kTitle",
+		"title": {
+			"type": 0,
+			"calc": "Remote task monitor"
+		},
+		"toolbarnames": "",
+		"toolbaroptions": "kTBOptionNone",
+		"toolbarpos": "kDockingAreaNone",
+		"top": 5,
+		"userinfo": {
+			"type": 29,
+			"subtype": 1,
+			"data": {
+				"$base64": "ggEAIAAAAMEAAADSAAAAAwAAAAH/////AAAAAQAAANKBAAAaAAAAYQAAAGEAAAChAAAAAABhAAAAAIIBACAAAAAgAAAARwAAAAMAAAACO5rKAAAAAAAAAABHAAAAAAEA4AIAEGQAGgAAgQJDMQACIeACABBkABoAAIECQzIAAiHgAAAAAgACAABDMQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABQzIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAABAOACAApxBB9xB+zg"
+			}
+		},
+		"usesheets": false,
+		"version": "2",
+		"vertgrid": 8,
+		"vertscroll": false,
+		"width": 1163,
+		"zoombox": false
+	},
+	"statusbar": {
+		"properties": {
+			"fieldstyle": "",
+			"font": 1,
+			"fontsize": 0,
+			"helppane": 0
+		}
+	}
+}

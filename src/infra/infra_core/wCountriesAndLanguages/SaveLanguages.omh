@@ -1,0 +1,7 @@
+Do oDAO_CoLang.$SaveLanguages(ilLanguages) Returns lbOK
+
+
+;  Do ilLanguages.$dowork_() Returns lbOK
+If lbOK
+	Do ilLanguages.$savelistwork()
+End If

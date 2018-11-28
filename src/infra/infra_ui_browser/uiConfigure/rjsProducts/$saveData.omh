@@ -1,0 +1,48 @@
+Calculate lcMode as icMode     ;; savew the mode cos $saveData clears it on lbOK
+;  first save the master record
+If icMode='I'     ;; add Model
+	Do irCurrentRecord.$validation() Returns lbProceed
+	If not(lbProceed)
+		Calculate icDisplayMessage as irCurrentRecord.icValidationMessage
+	Else
+		Do irCurrentRecord.$insert() Returns lbOK
+		If lbOK
+			Do irInternalData.$assignrow(irCurrentRecord,kTrue)
+			Calculate irInternalData.PID_PRD_REF as irCurrentRecord.PRD_SEQ
+			Do irInternalData.$insert() Returns lbOK
+			If lbOK
+				;  Do method FetchRecords
+				Do ilDisplayRecords.$fetchOurProducts()
+				Calculate icMode as ''
+			Else
+				Calculate icDisplayMessage as irInternalData.irErrorSQL.NativeErrorText
+			End If
+		Else
+			;  Calculate icMode as ''     ;; remain in insert mode
+			Calculate icDisplayMessage as irCurrentRecord.irErrorSQL.NativeErrorText
+		End If
+	End If
+Else If icMode='E'
+	Do irCurrentRecord.$validation() Returns lbProceed
+	If not(lbProceed)
+		Calculate icDisplayMessage as irCurrentRecord.icValidationMessage
+	Else
+		Do irCurrentRecord.$update() Returns lbOK
+		If lbOK
+			Do irInternalData.$assignrow(irCurrentRecord,kTrue)
+			Do irInternalData.$update() Returns lbOK
+			If lbOK
+				Calculate ilDisplayRecords.[ilDisplayRecords.$line] as irCurrentRecord
+				Calculate icMode as ''
+			Else
+				Calculate icDisplayMessage as irInternalData.irErrorSQL.NativeErrorText
+			End If
+		Else
+			;  Calculate icMode as ''     ;; remain in edit mode
+			Calculate icDisplayMessage as irCurrentRecord.irErrorSQL.NativeErrorText
+		End If
+	End If
+End If
+
+;  Do $cinst.$behaviour()
+Quit method lbOK

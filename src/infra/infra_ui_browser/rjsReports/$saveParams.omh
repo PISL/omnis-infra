@@ -1,0 +1,143 @@
+;  save parameters - could be to either user prefs or org prefs
+Calculate lrAttributes as plDisplayList.reportAttributes
+Do lrAttributes.$cols.$findname('saveParamsUser') Returns liColRefUser
+Do lrAttributes.$cols.$findname('saveParams') Returns liColRefAll
+If liColRefUser&lrAttributes.saveParamsUser
+	Do $ctask.toValues.$initUser('REP_PARAMS',plDisplayList.reportCode) Returns lrParameter
+	Calculate lbSave as kTrue
+Else If liColRefAll&lrAttributes.saveParams
+	Do $ctask.toValues.$initOrg('REP_PARAMS',plDisplayList.reportCode) Returns lrParameter
+	Calculate lbSave as kTrue
+End If
+If not(lbSave)
+	Quit method
+End If
+
+;  Breakpoint {This is untested code !}
+;  Determine which report parameters are to be saved.     ;; If the field has a label then it was displayed to the user.
+
+;  Tried using OJSON.$listorrowtojson but the definition changed each time it was run, as though the column definitions were encoded in a random order.
+;  Also we were saving all paramters whether or not they were used and we needed to be more discerning.
+;  So I am doing hand rolled JSON - it gets around the awkward way lists within rows are handled too.
+
+;  Do lrJSON.$define(pnPrintDestination,pdFrom,pdTo,pbCheckBox1,pbCheckbox2,pbCheckbox3,plSorts,plFilter,plSelectList,plGroupBy,pnInteger1,pnInteger2,pnReal1,pnReal2)
+;  Do lrJSON.$assigncols(pnPrintDestination,pdFrom,pdTo,pbCheckBox1,pbCheckbox2,pbCheckbox3,plSorts,plFilter,plSelectList,plGroupBy,pnInteger1,pnInteger2,pnReal1,pnReal2)
+;  Calculate lcErrorJSON as ''
+;  Do OJSON.$listorrowtojson(lrJSON,kUniTypeCharacter,lcErrorJSON) Returns lcJSON
+;  If lcErrorJSON<>''
+;  Breakpoint
+;  End If
+
+Begin text block
+Text: {{}
+Text: {"[nam(pnPrintDestination)]":"[pnPrintDestination]"}
+Calculate lcSeparator as ','
+
+Do lrAttributes.$cols.$findname('sortlist_lbl') Returns liColRef
+If liColRef
+	Text: {[lcSeparator]"[nam(plSorts)]":"[plSorts.C1]"}
+End If
+Do lrAttributes.$cols.$findname('filterlist_lbl') Returns liColRef
+If liColRef
+	Text: {[lcSeparator]"[nam(plFilter)]":"[plFilter.C1]"}
+End If
+;  checkboxes
+Do lrAttributes.$cols.$findname('checkbox1_lbl') Returns liColRef
+If liColRef
+	Text: {[lcSeparator]"[nam(pbCheckBox1)]":"[int(pbCheckBox1)]"}
+End If
+Do lrAttributes.$cols.$findname('checkbox2_lbl') Returns liColRef
+If liColRef
+	Text: {[lcSeparator]"[nam(pbCheckbox2)]":"[int(pbCheckbox2)]"}
+End If
+Do lrAttributes.$cols.$findname('checkbox3_lbl') Returns liColRef
+If liColRef
+	Text: {[lcSeparator]"[nam(pbCheckbox3)]":"[int(pbCheckbox3)]"}
+End If
+;  dates
+Do lrAttributes.$cols.$findname('datefrom_lbl') Returns liColRef
+If liColRef
+	Text: {[lcSeparator]"[nam(pdFrom)]":"[pdFrom]"}
+End If
+Do lrAttributes.$cols.$findname('dateto_lbl') Returns liColRef
+If liColRef
+	Text: {[lcSeparator]"[nam(pdTo)]":"[pdTo]"}
+End If
+;  integers
+Do lrAttributes.$cols.$findname('integer1_lbl') Returns liColRef
+If liColRef
+	Text: {[lcSeparator]"[nam(pnInteger1)]":"[pnInteger1]"}
+End If
+Do lrAttributes.$cols.$findname('integer2_lbl') Returns liColRef
+If liColRef
+	Text: {[lcSeparator]"[nam(pnInteger2)]":"[pnInteger2]"}
+End If
+;  decimal numbers
+Do lrAttributes.$cols.$findname('real1_lbl') Returns liColRef
+If liColRef
+	Text: {[lcSeparator]"[nam(pnReal1)]":"[pnReal1]"}
+End If
+Do lrAttributes.$cols.$findname('real2_lbl') Returns liColRef
+If liColRef
+	Text: {[lcSeparator]"[nam(pnReal2)]":"[pnReal2]"}
+End If
+;  select or group list
+;  If a group by list is used we will save the group by result and ignore the selectlist contents.
+Do lrAttributes.$cols.$findname('groupbylist_lbl') Returns liColRef
+If liColRef
+	Calculate lcTemp as ''
+	Calculate plGroupBy.$line as 0
+	While $Loop(plGroupBy)
+		Calculate lcTemp as con(lcTemp,pick(lcTemp<>'','',','),plGroupBy.C1)     ;; this assumes C1 is the unique column - the code column (not the translation)
+	End While
+	Text: {[lcSeparator]"[nam(plGroupBy)]":"[lcTemp]"}
+Else
+	;  no group by - save selectlist items
+	Do lrAttributes.$cols.$findname('selectlist_lbl') Returns liColRef
+	If liColRef
+		Do lrAttributes.$cols.$findname('selectlist_ischecklist') Returns liColRef
+		If liColRef
+			;  save code of all selected lines
+			Calculate lcTemp as ''
+			Calculate plSelectList.$line as 0
+			While $Loop(plSelectList,kTrue)
+				Calculate lcTemp as con(lcTemp,pick(lcTemp<>'','',','),plSelectList.C1)     ;; this assumes C1 is the unique column - the code column (not the translation)
+			End While
+			Text: {[lcSeparator]"[nam(plSelectList)]":"[lcTemp]"}
+		Else
+			;  save the code of the current line
+			Text: {[lcSeparator]"[nam(plSelectList)]":"[plSelectList.C1]"}
+		End If
+	End If
+End If
+If plSearch1.$line>0
+	;  Text: {[lcSeparator]"[nam(plSearch1)]":"[plSearch1.C1]"}
+End If
+If plSearch2.$line>0
+	;  Text: {[lcSeparator]"[nam(plSearch2)]":"[plSearch2.C1]"}
+End If
+Text: {}}
+End text block
+Get text block lcJSON
+
+If lrParameter.[lrParameter.icPrefix]JSON=lcJSON
+	;  nothing to save
+Else
+	Calculate lrParameter.[lrParameter.icPrefix]JSON as lcJSON
+	If lrParameter.[lrParameter.icPrefix]SEQ>0
+		Do lrParameter.$update() Returns lbOK
+	Else
+		Do lrParameter.$defaults()     ;; active and inherited (inherited not used)
+		Calculate lrParameter.[lrParameter.icPrefix]CLASS as 'REP_PARAMS'
+		Calculate lrParameter.[lrParameter.icPrefix]VALUE as plDisplayList.reportCode
+		Calculate lrParameter.[lrParameter.icPrefix]DESC as plDisplayList.reportName
+		Do lrParameter.$insert() Returns lbOK
+		If not(lbOK)
+			If lrParameter.icValidationMessage<>''
+				Calculate icDisplayMessage as lrParameter.icValidationMessage
+			Else If lrParameter.irErrorSQL.NativeErrorText<>''
+				Calculate icDisplayMessage as lrParameter.irErrorSQL.NativeErrorText
+			End If
+		End If
+	End If
+End If

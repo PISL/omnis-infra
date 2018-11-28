@@ -1,0 +1,27 @@
+{
+	"ident": 1027,
+	"order": 16387,
+	"objtype": "kLabel",
+	"properties": {
+		"align": "kLeftJst",
+		"backcolor": "kColorBackFill",
+		"backpattern": 15,
+		"designactive": true,
+		"edgefloat": "kEFtopBottom",
+		"fieldstyle": "CtrlLabel",
+		"font": 3,
+		"fontsize": 0,
+		"fontstyle": "kPlain",
+		"forecolor": "kColorForeFill",
+		"height": 13,
+		"left": 8,
+		"objlink": 0,
+		"text": "IP address filter",
+		"textcolor": "kColorWindowText",
+		"top": 277,
+		"userinfo": "",
+		"vertcentertext": false,
+		"visible": true,
+		"width": 201
+	}
+}

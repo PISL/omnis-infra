@@ -1,0 +1,9 @@
+Do irEcoInvoiceH.$clear()
+Do ilEcoInvoiceD.$clear()
+
+If irCurrentRecord.FOH_INV_NO<>''
+	Do irEcoInvoiceH.$fetchFromFinInvoice(irCurrentRecord.FOH_INV_NO)
+	If irEcoInvoiceH.EOH_SEQ>0
+		Do ilEcoInvoiceD.$fetchInvDetails(irEcoInvoiceH.EOH_SEQ)
+	End If
+End If

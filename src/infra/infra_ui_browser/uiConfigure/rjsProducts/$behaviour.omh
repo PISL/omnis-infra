@@ -1,0 +1,38 @@
+If irefContainer
+	Do irefContainer.$behaviour(icMode)     ;; set the TabControl $enabled
+End If
+
+Calculate $cinst.$objs.ilSearch1.$enabled as icMode=''
+Calculate $cinst.$objs.ilSearch2.$enabled as icMode=''
+Calculate $cinst.$objs.ilDisplayRecords.$enabled as icMode=''
+
+Calculate $cinst.$objs.pbAdd.$enabled as irUserRights.canInsert&icMode=''
+Calculate $cinst.$objs.pbDuplicate.$enabled as irUserRights.canInsert&icMode=''&irCurrentRecord.PRD_SEQ>0
+Calculate $cinst.$objs.pbEdit.$enabled as irUserRights.canEdit&irCurrentRecord.PRD_SEQ>0&icMode=''
+Calculate $cinst.$objs.pbDelete.$enabled as irUserRights.canDelete&irCurrentRecord.PRD_SEQ>0&icMode=''
+
+Calculate $cinst.$objs.pbCancel.$visible as icMode<>''
+Calculate $cinst.$objs.pbSave.$visible as icMode<>''
+
+Calculate $cinst.$objs.EO_NAME.$visible as irExtOrg.EO_SEQ>0
+
+Calculate $cinst.$objs.PRD_SUPP_PRODCODE.$enabled as icMode<>''
+Calculate $cinst.$objs.PRD_INT_PRODCODE.$enabled as icMode<>''
+Calculate $cinst.$objs.PRD_BRAND.$enabled as icMode<>''
+Calculate $cinst.$objs.PRD_NAME.$enabled as icMode<>''
+Calculate $cinst.$objs.PRD_DESC.$enabled as icMode<>''
+Calculate $cinst.$objs.PRD_SIZE.$enabled as icMode<>''
+Calculate $cinst.$objs.PRD_DISCONTINUED.$enabled as icMode<>''
+Calculate $cinst.$objs.PID_UNIT_PRICE.$enabled as icMode<>''
+Calculate $cinst.$objs.PID_TAX_BAND.$enabled as icMode<>''
+
+;  ### DEMO hide the "Technical" tab for the demo
+Calculate $cinst.$objs.TabControl_PRD.$selectedtab as 2     ;; not used at the moment
+Calculate $cinst.$objs.TabControl_PRD.$tabvisible as kFalse
+
+
+Calculate $cinst.$objs.TabControl_PRD.$enabled as (icMode<>'I')
+
+Do method assignEntryFieldProperties
+
+Do inherited      ;; handle objects in the navigation and results panes

@@ -1,0 +1,4 @@
+Calculate $cinst.RFO_CLASS as pcClass     ;; this may be empty when called from superclass but should be called again in subclass
+Calculate $cinst.RFO_ACTIVE as 1     ;; default new records to Active
+Calculate $cinst.RFO_INHERIT as 0     ;; if ACTIVE is true, INHERIT must be false; they can both be false.
+Calculate $cinst.RFO_GO_REF as trGroupOrg.GO_SEQ

@@ -1,0 +1,4 @@
+On evClick     ;; Event Parameters - pRow( Itemreference )
+	Calculate ilCountries.$line as 0
+	Do $cinst.$behaviour()
+	Do $cinst.$redraw()

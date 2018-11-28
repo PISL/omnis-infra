@@ -1,0 +1,94 @@
+;  specific to MEC suite
+If left(tcCurrentLibrary,3)<>'MEC'
+	Breakpoint {Developer:  What are you doing here?}
+	Quit method
+End If
+
+If tlDatabases.DAM='WebService'
+	If pbReturnCount
+		Do ioWeb.$callFetch(lnCount,irErrorSQL,row($cinst.$class().$name,$cmethod().$name,row(pcSearchString,pdFrom,pdTo,pbReturnCount),lnCount.$type,0,ilRESTextensions))
+		If ioWeb.irResponse.httpStatusCode=200
+			;  the result should be in this object     ;; however there may be a SQL error
+			If irErrorSQL.NativeErrorText<>''
+				Quit method kFalse
+			End If
+			Quit method lnCount
+		Else
+			Quit method kFalse
+		End If
+	Else
+		Do ioWeb.$callFetch($cinst,irErrorSQL,row($cinst.$class().$name,$cmethod().$name,row(pcSearchString,pdFrom,pdTo,pbReturnCount),$cinst.$type,0,ilRESTextensions))
+		If ioWeb.irResponse.httpStatusCode=200
+			;  the result should be in this object     ;; however there may be a SQL error
+			If irErrorSQL.NativeErrorText<>''
+				Quit method kFalse
+			End If
+			Quit method kTrue
+		Else
+			Quit method kFalse
+		End If
+	End If
+End If
+
+Do $cinst.$ImmediateSession(loSession,loStatement) Returns lbImmediateSession
+If lbImmediateSession
+	Do $cinst.$SetSession(loSession,loStatement)
+Else If not(ibGoodConnectionToDb)
+	Quit method kFalse
+End If
+
+Begin statement (Carriage return,Linefeed)
+If pbReturnCount
+	Sta: {select count(*) from (}
+End If
+Sta: {select [$cinst.$selectnames()]}
+Sta: {from [$cinst.$servertablenames]}
+Sta: {where PRD_GO_REF = @[trGroupOrg.GO_SEQ]}
+;  only purchased
+Sta: {and    PRD_SUPP_PRODCODE is not null}
+;  check for calculation products
+Sta: {and exists (select 1 from [lrPublication.$servertablenames] where pep_prd_ref = prd_seq}
+If not(isclear(pdFrom))
+	Sta: {and pep_cwhen >= @[pdFrom]}
+End If
+If not(isclear(pdTo))
+	Calculate pdTo as dadd(kDay,1,pdTo)     ;; add a day to give us midnight on the selected date
+	Sta: {and pep_cwhen <= @[pdTo]}
+End If
+;  close the exists subquery
+Sta: {)}
+
+If pnEOref>0
+	Sta: {and PRD_EO_REF = @[pnEOref]}
+End If
+
+If pcSearchString<>''
+	Calculate pcSearchString as upp(con(pcSearchString,'%'))
+	Sta: {and  (upper(PRD_NAME) like @[pcSearchString]}
+	Sta: {or upper(PRD_INT_PRODCODE) like @[pcSearchString]}
+	Sta: {or upper(PRD_BRAND) like @[pcSearchString]}
+	Sta: {or upper(PRD_DESC) like @[pcSearchString]}
+	Sta: {or upper(PRD_SERVICE_UNIT) like @[pcSearchString]}
+	Sta: {)}
+End If
+Sta: {order by PRD_NAME}
+If pbReturnCount
+	;  postgres insists on an alias (optional in Oracle)
+	Sta: {) count_records}
+End If
+End statement
+
+If pbReturnCount
+	Do $cinst.$executesqlandfetchinto(lnCount) Returns lbOK
+Else
+	Do $cinst.$executesqlandfetch() Returns lbOK
+End If
+If lbImmediateSession
+	Do $cinst.$SetSession(#NULL,#NULL,kTrue)
+End If
+
+If pbReturnCount
+	Quit method lnCount
+Else
+	Quit method lbOK
+End If

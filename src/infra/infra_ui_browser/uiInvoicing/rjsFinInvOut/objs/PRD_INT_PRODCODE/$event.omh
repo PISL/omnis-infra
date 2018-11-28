@@ -1,0 +1,43 @@
+On evAfter
+	If irCurrentDetail.PRD_INT_PRODCODE<>''
+		;  irCurrentRecord.FOH_CURRENCY
+		Do ilProducts.$searchstring('COUNT',irCurrentDetail.PRD_INT_PRODCODE) Returns lnCount
+		If lnCount<20
+			Do ilProducts.$searchstring('RESULT',irCurrentDetail.PRD_INT_PRODCODE) Returns lnCount
+			While $Loop(ilProducts)
+				;  filter out currency mismatch     ;; this is a CONFERENCE item for OmnisWorld
+				If tcCurrentLibrary='CONFERENCE'&irCurrentRecord.FOH_CURRENCY<>''
+					If pos(irCurrentRecord.FOH_CURRENCY,ilProducts.PRD_BRAND)=0
+						Calculate ilProducts.[ilProducts.$line].$selected as kTrue
+					Else
+						Do ilProducts.$displayName()
+					End If
+				Else
+					Do ilProducts.$displayName()
+				End If
+			End While
+			Do ilProducts.$remove(kListDeleteSelected)
+			
+			Calculate $cobj.$errortext as ''
+			If ilProducts.$linecount=0
+				Do toStrings.$StringTableEntry('MSG_INVALIDPRDREF',lcMessage,'Invalid - value did not identify a product')
+				Calculate $cobj.$errortext as lcMessage
+				Calculate irCurrentDetail.PRD_INT_PRODCODE as ''
+				Quit event handler (Discard event)
+			Else If ilProducts.$linecount=1
+				Calculate ilProducts.$line as 1
+				Do method ProductSelected
+			Else
+				Do $cinst.$setcurfield('ilProducts_after')
+			End If
+			
+			Calculate $cinst.$objs.PagedPane.$objs.ilProducts_after.$visible as ilProducts.$linecount>1
+		Else
+			Do toStrings.$StringTableEntry('MSG_TOOMANYPROD',lcMessage,'Too many products using')
+			Calculate icDisplayMessage as con(lcMessage,' "',irCurrentDetail.PRD_INT_PRODCODE,'".  ')
+			Do toStrings.$StringTableEntry('MSG_PROVIDEMORE',lcMessage,'Provide more characters to reduce result set.')
+			Calculate icDisplayMessage as con(icDisplayMessage,lcMessage)
+		End If
+	End If
+	
+	Do $cinst.$behaviour()

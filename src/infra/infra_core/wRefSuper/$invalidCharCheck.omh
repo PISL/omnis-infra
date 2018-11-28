@@ -1,0 +1,7 @@
+Do ioFormatData.$FormatRef(pcValue) Returns icValidationText
+
+If icValidationText<>''
+	OK message Invalid entry ! {[icValidationText][kCr][kCr][ioFormatData.icInvalidChars][kCr]are not allowed.}
+	Quit method kFalse
+End If
+Quit method kTrue     ;; proceed

@@ -1,0 +1,23 @@
+Do ilNow.$clear()
+Calculate $cinst.$objs.PagedPane.$objs.ilNow.$errortext as ''     ;; used to display names of children
+Do irCurrentStructure.$clear()
+Calculate irOriginalStructure as irCurrentStructure
+Calculate ilStructureType.$line as 0
+
+If ilPrevious.$line
+	Do ilNow.$FetchBranch(ilPrevious.GS_SEQ,kTrue)     ;; include inactive nodes - this is our browser
+	Do ilNow.$sort($ref.GS_ORDER,0,$ref.GS_SEQ,0)
+	;
+	;  Do method ChildNodeCounts
+	;
+	
+	Calculate ilNow.$line as 0
+	;  Calculate irCurrentStructure as ilPrevious
+	;  Calculate irOriginalStructure as irCurrentStructure
+	Calculate ibModifiedRecord as kFalse
+	Calculate icMode as ''
+	If not(pbPreserveCopyNode)
+		;  Calculate irCopyNode as ''
+	End If
+	;  Do ilColours.$search($ref.REF_VALUE=irCurrentRecord.PB_COLOURC,1,0,0,0)
+End If

@@ -1,0 +1,13 @@
+Do $DefineList(lrTemp,'tDelegates')
+Do lrTemp.$countSpecialEventsOnDate(#D-7,#D,pcExtraString) Returns lrCount
+
+If lrCount.totalInvoiceSent>0|lrCount.totalTravelLinkSent>0
+	Do ilActivity.$add()     ;; blank line
+End If
+
+If lrCount.totalInvoiceSent>0
+	Do ilActivity.$add('Invoices sent',lrCount.totalInvoiceSent,#NULL,lrCount.countInvoiceSent1,#NULL,lrCount.countInvoiceSent2,#NULL,lrCount.countInvoiceSent3,#NULL,lrCount.countInvoiceSent4,#NULL,lrCount.countInvoiceSent5,#NULL,lrCount.countInvoiceSent6,#NULL,lrCount.countInvoiceSent7,#NULL,lrCount.countInvoiceSent8,#NULL)
+End If
+If lrCount.totalTravelLinkSent>0
+	Do ilActivity.$add('travel links sent',lrCount.totalTravelLinkSent,#NULL,lrCount.countTravelLinkSent1,#NULL,lrCount.countTravelLinkSent2,#NULL,lrCount.countTravelLinkSent3,#NULL,lrCount.countTravelLinkSent4,#NULL,lrCount.countTravelLinkSent5,#NULL,lrCount.countTravelLinkSent6,#NULL,lrCount.countTravelLinkSent7,#NULL,lrCount.countTravelLinkSent8,#NULL)
+End If

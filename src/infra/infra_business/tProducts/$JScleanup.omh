@@ -1,0 +1,11 @@
+;  abstract method, should be overloaded in subclass
+;  designed to clean up rows that have been manipulated by the Javascript client
+;  which converts all foregin key NULL values to empty strings or zeroes
+
+If $cinst.PRD_UOS_CODE=''
+	Calculate $cinst.PRD_UOS_CODE as #NULL
+End If
+
+If $cinst.PRD_ECOCOST_UOS_CODE=''
+	Calculate $cinst.PRD_ECOCOST_UOS_CODE as #NULL
+End If

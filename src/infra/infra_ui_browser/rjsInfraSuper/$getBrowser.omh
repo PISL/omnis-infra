@@ -1,0 +1,6 @@
+;  parse the sysTaskStats broser value for the userAgent Platform
+;  this is between the first opening parenthesis and the first semicolon
+Do $getVar('trTaskStats.STS_BROWSER') Returns lcBrowser
+Do OJSON.$jsontolistorrow(lcBrowser,lcErrorText) Returns lrBrowser
+Calculate icPlatform as mid(lrBrowser.userAgent,pos('(',lrBrowser.userAgent)+1)
+Calculate icPlatform as left(icPlatform,pos(';',icPlatform)-1)

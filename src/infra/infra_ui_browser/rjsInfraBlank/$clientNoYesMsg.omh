@@ -1,0 +1,10 @@
+Do lRow.$cols.$add('Msg',kCharacter,kSimplechar,500)
+Do lRow.$cols.$add('title',kCharacter,kSimplechar,50)
+Do lRow.$cols.$add('yesmethod',kCharacter,kSimplechar,50)
+Do lRow.$cols.$add('nomethod',kCharacter,kSimplechar,50)
+
+Calculate lRow.Msg as pcMsg
+Calculate lRow.title as pcTitle
+Calculate lRow.yesmethod as pcYesMethod
+Calculate lRow.nomethod as pcNoMethod
+Do $cinst.$clientcommand('noyesmessage',lRow)

@@ -1,0 +1,21 @@
+;  Breakpoint
+;  $destruct will clear the instance variables
+If ibReimportExcel
+	Do method reimportFromExcel
+End If
+Calculate lcFilePath as icFileName
+Calculate llContent as ilContent
+Calculate llDataCols as ilDataCols
+Calculate lbIgnoreFirstRow as ibDoNotImportFirstLine
+Calculate lcSepThou as icSepThou
+Calculate lcSepDec as icSepDec
+Calculate lcFmtDate as icFmtDate
+Calculate lnRowsToIgnore as inRowsToIgnore
+Do $cinst.$objs.PagedPane.$objs.Grid_ilDataCols.$clearexceptions()     ;; this throws an error if placed in the $destruct method
+Do $cinst.$destruct()
+
+If ibSaveUpload
+	Do irefParent.[icMethodImport](icFileName)     ;; just pass back the path to the saved file
+Else
+	Do irefParent.[icMethodImport](ilSchemaCols,llDataCols,llContent,lbIgnoreFirstRow,lcSepThou,lcSepDec,lcFmtDate,lnRowsToIgnore)
+End If

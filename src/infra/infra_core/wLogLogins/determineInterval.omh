@@ -1,0 +1,9 @@
+If idFrom=fday(kMonth,idFrom)&idTo=lday(kMonth,idTo)
+	Calculate inIncrementMode as cnIntervalMonth     ;; month by month
+Else If ddiff(kDay,idFrom,idTo)=6     ;; Mon-Sun
+	Calculate inIncrementMode as cnIntervalWeek     ;; week by week
+Else If ddiff(kDay,idFrom,idTo)<28
+	Calculate inIncrementMode as cnIntervalDays     ;; less than a month but not a regular period
+Else
+	Calculate inIncrementMode as 0     ;; ??
+End If

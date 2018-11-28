@@ -1,0 +1,5 @@
+Calculate lrAttributes as OJSON.$jsontolistorrow(trFormColours.WORKTAB)
+For lnCount from 1 to lrAttributes.$colcount step 1
+	Calculate lcProperty as lrAttributes.$cols.[lnCount].$name
+	Calculate $cinst.$objs.TabControl_EO.$[lcProperty] as eval(lrAttributes.[lcProperty])
+End For

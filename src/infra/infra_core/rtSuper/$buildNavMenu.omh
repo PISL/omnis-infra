@@ -1,0 +1,61 @@
+Do method $cinst.$initNavGroups Returns llGroups
+Do tlNavMenu.$clear()
+Do tlNavParams.$clear()
+Do llMenuEntries.$copydefinition(tlNavMenu)     ;; tlNavMenu is initialised in infra.rjsBusinessAccess.$construct
+
+;  initialise the Ident counter
+Calculate lnIdent as 1
+
+;  get the properties for the cascading menus
+Calculate lrAttributes as OJSON.$jsontolistorrow(trFormColours.ANAVLIST)
+Calculate lnBackAlpha as lrAttributes.backalpha
+Calculate lnBackColour as eval(lrAttributes.backcolor)
+
+;  use tlAuthorisedForms to filter the list of available groups
+Calculate llGroups.$line as 0
+While $Loop(llGroups)
+	If $ctask.tlAuthorisedForms.$search($ref.class=llGroups.container,1,0,0,0)
+		Calculate llGroups.[llGroups.$line].$selected as kTrue
+	End If
+End While
+Do llGroups.$remove(kListKeepSelected)     ;; remove lines that the user has no access to
+
+;  gather the navMenu groupings
+Calculate llHeaders as llGroups
+Do llHeaders.$cols.group.$removeduplicates(kFalse)
+While $Loop(llHeaders)
+	If len(llHeaders.group)     ;; add a cascading menu item
+		Do llGroups.$search($ref.group=llHeaders.group,1,0,1,1)
+		Calculate llGroups.$line as 0
+		Do llMenuEntries.$clear()
+		While $Loop(llGroups,kTrue)
+			Do llMenuEntries.$add(kNavMenuTypeEntry,llGroups.code,,0,lnIdent,llGroups.container,#NULL)
+			Do method setAuthorisedFormsMenuIdent (llGroups.container,llGroups.code,lnIdent)
+			If len(llGroups.params)
+				Do tlNavParams.$add(lnIdent,OJSON.$jsontolistorrow(llGroups.params))
+			End If
+			Calculate lnIdent as lnIdent+1
+		End While
+		While $Loop(llMenuEntries)
+			;  get the menu translation
+			Do toStrings.$StringTableEntry(llMenuEntries.text,llMenuEntries.text)
+			Calculate llMenuEntries.text as replaceall(llMenuEntries.text,'//',kCr)
+		End While
+		Do tlNavMenu.$add(kNavMenuTypeCascade,llHeaders.group,,1,lnIdent,,row(llMenuEntries,kNavMenuCascadeFlagOpenOnParentEdge+kNavMenuCascadeFlagExpand,#NULL,#NULL,#NULL,#NULL,lnBackColour,eval(lnBackAlpha)))
+		Calculate lnIdent as lnIdent+1
+	Else
+		;  no group, so add a menu item
+		Do tlNavMenu.$add(kNavMenuTypeHeading,llHeaders.code,,0,lnIdent,llHeaders.container)
+		Do method setAuthorisedFormsMenuIdent (llHeaders.container,llHeaders.code,lnIdent)
+		If len(llGroups.params)
+			Do tlNavParams.$add(lnIdent,OJSON.$jsontolistorrow(llGroups.params))
+		End If
+		Calculate lnIdent as lnIdent+1
+	End If
+End While
+
+;  translate the groups
+While $Loop(tlNavMenu)
+	Do toStrings.$StringTableEntry(tlNavMenu.text,tlNavMenu.text)
+	Calculate tlNavMenu.text as replaceall(tlNavMenu.text,'//',kCr)
+End While

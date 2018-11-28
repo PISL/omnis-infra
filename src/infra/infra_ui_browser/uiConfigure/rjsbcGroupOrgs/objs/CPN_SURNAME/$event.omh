@@ -1,0 +1,5 @@
+On evBefore
+	
+	
+On evAfter
+	Do method $cinst.$RegistrationFormBehaviour

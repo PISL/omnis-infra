@@ -1,0 +1,62 @@
+On evDrop
+	;  Set reference lrWin to pDragField     ;; pDragType  pDragValue
+	Calculate lcNotationString as pDragField.$fullname()
+	Calculate lcNotationString as mid(lcNotationString,1,pos('$objs',lcNotationString)-2)     ;; determine window instance reference
+	Set reference lrWin to [lcNotationString]
+	
+	If pos($cclass().$name,lcNotationString)
+		;  good - it has come from an instance of this window class
+		If lrWin<>$cinst.$ref     ;; itmust come from different window
+			;  and it must be a DIFFERENT instance to this one
+			Do lrWin.$GetData() Returns llDataOtherDB
+			
+			Calculate llData as ilData
+			Do llData.$clear()
+			;  fetch existing records for this class
+			Do llData.$FetchClass(llDataOtherDB.1.REF_CLASS)
+			Do llData.$sort($ref.REF_ORDER,0,$ref.REF_VALUE,0)
+			Calculate llData.$smartlist as kTrue
+			
+			Calculate llDataOtherDB.$line as 0
+			While $Loop(llDataOtherDB)
+				Do llData.$search($ref.REF_VALUE=llDataOtherDB.REF_VALUE,1,0,0,0) Returns lbFound
+				If lbFound
+					;  Do llData.$assignrow(llDataOtherDB.[llDataOtherDB.$line])
+					;  cannot use assignrow cos it would alter REF_SEQ
+					For lnColNo from 1 to llData.$colcount step 1
+						Calculate lcColName as llData.$cols.[lnColNo].$name
+						If lcColName<>llData.icPrimaryKey     ;; omit the primary key
+							Calculate llData.[lcColName] as llDataOtherDB.[lcColName]
+						End If
+					End For
+					Calculate llData.[llData.$line].$selected as kTrue
+				Else
+					Do llData.$add()
+					Calculate llData.$line as llData.$linecount
+					Calculate llData.[llData.$line].$selected as kTrue
+					
+					For lnColNo from 1 to llData.$colcount step 1
+						Calculate lcColName as llData.$cols.[lnColNo].$name
+						If lcColName<>llData.icPrimaryKey     ;; omit the primary key
+							Calculate llData.[lcColName] as llDataOtherDB.[lcColName]
+						End If
+					End For
+				End If
+			End While
+			
+			;  any unselected lines in llData are NOT in the other db - do we delete these lines?
+			If tot(llData,#LSEL)<>llData.$linecount
+				OK message  {There are [abs(tot(llData,#LSEL)-llData.$linecount)] lines that are not in the other db.  They will shown as highlighted lines.}
+				If flag true
+					Begin reversible block
+						Set current list llData
+					End reversible block
+					Invert selection for line(s) (All lines)
+				End If
+			End If
+			
+			Calculate ilData as llData
+			Do method $Save
+			Do $cinst.$redraw()
+		End If
+	End If

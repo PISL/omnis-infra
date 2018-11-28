@@ -1,0 +1,58 @@
+;  The original ambition of this method was to turn events on or off as user permissions required.
+;  However it is not possible to alter these at runtime.
+;  The method has been rejigged to turn off the $dropmode attribute.
+If pbCanDo1=99     ;; reset
+	Calculate ilControlEvents as ''
+	Do ilControlEvents.$cols.$add('controlName',kCharacter,kSimplechar,100)
+	Do ilControlEvents.$cols.$add('eventCode',kInteger,k32bitint)
+	Quit method
+End If
+
+If pbCanDo1=100     ;; implement
+	Do ilControlEvents.$sort($ref.controlName,0,$ref.eventCode,0)
+	
+	;  the re-jig
+	;  The good news is that this code works.  It removes or sets the dropmode correctly.
+	;  However there are two things to bear in mind.
+	;  1.  To handle when someone has no privileges then $dropmode should be set to kAcceptNone as the default.
+	;  2.  By denying the event, the drop bounces back to original position but there is no feedback to user what has happened.
+	;  .    By leaving the event in place the privileges behind the event can send a message to user they don't have privileges.
+	
+	;  Either way works and some may argue that less info to user over security issues, the better.
+	;  For now though, we are leaving $dropmode as kAcceptControl as default in order for user to get feedback.
+	If 1=0
+		Calculate llHasDrop as ilControlEvents
+		Do llHasDrop.$search($ref.eventCode=evDrop,1,0,1,0)
+		Do llHasDrop.$remove(kListKeepSelected)
+		;  remove all references to evDrop from ilControlEvents
+		Calculate llHasDrop.$line as 0
+		While $Loop(llHasDrop)
+			Do ilControlEvents.$search($ref.controlName=llHasDrop.controlName,1,0,1,0)
+		End While
+		Do ilControlEvents.$remove(kListDeleteSelected)
+		;  any lines left in ilControlEvents will have their $dropmode removed
+		Do ilControlEvents.$cols.controlName.$removeduplicates()
+		
+		;  these objects lose dropmode
+		Calculate ilControlEvents.$line as 0
+		While $Loop(ilControlEvents)
+			Calculate $cinst.$objs.[ilControlEvents.controlName].$dropmode as kAcceptNone
+		End While
+		
+		;  these objects get to keep dropmode
+		Calculate llHasDrop.$line as 0
+		While $Loop(llHasDrop)
+			Calculate $cinst.$objs.[llHasDrop.controlName].$dropmode as kAcceptControl
+		End While
+	End If
+	
+	Quit method
+End If
+
+If pbCanDo1
+	;  log the required events for this control
+	Do ilControlEvents.$add(pcControlName1,pnEventCodes1)
+	If pcControlName2<>''
+		Do ilControlEvents.$add(pcControlName2,pnEventCodes2)
+	End If
+End If

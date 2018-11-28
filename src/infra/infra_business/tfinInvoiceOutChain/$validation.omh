@@ -1,0 +1,23 @@
+Calculate icValidationMessage as ''
+Do ilValidation.$clear()
+
+If $cinst.FOC_FOH_REF_PREV>0
+	;  good
+Else
+	Calculate lcMessage as con(lcMessage,pick(lcMessage<>'','',', '),'FOC_FOH_REF_PREV missing')
+	Do ilValidation.$add('FOC_FOH_REF_PREV_LBL','VAL_MISSING','FOC_FOH_REF_PREV missing',0)
+End If
+
+If $cinst.FOC_FOH_REF_NEXT>0
+	;  good
+Else
+	Calculate lcMessage as con(lcMessage,pick(lcMessage<>'','',', '),'FOC_FOH_REF_NEXT missing')
+	Do ilValidation.$add('FOC_FOH_REF_NEXT_LBL','VAL_MISSING','FOC_FOH_REF_NEXT missing',0)
+End If
+
+If lcMessage<>''
+	Calculate icValidationMessage as lcMessage
+	Quit method kFalse
+End If
+
+Quit method kTrue

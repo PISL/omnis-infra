@@ -1,0 +1,8 @@
+Calculate icFormIntro as $cell(clLabels,'objName','FOH_Intro','label')
+If ilSearch1.EO_SEQ<>0
+	;  a specific client has been identified     ;; so clear any search text that may have been provided before
+	Calculate icSearch as ''
+End If
+Do method fetchDisplayList
+
+Do ilDisplayRecords.$sort($ref.EO_NAME,0)

@@ -1,0 +1,5 @@
+Calculate $cinst.icPrefix as 'LC_'
+Calculate icPrimarykey as 'LC_SEQ'
+Calculate icForeignKey as 'LC_CO_REF_ISO3'     ;; LC_LGREF_ISO2
+Calculate ibHasSequence as kTrue
+Do inherited

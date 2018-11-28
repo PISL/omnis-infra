@@ -1,0 +1,6 @@
+
+Calculate queryValue as dat(pValue,'y-M-D H:N:S')     ;; #FDT
+
+Calculate queryValue as con("TIMESTAMP '",queryValue,"'")
+
+Quit method queryValue

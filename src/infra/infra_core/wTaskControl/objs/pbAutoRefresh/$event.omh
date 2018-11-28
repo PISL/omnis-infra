@@ -1,0 +1,13 @@
+On evClick     ;; Event Parameters - pRow( Itemreference )
+	Calculate ibAutoRefresh as not(ibAutoRefresh)
+	Do method updateWindowSettings
+	If ibAutoRefresh
+		Calculate ioAutoTimer.$timervalue as inTimerSeconds
+		Do ioAutoTimer.$starttimer()
+	Else
+		Do ioAutoTimer.$stoptimer()
+	End If
+	
+	Do $cinst.$behaviour()
+	Queue set current field {ilRemoteTasks}
+	Do $cinst.$redraw()

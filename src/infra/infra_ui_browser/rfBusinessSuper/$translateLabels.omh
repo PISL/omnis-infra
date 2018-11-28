@@ -1,0 +1,130 @@
+;  give the list column meaningful names     ;; and add translation columns
+Do plLabelObjects.$redefine(objName,objRef)
+;  eliminate those not beginning with (label_ or pb or TabControl_ or Grid_)
+Do plLabelObjects.$search(mid($ref.objName,1,6)='label_',1,0,1,0)
+Do plLabelObjects.$search(mid($ref.objName,1,2)='pb',1,0,1,0)
+Do plLabelObjects.$search(mid($ref.objName,1,11)='TabControl_',1,0,1,0)
+Do plLabelObjects.$search(mid($ref.objName,1,5)='Grid_',1,0,1,0)
+Do plLabelObjects.$search(mid($ref.objName,1,3)='RG_',1,0,1,0)
+Do plLabelObjects.$remove(kListKeepSelected)
+Do plLabelObjects.$merge(plSuperObjects)
+Do plLabelObjects.$search(0)
+;       ;; and add translation columns
+Do plLabelObjects.$cols.$add('label',kCharacter,kSimplechar,255)
+Do plLabelObjects.$cols.$add('tooltip',kCharacter,kSimplechar,1000)     ;; 2015-12-09 GRS increased to 1000 characters to incorporate TabControl tooltips in MEC
+Do plLabelObjects.$cols.$add('text',kCharacter,kSimplechar,255)
+Do plLabelObjects.$cols.$add('contenttip',kCharacter,kSimplechar,255)
+Do plLabelObjects.$cols.$add('abbrev',kCharacter,kSimplechar,50)
+
+;  now translate
+Calculate plLabelObjects.$line as 0
+While $Loop(plLabelObjects)
+	Calculate lcText as ''
+	;  LABEL first
+	;  look in schemas string table first
+	If mid(plLabelObjects.objName,1,6)='label_'     ;; label_
+		Calculate lcLookupCode as mid(plLabelObjects.objName,7,99)
+		;  Else If mid(plLabelObjects.objName,1,2)='pb'     ;; pb...
+		;  the entries in the "labels" string table are pbSave, not Save, to denote the context of a push button
+	Else
+		Calculate lcLookupCode as plLabelObjects.objName
+	Else
+		Breakpoint {Mr. Programmer - wake up!}
+	End If
+	
+	;  loop for each label, tooltip, text, content tip and abbreviation plus a final time for lazy programmers omitting the suffix
+	For lnLoopCount from 1 to 6 step 1
+		If lnLoopCount=6&plLabelObjects.label<>''
+			Break to end of loop
+		End If
+		If lnLoopCount=3&mid(lcLookupCode,1,3)<>'RG_'     ;; 3=TXT, only applicable for RG_ prefix at time of writing
+			;  omit the string table lookup
+		Else
+			Calculate lcSuffix as pick(lnLoopCount,'','_LBL','_TT','_TXT','_CT','_AB','')
+			Calculate lcColumn as pick(lnLoopCount,'','label','tooltip','text','contenttip','abbrev','label')
+			
+			;  look in schemas string table first
+			Do toStrings.$StringTableEntry(con('',lcLookupCode,lcSuffix),lcText) Returns lbValid
+			If not(lbValid)     ;; look in labels
+				Do toStrings.$StringTableEntry(con('',lcLookupCode,lcSuffix),lcText) Returns lbValid
+				If not(lbValid)     ;; look in labels
+					Do toStrings.$StringTableEntry(con('',lcLookupCode,lcSuffix),lcText) Returns lbValid
+					
+					;  RSM added this 27 JUL 2015 to support organisation specific nomenclature
+					;  The concern is that this adds a lot of searching overhead for only rare occasions.
+					;  So its not a good investment CPU wise, although these STB searches are very damn fast.
+					;  Its just not CPU efficient thinking...     ;; there must be a better way
+					
+				End If
+			End If
+			If lbValid
+				;  If isnull(lcText)
+				;  Calculate lcText as ''     ;; javascript really does not like NULL ! !
+				;  End If
+				Calculate plLabelObjects.[lcColumn] as lcText
+			Else
+				;  the translation column remains empty
+			End If
+		End If
+	End For
+	
+End While
+
+;  plOverrideObjects will have entries in it for every GO because they have to be hard coded in, in the sub class
+;  but there will only be a prospect of finding an alternative entry if a suffix exists in irSTBsuffixGO.RFO_DESC
+If plOverrideObjects.$linecount>0&$ctask.trGroupOrg.ExceptionSuffixSTB<>''
+	Calculate lcExceptionSuffix as $ctask.trGroupOrg.ExceptionSuffixSTB
+	
+	Calculate plOverrideObjects.$line as 0
+	While $Loop(plOverrideObjects)
+		;  see if an alternate string table entry exists and if it does, override the corresponding value that exists in plLabelObjects
+		Calculate lcText as ''
+		If mid(plOverrideObjects.objName,1,6)='label_'     ;; label_
+			Calculate lcLookupCode as mid(plOverrideObjects.objName,7,99)
+		Else
+			Calculate lcLookupCode as plOverrideObjects.objName
+		Else
+			Breakpoint {Mr. Programmer - wake up!}
+		End If
+		;  loop for each label, tooltip, text and content tip plus a final time for lazy programmers omitting the suffix
+		For lnLoopCount from 1 to 6 step 1
+			If lnLoopCount=6&plOverrideObjects.label<>''
+				Break to end of loop
+			End If
+			If lnLoopCount=3&mid(lcLookupCode,1,3)<>'RG_'     ;; 3=TXT, only applicable for RG_ prefix at time of writing
+				;  omit the string table lookup
+			Else
+				Calculate lcSuffix as pick(lnLoopCount,'','_LBL','_TT','_TXT','_CT','_AB','')
+				Calculate lcColumn as pick(lnLoopCount,'','label','tooltip','text','contenttip','abbrev','label')
+				
+				;  look in schemas string table first
+				Do toStrings.$StringTableEntry(con('',lcLookupCode,lcSuffix,'_',lcExceptionSuffix),lcText) Returns lbValid
+				If not(lbValid)     ;; look in labels
+					Do toStrings.$StringTableEntry(con('',lcLookupCode,lcSuffix,'_',lcExceptionSuffix),lcText) Returns lbValid
+					If not(lbValid)     ;; look in labels
+						Do toStrings.$StringTableEntry(con('',lcLookupCode,lcSuffix,'_',lcExceptionSuffix),lcText) Returns lbValid
+					End If
+				End If
+				If lbValid
+					;  Calculate plLabelObjects.[lcColumn] as lcText
+					;  Breakpoint
+					;  find the appropriate line in plLabelObjects and over write
+					Do plLabelObjects.$search($ref.objName=con(lcColumn,'_',plOverrideObjects.objName),1,0,0,0) Returns lbFound
+					If lbFound
+						Calculate plLabelObjects.[lcColumn] as lcText
+					Else
+						Do plLabelObjects.$search($ref.objName=con(plOverrideObjects.objName),1,0,0,0) Returns lbFound
+						If lbFound
+							Calculate plLabelObjects.[lcColumn] as lcText
+						End If
+					End If
+				Else
+					;  the translation column remains empty
+				End If
+			End If
+		End For
+	End While
+End If
+
+Do plLabelObjects.$sort($ref.objName,0)
+Do plSuperObjects.$sort($ref.objName,0)

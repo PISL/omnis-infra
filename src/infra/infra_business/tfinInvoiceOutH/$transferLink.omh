@@ -1,0 +1,42 @@
+If tlDatabases.DAM='WebService'
+	;  pass parameters to web service
+	Do ioWeb.$callFetch(lnInvNo,irErrorSQL,row($cinst.$class().$name,$cmethod().$name,row(pnFOH_from,pnFOH_to),lnInvNo.$type,0,ilRESTextensions))
+	If ioWeb.irResponse.httpStatusCode=200
+		;  the result should be in this object     ;; however there may be a SQL error
+		If irErrorSQL.NativeErrorText<>''
+			Quit method kFalse
+		End If
+		Calculate $cinst.FOH_INV_NO as lnInvNo
+		Quit method kTrue
+	Else
+		Quit method kFalse
+	End If
+End If
+
+Do $cinst.$ImmediateSession(loSession,loStatement) Returns lbImmediateSession
+If lbImmediateSession
+	Do $cinst.$SetSession(loSession,loStatement)
+Else If not(ibGoodConnectionToDb)
+	Quit method kFalse
+End If
+
+;  This update will transfer ALL delgates associated with  particular invoice to a new invoice.
+;  There may be exceptions but this will generally be the case.
+Begin statement
+Sta: {update [lrDelegateInvoiceLink.$servertablenames]}
+Sta:
+Sta: {set DIL_FOH_REF = @[pnFOH_to]}
+Sta: {, DIL_PRIMARY = 0}
+Sta: {, DIL_MWHEN = date_trunc('second', now())}
+Sta: {, DIL_MBY = @[trCurrUser.USR_NAME]}
+Sta: {, DIL_MCOUNT = DIL_MCOUNT+1}
+Sta:
+Sta: {where DIL_FOH_REF = @[pnFOH_from]}
+End statement
+
+Do $cinst.$executesql() Returns lbOk
+If lbImmediateSession
+	Do $cinst.$SetSession(#NULL,#NULL,kTrue)
+End If
+
+Quit method inRowsAffected

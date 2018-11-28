@@ -1,0 +1,118 @@
+Do lrReturn.$cols.$add('AppleScriptResult',kCharacter,kSimplechar,255)
+Do lrReturn.$cols.$add('AppleScriptError',kCharacter,kSimplechar,255)
+;  contains urls, addresses, phones, groups, custom dates, instant messages, social profiles, related names, emails; contained by application, groups.
+;  make new email at end of emails of thePerson with properties
+;  make new url at end of urls of thePerson with properties
+;  make new phone at end of phones of thePerson with properties
+
+;  Calculate irStandard.HomePhone as
+;  Calculate irStandard.WorkPhone as pPerson.CP_PHONE_W
+;  Calculate irStandard.MobilePhone as pPerson.CP_PHONE_M
+;  Calculate irStandard.Email as pPerson.CP_EMAIL
+;  Calculate irStandard.Building as pPerson.CP_ADDR_BUILDING
+;  Calculate irStandard.Street as pPerson.CP_ADDR_STREET
+;  Calculate irStandard.Locality as pPerson.CP_ADDR_LOCALITY
+;  Calculate irStandard.Town as pPerson.CP_ADDR_TOWN
+;  Calculate irStandard.County as pPerson.CP_ADDR_COUNTY
+;  Calculate irStandard.Postcode as pPerson.CP_ADDR_PCODE
+;  Calculate irStandard.Country as pPerson.CP_ADDR_COUNTRY
+
+For lnColNo from 1 to pRow.$colcount step 1
+	Calculate lcColName as pRow.$cols.[lnColNo].$name
+	Calculate lcElement as ''
+	Calculate lcOtherProperties as ''
+	
+	Calculate lcValue as pRow.[lcColName]
+	
+	If lcValue<>''
+		If lcColName='EmailWork'
+			Calculate lcElement as 'email'
+			Calculate lcLabel as 'Work'
+			
+		Else If lcColName='EmailHome'
+			Calculate lcElement as 'email'
+			Calculate lcLabel as 'Home'
+			
+		Else If lcColName='HomePhone'
+			Calculate lcElement as 'phone'
+			Calculate lcLabel as 'Home'
+			
+		Else If lcColName='WorkPhone'
+			Calculate lcElement as 'phone'
+			Calculate lcLabel as 'Work'
+			
+		Else If lcColName='MobilePhone'
+			Calculate lcElement as 'phone'
+			Calculate lcLabel as 'Mobile'
+			
+		Else If lcColName='Street'
+			;  make new address at end of addresses of thePerson with properties
+			;  label:"Work", street:"123 Anystreet", city:"Anytown", state:"PA", zip:"99999"
+			Calculate lcElement as 'address'
+			Calculate lcLabel as 'Work'
+			;  address has more properties
+			If pRow.Street<>''
+				If pRow.Building<>''
+					Calculate lcStreet as con(lcStreet,pick(lcStreet<>'','',kCr),cap(pRow.Building))
+				End If
+				Calculate lcStreet as con(lcStreet,pick(lcStreet<>'','',kCr),cap(pRow.Street))
+				Calculate lcOtherProperties as con(lcOtherProperties,pick(lcOtherProperties<>'','',', '),'street:',kDq,lcStreet,kDq)
+			End If
+			If pRow.Town<>''
+				If pRow.Locality<>''
+					Calculate lcCity as con(lcCity,pick(lcCity<>'','',', '),cap(pRow.Locality))
+				End If
+				Calculate lcCity as con(lcCity,pick(lcCity<>'','',', '),cap(pRow.Town))
+				Calculate lcOtherProperties as con(lcOtherProperties,pick(lcOtherProperties<>'','',', '),'city:',kDq,cap(lcCity),kDq)
+			End If
+			If pRow.Postcode<>''
+				Calculate lcOtherProperties as con(lcOtherProperties,pick(lcOtherProperties<>'','',', '),'zip:',kDq,pRow.Postcode,kDq)
+			End If
+			If pRow.County<>''
+				Calculate lcOtherProperties as con(lcOtherProperties,pick(lcOtherProperties<>'','',', '),'state:',kDq,pRow.County,kDq)
+			End If
+			If pRow.Country<>''
+				If len(pRow.Country)=2
+					Calculate lcOtherProperties as con(lcOtherProperties,pick(lcOtherProperties<>'','',', '),'country code:',kDq,pRow.Country,kDq)
+				Else
+					Calculate lcOtherProperties as con(lcOtherProperties,pick(lcOtherProperties<>'','',', '),'country:',kDq,pRow.Country,kDq)
+				End If
+			End If
+		End If
+		
+		If lcElement<>''
+			Begin text block
+			Text: {tell application "Address Book"} (Platform newline)
+			Text: {set thePerson to (first person whose id = "[pcPersonID]")} (Platform newline)
+			Text: {tell thePerson} (Platform newline)
+			Text: {set theElement to (first [lcElement] whose label = "[lcLabel]")} (Platform newline)
+			Text: {if theElement is missing value} (Platform newline)
+			;  create a new element
+			If upp(lcElement)='ADDRESS'     ;; plural of Address is formed with es at end, not just s
+				Text: {make new [lcElement] at end of [lcElement]es of thePerson with properties}
+			Else
+				Text: {make new [lcElement] at end of [lcElement]s of thePerson with properties}
+			End If
+			If lcOtherProperties<>''
+				Text: {{label:"[lcLabel]", [lcOtherProperties]}} (Platform newline)
+			Else
+				Text: {{label:"[lcLabel]", value:"[lcValue]"}} (Platform newline)
+			End If
+			Text: {else} (Platform newline)
+			;  update existing element
+			Text: {tell theElement} (Platform newline)
+			Text: { set value to "[lcValue]"} (Platform newline)
+			Text: {end tell} (Platform newline)
+			Text: {end if} (Platform newline)
+			;  thePerson
+			Text: {end tell} (Platform newline)
+			;  Text: save  (Platform newline)
+			;  application "Address Book"
+			Text: {end tell} (Platform newline)
+			Get text block lcApplescript
+			Do $root.$runapplescript(lcApplescript,lrReturn.AppleScriptResult,lrReturn.AppleScriptError)
+		End If
+	End If     ;; lcValue<>''
+End For
+
+Calculate pAppleScript as lrReturn

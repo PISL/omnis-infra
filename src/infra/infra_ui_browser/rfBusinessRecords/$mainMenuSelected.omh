@@ -1,0 +1,40 @@
+;  Breakpoint
+If isclear(ilAuthorisedForms.code)     ;; blank menu line selected
+	Calculate ilAuthorisedForms.$line as tlAuthorisedForms.$line
+	Quit event handler (Discard event)
+End If
+
+If ibOpenInNewWindow
+	;  new functionality here
+	;  Breakpoint
+	;  init the parameter list
+	Do lrParams.$cols.$add('task',kCharacter,kSimplechar,50)
+	Do lrParams.$cols.$add('UUID',kCharacter,kSimplechar,50)
+	Do lrParams.$cols.$add('form',kCharacter,kSimplechar,50)
+	Do lrParams.$cols.$add('code',kCharacter,kSimplechar,15)
+	;  generate the one-time UUID
+	Do $ctask.$setVar('icNewWindowID',OWEB.$makeuuid())
+	;  populate the row
+	Calculate lrParams.task as $ctask().$name
+	Calculate lrParams.UUID as $ctask.$getVar('icNewWindowID')
+	Calculate lrParams.form as ilAuthorisedForms.class
+	Calculate lrParams.code as ilAuthorisedForms.code
+	;  set the URL
+	Do $itasks.[tcCurrentLibrary].$getPref('URL') Returns lcURL
+	Calculate lcURL as con(lcURL,'?newForm=',bintohex(lrParams))
+	;  set ilAuthorised From back to its original value
+	Calculate ilAuthorisedForms.$line as tlAuthorisedForms.$line
+	;  call back to the form
+	Quit method row(lcURL,OWEB.$makeuuid(kFalse))
+Else     ;; normal functionality
+	Calculate tlAuthorisedForms.$line as ilAuthorisedForms.$line
+	
+	If tlAuthorisedForms.class=trCurrentForm.class&tlAuthorisedForms.code=trCurrentForm.code
+		;  no change     ;; ignore
+	Else
+		;  change of class or form
+		Do $changeOfForm()
+	End If
+	
+	Calculate trCurrentForm as tlAuthorisedForms
+End If

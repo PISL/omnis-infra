@@ -1,0 +1,5 @@
+Calculate $cinst.$objs.ppRecordNavigation.$objs.icSearch.$visible as pbDisplaySearch
+Calculate $cinst.$objs.ppRecordNavigation.$objs.inSearchCount.$visible as pbDisplaySearch
+If pbDisplaySearch&pcSearchContentTip<>''
+	Calculate $cinst.$objs.ppRecordNavigation.$objs.icSearch.$::contenttip as pcSearchContentTip
+End If

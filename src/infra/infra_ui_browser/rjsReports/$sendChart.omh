@@ -1,0 +1,3 @@
+Set reference lrefSubForm to $cinst.$objs.MarqueeChart.$subinst
+;  Do lrefSubForm.$refreshChart(ilChartData,icChartConfig,icBreakCols,icTransposeCol,icTransposeValCols)
+Do lrefSubForm.$refreshChart(irRawChartData)     ;; this row contains the data and all configs and lists that could be used to pivot that data

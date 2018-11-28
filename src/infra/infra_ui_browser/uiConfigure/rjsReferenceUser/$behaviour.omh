@@ -1,0 +1,45 @@
+If irefContainer
+	Do irefContainer.$behaviour(icMode)     ;; set the TabControl $enabled
+End If
+Calculate $cinst.$objs.ilSearch1.$enabled as icMode=''
+Calculate $cinst.$objs.ilSearch2.$enabled as icMode=''
+Calculate $cinst.$objs.ilDisplayRecords.$enabled as icMode=''
+
+Calculate $cinst.$objs.PagedPane.$objs.pbCheckJSON.$enabled as len(irCurrentRecord.RFU_JSON)>0&icMode<>''
+
+;  Calculate $cinst.$objs.pbAdd.$enabled as irUserRights.canInsert&icMode=''
+Calculate $cinst.$objs.pbAdd.$visible as kFalse
+Calculate $cinst.$objs.pbEdit.$enabled as irUserRights.canEdit&irCurrentRecord.RFU_SEQ>0&icMode=''
+;  Calculate $cinst.$objs.pbDelete.$enabled as irUserRights.canDelete&irCurrentRecord.RFU_SEQ>0&icMode=''
+Calculate $cinst.$objs.pbDelete.$visible as kFalse
+
+Calculate $cinst.$objs.pbCancel.$visible as icMode<>''
+Calculate $cinst.$objs.pbSave.$visible as icMode<>''
+
+Set reference lirefPagedPaneObjs to $cinst.$objs.PagedPane.$objs
+;  Calculate lirefPagedPaneObjs.UniqueBox.$visible as icMode='I'
+Calculate lirefPagedPaneObjs.RFU_CLASS.$enabled as icMode<>''&icMode<>'E'     ;; cannot allow editing of Classification once set
+Calculate lirefPagedPaneObjs.RFU_VALUE.$enabled as icMode<>''&icMode<>'E'     ;; cannot allow editing of Value once saved
+Calculate lirefPagedPaneObjs.RFU_DESC.$enabled as icMode<>''
+Calculate lirefPagedPaneObjs.RFU_ORDER.$enabled as icMode<>''
+Calculate lirefPagedPaneObjs.RFU_ACTIVE.$enabled as icMode<>''
+Calculate lirefPagedPaneObjs.RFU_EFFECTIVE.$enabled as icMode<>''
+Calculate lirefPagedPaneObjs.RFU_EXPIRES.$enabled as icMode<>''
+
+Calculate lirefPagedPaneObjs.RFU_CHAR.$enabled as icMode<>''
+Calculate lirefPagedPaneObjs.RFU_INT.$enabled as icMode<>''
+Calculate lirefPagedPaneObjs.RFU_NUMBER.$enabled as icMode<>''
+Calculate lirefPagedPaneObjs.RFU_DATE.$enabled as icMode<>''
+Calculate lirefPagedPaneObjs.RFU_JSON.$enabled as icMode<>''
+
+Calculate lirefPagedPaneObjs.RFU_BIN.$enabled as icMode<>''
+
+If $cobj.$name='pbCheckJSON'
+	;  do not touch $errortext
+Else
+	Calculate $cinst.$objs.PagedPane.$objs.pbCheckJSON.$errortext as ''
+End If
+
+Do method assignEntryFieldProperties
+
+Do inherited      ;; handle objects in the navigation and results panes

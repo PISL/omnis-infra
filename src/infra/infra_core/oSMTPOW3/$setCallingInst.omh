@@ -1,0 +1,1 @@
+Set reference irefCallingInst to pCallingInst     ;; in the case of thin client and possibly JS client also, this will be a task instance, eg. $itasks.tkEmailer

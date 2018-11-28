@@ -1,0 +1,24 @@
+Calculate icDisplayMessage as ''
+
+;  check for child records but exclude PID record of which there can be only one,
+;  and it will be deleted by the database (using CASCADE) along with the PRD record
+Do irCurrentRecord.$checkChildren('productinternaldata') Returns lnCountChildren
+If lnCountChildren=0
+	Do irInternalData.$delete_pk() Returns lbOK     ;; internal data first
+	If lbOK
+		Do irCurrentRecord.$delete_pk() Returns lbOK     ;; now product record
+	End If
+	If not(lbOK)
+		Calculate icDisplayMessage as irCurrentRecord.irErrorSQL.NativeErrorText
+	Else
+		Do ilDisplayRecords.$remove(ilDisplayRecords.$line)
+		Do irCurrentRecord.$clear()
+		Do irInternalData.$clear()
+		Calculate ilDisplayRecords.$line as 0
+		Do irReference.$clear()
+	End If
+Else
+	Calculate icDisplayMessage as 'Cannot be deleted because the record has children associated to it'
+End If
+
+Do $cinst.$behaviour()

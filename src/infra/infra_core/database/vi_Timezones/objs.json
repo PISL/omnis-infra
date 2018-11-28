@@ -1,0 +1,86 @@
+[
+	{
+		"name": "TIMEZONE",
+		"ident": 32001,
+		"order": 1,
+		"type": "kCharacter",
+		"subtype": "kSimplechar",
+		"sublen": 50,
+		"properties": {
+			"desc": "unique timezone name used for set timezone",
+			"nonull": false,
+			"primarykey": true,
+			"userinfo": ""
+		}
+	},
+	{
+		"name": "REGION",
+		"ident": 32002,
+		"order": 2,
+		"type": "kCharacter",
+		"subtype": "kSimplechar",
+		"sublen": 25,
+		"properties": {
+			"desc": "geographical area",
+			"nonull": false,
+			"primarykey": false,
+			"userinfo": ""
+		}
+	},
+	{
+		"name": "ABBREV",
+		"ident": 32003,
+		"order": 3,
+		"type": "kCharacter",
+		"subtype": "kSimplechar",
+		"sublen": 10,
+		"properties": {
+			"desc": "TZ abbreviation, eg, GMT",
+			"nonull": false,
+			"primarykey": false,
+			"userinfo": ""
+		}
+	},
+	{
+		"name": "TOOLTIP",
+		"ident": 32004,
+		"order": 4,
+		"type": "kCharacter",
+		"subtype": "kSimplechar",
+		"sublen": 512,
+		"properties": {
+			"desc": "all towns within the timezone",
+			"nonull": false,
+			"primarykey": false,
+			"userinfo": ""
+		}
+	},
+	{
+		"name": "UTC_OFFSET",
+		"ident": 32005,
+		"order": 5,
+		"type": "kCharacter",
+		"subtype": "kSimplechar",
+		"sublen": 10,
+		"properties": {
+			"desc": "+ve = East, -ve = West",
+			"nonull": false,
+			"primarykey": false,
+			"userinfo": ""
+		}
+	},
+	{
+		"name": "IS_DST",
+		"ident": 32006,
+		"order": 6,
+		"type": "kBoolean",
+		"subtype": 0,
+		"sublen": 0,
+		"properties": {
+			"desc": "is Daylight Savings Timezone",
+			"nonull": false,
+			"primarykey": false,
+			"userinfo": ""
+		}
+	}
+]

@@ -1,0 +1,44 @@
+[
+	{
+		"name": "FOC_SEQ",
+		"ident": 32001,
+		"order": 1,
+		"type": "kInteger",
+		"subtype": "k64bitint",
+		"sublen": 0,
+		"properties": {
+			"desc": "primary key",
+			"nonull": true,
+			"primarykey": true,
+			"userinfo": ""
+		}
+	},
+	{
+		"name": "FOC_FOH_REF_PREV",
+		"ident": 32002,
+		"order": 2,
+		"type": "kInteger",
+		"subtype": "k64bitint",
+		"sublen": 0,
+		"properties": {
+			"desc": "primary key of previous invoice",
+			"nonull": true,
+			"primarykey": false,
+			"userinfo": ""
+		}
+	},
+	{
+		"name": "FOC_FOH_REF_NEXT",
+		"ident": 32003,
+		"order": 3,
+		"type": "kInteger",
+		"subtype": "k64bitint",
+		"sublen": 0,
+		"properties": {
+			"desc": "primary key of next invoice",
+			"nonull": true,
+			"primarykey": false,
+			"userinfo": ""
+		}
+	}
+]

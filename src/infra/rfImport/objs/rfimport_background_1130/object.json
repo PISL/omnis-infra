@@ -1,0 +1,46 @@
+{
+	"ident": 1130,
+	"order": 1,
+	"objtype": "kComponent",
+	"componentlib": "jsBack",
+	"componentctrl": "Background Control",
+	"properties": {
+		"::shape": "kJSBackRoundRect",
+		"alpha": 255,
+		"backalpha": 0,
+		"backcolor": "RGB(255,255,255)",
+		"backpattern": 0,
+		"bordercolor": "kColorDefault",
+		"contextmenu": "",
+		"cssclassname": "",
+		"desgroup": 0,
+		"designactive": true,
+		"deslock": false,
+		"disabledefaultcontextmenu": false,
+		"disablesystemfocus": false,
+		"dropmode": "kAcceptNone",
+		"enabled": true,
+		"events": "",
+		"fieldstyle": "",
+		"forecolor": "RGB(240,240,240)",
+		"imagepath": "",
+		"objlink": 65567,
+		"preventlayoutanimation": false,
+		"strokewidth": 1,
+		"tooltip": "",
+		"userinfo": "",
+		"visible": true
+	},
+	"screensizes": [
+		{
+			"name": "kSSZDesktop",
+			"left": 782,
+			"top": 215,
+			"width": 272,
+			"height": 247,
+			"edgefloat": "kEFnone",
+			"dragborder": false,
+			"errortextpos": "kJSErrorTextPosUnder"
+		}
+	]
+}

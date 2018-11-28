@@ -1,0 +1,55 @@
+Do $cinst.$getBrowser()     ;; populate icPlatform used in TranslateText to decide on tab shortcuts
+Set reference irefContainer to $cinst.$container
+Do inherited
+Do method setTabColours
+
+;  Enter your initialization code here
+Calculate $cinst.$objs.icFormIntro.$visible as kFalse
+
+Do $DefineList(ilDisplayRecords,'infra.tsysReferenceLocal')
+;  Do $DefineList(ilSearch1,'infra.tsysReferenceLocal',"'RFL_CLASS'")
+Do method fetchSearch1List
+
+Calculate irCurrentRecord as ilDisplayRecords
+Do method fetchDisplayList (ilSearch1.RFL_CLASS)
+Calculate ilDisplayRecords.$line as 1
+Calculate irCurrentRecord as ilDisplayRecords
+
+Do method TranslateText     ;; call this here to get the translations before setting superclass labels/values
+
+Calculate icFormHeading as $cell(clLabels,'objName','RFL_Heading','label')
+Calculate icFormIntro as $cell(clLabels,'objName','RFL_Intro','label')
+
+Do method UserPermissions
+
+Do ilBinaryDisplayOption.$cols.$add('code',kCharacter,kSimplechar,15)
+Do ilBinaryDisplayOption.$cols.$add('desc',kCharacter,kSimplechar,100)
+
+Do $ctask.toStrings.$StringTableEntry('word_bytes',icWordBytes,'bytes')
+Do toStrings.$StringTableEntry('MSG_RAWNODISP',lcMessage,'raw - no display -')
+Do ilBinaryDisplayOption.$add(#NULL,con(lcMessage,' ',binlength(irCurrentRecord.RFL_BIN),' ',icWordBytes))
+Do ilBinaryDisplayOption.$add('GIF','GIF')
+Do toStrings.$StringTableEntry('rm_list',lcMessage,'List')
+Do ilBinaryDisplayOption.$add('LIST',lcMessage)
+
+;  Breakpoint
+Calculate inMinSearchString as 0
+Do $cinst.$superObjects($cell(clLabels,'objName','disp_values','label'),3,$cell(clLabels,'objName','sel_class','label'),'',,kTrue)
+
+Calculate $cinst.$objs.TabControl_RFL.$currenttab as 1
+Calculate $cinst.$objs.PagedPane.$currentpage as 1
+
+If tlDatabases.$linecount>1
+	Calculate $cinst.icDisplayMessage as ilDisplayRecords.$WhichDatabase()
+End If
+
+;  Calculate $cinst.$objs.UniqueBox.$top as $cinst.$objs.RFL_CLASS.$top
+;  Calculate $cinst.$objs.UniqueBox.$left as $cinst.$objs.RFL_CLASS.$left
+Do $cinst.$container().$initToolsMenu('IE') Returns ilMenuCommands
+If sys(2)=17
+	Do ilMenuCommands.$add('FACT_YYY',1111)
+End If
+Do $cinst.$container().$setupToolsMenu('refLocal',ilMenuCommands)
+
+Do method DisplayBinary
+Do $cinst.$behaviour()

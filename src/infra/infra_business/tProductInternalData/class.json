@@ -1,0 +1,44 @@
+{
+	"classtype": "kTable",
+	"internalversion": 5,
+	"superclass": "tMaster",
+	"designtaskname": "Startup_Task",
+	"cvardefs": [
+
+	],
+	"ivardefs": [
+		{
+			"name": "___ROW1",
+			"order": 1,
+			"type": "kRow",
+			"subtype": "",
+			"sublen": 0
+		},
+		{
+			"name": "___ROW2",
+			"order": 2,
+			"type": "kRow",
+			"subtype": "",
+			"sublen": 0
+		}
+	],
+	"properties": {
+		"collectperformancedata": false,
+		"componenticon": 0,
+		"componenttype": "kCompStoreHidden",
+		"createdate": "2017-10-27 11:20:33",
+		"desc": "",
+		"editor": "",
+		"editordata": "",
+		"external": true,
+		"issupercomponent": false,
+		"moddate": "2018-02-15 16:44:52",
+		"showascheckedout": false,
+		"sqlclassname": "sProductInternalData",
+		"userinfo": "",
+		"version": "2"
+	},
+	"inheritedproperties": [
+		"designtaskname"
+	]
+}

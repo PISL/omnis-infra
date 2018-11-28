@@ -1,0 +1,24 @@
+Do ilDisplayRecords.$clear()
+Do irCurrentRecord.$clear()
+Calculate irOriginalRecord as irCurrentRecord
+
+Do ilDisplayRecords.$fetchString(icSearch)
+
+If ilDisplayRecords.irErrorSQL.NativeErrorText<>''
+	Calculate icDisplayMessage as ilDisplayRecords.irErrorSQL.NativeErrorText
+End If
+
+If ilDisplayRecords.$linecount=0
+	Calculate icDisplayMessage as 'No records found.'
+Else
+	While $Loop(ilDisplayRecords)
+		Do ilDisplayRecords.$DisplayName()
+	End While
+End If
+
+Do ilDisplayRecords.$sort($ref.AE_CWHEN,0)
+Calculate ilDisplayRecords.$line as 1
+Calculate irCurrentRecord as ilDisplayRecords
+Calculate irOriginalRecord as irCurrentRecord
+
+Calculate $cinst.inSearchCount as ilDisplayRecords.$linecount

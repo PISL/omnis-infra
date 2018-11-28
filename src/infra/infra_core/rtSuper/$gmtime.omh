@@ -1,0 +1,2 @@
+Calculate gmt as dadd(kSecond,tWebParameters.SERVER_TIME+pOffSecs,"1 JAN 1970")
+Quit method gmt

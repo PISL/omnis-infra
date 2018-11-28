@@ -1,0 +1,66 @@
+Do $cinst.$getBrowser()     ;; populate icPlatform used in TranslateText to decide on tab shortcuts
+Set reference $cinst.irefContainer to $cinst.$container
+Do inherited
+Do method setTabColours
+
+Do $DefineList(ilDisplayRecords,'infra.tuaPermissions')
+;  Do ilDisplayRecords.$addDisplayName()
+Calculate irCurrentRecord as ilDisplayRecords
+
+Do ilDisplayRecords.$cols.$findname('PER_DESC_EN') Returns liColRef
+Calculate $cinst.$objs.ilDisplayRecords.$listcolumn as liColRef.$ident
+Calculate lnDisplayListCol as liColRef.$ident
+
+Do $DefineList(ilRolePermissions,'infra.tuaRolePermissions')
+;  Do ilRolePermissions.$addLinkedCols('ROL_SEQ,ROL_NAME,ROL_REVOKE,ROL_ACTIVE')
+Do ilRolePermissions.$addSchemaColumns('infra.suaRoles')
+Do ilRolePermissions.$cols.$findname('ROL_NAME') Returns liColRef
+Calculate $cinst.$objs.ilRolePermissions.$listcolumn as liColRef.$ident
+
+Do $DefineList(ilRoles,'infra.tuaRoles')
+Do ilRoles.$fetch_all()
+
+Do method TranslateText     ;; call this here to get the translations before setting superclass labels/values
+
+Calculate icFormHeading as $cell(clLabels,'objName','PERMISSIONS_Heading','label')
+Calculate icFormIntro as $cell(clLabels,'objName','PERMISSIONS_Intro','label')
+;  Calculate $cinst.$objs.icFormHeading.$tooltip as $cell(clLabels,'objName','PERM_Intro','label')
+
+Do method UserPermissions
+
+Do method FetchRecords
+
+;  populate ilSearch1 with prefixes of all permissions
+Calculate ilSearch1 as ilDisplayRecords
+Do ilSearch1.$addDisplayName()
+Do ilSearch1.$sendall($ref.PER_LABEL.$assign(mid(ilSearch1.PER_LABEL,1,pos('_',ilSearch1.PER_LABEL))))
+Do ilSearch1.$cols.PER_LABEL.$removeduplicates()
+;  Most of the prefixes correspond to a database table.  Where they do, add this to the description.
+Do $itasks.[tcCurrentLibrary].$GetVar('ilColumns') Returns llTables
+Calculate ilSearch1.$line as 0
+While $Loop(ilSearch1)
+	Do llTables.$search(pos(upp(ilSearch1.PER_LABEL),$ref.COLUMN)=1,1,0,0,0) Returns lbFound
+	If lbFound
+		;  remove any schema prefix from the TABLE name
+		If pos('.',llTables.TABLE)
+			Calculate ilSearch1.DisplayName as con(ilSearch1.PER_LABEL,'  ',mid(llTables.TABLE,rpos('.',llTables.TABLE)+1,99))
+		Else
+			Calculate ilSearch1.DisplayName as con(ilSearch1.PER_LABEL,'  ',llTables.TABLE)
+		End If
+	Else
+		Calculate ilSearch1.DisplayName as ilSearch1.PER_LABEL
+	End If
+End While
+;  present DisplayName to user
+Do ilSearch1.$cols.$findname('DisplayName') Returns liColRef
+Calculate $cinst.$objs.ilSearch1.$listcolumn as liColRef.$ident
+;  add blank line so user can clear selection
+Do ilSearch1.$addbefore(1,#NULL,#NULL,#NULL)
+Calculate ilSearch1.$line as 0
+
+Do $cinst.$superObjects($cell(clLabels,'objName','disp_permissions','label'),lnDisplayListCol,$cell(clLabels,'objName','sel_prefix','label'),'',,kTrue,$cell(clLabels,'objName','text_search_LBL','label'))
+
+Do $cinst.$container().$initToolsMenu() Returns ilMenuCommands
+Do $cinst.$container().$setupToolsMenu('uaPerm',ilMenuCommands)
+
+Do $cinst.$behaviour()

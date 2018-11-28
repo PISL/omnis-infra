@@ -1,0 +1,76 @@
+Calculate lbProceed as kFalse
+If prLinkRecord.EOL_FINACCT_CUID<>''
+	Calculate lbProceed as kTrue
+End If
+If prLinkRecord.EOL_FINACCT_SUID<>''
+	Calculate lbProceed as kTrue
+End If
+If not(lbProceed)
+	Calculate icErrorMessage as 'validation error: Supplier or Customer code missing'
+	Quit method kFalse
+End If
+
+;  update External Organisation if neccessary
+If prOrgRecord.EO_SEQ>0
+	Calculate lbModifiedOrg as kFalse
+	
+	If prOrgRecord.EO_SEQ=prOrigOrg.EO_SEQ
+		Do toStrings.$HasRowBeenModified(prOrigOrg,prOrgRecord) Returns lbModifiedOrg
+	Else If prOrgRecord.EO_SEQ=irOrigExtOrg.EO_SEQ
+		Do toStrings.$HasRowBeenModified(irOrigExtOrg,prOrgRecord) Returns lbModifiedOrg
+	End If
+	
+	If lbModifiedOrg
+		Do irExtOrg.$assignrow(prOrgRecord)
+		Do irExtOrg.$validation() Returns lbProceed
+		If lbProceed
+			Do irExtOrg.$update() Returns lbUpdateOrgOK
+			If lbUpdateOrgOK
+				Do prOrgRecord.$assignrow(irExtOrg)     ;; return result to calling object
+				Calculate irOrigExtOrg as irExtOrg
+			Else
+				Calculate icErrorMessage as irExtOrg.irErrorSQL.NativeErrorText
+				Quit method kFalse
+			End If
+		Else
+			Calculate icErrorMessage as con('validation error: ',irExtOrg.icValidationMessage)
+			Quit method kFalse
+		End If
+	End If
+End If
+
+;  update link with Supplier and/or Customer code
+If prLinkRecord.EOL_SEQ>0
+	Calculate lbModifiedLink as kFalse
+	
+	If prLinkRecord.EOL_SEQ=prOrigLink.EOL_SEQ
+		Do toStrings.$HasRowBeenModified(prOrigLink,prLinkRecord) Returns lbModifiedLink
+	Else If prLinkRecord.EOL_SEQ=irOrigOrgLink.EOL_SEQ
+		Do toStrings.$HasRowBeenModified(irOrigOrgLink,prLinkRecord) Returns lbModifiedLink
+	End If
+	
+	If lbModifiedLink
+		Do irOrglink.$assignrow(prLinkRecord)
+		Do irOrglink.$validation() Returns lbProceed
+		If lbProceed
+			Do irOrglink.$update() Returns lbUpdateLinkOK
+			If lbUpdateLinkOK
+				Do prLinkRecord.$assignrow(irOrglink)     ;; return result to calling object
+			Else
+				Calculate icErrorMessage as irOrglink.irErrorSQL.NativeErrorText
+				Quit method kFalse
+			End If
+		Else
+			Calculate icErrorMessage as con('validation error: ',irOrglink.icValidationMessage)
+			Quit method kFalse
+		End If
+	End If
+End If
+
+;  we are here because either an update has occurred and its returned OK
+;  or no updates have been executed because nothing has been modified
+If not(lbModifiedOrg)&not(lbModifiedLink)
+	;  nothing to update
+	Quit method kTrue
+End If
+Quit method kTrue

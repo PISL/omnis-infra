@@ -1,0 +1,19 @@
+;  on evOK repeated in $control     ;; to deal with double click on iList
+On evOK
+	Do method OnOk
+	
+On evCancel
+	;  Breakpoint
+	If icDoMethodOnCancel<>''
+		Set reference lrefCallingWindow to irefCallingWindow
+		Calculate lcCallbackMethod as icDoMethodOnCancel
+		
+		Close window instance $cinst
+		If lrefCallingWindow
+			Do lrefCallingWindow.[lcCallbackMethod](iList)
+		Else
+			Do [lcCallbackMethod](iList)
+		End If
+	Else
+		Close window instance $cinst
+	End If

@@ -1,0 +1,50 @@
+;  If clLabels.$linecount=0
+;  prepare list of super class objects
+Do llSuperLabels.$cols.$add('objName',kCharacter,kSimplechar,50)
+
+;  Do llSuperLabels.$add('sel_group')
+Do llSuperLabels.$add('disp_orgs')
+Do llSuperLabels.$add('disp_cust')
+Do llSuperLabels.$add('disp_supp')
+Do llSuperLabels.$add('EO_Heading')
+Do llSuperLabels.$add('EO_Intro')
+Do llSuperLabels.$add('SUPP_Heading')
+Do llSuperLabels.$add('SUPP_Intro')
+Do llSuperLabels.$add('CUST_Heading')
+Do llSuperLabels.$add('CUST_Intro')
+Do llSuperLabels.$add('EO_icSearch')
+
+Do $cinst.$objs.$makelist($ref.$name,$ref) Returns llLabels
+Do llLabels.$sendall($sendallref.C1.$assign(mid($sendallref.C1,1,len($sendallref.C1)-2)),isnumber(right($sendallref.C1,1))&left(right($sendallref.C1,2),1)='_')     ;; remove the "_digit" from the end of duplicated object names
+;  now we have to identify field objects with labels so we can add the tooltip to them in $assigntext
+Calculate llEntryFields as llLabels
+Do llEntryFields.$search(0)
+For llLabels.$line from 1 to llLabels.$linecount step 1
+	If left(llLabels.C1,6)='label_'
+		Do llEntryFields.$search($ref.C1=mid(llLabels.C1,7),1,0,1,0)
+	End If
+End For
+Do llEntryFields.$remove(kListKeepSelected)
+Do $cinst.$translateLabels(llLabels,llSuperLabels)
+Calculate clLabels as llLabels
+;  End If
+
+Do $cinst.$assignText(llEntryFields)     ;; get the super class to set the objects' properties
+
+;  now display tab shortcut keys
+If pos('Macintosh',icPlatform)|pos('Windows',icPlatform)     ;; we don't want keyboard shortcuts on mobile devices
+	Do clLabels.$search($ref.objName='TabControl_EO',1,0,0,0) Returns lnLine
+	If lnLine&clLabels.label<>''     ;; we have translations so let's prefix them with the shortcut key
+		Calculate lnShortcutAdd as irefContainer.ilTabShortcuts.$cols.key.$maximum()
+		If isnull(lnShortcutAdd)
+			Calculate lnShortcutAdd as 0
+		End If
+		Do toStrings.$StringToList($cinst.clLabels.label,'\') Returns llLabels
+		Set reference lrefTabs to $cinst.$objs.TabControl_EO
+		For lnTabCount from 1 to 3 step 1
+			Calculate lrefTabs.$selectedtab as lnTabCount
+			Calculate lrefTabs.$tabtext as con(lnTabCount+lnShortcutAdd,". ",llLabels.[lnTabCount].C1)
+			Do ilTabShortcuts.$add(lnTabCount+lnShortcutAdd)
+		End For
+	End If
+End If

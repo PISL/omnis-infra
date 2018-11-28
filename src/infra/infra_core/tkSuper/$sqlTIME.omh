@@ -1,0 +1,6 @@
+
+Calculate queryValue as tim(pValue,'H:N:S')
+
+Calculate queryValue as con("TIME '",queryValue,"'")
+
+Quit method queryValue

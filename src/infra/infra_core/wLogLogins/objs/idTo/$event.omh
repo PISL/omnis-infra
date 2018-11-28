@@ -1,0 +1,9 @@
+On evClick
+	Do method determineInterval
+	Do method determineFromTo (1)
+	
+	Do $cinst.$refreshUsers()
+	Do $cinst.$refresh()
+	
+	Do $cinst.$behaviour()
+	Do $cinst.$redraw()

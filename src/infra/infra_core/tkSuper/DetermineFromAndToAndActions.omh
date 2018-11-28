@@ -1,0 +1,107 @@
+Quit method
+
+Do plTimes.$sort($ref.REF_ORDER,0,$ref.REF_VALUE,0)
+
+If clRegularReportingOptions.$colcount>0
+	;  initialised
+Else
+	Do clRegularReportingOptions.$cols.$add('Instruction',kCharacter,kSimplechar,30)
+	Do clRegularReportingOptions.$cols.$add('ActionColumn',kCharacter,kSimplechar,30)
+	Do clRegularReportingOptions.$add('BACKUP','Backup')
+	Do clRegularReportingOptions.$add('POLLSERVER','PollServer')
+	Do clRegularReportingOptions.$add('SESSION_STATS','SessionStats')
+	Do clRegularReportingOptions.$add('STO_CLEANUP','DirCleanupSTO')
+	Do clRegularReportingOptions.$add('DBTRANSFERS_PENDING','TransfersPending')
+	Do clRegularReportingOptions.$add('NEW_SUBSCRIPTIONS','NewSubscriptions')
+	Do clRegularReportingOptions.$add('BROWSER_STATS','BrowserStats')
+	Do clRegularReportingOptions.$add('SESSION_SUMMARY','SessionPageCount')
+	Do clRegularReportingOptions.$add('GEO_LOOKUP','GeoLookup')
+	Do clRegularReportingOptions.$add('HACKER_SCAN','HackerScan')
+	Do clRegularReportingOptions.$add('ASYNC_EMAILS','AsyncEmails')
+	Do clRegularReportingOptions.$add('SUMMARY_TABLE_PAGE_HITS','SummaryTablePageHits')
+	
+	Do clRegularReportingOptions.$add('RECORD_UPTIME','RecordUptime')
+	Do clRegularReportingOptions.$add('PAGETRACE_CLEANUP','PagetraceCleanup')
+	Do clRegularReportingOptions.$add('WEB_DOCS_NAME_CHANGE','WebDocsNameChange')
+End If
+
+Do lrActions.$cols.$add('ActionsApplyNow',kBoolean)
+Calculate lrActions.ActionsApplyNow as kTrue
+
+Calculate clRegularReportingOptions.$line as 0
+While $Loop(clRegularReportingOptions)
+	Do lrActions.$cols.$add(clRegularReportingOptions.ActionColumn,kBoolean)
+	Do lrActions.$cols.$add(con('PreviousEvent',clRegularReportingOptions.ActionColumn),kDate,kDatetime)
+	Do lrActions.$cols.$add(con('CurrentEvent',clRegularReportingOptions.ActionColumn),kDate,kDatetime)
+	Do lrActions.$cols.$add(con('NextEvent',clRegularReportingOptions.ActionColumn),kDate,kDatetime)
+	Do lrActions.$cols.$add(con('DateFormat',clRegularReportingOptions.ActionColumn),kCharacter,kSimplechar,20)
+End While
+
+;  there are 3 jobs that could be done:  backup, stats and polling the web server
+;  stats requires a date range between "this" and the previous STATS entry
+Calculate lcTimeNow as #T
+Do plTimes.$search($ref.REF_VALUE>lcTimeNow,1,0,0,0) Returns lbFound     ;; llTimes
+If not(lbFound)
+	Calculate plTimes.$line as 1
+End If
+
+If plTimes.$line>1
+	Calculate lnEventLineNo_NOW as plTimes.$line-1
+Else
+	Calculate lnEventLineNo_NOW as plTimes.$linecount
+End If
+
+Calculate lnEventLineNo_NEXT as plTimes.$line
+Calculate plTimes.$line as lnEventLineNo_NOW     ;; this is for debugging ease only - when plTimes is being viewed in debugger
+
+Calculate lnSecondsBetweenNowAndDetectedEvent as ddiff(kSecond,dat(#D)+tim(plTimes.[lnEventLineNo_NOW].REF_VALUE),#D)
+Calculate lcTimeOnly as '-12D:H:N'
+Calculate lcDateTime as '-12D:D/M  H:N'     ;; period spans different days
+
+Calculate clRegularReportingOptions.$line as 0
+While $Loop(clRegularReportingOptions)
+	
+	Calculate lrActions.[clRegularReportingOptions.ActionColumn] as pos(clRegularReportingOptions.Instruction,upp(plTimes.[lnEventLineNo_NOW].REF_CHAR))>0
+	If lrActions.[clRegularReportingOptions.ActionColumn]
+		Calculate lrActions.DateFormat[clRegularReportingOptions.ActionColumn] as lcTimeOnly
+		Calculate lrActions.CurrentEvent[clRegularReportingOptions.ActionColumn] as con(#D,'  ',plTimes.[lnEventLineNo_NOW].REF_VALUE)
+		
+		;  find next occurrence of event
+		Calculate llCopyOfTimes as plTimes
+		Do llCopyOfTimes.$search($ref.REF_SEQ=plTimes.[lnEventLineNo_NOW].REF_SEQ,1,0,0,0) Returns lbFound     ;; position current line where we are now
+		Do llCopyOfTimes.$search(pos(clRegularReportingOptions.Instruction,upp($ref.REF_CHAR))>0,0,0,0,0) Returns lbFound     ;; search forward from where we are
+		If lbFound
+			Calculate lrActions.NextEvent[clRegularReportingOptions.ActionColumn] as con(#D,'  ',llCopyOfTimes.REF_VALUE)
+		Else
+			Do llCopyOfTimes.$search(pos(clRegularReportingOptions.Instruction,upp($ref.REF_CHAR))>0,1,0,0,0) Returns lbFound     ;; search from beginning
+			;  entry has to be found     ;; it may be pointing to same line though
+			Calculate lrActions.NextEvent[clRegularReportingOptions.ActionColumn] as con(#D+1,'  ',llCopyOfTimes.REF_VALUE)     ;; tomorrow
+			Calculate lrActions.DateFormat[clRegularReportingOptions.ActionColumn] as lcDateTime
+		End If
+		
+		;  now find previous occurrence of event
+		Calculate llReverseTimes as plTimes
+		Do llReverseTimes.$sort($ref.REF_ORDER,1,$ref.REF_VALUE,1)     ;; descending order now in order to search backward
+		Do llReverseTimes.$search($ref.REF_SEQ=plTimes.[lnEventLineNo_NOW].REF_SEQ,1,0,0,0) Returns lbFound     ;; reset line we were at before
+		Do llReverseTimes.$search(pos(clRegularReportingOptions.Instruction,upp($ref.REF_CHAR))>0,0,0,0,0) Returns lbFound     ;; search current line
+		If lbFound
+			Calculate lrActions.PreviousEvent[clRegularReportingOptions.ActionColumn] as con(#D,'  ',llReverseTimes.REF_VALUE)     ;; earlier today day
+		Else
+			Do llReverseTimes.$search(pos(clRegularReportingOptions.Instruction,upp($ref.REF_CHAR))>0,1,0,0,0) Returns lbFound     ;; search from beginning of list (which is bottom of plTimes)
+			Calculate lrActions.PreviousEvent[clRegularReportingOptions.ActionColumn] as con(#D-1,'  ',llReverseTimes.REF_VALUE)     ;; yesterday
+			Calculate lrActions.DateFormat[clRegularReportingOptions.ActionColumn] as lcDateTime
+		End If
+	End If
+End While
+
+If abs(lnSecondsBetweenNowAndDetectedEvent)>60     ;; 1 min tolerance
+	;  then no actions are going to take place...  unless pInit is true - in which case a pollserver will run
+	Calculate lrActions.ActionsApplyNow as kFalse
+End If
+
+If lnEventLineNo_NOW<lnEventLineNo_NEXT
+	Calculate pNextEvent as con(#D,'  ',plTimes.[lnEventLineNo_NEXT].REF_VALUE)     ;; later today
+Else
+	Calculate pNextEvent as con(#D+1,'  ',plTimes.[lnEventLineNo_NEXT].REF_VALUE)     ;; tomorrow
+End If
+Quit method lrActions

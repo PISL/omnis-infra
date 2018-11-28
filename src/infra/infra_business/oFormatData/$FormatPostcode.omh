@@ -1,0 +1,77 @@
+Calculate icInvalidChars as ''
+If pDoNotInitialise
+	;  leave icValidationText as is because its being called internally
+Else
+	Calculate icValidationText as ''
+	Calculate icValidationCodes as ''
+End If
+Do StringTable.$setcolumn(pLangCode) Returns #F
+
+If irCountry.CO_ISO3=pCountry
+	;  already fetched
+Else If irCountry.CO_ISO2=pCountry
+	;  already fetched
+Else
+	Do irCountry.$clear()
+	Do irCountry.$fetch_pk(pCountry)
+End If
+
+Calculate pPostcode as upp(pPostcode)
+;  Switch pCountry
+;  Case ''
+;  Default     ;; any other country we will have to accept as valid
+
+;  see if there is a simple pattern matching calculation
+Do toStrings.$TagContent(irCountry.CO_PCODE_FORMAT,'EVAL') Returns lcTemp
+If lcTemp<>''
+	If eval(lcTemp)
+		;  it passed
+	Else
+		Do toStrings.$StringTableMessage('VAL_POSTCODE_INVALID_FORMAT',icValidationText,icValidationCodes) Returns lbStringTableEntryFound
+		If not(lbStringTableEntryFound)
+			Calculate icValidationText as con(icValidationText,pick(icValidationText<>'','',', '),'invalid postcode format')
+		End If
+		Calculate lbFailed as kTrue
+	End If
+End If
+
+If not(lbFailed)
+	;  see if there is a specific method to call - e.g. UK postcodes
+	;  Do toStrings.$TagContent(irCountry.CO_PCODE_FORMAT,'METHOD') Returns lcTemp     ;; ### GRS 10/10/14 commented out during TM integration
+	If lcTemp<>''
+		;  in the case of method PostcodeGBR there will be nothing ever returned in lcMessage - that method updates icValidationText itself
+		Do method [lcTemp] (pPostcode) Returns lcMessage
+		If lcMessage<>''
+			Calculate icValidationText as con(icValidationText,pick(icValidationText<>'','',', '),lcMessage)
+			Calculate lbFailed as kTrue
+		End If
+	End If
+End If
+
+If not(lbFailed)
+	;  see if there is a database of valid postcodes and use that - Australia and USA
+	Do toStrings.$TagContent(irCountry.CO_PCODE_FORMAT,'LOOKUP') Returns lcTemp
+	If lcTemp<>''
+		Do method LookupPostcode (pPostcode,lcTemp) Returns lbFound
+		If not(lbFound)
+			Do toStrings.$StringTableMessage('VAL_ADDR_POSTCODE_NOT_FOUND',icValidationText,icValidationCodes) Returns lbStringTableEntryFound
+			If not(lbStringTableEntryFound)
+				Calculate icValidationText as con(icValidationText,pick(icValidationText<>'','',', '),'postcode did not verify')
+			End If
+			Calculate lbFailed as kTrue
+		End If
+	End If
+End If
+;  End Switch
+
+Calculate lcTest as strpbrk(pName,ccIllegalPostcode)
+If lcTest<>''
+	;  not testing for full stop as first or last char     ;; yet
+	Do $ctask.toStrings.$StringTableMessage('VAL_PCODE_ILLEGAL_CHAR',icValidationText,icValidationCodes) Returns lbStringTableEntryFound
+	If not(lbStringTableEntryFound)
+		Calculate icValidationText as con(icValidationText,pick(icValidationText<>'','',', '),'illegal character in postcode')
+	End If
+	Calculate icInvalidChars as ccIllegalPostcode
+End If
+
+Quit method icValidationText

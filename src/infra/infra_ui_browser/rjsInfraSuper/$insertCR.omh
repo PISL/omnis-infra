@@ -1,0 +1,9 @@
+;  may be called from pbAdd or enterData
+Calculate $cinst.icDisplayMessage as $cell($cinst.clLabels,'objName','REC_INSERT','label')     ;; irCurrentRecord
+Calculate $cinst.icMode as 'I'     ;; insert role
+
+Do irCurrentRecord.$clear()
+Do irCurrentRecord.$defaults()
+Calculate $cinst.irOriginalRecord as $cinst.irCurrentRecord
+
+Do $cinst.$behaviour()

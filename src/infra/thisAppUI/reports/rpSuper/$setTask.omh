@@ -1,0 +1,9 @@
+If prefTask.$DefineList.$cando()
+	Set reference irefTask to prefTask
+Else
+	If $cdevice.$ident=kDevOmnisPDF
+		Set reference irefTask to $iremotetasks.rtBusinessApp.$ref
+	Else
+		Set reference irefTask to $ctask().$ref
+	End If
+End If

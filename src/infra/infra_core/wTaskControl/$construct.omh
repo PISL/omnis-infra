@@ -1,0 +1,62 @@
+Do inherited
+
+Calculate $cinst.$title as con('App: ',upp(tcCurrentLibrary),'  DB: ',upp(tlDatabases.DB),'  ',$cinst.$title)
+
+;  Calculate lrInfo as $cclass.$userinfo
+;  If lrInfo.C1>-1&lrInfo.C2>-1&lrInfo.C1<sys(105)&lrInfo.C2<sys(104)     ;; lets not use it if it was moved off screen or not set
+;  Calculate $cinst.$top as lrInfo.C1
+;  Calculate $cinst.$left as lrInfo.C2
+;  End If
+
+Calculate inTimerSeconds as 10
+Do toValues.$initLocal('POSITION_WIN',upp($cclass().$name)) Returns irWinPosition
+If irWinPosition.RFL_SEQ>0
+	If irWinPosition.RFL_JSON<>''
+		Do OJSON.$jsontolistorrow(irWinPosition.RFL_JSON) Returns lrPos
+		Calculate $cinst.$top as lrPos.top
+		Calculate $cinst.$left as lrPos.left
+		Calculate $cinst.$width as lrPos.width
+		Calculate $cinst.$height as lrPos.height
+		Calculate ibAutoRefresh as pick(lrPos.autorefresh,0,1)
+		Calculate inTimerSeconds as pick(lrPos.timerSeconds>0,10,lrPos.timerSeconds)
+		Calculate ibSpeakAppName as pick(lrPos.speakName,0,1)
+	End If
+Else
+	Calculate irWinPosition.RFL_CLASS as 'POSITION_WIN'
+	Calculate irWinPosition.RFL_VALUE as upp($cclass().$name)
+	Calculate irWinPosition.RFL_DESC as con('record of last moved window position for ',$cclass().$name)
+	Calculate irWinPosition.RFL_ACTIVE as kTrue
+	;  nothing in RFL_CHAR on initialisation
+	Do irWinPosition.$insert() Returns lbOK
+End If
+
+Do ioAutoTimer.$setReference($cinst)
+Calculate ioAutoTimer.$useseconds as kTrue
+Calculate ioAutoTimer.$autoreset as kTrue
+Calculate ioAutoTimer.$timervalue as inTimerSeconds
+If ibAutoRefresh
+	Do ioAutoTimer.$starttimer()
+End If
+
+Calculate icPathForNewConnection as mid($getLibPath(),1,rpos(sys(9),$getLibPath())-1)
+Calculate icPathForNewConnection as con(icPathForNewConnection,sys(9),'SOUNDS',sys(9),'bong.wav')
+Do FileOps.$doesfileexist(icPathForNewConnection) Returns lbOK
+If not(lbOK)
+	Calculate icPathForNewConnection as ''
+End If
+
+Calculate icPathForLostConnection as mid($getLibPath(),1,rpos(sys(9),$getLibPath())-1)
+Calculate icPathForLostConnection as con(icPathForLostConnection,sys(9),'SOUNDS',sys(9),'swipe.wav')
+Do FileOps.$doesfileexist(icPathForLostConnection) Returns lbOK
+If not(lbOK)
+	Calculate icPathForLostConnection as ''
+End If
+
+Do method $refresh
+
+Do $GetPref('AppName') Returns icNameOfApplication
+If isclear(icNameOfApplication)
+	Calculate icNameOfApplication as tcCurrentLibrary
+End If
+
+Do $cinst.$behaviour()

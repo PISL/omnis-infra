@@ -1,0 +1,5 @@
+On evClick
+	Do $cinst.$validateParams() Returns lbProceed
+	If lbProceed
+		Do $cinst.$initPrint()
+	End If

@@ -1,0 +1,3 @@
+;  subclass must contain the following line (uncommented!)
+;  Quit method sys(10)
+Breakpoint {Developer:  you should not be here!}

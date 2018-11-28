@@ -1,0 +1,44 @@
+;  clear ancilliary lists
+Do ilDetails.$clear()
+Calculate ilOriginalDetails as ilDetails
+Do ilChains.$clear()
+Do ilDisplayRecords.$clear()
+
+If len(idFrom)|len(idTo)
+	If len(idFrom)
+		Do toStrings.$StringTableEntry('word_from',lcMessage,'from')
+		Calculate icFormIntro as con(lcMessage,' ',idFrom,pick(len(idTo)>0,'',' - '),idTo)
+	Else
+		Do toStrings.$StringTableEntry('word_to',lcMessage,'to')
+		Calculate icFormIntro as con(lcMessage,' ',idTo)
+	End If
+Else
+	Calculate icFormIntro as $cell(clLabels,'objName','TP_ALL','label')
+End If
+
+;  If ilSearch1.EO_SEQ>0
+;  Do ilDisplayRecords.$fetchOurInvoices(ilSearch1.EO_SEQ,idFrom,idTo,ibExactDate)
+;  Do toStrings.$StringTableEntry('word_customer',lcMessage,'customer')
+;  Calculate icFormIntro as con(icFormIntro,kCr,lcMessage,' ',ilSearch1.EO_NAME,' (',ilSearch1.EO_SEQ,')')
+;  Else
+;  Do ilDisplayRecords.$fetchOurInvoices(,idFrom,idTo,ibExactDate)
+;  End If
+Do method $stringSearchActual
+
+Do ilDisplayRecords.$sort($ref.FOH_CUST_NAME,0,$ref.FOH_INV_NO,0,$ref.FOH_DATE,0)
+
+Calculate inTotalPrice as 0
+Calculate inTotalTax as 0
+Calculate inTotalInvoice as 0
+
+While $Loop(ilDisplayRecords)
+	Do ilDisplayRecords.$DisplayName()
+End While
+
+If pnSelect>0
+	Do ilDisplayRecords.$search($ref.FOH_SEQ=pnSelect,1,0,0,0)
+Else
+	Calculate ilDisplayRecords.$line as 1
+End If
+
+Do $cinst.$displayListClick

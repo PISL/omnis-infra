@@ -1,0 +1,14 @@
+;  Calculate ilPrevious.$line as 0
+Calculate irCurrentStructure as ilNow
+Calculate irOriginalStructure as irCurrentStructure
+Calculate ibModifiedRecord as kFalse
+Calculate icMode as ''
+
+Do ilStructureType.$search($ref.RFO_VALUE=irCurrentStructure.GS_TYPE,1,0,0,0)
+;  Do ilEPMfieldNames.$search($ref.REF_VALUE=irCurrentRecord.PB_FIELDNAME,1,0,0,0)
+;  Calculate ibIsCloneable as kFalse
+;  If irCurrentRecord.PB_CLONEABLE     ;; done like this in case PB_CLONEABLE is null
+;  Calculate ibIsCloneable as kTrue
+;  End If
+Do method AssignFieldValueOptions
+;  Do $cinst.$SetColours()

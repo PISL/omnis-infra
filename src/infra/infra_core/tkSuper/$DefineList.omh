@@ -1,0 +1,23 @@
+;  Breakpoint {pcColumns}
+If pos('.',pTableClass)
+	;  ok, good to go
+Else
+	;  this is a class without a library name
+	Do $ctask.$getTableLibrary(pTableClass) Returns lcLib
+	Calculate pTableClass as con(lcLib,'.',pTableClass)
+End If
+
+If len(pcColumns)
+	If pos(kSq,pcColumns)=0
+		Calculate pcColumns as replaceall(pcColumns,',',"','")
+		Calculate pcColumns as con(kSq,pcColumns,kSq)
+	End If
+	Do pListOrRow.$definefromsqlclass[con("('",pTableClass,"',",pcColumns,')')] Returns #F
+Else
+	Do pListOrRow.$definefromsqlclass(pTableClass) Returns #F
+End If
+
+If flag false
+	Breakpoint
+End If
+Quit method #F

@@ -1,0 +1,14 @@
+Do method $buildStringTable     ;; this gets the STB entries from the DB at builds one string table from them
+
+;  initialise tlTableClasses
+Do tlTableClasses.$addcols('lib',kCharacter,kSimplechar,50,'classes',kCharacter,kSimplechar,50000)
+
+Calculate lcDependecies as 'TMObjs,ExcelFormat'
+Do $cinst.$checkDependencies(lcDependecies) Returns lbOK
+If not(lbOK)
+	Open trace log
+	OK message Error ! ! (Sound bell) {This app cannot run.  See trace log for details.}
+	Quit method
+End If
+
+Do $init

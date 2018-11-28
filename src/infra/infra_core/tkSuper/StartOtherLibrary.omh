@@ -1,0 +1,11 @@
+Working message  {opening library [pLibName]}
+Do $libs.$findname(pLibName) Returns liOtherLib
+If liOtherLib
+	;  fine - its already open
+Else
+	Do FileOps.$doesfileexist(con(tConstants.HostDirectory,con(pLibName,'.lbs'))) Returns lbOK
+	If lbOK
+		Open library (Do not close others) {[con(tConstants.HostDirectory,pLibName,'.lbs')]}
+	End If
+End If
+Close working message

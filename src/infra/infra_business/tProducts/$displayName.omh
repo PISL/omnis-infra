@@ -1,0 +1,5 @@
+If $cinst.PRD_INT_PRODCODE<>''
+	Calculate $cinst.DisplayName as con($cinst.PRD_INT_PRODCODE,' : ',$cinst.PRD_NAME)
+Else
+	Calculate $cinst.DisplayName as con($cinst.PRD_SUPP_PRODCODE,' > ',$cinst.PRD_NAME)
+End If

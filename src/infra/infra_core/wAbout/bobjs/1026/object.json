@@ -1,0 +1,30 @@
+{
+	"ident": 1026,
+	"order": 16388,
+	"objtype": "kBackComponent",
+	"componentlib": "StringTable",
+	"componentctrl": "String Label",
+	"properties": {
+		"::text": "",
+		"align": "kLeftJst",
+		"backcolor": "RGB(238,238,238)",
+		"backpattern": 1,
+		"designactive": true,
+		"edgefloat": "kEFnone",
+		"fieldstyle": "",
+		"font": 1,
+		"fontsize": 8,
+		"fontstyle": "kPlain",
+		"forecolor": "kBlack",
+		"height": 20,
+		"left": 22,
+		"objlink": 0,
+		"rowid": "sys_licensor_phone_support",
+		"textcolor": "kColorWindowText",
+		"top": 135,
+		"userinfo": "",
+		"vertcentertext": false,
+		"visible": true,
+		"width": 120
+	}
+}

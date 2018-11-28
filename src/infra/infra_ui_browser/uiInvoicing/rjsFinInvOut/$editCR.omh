@@ -1,0 +1,12 @@
+If irUserRights.canEdit&irCurrentRecord.FOH_SEQ>0&isclear(irCurrentRecord.FOH_SWHEN)&icMode=''
+	Calculate icDisplayMessage as ''
+	Calculate icMode as 'E'     ;; edit
+	
+	Do irCurrentRecord.$fetch_pk()
+	Calculate irOriginalHeader as irCurrentRecord
+	Do method DropLists
+	Do method fetchChainedInvoices
+	Do method fetchDetails
+	
+	Do $cinst.$behaviour()
+End If

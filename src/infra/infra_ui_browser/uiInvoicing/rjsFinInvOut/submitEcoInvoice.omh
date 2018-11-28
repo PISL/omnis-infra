@@ -1,0 +1,2 @@
+Calculate icDisplayMessage as ''
+Do $cinst.$clientNoYesMsg($cell(clLabels,'objName','msg_submit_fininv','label'),'','$submitEcoInvoice','$cancelSubmit')     ;; pMessage, pTitle, pYescallback, pNoCallback

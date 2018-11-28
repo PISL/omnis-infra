@@ -1,0 +1,7 @@
+On evLayoutChanged
+	Do inherited
+	If inBreakpoint<=375
+		Calculate $cinst.$objs.TabControl_Access.$fontsize as 8
+	Else
+		Calculate $cinst.$objs.TabControl_Access.$fontsize as 12
+	End If

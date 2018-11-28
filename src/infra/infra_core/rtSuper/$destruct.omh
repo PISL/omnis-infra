@@ -1,0 +1,36 @@
+If tConstants.LogTaskStats
+	If trTaskStats.STS_SEQ>0
+		Do $iremotetasks.$makelist($ref.$name,$ref.$ident) Returns llConnections
+		Calculate trTaskStats.STS_END as #D
+		Calculate trTaskStats.STS_COUNT_END as llConnections.$linecount
+		
+		Calculate trTaskStats.STS_LAST_RESPONSE as $cinst.$lastresponse     ;; a significant gap between this and STS_END will indicate timeout (I hope)
+		Calculate trTaskStats.STS_GO_REF as trGroupOrg.GO_SEQ
+		;  this check has been added for mdm_ws which uses ULA_REF to store a WS_REF
+		If isnull(trTaskStats.STS_ULA_REF)
+			Calculate trTaskStats.STS_ULA_REF as trLogAccess.ULA_SEQ
+		End If
+		
+		Calculate trTaskStats.STS_BYTES_REQCURSENT as $cinst.$reqcurbytessent
+		Calculate trTaskStats.STS_BYTES_REQCURRECD as $cinst.$reqcurbytesreceived
+		
+		Calculate trTaskStats.STS_BYTES_REQMAXSENT as $cinst.$reqmaxbytessent
+		Calculate trTaskStats.STS_BYTES_REQMAXRECD as $cinst.$reqmaxbytesreceived
+		
+		Calculate trTaskStats.STS_BYTES_REQTOTSENT as $cinst.$reqtotbytessent
+		Calculate trTaskStats.STS_BYTES_REQTOTRECD as $cinst.$reqtotbytesreceived
+		
+		Calculate trTaskStats.STS_TOT_EVENTS as $cinst.$requests
+		
+		Do trTaskStats.$update() Returns lbOK
+	End If
+End If
+
+If len($cinst.icPoolName)>0
+	Set reference lrefPool to $sessionpools.[$cinst.icPoolName]
+	If lrefPool.$poolsize<=2
+		Do $itasks.[tcCurrentLibrary].$CloseSessionPool($cinst.icPoolName)
+	Else
+		Do lrefPool.$poolsize.$assign(lrefPool.$poolsize-1)
+	End If
+End If

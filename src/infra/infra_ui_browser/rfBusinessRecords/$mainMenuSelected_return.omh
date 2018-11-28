@@ -1,0 +1,6 @@
+
+If not(isclear(pReturn))
+	Calculate lcURL as pReturn.C1
+	Calculate lcNewTab as pReturn.C2
+	JavaScript: window.open(lcURL,lcNewTab)
+End If

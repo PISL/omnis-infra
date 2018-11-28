@@ -1,0 +1,50 @@
+;  tell application "Safari"
+;  activate
+;  do JavaScript "window.open('http://www.yahoo.com')" in document 1
+;  end tell
+If pos('HTTP://',upp(pcWebPage))=1
+	Calculate pcWebPage as mid(pcWebPage,8,999)
+End If
+Calculate lcJavaScript as "window.open('http://"
+Calculate lcJavaScript as con(lcJavaScript,pcWebPage)
+Calculate lcJavaScript as con(lcJavaScript,"')")
+
+;  RSM:  15 FEB 2016     ;; for some time now the oipening of a web page has not been working.
+;  Stepping through this code in the debugger, it works.     ;; Letting it run on its own, it doesn't.
+If #D>=dat('15 FEB 2016')
+	Begin text block
+	Text: {tell application "Safari"} (Platform newline)
+	Text: {make new document with properties {URL:"[pcWebPage]"}} (Platform newline)
+	Text: {end tell} (Platform newline)
+	End text block
+	Get text block lcApplescript
+	Do $root.$runapplescript(lcApplescript,lcApplescriptResult,lcApplescriptError)
+Else
+	;  make sure a window is open
+	Begin text block
+	Text: {tell application "Safari"} (Platform newline)
+	Text: {if windows is {} then reopen} (Platform newline)
+	Text: {end tell} (Platform newline)
+	End text block
+	Get text block lcApplescript
+	Do $root.$runapplescript(lcApplescript,lcApplescriptResult,lcApplescriptError)
+	;  don't bother checking for errors
+	
+	;  with a window open, the following will open the desired web link
+	Begin text block
+	Text: {tell application "Safari"} (Platform newline)
+	If pbActivate
+		Text: {activate} (Platform newline)
+	End If
+	Text: {do JavaScript "[lcJavaScript]" in document 1} (Platform newline)
+	Text: {end tell} (Platform newline)
+	End text block
+	Get text block lcApplescript
+	
+	Do $root.$runapplescript(lcApplescript,lcApplescriptResult,lcApplescriptError)
+End If
+
+If lcApplescriptError<>''
+	OK message  {applescript did not work because[kCr][kCr][lcApplescriptError][kCr][kCr]This may be because the browser does not have a window already open.}
+	Breakpoint
+End If

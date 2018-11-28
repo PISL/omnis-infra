@@ -1,0 +1,15 @@
+;  clear the current form as this may be a window refresh
+JavaScript: sessionStorage.removeItem("currentForm");
+;  Remove the shortcut key event listener
+JavaScript: document.removeEventListener('keypress', window.omnisShortcutKeys1);
+Do $cinst.$setupShortcutKeys()
+
+;  catch asubform becoming visible
+JavaScript: var oldFormVisibiltyChanged = omnis_form.prototype.visibilityChanged;
+
+JavaScript: omnis_form.prototype.visibilityChanged = function(always) {
+JavaScript: if (oldFormVisibiltyChanged.call(this,always)) {
+JavaScript: var visible = this.getTrueVisibility(null);
+JavaScript: this.callMethodEx("onVisibilityChanged",eDoMethodFlags.noLog|eDoMethodFlags.clientOnly,visible)
+JavaScript: }
+JavaScript: };

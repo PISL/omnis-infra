@@ -1,0 +1,35 @@
+JavaScript: // fixed columns
+JavaScript: tempArray = [pBreakCols]
+JavaScript: while (tempArray[0].length) {
+JavaScript: lcToken = strtok(tempArray, ",");
+JavaScript: lNewList.$cols().$add(["lcToken","0x15","0x0",null],lcToken,0x15,0x0,255);
+JavaScript: }
+
+JavaScript: if (pWithTotalCols) {
+JavaScript: // total per row columns
+JavaScript: tempArray = [pTransposeValCols]
+JavaScript: while (tempArray[0].length) {
+JavaScript: lcToken = strtok(tempArray, ",");
+JavaScript: liColRef = plTransposeValues.$cols().$findname(lcToken);
+;  we need to assume that this is numeric or we wouldn't be able to total it
+JavaScript: lNewList.$cols().$add([null,"0x19","0x18"],"TOTAL_" + lcToken ,0x19,0x18);
+JavaScript: }
+JavaScript: }
+
+JavaScript: // columns for each transpose value (e.g. USTATUS)
+JavaScript: for (plTransposeValues.setPropCli(-622,1); plTransposeValues.getProperty(-622) <= plTransposeValues.getProperty(-620); plTransposeValues.setPropCli(-622,plTransposeValues.getProperty(-622) + 1))
+JavaScript: {
+JavaScript: tempArray = [pTransposeValCols]
+JavaScript: while (tempArray[0].length) {
+JavaScript: lcToken = strtok(tempArray, ",");
+JavaScript: lcToken = lcToken + plTransposeValues.getValue(pTransposeValCol);
+;  we need to assume that this is numeric or we wouldn't be able to total it
+JavaScript: lNewList.$cols().$add(["lcToken","0x19","0x18",null],lcToken,0x19,0x18);
+JavaScript: if (pWithPercentCols)
+JavaScript: {
+JavaScript: lNewList.$cols().$add([null,"0x19","0x2"],lcToken + "_PERCENT",0x19,0x2);
+JavaScript: }
+JavaScript: }
+JavaScript: }
+
+JavaScript: return lNewList;

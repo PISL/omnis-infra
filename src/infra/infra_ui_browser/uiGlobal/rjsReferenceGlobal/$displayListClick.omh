@@ -1,0 +1,16 @@
+Calculate icDisplayMessage as ''
+Calculate irCurrentRecord as ilDisplayRecords
+
+Do toStrings.$StringTableEntry('MSG_RAWNODISP',lcMessage,'raw - no display -')
+Calculate ilBinaryDisplayOption.1.desc as con(lcMessage,' ',binlength(irCurrentRecord.RFG_BIN),' ',icWordBytes)
+Do method DisplayBinary
+Do method checkJSON
+
+If icSearch<>''
+	;  user has provided a search string which populates ilDisplayList
+	;  NOT populated by ilSearch1     ;; therefore populate ilSearch1
+	Do ilSearch1.$search($ref.RFG_CLASS=irCurrentRecord.RFG_CLASS,1,0,0,0)
+End If
+
+Do $cinst.$behaviour()
+Do $cinst.$redraw()

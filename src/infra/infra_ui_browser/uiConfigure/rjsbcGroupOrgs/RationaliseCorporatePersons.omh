@@ -1,0 +1,32 @@
+If not(ibRESTserviceRunning)
+	Do toStrings.$StringTableEntry('MSG_REGSERVUNAVAILABLE',lcMessage,'Registeration server is not running.')
+	Calculate icDisplayMessage as lcMessage
+	Quit method
+End If
+
+Calculate ilCorporatePerson.$line as 0
+While $Loop(ilCorporatePerson)     ;; $Loop(ilco
+	Do toStrings.$DoesDataExist(ilCorporatePerson) Returns lbExists
+	If not(lbExists)
+		Calculate ilCorporatePerson.[ilCorporatePerson.$line].$selected as kTrue
+	End If
+End While
+Do ilCorporatePerson.$remove(kListDeleteSelected)
+
+;  check minimum number of corporate people have been entered
+If inRegisterType=1&ilCorporatePerson.$linecount>=2     ;; organisation need at least 2 people named
+	;  minimum named people provided
+Else If inRegisterType=2&ilCorporatePerson.$linecount>=1     ;; sole trader nneds at least one person named
+	;  minimum named people provided
+Else If inRegisterType=3
+	;  we do not submit any corpPerson information
+Else
+	;  OK message Invalid submission {There must be at least [pick(inRegisterType,'',2,1)] named people authorised to access the registration record.}
+	Do toStrings.$StringTableEntry('MSG_INVALIDSUBMISSION',lcMessage,'INVALID SUBMISSION')
+	Calculate icDisplayMessage as con(lcMessage,kCr)
+	Do toStrings.$StringTableEntry('MSG_ATLEAST',lcMessage,'There must be at least')
+	Calculate icDisplayMessage as con(icDisplayMessage,lcMessage,' ',pick(inRegisterType,'',2,1),' ')
+	Do toStrings.$StringTableEntry('MSG_NAMEDCONTACT',lcMessage,'named contact people authorised to access the registration record')
+	Calculate icDisplayMessage as con(icDisplayMessage,lcMessage)
+	Quit method
+End If

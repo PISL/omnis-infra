@@ -1,0 +1,108 @@
+{
+	"classtype": "kRemoteForm",
+	"internalversion": 131,
+	"superclass": "rjsInfraSuper",
+	"designtaskname": "rtBusinessApp",
+	"nextident": 1003,
+	"lastgroupident": 0,
+	"cvardefs": [
+
+	],
+	"ivardefs": [
+		{
+			"name": "icCurrentGroupOrg",
+			"order": 1,
+			"type": "kCharacter",
+			"subtype": "kSimplechar",
+			"sublen": 10
+		}
+	],
+	"properties": {
+		"aligntogrid": false,
+		"collectperformancedata": false,
+		"componenttype": "kCompStoreHidden",
+		"contextmenu": "",
+		"createdate": "2018-01-05 15:28:04",
+		"currentlayoutbreakpoint": 1280,
+		"defaultappearance": "kAppearanceiOS",
+		"desc": "",
+		"disabledefaultcontextmenu": false,
+		"editor": "",
+		"editordata": "",
+		"events": "evLayoutChanged",
+		"external": false,
+		"horzgrid": 8,
+		"inheritedorder": 0,
+		"issupercomponent": false,
+		"layoutbreakpoints": "320,375,480,667,768,1024,1280",
+		"layouttype": "kLayoutTypeResponsive",
+		"left": 5,
+		"moddate": "2018-03-08 09:15:34",
+		"serverlessclient": false,
+		"showascheckedout": false,
+		"showgrid": false,
+		"sizetogrid": false,
+		"title": {
+			"type": 0,
+			"calc": "rjsInfraSuper subclass"
+		},
+		"top": 0,
+		"userinfo": "",
+		"version": "",
+		"vertgrid": 8
+	},
+	"inheritedproperties": [
+		"designtaskname",
+		"componenticon",
+		"height",
+		"width",
+		"horzscroll",
+		"vertscroll",
+		"backcolor",
+		"backpattern",
+		"forecolor",
+		"backgroundtheme",
+		"effect",
+		"startfield",
+		"iconpages",
+		"okkeyobject",
+		"cancelkeyobject",
+		"alwaysenabledobject",
+		"backgroundskin",
+		"backgroundskinalign",
+		"openinwindow",
+		"designshowmobiletitle",
+		"backalpha",
+		"alpha",
+		"stringtabledata",
+		"stringtabledesignform",
+		"resizemode",
+		"layoutminheight",
+		"animatelayouttransitions"
+	],
+	"layout": {
+		"width": 1364,
+		"height": 1071,
+		"320": {
+			"height": 0
+		},
+		"375": {
+			"height": 0
+		},
+		"480": {
+			"height": 0
+		},
+		"667": {
+			"height": 0
+		},
+		"768": {
+			"height": 0
+		},
+		"1024": {
+			"height": 0
+		},
+		"1280": {
+			"height": 0
+		}
+	}
+}

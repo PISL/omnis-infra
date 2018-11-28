@@ -1,0 +1,255 @@
+{
+	"classtype": "kReport",
+	"internalversion": 10,
+	"superclass": "rpSuper",
+	"designtaskname": "Startup_Task",
+	"nextident": 1090,
+	"lastgroupident": 0,
+	"usecms": true,
+	"cvardefs": [
+
+	],
+	"ivardefs": [
+		{
+			"name": "ibEveryOtherLine",
+			"order": 7,
+			"type": "kBoolean",
+			"subtype": 0,
+			"sublen": 0,
+			"initval": "kFalse"
+		},
+		{
+			"name": "icBankAccount",
+			"order": 4,
+			"type": "kCharacter",
+			"subtype": "kSimplechar",
+			"sublen": 255
+		},
+		{
+			"name": "irHeader",
+			"order": 1,
+			"type": "kRow",
+			"subtype": "",
+			"sublen": 0
+		},
+		{
+			"name": "irLogo",
+			"order": 5,
+			"type": "kRow",
+			"subtype": "",
+			"sublen": 0
+		},
+		{
+			"name": "irRecipient",
+			"order": 3,
+			"type": "kRow",
+			"subtype": "infra.tentExtOrganisations",
+			"sublen": 0
+		},
+		{
+			"name": "irTerms",
+			"order": 6,
+			"type": "kRow",
+			"subtype": "",
+			"sublen": 0
+		},
+		{
+			"name": "irTotal",
+			"order": 2,
+			"type": "kRow",
+			"subtype": "",
+			"sublen": 0
+		}
+	],
+	"properties": {
+		"aligntogrid": false,
+		"backcolor": "RGB(0,0,0)",
+		"backiconid": 0,
+		"backpattern": 15,
+		"backpicture": {
+			"$base64": ""
+		},
+		"bordercolor": "RGB(0,0,0)",
+		"borderpos": "kBordPosMargins",
+		"bottommargin": 1.001,
+		"callprintonexport": false,
+		"collectperformancedata": false,
+		"componenticon": 0,
+		"componenttype": "kCompStoreHidden",
+		"copies": 0,
+		"createdate": "2018-03-28 13:56:34",
+		"desc": "",
+		"editor": "",
+		"editordata": "",
+		"effect": "kBorderNone",
+		"exportformat": "kEXnone",
+		"external": true,
+		"forecolor": "RGB(0,0,0)",
+		"horzdpi": 0,
+		"horzgrid": 0.508,
+		"horzoffset": 0.0,
+		"horzpages": false,
+		"islabel": false,
+		"islist": false,
+		"issupercomponent": false,
+		"labelcount": 0,
+		"labelwidth": 0.0,
+		"leftmargin": 1.001,
+		"linestyle": 1,
+		"loadpagesetup": false,
+		"macosdestname": "",
+		"macosdesttype": "kPrinter",
+		"mainfile": "",
+		"mainlist": "",
+		"moddate": "2018-09-26 12:06:09",
+		"orientation": "kOrientPortrait",
+		"pagesetupdata": {
+			"$base64": ""
+		},
+		"paper": "kPaDefault",
+		"paperlength": 0.0,
+		"paperwidth": 0.0,
+		"picturealign": "kPALtopLeft",
+		"recordspacing": 0.0,
+		"repeatfactor": 1,
+		"rightmargin": 1.001,
+		"scale": 0,
+		"showascheckedout": false,
+		"showgrid": true,
+		"shownames": false,
+		"sizetogrid": false,
+		"topmargin": 1.001,
+		"userinfo": "",
+		"version": "",
+		"vertdpi": 0,
+		"vertoffset": 0.0
+	},
+	"sortfields": [
+		{
+			"order": 1,
+			"properties": {
+				"dataname": "",
+				"descending": false,
+				"newpage": false,
+				"newpageinterval": 0.0,
+				"newpageintervalstart": 0.0,
+				"subtotalinterval": 0.0,
+				"subtotalintervalstart": 0.0,
+				"subtotals": false,
+				"upper": false
+			}
+		},
+		{
+			"order": 2,
+			"properties": {
+				"dataname": "",
+				"descending": false,
+				"newpage": false,
+				"newpageinterval": 0.0,
+				"newpageintervalstart": 0.0,
+				"subtotalinterval": 0.0,
+				"subtotalintervalstart": 0.0,
+				"subtotals": false,
+				"upper": false
+			}
+		},
+		{
+			"order": 3,
+			"properties": {
+				"dataname": "",
+				"descending": false,
+				"newpage": false,
+				"newpageinterval": 0.0,
+				"newpageintervalstart": 0.0,
+				"subtotalinterval": 0.0,
+				"subtotalintervalstart": 0.0,
+				"subtotals": false,
+				"upper": false
+			}
+		},
+		{
+			"order": 4,
+			"properties": {
+				"dataname": "",
+				"descending": false,
+				"newpage": false,
+				"newpageinterval": 0.0,
+				"newpageintervalstart": 0.0,
+				"subtotalinterval": 0.0,
+				"subtotalintervalstart": 0.0,
+				"subtotals": false,
+				"upper": false
+			}
+		},
+		{
+			"order": 5,
+			"properties": {
+				"dataname": "",
+				"descending": false,
+				"newpage": false,
+				"newpageinterval": 0.0,
+				"newpageintervalstart": 0.0,
+				"subtotalinterval": 0.0,
+				"subtotalintervalstart": 0.0,
+				"subtotals": false,
+				"upper": false
+			}
+		},
+		{
+			"order": 6,
+			"properties": {
+				"dataname": "",
+				"descending": false,
+				"newpage": false,
+				"newpageinterval": 0.0,
+				"newpageintervalstart": 0.0,
+				"subtotalinterval": 0.0,
+				"subtotalintervalstart": 0.0,
+				"subtotals": false,
+				"upper": false
+			}
+		},
+		{
+			"order": 7,
+			"properties": {
+				"dataname": "",
+				"descending": false,
+				"newpage": false,
+				"newpageinterval": 0.0,
+				"newpageintervalstart": 0.0,
+				"subtotalinterval": 0.0,
+				"subtotalintervalstart": 0.0,
+				"subtotals": false,
+				"upper": false
+			}
+		},
+		{
+			"order": 8,
+			"properties": {
+				"dataname": "",
+				"descending": false,
+				"newpage": false,
+				"newpageinterval": 0.0,
+				"newpageintervalstart": 0.0,
+				"subtotalinterval": 0.0,
+				"subtotalintervalstart": 0.0,
+				"subtotals": false,
+				"upper": false
+			}
+		},
+		{
+			"order": 9,
+			"properties": {
+				"dataname": "",
+				"descending": false,
+				"newpage": false,
+				"newpageinterval": 0.0,
+				"newpageintervalstart": 0.0,
+				"subtotalinterval": 0.0,
+				"subtotalintervalstart": 0.0,
+				"subtotals": false,
+				"upper": false
+			}
+		}
+	]
+}

@@ -1,0 +1,11 @@
+Set reference $cinst.irefContainer to $cinst.$container
+Do method setFormColours
+
+Do $DefineList(irCurrentRecord,'infra.tuaUsers')
+Calculate irCurrentRecord.USR_NAME as $ctask.trCurrUser.USR_NAME
+
+Do method TranslateText     ;; call this here to get the translations before setting superclass labels/values
+
+Calculate icMode as 'CP'     ;; ChangePassword
+
+Do $cinst.$behaviour()

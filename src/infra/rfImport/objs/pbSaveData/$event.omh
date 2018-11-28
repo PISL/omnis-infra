@@ -1,0 +1,16 @@
+On evClick
+	If not(ibExistingTemplate)
+		;  prompt the user for the template name
+		JavaScript: inputText=prompt(__form.get("icUserPrompt"))
+		JavaScript: {  {𯿿	var __form = this.form;𯿿	__form.set("icUserInput", inputText);𯿿}𯿿}
+		
+		If not(isclear($cinst.icUserInput))     ;; the user has not cancelled
+			Do $cinst.$saveTemplate()     ;; this then calls $saveData
+		Else
+			Do $cinst.$saveData()
+		End If
+		
+	Else
+		;  check for changes and prompt user to save
+		Do $cinst.$checkTemplateModified()     ;; $checkTemplateModified_return handles the user prompt and $save methods
+	End If

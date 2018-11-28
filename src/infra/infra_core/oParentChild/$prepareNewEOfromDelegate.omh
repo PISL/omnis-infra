@@ -1,0 +1,46 @@
+Do irCustomer.$clear()
+Do irEOL.$clear()
+
+If prDelegate.DG_PSN_REF=irPerson.PSN_SEQ
+	;  do not fetch again
+Else
+	Do irPerson.$clear()
+	Do irPerson.$fetch_pk(prDelegate.DG_PSN_REF)
+End If
+If prDelegate.DG_EO_REF>0
+	Do irCustomer.$fetch_pk(prDelegate.DG_EO_REF)
+Else
+	Do irCustomer.$fetchOurCustomers(,con(irPerson.PSN_SURNAME,', ',irPerson.PSN_FIRST_NAME),,,irPerson.PSN_EMAIL,irPerson.PSN_COMPANY,kTrue)
+End If
+
+If irCustomer.EO_SEQ>0
+	;  existing customer
+	Do irEOL.$fetchCompound(irCustomer.EO_SEQ)     ;; trGroupOrg is referenced within the method
+Else
+	If prDelegate.DG_COMPANY_NAME<>''
+		Calculate irCustomer.EO_NAME as prDelegate.DG_COMPANY_NAME
+	Else
+		If irPerson.PSN_COMPANY<>''
+			Calculate irCustomer.EO_NAME as irPerson.PSN_COMPANY
+		Else
+			Calculate irCustomer.EO_NAME as con(irPerson.PSN_SURNAME,', ',irPerson.PSN_FIRST_NAME)
+		End If
+	End If
+	;  EO_NAME and EO_CONTACT may be repeated
+	Calculate irCustomer.EO_CONTACT as con(irPerson.PSN_SURNAME,', ',irPerson.PSN_FIRST_NAME)
+	Calculate irCustomer.EO_ADDR_BILL as 'ONLINE APPLICATION'
+	Calculate irCustomer.EO_EMAIL as irPerson.PSN_EMAIL
+	;  Breakpoint
+	
+	;  this new external organisation will be a CUSTOMER so mark this as so
+	Calculate irEOL.EOL_GO_REF as $ctask.trGroupOrg.GO_SEQ
+	Calculate irEOL.EOL_EO_REF as irCustomer.EO_SEQ     ;; may be null at this point
+	If irPerson.PSN_COMPANY<>''
+		Calculate irEOL.EOL_FINACCT_CUID as con(mid(replaceall(upp(irPerson.PSN_COMPANY),' ',''),1,6))
+	Else
+		Calculate irEOL.EOL_FINACCT_CUID as con(mid(upp(irPerson.PSN_SURNAME),1,6),'_',mid(upp(irPerson.PSN_FIRST_NAME),1,1))
+	End If
+End If
+
+Calculate pretCustomer as irCustomer
+Calculate pretExtOrgLink as irEOL

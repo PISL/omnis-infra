@@ -1,0 +1,30 @@
+Calculate icValidationMessage as ''
+Do ilValidation.$clear()
+
+If $cinst.UOM_CODE<>''
+	;  good
+Else
+	Calculate lcMessage as con(lcMessage,pick(lcMessage<>'','',', '),'UOM_CODE missing')
+	Do ilValidation.$add('UOM_CODE_LBL','VAL_MISSING','UOM_CODE missing',0)
+End If
+
+If $cinst.UOM_DESC_EN<>''
+	;  good
+Else
+	Calculate lcMessage as con(lcMessage,pick(lcMessage<>'','',', '),'UOM_DESC_EN missing')
+	Do ilValidation.$add('UOM_DESC_EN_LBL','VAL_MISSING','UOM_DESC_EN missing',0)
+End If
+
+If $cinst.UOM_GROUP<>''
+	;  good
+Else
+	Calculate lcMessage as con(lcMessage,pick(lcMessage<>'','',', '),'UOM_GROUP missing')
+	Do ilValidation.$add('UOM_GROUP_LBL','VAL_MISSING','UOM_GROUP missing',0)
+End If
+
+If lcMessage<>''
+	Calculate icValidationMessage as lcMessage
+	Quit method kFalse
+End If
+
+Quit method kTrue

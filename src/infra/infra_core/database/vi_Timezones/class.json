@@ -1,0 +1,20 @@
+{
+	"classtype": "kSchema",
+	"internalversion": 3,
+	"nextident": 32007,
+	"properties": {
+		"componenticon": 0,
+		"componenttype": "kCompStoreHidden",
+		"createdate": "2017-10-27 11:20:30",
+		"createinstancewhensubtype": true,
+		"desc": "",
+		"editor": "",
+		"editordata": "",
+		"external": true,
+		"moddate": "2015-10-27 08:59:13",
+		"servertablename": "infra.vi_timezones",
+		"showascheckedout": false,
+		"userinfo": "",
+		"version": "1.00"
+	}
+}

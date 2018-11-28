@@ -1,0 +1,11 @@
+On evClick
+	Calculate $cinst.$objs.TabControl_FEEDBACK.$currenttab as 1
+	Calculate $cinst.$objs.PagedPane.$currentpage as 1
+	
+	Calculate icDisplayMessage as ''
+	
+	
+	Do $cinst.$initInsert()
+	Calculate icMode as 'I'     ;; insert
+	
+	Do $cinst.$behaviour()

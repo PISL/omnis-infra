@@ -1,0 +1,9 @@
+Do ilDisplayRecords.$clear()
+Calculate ilDisplayRecords.$line as 1
+Calculate ilDisplayRecords.RFG_CLASS as pcSearch1
+Do ilDisplayRecords.$FetchClass(ilSearch1.RFG_CLASS,,kTrue)
+If ilDisplayRecords.irErrorSQL.NativeErrorText<>''
+	Calculate icDisplayMessage as ilDisplayRecords.irErrorSQL.NativeErrorText
+End If
+
+Do method displaySearchCount

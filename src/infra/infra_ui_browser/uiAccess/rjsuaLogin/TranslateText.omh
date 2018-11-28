@@ -1,0 +1,22 @@
+;  If clLabels.$linecount=0
+;  prepare list of super class objects
+Do llSuperLabels.$cols.$add('objName',kCharacter,kSimplechar,50)
+
+;  Do llSuperLabels.$add('xxxxxxxx')     ;; just a placeholder should we need it in future
+
+Do $cinst.$objs.$makelist($ref.$name,$ref) Returns llLabels
+Do llLabels.$sendall($sendallref.C1.$assign(mid($sendallref.C1,1,len($sendallref.C1)-2)),isnumber(right($sendallref.C1,1))&left(right($sendallref.C1,2),1)='_')     ;; remove the "_digit" from the end of duplicated object names
+;  now we have to identify field objects with labels so we can add the tooltip to them in $assigntext
+Calculate llEntryFields as llLabels
+Do llEntryFields.$search(0)
+For llLabels.$line from 1 to llLabels.$linecount step 1
+	If left(llLabels.C1,6)='label_'
+		Do llEntryFields.$search($ref.C1=mid(llLabels.C1,7),1,0,1,0)
+	End If
+End For
+Do llEntryFields.$remove(kListKeepSelected)
+Do $cinst.$translateLabels(llLabels,llSuperLabels)
+Calculate clLabels as llLabels
+;  End If
+
+Do $cinst.$assignText(llEntryFields)     ;; get the super class to set the objects' properties

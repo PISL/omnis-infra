@@ -1,0 +1,10 @@
+If ibCrashTraceOpen
+	If ibFirstContentProvided
+		Do oFileOps.$writefile(con(kCr,pClass,'  ',pMethod,':  ',pText)) Returns lbOK
+	Else
+		Do oFileOps.$writefile(con(pClass,'  ',pMethod,':  ',pText)) Returns lbOK
+		Calculate ibFirstContentProvided as kTrue
+	End If
+	Quit method lbOK
+End If
+Quit method kFalse

@@ -1,0 +1,5 @@
+Do inherited
+
+If isclear($cinst.USR_SALT)
+	Do toStrings.$randomString(3,'Aa0*') Returns $cinst.USR_SALT
+End If

@@ -1,0 +1,9 @@
+;  Enter your termination code here
+;  Breakpoint
+Calculate tbinFileUpload as lbinEmpty
+Do ilDataCols.$clear()
+Calculate ilContent as #NULL
+Calculate irFileUpload.mime as ilUploadMime
+Calculate ibExistingTemplate as kFalse
+Calculate ibDoNotImportFirstLine as kFalse
+Calculate ibReimportExcel as kFalse

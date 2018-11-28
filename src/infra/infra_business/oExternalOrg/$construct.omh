@@ -1,0 +1,6 @@
+;  Enter your initialization code here
+Do $DefineList(irExtOrg,'infra.tentExtOrganisations')
+Do $DefineList(irOrglink,'infra.tentOrgLinks')
+
+Calculate irOrigExtOrg as irExtOrg
+Calculate irOrigOrgLink as irOrglink

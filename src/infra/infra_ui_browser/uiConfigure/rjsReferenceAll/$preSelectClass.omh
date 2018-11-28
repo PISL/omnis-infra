@@ -1,0 +1,19 @@
+Switch pcWhichRef
+	Case 'RFO'
+		If $cinst.$objs.subFormOrg.$subinst     ;; form may not be instanciated yet
+			Do $cinst.$objs.subFormOrg.$subinst().$Search1ListClick(pcPreSelectClass)
+		End If
+		
+	Case 'RFL'
+		If $cinst.$objs.subFormLocal.$subinst     ;; form may not be instanciated yet
+			Do $cinst.$objs.subFormLocal.$subinst().$Search1ListClick(pcPreSelectClass)
+		End If
+		
+	Case 'RFG'
+		If $cinst.$objs.subFormGlobal.$subinst     ;; form may not be instanciated yet
+			Do $cinst.$objs.subFormGlobal.$subinst().$Search1ListClick(pcPreSelectClass)
+		End If
+		
+	Default
+		
+End Switch

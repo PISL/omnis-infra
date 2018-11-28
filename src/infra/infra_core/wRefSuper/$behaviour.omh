@@ -1,0 +1,54 @@
+Calculate icDisplayValue as ilData.[icColPrefix]VALUE
+
+Calculate $cinst.$objs.ilDatabases.$visible as ilDatabases.$linecount>1
+Calculate lbinCheck as ilData.[icColPrefix]BIN
+Calculate inBinLength as binlength(lbinCheck)
+Calculate $cinst.$objs.pbBinary.$text as pick(inBinLength>0,'binary empty',con('binary content ',inBinLength,' bytes'))
+Calculate $cinst.$objs.pbBinary.$enabled as ilData.$line>0
+
+;  Calculate $cinst.$bobjs.1111.$visible as ilData.$line>0     ;; character and JSON fields label
+;  Calculate $cinst.$bobjs.1111.$text as ilData.[icColPrefix]VALUE     ;; character and JSON fields label
+Calculate $cinst.$objs._CHAR.$enabled as ilData.$line>0
+Calculate $cinst.$objs._JSON.$enabled as ilData.$line>0
+
+Calculate $cinst.$objs.pbFormatJSON.$enabled as ilData.$line>0&len(ilData.[icColPrefix]JSON)>0
+
+Calculate $cinst.$objs.TabPaneHeader.$objs.Fetch.$enabled as ilServers.$linecount>0&ilDBs.$linecount>0&ibCanSelectRemote
+
+Calculate $cinst.$objs.TabPaneHeader.$objs.cblKeyCols.$enabled as inDiffType=0
+Calculate $cinst.$objs.TabPaneHeader.$objs.pbAllKeys.$enabled as inDiffType=0
+Calculate $cinst.$objs.TabPaneHeader.$objs.pbNoKeys.$enabled as inDiffType=0
+
+Calculate $cinst.$objs.TabPaneHeader.$objs.cblComparisonCols.$enabled as inDiffType<>0
+Calculate $cinst.$objs.TabPaneHeader.$objs.pbAllComparisons.$enabled as inDiffType<>0
+Calculate $cinst.$objs.TabPaneHeader.$objs.pbNoComparisons.$enabled as inDiffType<>0
+
+Calculate #L1 as sys(192)
+Do #L1.$search($ref.method='$control',1,0,0,0) Returns #1
+If not(#1)
+	;  Breakpoint
+End If
+
+If $cinst.$objs.TabPaneHeader.$currenttab=2
+	Calculate $cinst.$objs.ilData.$dragmode as pick(ibCanUpdateRemote,kNoDragging,kDragData)
+	Calculate $cinst.$objs.ilData.$multipleselect as pick(ibCanUpdateRemote,kFalse,kTrue)
+Else
+	Calculate $cinst.$objs.ilData.$dragmode as kNoDragging
+	Calculate $cinst.$objs.ilData.$multipleselect as kFalse
+End If
+
+If ilBinOption.code='HEX'
+	Calculate icBinToHex as bintohex(lbinCheck)
+	Calculate lcType as 'HEX'
+Else
+	Calculate icBinToHex as ''
+	;  if the binary is an image we should be able to see it
+	Calculate ibinContent as ilData.[ilData.icPrefix]BIN
+	Calculate lcType as pictformat(ibinContent)
+	Calculate $cinst.$objs.ibinContent.$rawpictformat as lcType
+End If
+
+Calculate $cinst.$objs.TabPane.$objs.icBinToHex.$visible as lcType='HEX'
+Calculate $cinst.$objs.TabPane.$objs.ibinContent.$visible as lcType<>''&lcType<>'HEX'     ;; display image
+
+Do $cinst.$redraw(1,1)

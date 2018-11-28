@@ -1,0 +1,18 @@
+;  USER ROLES - what they have
+Do ilUserRoles.$clear()
+Do ilUserRoles.$fetchUserRoles(irCurrentRecord.USR_SEQ)
+
+;  then what they haven't got (available roles)
+Calculate ilChoiceOfRoles as ilRoles
+;  remove inappropriate roles determined by restriction (SU) status
+Do ilChoiceOfRoles.$search($ref.ROL_SU=irCurrentRecord.USR_SU,1,0,1,0)
+Do ilChoiceOfRoles.$remove(kListKeepSelected)
+Do ilChoiceOfRoles.$search(0)
+
+;  now split the two lists between already assigned and available to add
+Calculate ilUserRoles.$line as 0
+While $Loop(ilUserRoles)
+	Do ilChoiceOfRoles.$search($ref.ROL_NAME=ilUserRoles.ROL_NAME,1,0,1,0)
+End While
+Do ilChoiceOfRoles.$remove(kListDeleteSelected)
+Calculate ilChoiceOfRoles.$line as 0

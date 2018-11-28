@@ -1,0 +1,69 @@
+Set reference irefCallingInst to prefCallingInst     ;; this is most likely tkWorkerApp but just in case...
+
+Do ilPriorities.$define(icPriorityName,inPriorityValue)
+Do ilPriorities.$add("kOW3msgPriorityLowest",kOW3msgPriorityLowest)
+Do ilPriorities.$add("kOW3msgPriorityLow",kOW3msgPriorityLow)
+Do ilPriorities.$add("kOW3msgPriorityNormal",kOW3msgPriorityNormal)
+Do ilPriorities.$add("kOW3msgPriorityHigh",kOW3msgPriorityHigh)
+Do ilPriorities.$add("kOW3msgPriorityHighest",kOW3msgPriorityHighest)
+Calculate ilPriorities.$line as 3
+
+Do ilExtraHeaders.$define(icExtraHeaderName,icExtraHeaderValue)
+
+
+Do ilLogTypes.$define(icLogTypeChar,inLogType,ibUsesHTML)
+Do ilLogTypes.$add("No logging",kOW3logNone,kFalse)
+Do ilLogTypes.$add("Basic logging (HTML)",kOW3logBasic+kOW3logHTML,kTrue)
+Do ilLogTypes.$add("Basic and data logging (HTML)",kOW3logBasic+kOW3logData+kOW3logHTML,kTrue)
+Do ilLogTypes.$add("Full logging (HTML)",kOW3logBasic+kOW3logData+kOW3logSecureData+kOW3logHTML,kTrue)
+Do ilLogTypes.$add("Basic logging",kOW3logBasic,kFalse)
+Do ilLogTypes.$add("Basic and data logging",kOW3logBasic+kOW3logData,kFalse)
+Do ilLogTypes.$add("Full logging",kOW3logBasic+kOW3logData+kOW3logSecureData,kFalse)
+Calculate ilLogTypes.$line as 1
+
+Do $cinst.$getMIMElist() Returns ilAttachments
+
+Do irMessageAttributes.$cols.$add('from',kCharacter,kSimplechar,100)
+Do irMessageAttributes.$cols.$add('subject',kCharacter,kSimplechar,255)
+Do irMessageAttributes.$cols.$add('to',kList)
+Do irMessageAttributes.$cols.$add('cc',kList)
+Do irMessageAttributes.$cols.$add('bcc',kList)
+Do irMessageAttributes.$cols.$add('priority',kInteger,kShortint)     ;; 1-5
+
+Do irMessageBody.$cols.$add('text',kCharacter,kSimplechar,100000)
+Do irMessageBody.$cols.$add('html',kCharacter,kSimplechar,100000)
+Do irMessageBody.$cols.$add('attachments',kList)
+Calculate irMessageBody.attachments as ilAttachments
+
+Do irCredentials.$cols.$add('configCode',kCharacter,kSimplechar,15)
+Do irCredentials.$cols.$add('server',kCharacter,kSimplechar,100)
+Do irCredentials.$cols.$add('account',kCharacter,kSimplechar,100)
+Do irCredentials.$cols.$add('pw',kCharacter,kSimplechar,100)
+Do irCredentials.$cols.$add('debugLog',kBoolean)
+Do irCredentials.$cols.$add('timeout',kInteger,k32bitint)
+Do irCredentials.$cols.$add('senderName',kCharacter,kSimplechar,100)
+Do irCredentials.$cols.$add('senderAddress',kCharacter,kSimplechar,100)
+Do irCredentials.$cols.$add('OW3options',kRow)     ;; at 2018-09-20 these are "requireSecure" and "verifyPeer"
+;  the following are legacy columns and not used by this worker
+Do irCredentials.$cols.$add('secure',kInteger,kShortint)     ;; kCharacter,kSimplechar,100
+Do irCredentials.$cols.$add('authenticationTypes',kInteger,k32bitint)
+Do irCredentials.$cols.$add('OAUTH2',kCharacter,kSimplechar,1000000)
+Do irCredentials.$cols.$add('domain',kCharacter,kSimplechar,100000)
+Do irCredentials.$cols.$add('realm',kCharacter,kSimplechar,100000)
+Do irCredentials.$cols.$add('verifyCertificate',kBoolean)
+
+If clServerCache.$colcount>0
+	;  cache has been defined
+Else
+	Do clServerCache.$cols.$add('configCode',kCharacter,kSimplechar,15)
+	Do clServerCache.$cols.$add('attributes',kRow)
+	Do clServerCache.$cols.$add('GO_SEQ',kInteger,k32bitint)
+	Do tFormStatement.$execdirect(con("select * from infra.initinherited('EM_SRVR_FROM','DEFAULT',",trGroupOrg.GO_SEQ,")"))
+	Do tFormStatement.$fetch(lrReference)     ;; remember that the column names will be in lower case
+	Do OJSON.$jsontolistorrow(lrReference.rfo_json,lcError) Returns lrAttributes
+	If lrAttributes.$colcount>0
+		Do clServerCache.$add('DEFAULT',lrAttributes,trGroupOrg.GO_SEQ)
+	End If
+End If
+
+Do ilCurlOptions.$define(lnOption,lcValue)

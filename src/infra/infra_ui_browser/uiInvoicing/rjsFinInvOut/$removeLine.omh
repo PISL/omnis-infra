@@ -1,0 +1,8 @@
+;  called from the subform(s) rfSubAddRemoveLine
+;  prParams is a row variable contining whatever information necessary for this method
+
+If ilDetails.$line>0
+	Do $cinst.$clientNoYesMsg($cell(clLabels,'objName','msg_del_detail','label'),'','$deleteDetail')
+Else
+	;  Do nothing
+End If

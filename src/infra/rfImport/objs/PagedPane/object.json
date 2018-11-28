@@ -1,0 +1,50 @@
+{
+	"ident": 1119,
+	"order": 31,
+	"objtype": "kPagedPane",
+	"properties": {
+		"alpha": 255,
+		"animatetransitions": false,
+		"autoscroll": false,
+		"backalpha": 0,
+		"backcolor": "RGB(255,255,255)",
+		"bordercolor": "kColorDefault",
+		"borderradius": "0",
+		"contextmenu": "",
+		"cssclassname": "",
+		"currentpage": 1,
+		"dataname": "",
+		"desgroup": 0,
+		"designactive": true,
+		"deslock": true,
+		"disablesystemfocus": true,
+		"effect": "kJSborderNone",
+		"enabled": true,
+		"events": "",
+		"linestyle": 1,
+		"objlink": 0,
+		"pagecount": 2,
+		"preventlayoutanimation": false,
+		"scrolltochangepage": false,
+		"tooltip": "",
+		"userinfo": "",
+		"visible": true
+	},
+	"allpanes": [
+		1079,
+		1113,
+		1118
+	],
+	"screensizes": [
+		{
+			"name": "kSSZDesktop",
+			"left": 0,
+			"top": 0,
+			"width": 1093,
+			"height": 533,
+			"edgefloat": "kEFnone",
+			"dragborder": false,
+			"errortextpos": "kJSErrorTextPosUnder"
+		}
+	]
+}

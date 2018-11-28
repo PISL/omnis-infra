@@ -1,0 +1,18 @@
+
+If $cinst.$columnExists(pString)
+	Calculate stringQuote as ''     ;; clear the quote for this is a database field
+End If
+If $cinst.$columnExists(pSubstring)
+	Calculate subStringQuote as ''     ;; clear the quote for this is a database field
+End If
+
+Quit method con("position(",subStringQuote,pSubstring,subStringQuote," in ",stringQuote,pString,stringQuote,")>0")
+;  Function: position(substring in string)
+;  Return Type: integer
+;  Description: Location of specified substring
+;  Example: position('om' in 'Thomas')
+;  Result from example: 3
+;
+;  http://www.postgresql.org/docs/8.2/interactive/functions-string.html
+
+;  v70904 - rewrote routine to enable it to create the proper SQL within a search string and to handle database fields and/or string fields.  DDS

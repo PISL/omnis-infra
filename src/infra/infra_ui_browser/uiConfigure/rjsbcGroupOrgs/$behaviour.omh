@@ -1,0 +1,101 @@
+If irefContainer
+	Do irefContainer.$behaviour(icMode)     ;; set the TabControl $enabled
+End If
+
+Calculate $cinst.$objs.ilSearch1.$enabled as icMode=''
+Calculate $cinst.$objs.ilSearch2.$enabled as icMode=''
+Calculate $cinst.$objs.ilDisplayRecords.$enabled as icMode=''
+
+Calculate $cinst.$objs.TabControl_GO.$enabled as icMode=''
+
+Calculate $cinst.$objs.pbAdd.$visible as (inCurrentTab=cnTabCompany|inCurrentTab=cnTabStructure)
+Calculate $cinst.$objs.pbEdit.$visible as (inCurrentTab=cnTabCompany|inCurrentTab=cnTabStructure)
+Calculate $cinst.$objs.pbDelete.$visible as (inCurrentTab=cnTabCompany|inCurrentTab=cnTabStructure)
+
+If inCurrentTab=cnTabCompany
+	Calculate $cinst.$objs.pbAdd.$enabled as irUserRights.canInsertR&$cinst.icMode=''
+	Calculate $cinst.$objs.pbEdit.$enabled as (irUserRights.canEdit|irUserRights.canEditR)&irCurrentRecord.GO_SEQ>0&$cinst.icMode=''
+	Calculate $cinst.$objs.pbDelete.$enabled as irUserRights.canDeleteR&irCurrentRecord.GO_SEQ>0&icMode=''
+Else If inCurrentTab=cnTabStructure
+	Calculate $cinst.$objs.pbAdd.$enabled as irUserRights.canInsertS&$cinst.icMode=''
+	Calculate $cinst.$objs.pbEdit.$enabled as irUserRights.canEditS&irCurrentStructure.GS_SEQ>0&$cinst.icMode=''
+	Calculate $cinst.$objs.pbDelete.$enabled as irUserRights.canDeleteS&irCurrentStructure.GS_SEQ>0&icMode=''
+End If
+
+Calculate $cinst.$objs.pbCancel.$visible as icMode<>''&(inCurrentTab=cnTabCompany|inCurrentTab=cnTabStructure)
+Calculate $cinst.$objs.pbSave.$visible as icMode<>''&(inCurrentTab=cnTabCompany|inCurrentTab=cnTabStructure)
+
+Set reference lirefPagedPaneObjs to $cinst.$objs.PagedPane.$objs
+Calculate lirefPagedPaneObjs.GO_NAME_FULL.$enabled as icMode<>''
+Calculate lirefPagedPaneObjs.GO_NAME_SHORT.$enabled as icMode<>''
+Calculate lirefPagedPaneObjs.GO_CURRENCY.$enabled as icMode<>''
+
+Calculate lirefPagedPaneObjs.GO_ADDR_BUILDING.$enabled as $cinst.icMode<>''
+Calculate lirefPagedPaneObjs.GO_ADDR_STREET.$enabled as icMode<>''
+Calculate lirefPagedPaneObjs.GO_ADDR_LOCALITY.$enabled as icMode<>''
+Calculate lirefPagedPaneObjs.GO_ADDR_TOWN.$enabled as icMode<>''
+Calculate lirefPagedPaneObjs.GO_ADDR_STATE.$enabled as icMode<>''
+Calculate lirefPagedPaneObjs.GO_ADDR_POSTCODE.$enabled as icMode<>''
+Calculate lirefPagedPaneObjs.GO_ADDR_COUNTRY.$enabled as icMode<>''
+
+Calculate lirefPagedPaneObjs.GO_COMM_PH.$enabled as icMode<>''
+Calculate lirefPagedPaneObjs.GO_COMM_MOB.$enabled as icMode<>''
+Calculate lirefPagedPaneObjs.GO_COMM_EMAIL.$enabled as icMode<>''
+
+Calculate lirefPagedPaneObjs.GO_COMPANY_NO.$enabled as icMode<>''
+Calculate lirefPagedPaneObjs.GO_VAT_NO.$enabled as $cinst.icMode<>''
+
+If inCurrentTab=cnTabStructure
+	;  Calculate lirefPagedPaneObjs.GS_TYPE.$enabled as icMode<>''
+	Calculate lirefPagedPaneObjs.GS_DESC_SHORT.$enabled as icMode<>''
+	Calculate lirefPagedPaneObjs.GS_DESC_FULL.$enabled as icMode<>''
+	Calculate lirefPagedPaneObjs.GS_ORDER.$enabled as icMode<>''
+	Calculate lirefPagedPaneObjs.GS_ACTIVE.$enabled as icMode<>''
+	Calculate $cinst.$objs.ilPrevious.$enabled as icMode=''
+	Calculate $cinst.$objs.ilNow.$enabled as icMode=''
+	
+End If
+;  has anything changed with details to registration server?
+;  Do irBusinessDetailSubset.$assignrow($cinst.irCurrentRecord,kTrue)
+;  Do toStrings.$HasRowBeenModified(irBusinessDetailSubset,irBusinessDetailSubsetOrig) Returns lbRegDetailsModified
+;  If not(lbRegDetailsModified)
+;  Calculate lbRegDetailsModified as ilDeleteCorpPerson.$linecount>0
+;  If not(lbRegDetailsModified)
+;  Calculate llTemp as ilCorporatePerson
+;  Do llTemp.$search(isclear($ref.CPN_MWHEN),1,0,0,0) Returns lbRegDetailsModified     ;; someone new added
+;  If not(lbRegDetailsModified)
+;  Calculate llTemp.$line as 0
+;  While $Loop(llTemp)
+;  Do ilOriginalCorpPersons.$search($ref.CPN_EMAIL=llTemp.CPN_EMAIL,1,0,0,0) Returns lbFound
+;  If lbFound
+;  Do toStrings.$HasRowBeenModified(llTemp,ilOriginalCorpPersons) Returns lbRegDetailsModified
+;  If lbRegDetailsModified
+;  Break to end of loop
+;  End If
+;  End If
+;  End While
+;  End If
+;  End If
+;  End If
+;
+;
+;  Calculate lirefPagedPaneObjs.inRegisterType.$enabled as (icMode='')&isclear(irCurrentRecord.GO_MEC_ID)&irCurrentRecord.GO_SEQ>0
+;
+;  Calculate lirefPagedPaneObjs.pbAddCorpPerson.$enabled as ibRESTserviceRunning&(icMode='')&inRegisterType>0
+;  Calculate lirefPagedPaneObjs.pbDeleteCorpPerson.$enabled as ibRESTserviceRunning&ilCorporatePerson.$line>0
+;  Calculate lirefPagedPaneObjs.pbRegisterMEC.$enabled as ibRESTserviceRunning&isclear(irCurrentRecord.GO_MEC_ID)&inRegisterType>0
+;  Calculate lirefPagedPaneObjs.pbUpdateMEC.$enabled as ibRESTserviceRunning&irCurrentRecord.GO_MEC_ID<>''&icMode=''&(lbRegDetailsModified|ibRegistrationDoesNotMatchWithServer)
+;  Calculate lirefPagedPaneObjs.pbValidateMEC.$enabled as ibRESTserviceRunning&irCurrentRecord.GO_MEC_ID<>''&icMode=''
+If inCurrentTab=2&not(ibRESTserviceRunning)
+	Do toStrings.$StringTableEntry('MSG_REGSERVUNAVAILABLE',lcMessage,'Registration server is not available.')
+	;  Calculate icDisplayMessage as lcMessage
+Else If inCurrentTab=2&ibRESTserviceRunning&icDisplayMessage=''
+	Do toStrings.$StringTableEntry('MSG_REGSERVAVAILABLE',lcMessage,'Registration server is available.')
+	;  Calculate icDisplayMessage as lcMessage
+End If
+
+Do method assignEntryFieldProperties
+
+Do $cinst.$RegistrationFormBehaviour
+
+Do inherited      ;; handle objects in the navigation and results panes

@@ -1,0 +1,189 @@
+{
+	"classtype": "kObjectclass",
+	"internalversion": 13,
+	"designtaskname": "Startup_Task",
+	"cvardefs": [
+		{
+			"name": "ccCurrency",
+			"order": 3,
+			"type": "kCharacter",
+			"subtype": "kSimplechar",
+			"sublen": 10,
+			"initval": "'£$€¥'"
+		},
+		{
+			"name": "ccDigits",
+			"order": 2,
+			"type": "kCharacter",
+			"subtype": "kSimplechar",
+			"sublen": 10,
+			"initval": "'01234567890'"
+		},
+		{
+			"name": "ccIllegalAddress",
+			"order": 5,
+			"type": "kCharacter",
+			"subtype": "kSimplechar",
+			"sublen": 100,
+			"initval": "'§±!@£€¥$%^&*()_=+[{]}\\|?.><`~'"
+		},
+		{
+			"name": "ccIllegalDomain",
+			"order": 7,
+			"type": "kCharacter",
+			"subtype": "kSimplechar",
+			"sublen": 100,
+			"initval": "'§±!#@£€¥$%^&*()_=+[{]}\\|?><`~''/\",'",
+			"desc": "dot and hyphen allowed"
+		},
+		{
+			"name": "ccIllegalEmail",
+			"order": 6,
+			"type": "kCharacter",
+			"subtype": "kSimplechar",
+			"sublen": 100,
+			"initval": "'§±@£€¥()[]\\><\",'",
+			"desc": "! # $ % & ' * + - / = ? ^ _ ` { | } ~ - allowed, plus ."
+		},
+		{
+			"name": "ccIllegalName",
+			"order": 9,
+			"type": "kCharacter",
+			"subtype": "kSimplechar",
+			"sublen": 100,
+			"initval": "'§±!#@£#€¥$%^&*()_=+[{]}\\|?.><`~/\",'",
+			"desc": "apostrophe, dash allowed"
+		},
+		{
+			"name": "ccIllegalPhone",
+			"order": 8,
+			"type": "kCharacter",
+			"subtype": "kSimplechar",
+			"sublen": 100,
+			"initval": "'§±!#@£€#¥$%^&*_=+[{]}\\|?.><`~''/\",'",
+			"desc": "( ) - allowed"
+		},
+		{
+			"name": "ccIllegalPostcode",
+			"order": 11,
+			"type": "kCharacter",
+			"subtype": "kSimplechar",
+			"sublen": 100,
+			"initval": "'§±!#@£#€¥$%^&*()_=+[{]}\\|?.><`~/\",''-'",
+			"desc": "nothing obscure allowed"
+		},
+		{
+			"name": "ccIllegalRef",
+			"order": 10,
+			"type": "kCharacter",
+			"subtype": "kSimplechar",
+			"sublen": 100,
+			"initval": "'§±!#@£#€¥$%^&*()=+[{]}\\|?.><`~/\",''-'",
+			"desc": "_ allowed"
+		},
+		{
+			"name": "ccPunctuation",
+			"order": 4,
+			"type": "kCharacter",
+			"subtype": "kSimplechar",
+			"sublen": 100,
+			"initval": "'§±!#@£#€¥$%^&*()_=+[{]}\\|?.><`~''/-\",'"
+		},
+		{
+			"name": "cnPrimeNo",
+			"order": 1,
+			"type": "kInteger",
+			"subtype": "k32bitint",
+			"sublen": 0,
+			"initval": "109"
+		}
+	],
+	"ivardefs": [
+		{
+			"name": "icInvalidChars",
+			"order": 6,
+			"type": "kCharacter",
+			"subtype": "kSimplechar",
+			"sublen": 100
+		},
+		{
+			"name": "icValidationCodes",
+			"order": 10,
+			"type": "kCharacter",
+			"subtype": "kSimplechar",
+			"sublen": 100000000
+		},
+		{
+			"name": "icValidationText",
+			"order": 1,
+			"type": "kCharacter",
+			"subtype": "kSimplechar",
+			"sublen": 100000000
+		},
+		{
+			"name": "ilFolds1",
+			"order": 3,
+			"type": "kList",
+			"subtype": "",
+			"sublen": 0
+		},
+		{
+			"name": "irCountry",
+			"order": 7,
+			"type": "kRow",
+			"subtype": "",
+			"sublen": 0
+		},
+		{
+			"name": "oEncrypt",
+			"order": 2,
+			"type": "kObject",
+			"subtype": ".BlowFish Library.BlowFish",
+			"sublen": 0
+		},
+		{
+			"name": "oEncrypt2",
+			"order": 4,
+			"type": "kObject",
+			"subtype": ".BlowFish Library.BlowFish",
+			"sublen": 0
+		},
+		{
+			"name": "oEncrypt3",
+			"order": 5,
+			"type": "kObject",
+			"subtype": ".BlowFish Library.BlowFish",
+			"sublen": 0
+		},
+		{
+			"name": "oSessionPCODES",
+			"order": 8,
+			"type": "kObject",
+			"subtype": "",
+			"sublen": 0
+		},
+		{
+			"name": "oStatementPCODES",
+			"order": 9,
+			"type": "kObject",
+			"subtype": "",
+			"sublen": 0
+		}
+	],
+	"properties": {
+		"collectperformancedata": false,
+		"componenticon": 0,
+		"componenttype": "kCompStoreHidden",
+		"createdate": "2017-11-13 10:34:38",
+		"desc": "",
+		"editor": "",
+		"editordata": "",
+		"external": true,
+		"issupercomponent": false,
+		"moddate": "2018-08-09 13:09:10",
+		"selfcontained": false,
+		"showascheckedout": false,
+		"userinfo": "",
+		"version": "2"
+	}
+}

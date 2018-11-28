@@ -1,0 +1,97 @@
+;  fetch the params
+If piColRef().$name='saveParams'
+	Do toValues.$initOrg('REP_PARAMS',ilDisplayRecords.reportCode) Returns lrSavedRow
+Else If piColRef().$name='saveParamsUser'
+	Do toValues.$initUser('REP_PARAMS',ilDisplayRecords.reportCode) Returns lrSavedRow
+End If
+Do OJSON.$jsontolistorrow(lrSavedRow.[lrSavedRow.icPrefix]JSON) Returns lrSavedParams
+;  restore the parameters
+Do lrSavedParams.$cols.$findname('pnPrintDestination') Returns liColRef
+If liColRef
+	Calculate inPrintDestination as lrSavedParams.pnPrintDestination
+End If
+;  dates
+Do lrSavedParams.$cols.$findname('pdFrom') Returns liColRef
+If liColRef
+	Calculate idFrom as dat(lrSavedParams.pdFrom)
+End If
+Do lrSavedParams.$cols.$findname('pdTo') Returns liColRef
+If liColRef
+	Calculate idTo as dat(lrSavedParams.pdTo)
+End If
+;  checkboxes
+Do lrSavedParams.$cols.$findname('pbCheckbox1') Returns liColRef
+If liColRef
+	Calculate ibCheckbox1 as lrSavedParams.pbCheckbox1
+End If
+Do lrSavedParams.$cols.$findname('pbCheckbox2') Returns liColRef
+If liColRef
+	Calculate ibCheckbox2 as lrSavedParams.pbCheckbox2
+End If
+Do lrSavedParams.$cols.$findname('pbCheckbox3') Returns liColRef
+If liColRef
+	Calculate ibCheckbox3 as lrSavedParams.pbCheckbox3
+End If
+;  integers
+Do lrSavedParams.$cols.$findname('pnInteger1') Returns liColRef
+If liColRef
+	Calculate inInteger1 as lrSavedParams.pnInteger1
+End If
+Do lrSavedParams.$cols.$findname('pnInteger2') Returns liColRef
+If liColRef
+	Calculate inInteger2 as lrSavedParams.pnInteger2
+End If
+;  decimal numbers
+Do lrSavedParams.$cols.$findname('pnReal1') Returns liColRef
+If liColRef
+	Calculate inReal1 as lrSavedParams.pnReal1
+End If
+Do lrSavedParams.$cols.$findname('pnReal2') Returns liColRef
+If liColRef
+	Calculate inReal2 as lrSavedParams.pnReal2
+End If
+;  lists - sort, filter, select list, group by
+Do lrSavedParams.$cols.$findname('plSorts') Returns liColRef
+If liColRef
+	;  Breakpoint     ;; not tested
+	Do ilSortOptions.$search($ref.C1=lrSavedParams.plSorts,1,0,0,0) Returns lbFound
+End If
+Do lrSavedParams.$cols.$findname('plFilter') Returns liColRef
+If liColRef
+	;  Breakpoint     ;; not tested
+	Do ilFilterOptions.$search($ref.C1=lrSavedParams.plFilter,1,0,0,0) Returns lbFound
+End If
+Do lrSavedParams.$cols.$findname('plSelectList') Returns liColRef
+If liColRef
+	;  Breakpoint     ;; not tested
+	;  If the selct list is a checklist
+	If irReportAttributes.checklist_ischecklist
+		Calculate lcTemp as lrSavedParams.plSelectList     ;; somma separated values
+		While lcTemp<>''
+			Calculate lcToken as trim(strtok(nam(lcTemp),','))
+			If lcToken<>''
+				Do ilSelectList.$search($ref.C1=lcToken,1,0,1,0) Returns lbFound
+			End If
+		End While
+	Else     ;; single current line
+		Do ilSelectList.$search($ref.C1=lrSavedParams.plSelectList,1,0,0,0) Returns lbFound
+	End If
+End If
+Do lrSavedParams.$cols.$findname('plGroupBy') Returns liColRef
+If liColRef
+	;  Breakpoint     ;; not tested
+	Calculate lcTemp as lrSavedParams.plGroupBy     ;; somma separated values
+	While lcTemp<>''
+		Calculate lcToken as trim(strtok(nam(lcTemp),','))
+		If lcToken<>''
+			Do ilSelectList.$search($ref.C1=lcToken,1,0,0,0) Returns lbFound
+			If lbFound
+				Do ilGroupBy.$add(ilSelectList.C1,ilSelectList.C2)
+				Do ilSelectList.$remove(ilSelectList.$line)
+			End If
+		End If
+	End While
+	Calculate ilSelectList.$line as 0
+End If
+
+Do method filterSelectList (kTrue)

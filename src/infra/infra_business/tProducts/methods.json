@@ -1,0 +1,1735 @@
+[
+	{
+		"name": "$construct",
+		"ident": 0,
+		"order": 1,
+		"pvardefs": [
+
+		],
+		"lvardefs": [
+
+		]
+	},
+	{
+		"name": "$validation",
+		"ident": 1,
+		"order": 2,
+		"pvardefs": [
+
+		],
+		"lvardefs": [
+			{
+				"name": "lcMessage",
+				"order": 1,
+				"type": "kCharacter",
+				"subtype": "kSimplechar",
+				"sublen": 255
+			}
+		]
+	},
+	{
+		"name": "$ForeignKeys",
+		"ident": 2,
+		"order": 3,
+		"pvardefs": [
+
+		],
+		"lvardefs": [
+			{
+				"name": "llForeignKeyList",
+				"order": 1,
+				"type": "kList",
+				"subtype": "",
+				"sublen": 0
+			},
+			{
+				"name": "lrExtOrg",
+				"order": 3,
+				"type": "kRow",
+				"subtype": "sentExtOrganisations",
+				"sublen": 0
+			},
+			{
+				"name": "lrGroupOrg",
+				"order": 2,
+				"type": "kRow",
+				"subtype": "sentGroupOrganisations",
+				"sublen": 0
+			},
+			{
+				"name": "lrUnitSynonyms",
+				"order": 4,
+				"type": "kRow",
+				"subtype": "ssysUnitSynonyms",
+				"sublen": 0
+			}
+		]
+	},
+	{
+		"name": "$Links",
+		"ident": 3,
+		"order": 4,
+		"pvardefs": [
+
+		],
+		"lvardefs": [
+			{
+				"name": "llLinks",
+				"order": 1,
+				"type": "kList",
+				"subtype": "",
+				"sublen": 0
+			},
+			{
+				"name": "lrExtOrg",
+				"order": 4,
+				"type": "kRow",
+				"subtype": "sentExtOrganisations",
+				"sublen": 0
+			},
+			{
+				"name": "lrGroupOrg",
+				"order": 2,
+				"type": "kRow",
+				"subtype": "sentGroupOrganisations",
+				"sublen": 0
+			},
+			{
+				"name": "lrMeasures",
+				"order": 6,
+				"type": "kRow",
+				"subtype": "ssysUnitOfMeasure",
+				"sublen": 0
+			},
+			{
+				"name": "lrProductInternalData",
+				"order": 7,
+				"type": "kRow",
+				"subtype": "sProductInternalData",
+				"sublen": 0
+			},
+			{
+				"name": "lrRefLocal",
+				"order": 3,
+				"type": "kRow",
+				"subtype": "ssysReferenceLocal",
+				"sublen": 0
+			},
+			{
+				"name": "lrUnitSynonyms",
+				"order": 5,
+				"type": "kRow",
+				"subtype": "ssysUnitSynonyms",
+				"sublen": 0
+			}
+		]
+	},
+	{
+		"name": "$InsertCols",
+		"ident": 22,
+		"order": 5,
+		"pvardefs": [
+
+		],
+		"lvardefs": [
+
+		]
+	},
+	{
+		"name": "$UpdateCols",
+		"ident": 23,
+		"order": 6,
+		"pvardefs": [
+
+		],
+		"lvardefs": [
+
+		]
+	},
+	{
+		"name": "$fetch_pk",
+		"ident": 26,
+		"order": 7,
+		"pvardefs": [
+			{
+				"name": "pnPRD_SEQ",
+				"order": 8,
+				"type": "kInteger",
+				"subtype": "k64bitint",
+				"sublen": 0,
+				"param": 1
+			},
+			{
+				"name": "pbFetchAll",
+				"order": 1,
+				"type": "kBoolean",
+				"subtype": 0,
+				"sublen": 0,
+				"param": 2,
+				"initval": "kFalse"
+			}
+		],
+		"lvardefs": [
+			{
+				"name": "lbImmediateSession",
+				"order": 5,
+				"type": "kBoolean",
+				"subtype": 0,
+				"sublen": 0,
+				"initval": "kFalse"
+			},
+			{
+				"name": "lbOK",
+				"order": 2,
+				"type": "kBoolean",
+				"subtype": 0,
+				"sublen": 0
+			},
+			{
+				"name": "liColRefInternal",
+				"order": 12,
+				"type": "kItemref",
+				"subtype": "",
+				"sublen": 0
+			},
+			{
+				"name": "liColRefReference",
+				"order": 13,
+				"type": "kItemref",
+				"subtype": "",
+				"sublen": 0
+			},
+			{
+				"name": "lnCount",
+				"order": 6,
+				"type": "kInteger",
+				"subtype": "k32bitint",
+				"sublen": 0
+			},
+			{
+				"name": "loSession",
+				"order": 3,
+				"type": "kObject",
+				"subtype": "",
+				"sublen": 0
+			},
+			{
+				"name": "loStatement",
+				"order": 4,
+				"type": "kObject",
+				"subtype": "",
+				"sublen": 0
+			},
+			{
+				"name": "lrInternal",
+				"order": 7,
+				"type": "kRow",
+				"subtype": "sProductInternalData",
+				"sublen": 0
+			},
+			{
+				"name": "lrReferenceLocal",
+				"order": 14,
+				"type": "kRow",
+				"subtype": "ssysReferenceLocal",
+				"sublen": 0
+			}
+		]
+	},
+	{
+		"name": "$IncludeAll",
+		"ident": 19,
+		"order": 8,
+		"pvardefs": [
+			{
+				"name": "pbIncludeAll",
+				"order": 1,
+				"type": "kBoolean",
+				"subtype": 0,
+				"sublen": 0,
+				"param": 1,
+				"initval": "#NULL"
+			}
+		],
+		"lvardefs": [
+
+		]
+	},
+	{
+		"name": "$setMeta",
+		"ident": 24,
+		"order": 9,
+		"pvardefs": [
+			{
+				"name": "pnMeta",
+				"order": 1,
+				"type": "kInteger",
+				"subtype": "kShortint",
+				"sublen": 0,
+				"param": 1
+			}
+		],
+		"lvardefs": [
+
+		]
+	},
+	{
+		"name": "$fetchOurProducts",
+		"ident": 4,
+		"order": 10,
+		"pvardefs": [
+			{
+				"name": "pcNAME",
+				"order": 10,
+				"type": "kCharacter",
+				"subtype": "kSimplechar",
+				"sublen": 100,
+				"param": 1
+			},
+			{
+				"name": "pcDIVISION",
+				"order": 9,
+				"type": "kCharacter",
+				"subtype": "kSimplechar",
+				"sublen": 15,
+				"param": 2
+			},
+			{
+				"name": "pcPLANT",
+				"order": 6,
+				"type": "kCharacter",
+				"subtype": "kSimplechar",
+				"sublen": 15,
+				"param": 3
+			},
+			{
+				"name": "pcBUSUNIT",
+				"order": 7,
+				"type": "kCharacter",
+				"subtype": "kSimplechar",
+				"sublen": 15,
+				"param": 4
+			},
+			{
+				"name": "pcCATEGORY",
+				"order": 8,
+				"type": "kCharacter",
+				"subtype": "kSimplechar",
+				"sublen": 15,
+				"param": 5
+			},
+			{
+				"name": "pcBRAND",
+				"order": 12,
+				"type": "kCharacter",
+				"subtype": "kSimplechar",
+				"sublen": 15,
+				"param": 6
+			},
+			{
+				"name": "pcExtraCols",
+				"order": 13,
+				"type": "kCharacter",
+				"subtype": "kSimplechar",
+				"sublen": 255,
+				"param": 7,
+				"desc": "comma separated PID cols (starting with a comma)"
+			},
+			{
+				"name": "pbReturnCount",
+				"order": 14,
+				"type": "kBoolean",
+				"subtype": 0,
+				"sublen": 0,
+				"param": 8,
+				"initval": "kFalse"
+			}
+		],
+		"lvardefs": [
+			{
+				"name": "lbImmediateSession",
+				"order": 5,
+				"type": "kBoolean",
+				"subtype": 0,
+				"sublen": 0,
+				"initval": "kFalse"
+			},
+			{
+				"name": "lbOK",
+				"order": 2,
+				"type": "kBoolean",
+				"subtype": 0,
+				"sublen": 0
+			},
+			{
+				"name": "ldDate",
+				"order": 22,
+				"type": "kDate",
+				"subtype": "kDate2000",
+				"sublen": 0
+			},
+			{
+				"name": "liColRef",
+				"order": 21,
+				"type": "kItemref",
+				"subtype": "",
+				"sublen": 0
+			},
+			{
+				"name": "llData",
+				"order": 19,
+				"type": "kList",
+				"subtype": "",
+				"sublen": 0
+			},
+			{
+				"name": "lnCount",
+				"order": 15,
+				"type": "kInteger",
+				"subtype": "k32bitint",
+				"sublen": 0,
+				"initval": "0"
+			},
+			{
+				"name": "lnFakePrimaryKey",
+				"order": 20,
+				"type": "kInteger",
+				"subtype": "k32bitint",
+				"sublen": 0,
+				"initval": "0"
+			},
+			{
+				"name": "lnNumber",
+				"order": 1,
+				"type": "kNumber",
+				"subtype": "k0dp",
+				"sublen": 0
+			},
+			{
+				"name": "loSession",
+				"order": 3,
+				"type": "kObject",
+				"subtype": "",
+				"sublen": 0
+			},
+			{
+				"name": "loStatement",
+				"order": 4,
+				"type": "kObject",
+				"subtype": "",
+				"sublen": 0
+			},
+			{
+				"name": "lrActualProductIds",
+				"order": 17,
+				"type": "kRow",
+				"subtype": "",
+				"sublen": 0
+			},
+			{
+				"name": "lrActualProducts",
+				"order": 23,
+				"type": "kRow",
+				"subtype": "",
+				"sublen": 0
+			},
+			{
+				"name": "lrData",
+				"order": 18,
+				"type": "kRow",
+				"subtype": "",
+				"sublen": 0
+			},
+			{
+				"name": "lrInternalData",
+				"order": 11,
+				"type": "kRow",
+				"subtype": "sProductInternalData",
+				"sublen": 0
+			},
+			{
+				"name": "lrProducts",
+				"order": 24,
+				"type": "kRow",
+				"subtype": "sProducts",
+				"sublen": 0
+			},
+			{
+				"name": "lrReferenceLocal",
+				"order": 25,
+				"type": "kRow",
+				"subtype": "ssysReferenceLocal",
+				"sublen": 0
+			},
+			{
+				"name": "lrServiceResult",
+				"order": 16,
+				"type": "kRow",
+				"subtype": "",
+				"sublen": 0
+			}
+		]
+	},
+	{
+		"name": "$fetchSupplierProducts",
+		"ident": 5,
+		"order": 11,
+		"pvardefs": [
+			{
+				"name": "pnEO_REF",
+				"order": 9,
+				"type": "kInteger",
+				"subtype": "k64bitint",
+				"sublen": 0,
+				"param": 1
+			},
+			{
+				"name": "pcSearchString",
+				"order": 8,
+				"type": "kCharacter",
+				"subtype": "kSimplechar",
+				"sublen": 100,
+				"param": 2
+			},
+			{
+				"name": "pbReturnCount",
+				"order": 6,
+				"type": "kBoolean",
+				"subtype": 0,
+				"sublen": 0,
+				"param": 3,
+				"initval": "kFalse"
+			},
+			{
+				"name": "pbSearchOnProductCodeOnly",
+				"order": 10,
+				"type": "kBoolean",
+				"subtype": 0,
+				"sublen": 0,
+				"param": 4,
+				"initval": "kFalse"
+			}
+		],
+		"lvardefs": [
+			{
+				"name": "lbImmediateSession",
+				"order": 5,
+				"type": "kBoolean",
+				"subtype": 0,
+				"sublen": 0,
+				"initval": "kFalse"
+			},
+			{
+				"name": "lbOK",
+				"order": 2,
+				"type": "kBoolean",
+				"subtype": 0,
+				"sublen": 0
+			},
+			{
+				"name": "lnCount",
+				"order": 7,
+				"type": "kInteger",
+				"subtype": "k32bitint",
+				"sublen": 0
+			},
+			{
+				"name": "lnNumber",
+				"order": 1,
+				"type": "kNumber",
+				"subtype": "k0dp",
+				"sublen": 0
+			},
+			{
+				"name": "loSession",
+				"order": 3,
+				"type": "kObject",
+				"subtype": "",
+				"sublen": 0
+			},
+			{
+				"name": "loStatement",
+				"order": 4,
+				"type": "kObject",
+				"subtype": "",
+				"sublen": 0
+			},
+			{
+				"name": "lrSupplier",
+				"order": 11,
+				"type": "kRow",
+				"subtype": "sentExtOrganisations",
+				"sublen": 0
+			}
+		]
+	},
+	{
+		"name": "$fetchOurSupplierProducts",
+		"ident": 6,
+		"order": 12,
+		"pvardefs": [
+			{
+				"name": "pnEO_REF",
+				"order": 9,
+				"type": "kInteger",
+				"subtype": "k64bitint",
+				"sublen": 0,
+				"param": 1
+			},
+			{
+				"name": "pcSearchString",
+				"order": 8,
+				"type": "kCharacter",
+				"subtype": "kSimplechar",
+				"sublen": 100,
+				"param": 2
+			},
+			{
+				"name": "pbReturnCount",
+				"order": 6,
+				"type": "kBoolean",
+				"subtype": 0,
+				"sublen": 0,
+				"param": 3,
+				"initval": "kFalse"
+			}
+		],
+		"lvardefs": [
+			{
+				"name": "lbImmediateSession",
+				"order": 5,
+				"type": "kBoolean",
+				"subtype": 0,
+				"sublen": 0,
+				"initval": "kFalse"
+			},
+			{
+				"name": "lbOK",
+				"order": 2,
+				"type": "kBoolean",
+				"subtype": 0,
+				"sublen": 0
+			},
+			{
+				"name": "lnCount",
+				"order": 7,
+				"type": "kInteger",
+				"subtype": "k32bitint",
+				"sublen": 0
+			},
+			{
+				"name": "lnNumber",
+				"order": 1,
+				"type": "kNumber",
+				"subtype": "k0dp",
+				"sublen": 0
+			},
+			{
+				"name": "loSession",
+				"order": 3,
+				"type": "kObject",
+				"subtype": "",
+				"sublen": 0
+			},
+			{
+				"name": "loStatement",
+				"order": 4,
+				"type": "kObject",
+				"subtype": "",
+				"sublen": 0
+			},
+			{
+				"name": "lrSupplier",
+				"order": 11,
+				"type": "kRow",
+				"subtype": "sentExtOrganisations",
+				"sublen": 0
+			}
+		]
+	},
+	{
+		"name": "$fetchOurOverheadProducts",
+		"ident": 9,
+		"order": 13,
+		"pvardefs": [
+			{
+				"name": "pnOOL_SEQ",
+				"order": 14,
+				"type": "kInteger",
+				"subtype": "k64bitint",
+				"sublen": 0,
+				"param": 1
+			},
+			{
+				"name": "pDateFrom",
+				"order": 12,
+				"type": "kDate",
+				"subtype": "kDate2000",
+				"sublen": 0,
+				"param": 2
+			},
+			{
+				"name": "pDateTo",
+				"order": 13,
+				"type": "kDate",
+				"subtype": "kDate2000",
+				"sublen": 0,
+				"param": 3
+			},
+			{
+				"name": "pbReturnCount",
+				"order": 17,
+				"type": "kBoolean",
+				"subtype": 0,
+				"sublen": 0,
+				"param": 4,
+				"initval": "kFalse"
+			}
+		],
+		"lvardefs": [
+			{
+				"name": "lbImmediateSession",
+				"order": 4,
+				"type": "kBoolean",
+				"subtype": 0,
+				"sublen": 0,
+				"initval": "kFalse"
+			},
+			{
+				"name": "lbOK",
+				"order": 1,
+				"type": "kBoolean",
+				"subtype": 0,
+				"sublen": 0
+			},
+			{
+				"name": "ldNextDate",
+				"order": 11,
+				"type": "kDate",
+				"subtype": "kDate2000",
+				"sublen": 0
+			},
+			{
+				"name": "llProduct",
+				"order": 8,
+				"type": "kRow",
+				"subtype": "sProducts",
+				"sublen": 0
+			},
+			{
+				"name": "lnCount",
+				"order": 18,
+				"type": "kInteger",
+				"subtype": "k32bitint",
+				"sublen": 0
+			},
+			{
+				"name": "loSession",
+				"order": 2,
+				"type": "kObject",
+				"subtype": "",
+				"sublen": 0
+			},
+			{
+				"name": "loStatement",
+				"order": 3,
+				"type": "kObject",
+				"subtype": "",
+				"sublen": 0
+			},
+			{
+				"name": "lrCalcResult",
+				"order": 19,
+				"type": "kRow",
+				"subtype": "MEC.scalcProductResult",
+				"sublen": 0
+			},
+			{
+				"name": "lrEcoInvoiceInDetail",
+				"order": 6,
+				"type": "kRow",
+				"subtype": "MEC.secoInvoiceInD",
+				"sublen": 0
+			},
+			{
+				"name": "lrEcoInvoiceInHeader",
+				"order": 16,
+				"type": "kRow",
+				"subtype": "MEC.secoInvoiceInH",
+				"sublen": 0
+			},
+			{
+				"name": "lrOverheadAccount",
+				"order": 9,
+				"type": "kRow",
+				"subtype": "MEC.sohAccountH",
+				"sublen": 0
+			},
+			{
+				"name": "lrOverheadDetail",
+				"order": 15,
+				"type": "kRow",
+				"subtype": "MEC.sohAccountD",
+				"sublen": 0
+			},
+			{
+				"name": "lrOverheadGroupOrg",
+				"order": 10,
+				"type": "kRow",
+				"subtype": "MEC.sohOrgLinks",
+				"sublen": 0
+			},
+			{
+				"name": "lrProductBatch",
+				"order": 5,
+				"type": "kRow",
+				"subtype": "MEC.scalcProductBatch",
+				"sublen": 0
+			},
+			{
+				"name": "lrPublication",
+				"order": 7,
+				"type": "kRow",
+				"subtype": "mcommon.secPublication",
+				"sublen": 0
+			}
+		]
+	},
+	{
+		"name": "$fetchOurFromInventoryProducts",
+		"ident": 8,
+		"order": 14,
+		"pvardefs": [
+			{
+				"name": "pcSearchString",
+				"order": 6,
+				"type": "kCharacter",
+				"subtype": "kSimplechar",
+				"sublen": 100,
+				"param": 1
+			},
+			{
+				"name": "pcExtraCols",
+				"order": 12,
+				"type": "kCharacter",
+				"subtype": "kSimplechar",
+				"sublen": 255,
+				"param": 2,
+				"desc": "comma separated PID cols (starting with a comma)"
+			},
+			{
+				"name": "pbReturnCount",
+				"order": 7,
+				"type": "kBoolean",
+				"subtype": 0,
+				"sublen": 0,
+				"param": 3,
+				"initval": "kFalse"
+			}
+		],
+		"lvardefs": [
+			{
+				"name": "lbImmediateSession",
+				"order": 4,
+				"type": "kBoolean",
+				"subtype": 0,
+				"sublen": 0,
+				"initval": "kFalse"
+			},
+			{
+				"name": "lbOK",
+				"order": 1,
+				"type": "kBoolean",
+				"subtype": 0,
+				"sublen": 0
+			},
+			{
+				"name": "lnCount",
+				"order": 8,
+				"type": "kInteger",
+				"subtype": "k32bitint",
+				"sublen": 0
+			},
+			{
+				"name": "loSession",
+				"order": 2,
+				"type": "kObject",
+				"subtype": "",
+				"sublen": 0
+			},
+			{
+				"name": "loStatement",
+				"order": 3,
+				"type": "kObject",
+				"subtype": "",
+				"sublen": 0
+			},
+			{
+				"name": "lrInternalData",
+				"order": 5,
+				"type": "kRow",
+				"subtype": "sProductInternalData",
+				"sublen": 0
+			}
+		]
+	},
+	{
+		"name": "$fetchOurToInventoryProducts",
+		"ident": 11,
+		"order": 15,
+		"pvardefs": [
+			{
+				"name": "pcSearchString",
+				"order": 8,
+				"type": "kCharacter",
+				"subtype": "kSimplechar",
+				"sublen": 100,
+				"param": 1
+			},
+			{
+				"name": "pbReturnCount",
+				"order": 6,
+				"type": "kBoolean",
+				"subtype": 0,
+				"sublen": 0,
+				"param": 2,
+				"initval": "kFalse"
+			}
+		],
+		"lvardefs": [
+			{
+				"name": "lbImmediateSession",
+				"order": 5,
+				"type": "kBoolean",
+				"subtype": 0,
+				"sublen": 0,
+				"initval": "kFalse"
+			},
+			{
+				"name": "lbOK",
+				"order": 2,
+				"type": "kBoolean",
+				"subtype": 0,
+				"sublen": 0
+			},
+			{
+				"name": "lnCount",
+				"order": 7,
+				"type": "kInteger",
+				"subtype": "k32bitint",
+				"sublen": 0
+			},
+			{
+				"name": "lnNumber",
+				"order": 1,
+				"type": "kNumber",
+				"subtype": "k0dp",
+				"sublen": 0
+			},
+			{
+				"name": "loSession",
+				"order": 3,
+				"type": "kObject",
+				"subtype": "",
+				"sublen": 0
+			},
+			{
+				"name": "loStatement",
+				"order": 4,
+				"type": "kObject",
+				"subtype": "",
+				"sublen": 0
+			},
+			{
+				"name": "lrSupplier",
+				"order": 11,
+				"type": "kRow",
+				"subtype": "sentExtOrganisations",
+				"sublen": 0
+			}
+		]
+	},
+	{
+		"name": "$searchString",
+		"ident": 7,
+		"order": 16,
+		"pvardefs": [
+			{
+				"name": "pcReturnWhat",
+				"order": 8,
+				"type": "kCharacter",
+				"subtype": "kSimplechar",
+				"sublen": 10,
+				"param": 1,
+				"initval": "''"
+			},
+			{
+				"name": "pcSearchString",
+				"order": 6,
+				"type": "kCharacter",
+				"subtype": "kSimplechar",
+				"sublen": 100,
+				"param": 2
+			},
+			{
+				"name": "pcSearchColumn",
+				"order": 7,
+				"type": "kCharacter",
+				"subtype": "kSimplechar",
+				"sublen": 100,
+				"param": 3,
+				"initval": "''"
+			},
+			{
+				"name": "pnGroupOrgSEQ",
+				"order": 13,
+				"type": "kInteger",
+				"subtype": "k64bitint",
+				"sublen": 0,
+				"param": 4,
+				"initval": "trGroupOrg.GO_SEQ"
+			},
+			{
+				"name": "pnExtOrgSEQ",
+				"order": 14,
+				"type": "kInteger",
+				"subtype": "k64bitint",
+				"sublen": 0,
+				"param": 5
+			}
+		],
+		"lvardefs": [
+			{
+				"name": "lbImmediateSession",
+				"order": 5,
+				"type": "kBoolean",
+				"subtype": 0,
+				"sublen": 0,
+				"initval": "kFalse"
+			},
+			{
+				"name": "lbIsNumber",
+				"order": 10,
+				"type": "kBoolean",
+				"subtype": 0,
+				"sublen": 0,
+				"initval": "kFalse"
+			},
+			{
+				"name": "lbOK",
+				"order": 2,
+				"type": "kBoolean",
+				"subtype": 0,
+				"sublen": 0
+			},
+			{
+				"name": "lbSearchAllCols",
+				"order": 16,
+				"type": "kBoolean",
+				"subtype": 0,
+				"sublen": 0,
+				"initval": "kFalse"
+			},
+			{
+				"name": "lcSpecificColumnName",
+				"order": 17,
+				"type": "kCharacter",
+				"subtype": "kSimplechar",
+				"sublen": 100
+			},
+			{
+				"name": "lnCount",
+				"order": 9,
+				"type": "kInteger",
+				"subtype": "k32bitint",
+				"sublen": 0
+			},
+			{
+				"name": "loSession",
+				"order": 3,
+				"type": "kObject",
+				"subtype": "",
+				"sublen": 0
+			},
+			{
+				"name": "loStatement",
+				"order": 4,
+				"type": "kObject",
+				"subtype": "",
+				"sublen": 0
+			},
+			{
+				"name": "lrInternalData",
+				"order": 11,
+				"type": "kRow",
+				"subtype": "sProductInternalData",
+				"sublen": 0
+			},
+			{
+				"name": "lrReferenceLocal",
+				"order": 15,
+				"type": "kRow",
+				"subtype": "ssysReferenceLocal",
+				"sublen": 0
+			}
+		]
+	},
+	{
+		"name": "$JScleanup",
+		"ident": 10,
+		"order": 17,
+		"pvardefs": [
+
+		],
+		"lvardefs": [
+
+		]
+	},
+	{
+		"name": "$defaults",
+		"ident": 12,
+		"order": 18,
+		"pvardefs": [
+
+		],
+		"lvardefs": [
+
+		]
+	},
+	{
+		"name": "$fetchIntCode",
+		"ident": 13,
+		"order": 19,
+		"pvardefs": [
+			{
+				"name": "pcInternalCode",
+				"order": 5,
+				"type": "kCharacter",
+				"subtype": "kSimplechar",
+				"sublen": 100,
+				"param": 1
+			},
+			{
+				"name": "pbFetchInternalData",
+				"order": 8,
+				"type": "kBoolean",
+				"subtype": 0,
+				"sublen": 0,
+				"param": 2,
+				"initval": "kFalse"
+			}
+		],
+		"lvardefs": [
+			{
+				"name": "lbImmediateSession",
+				"order": 4,
+				"type": "kBoolean",
+				"subtype": 0,
+				"sublen": 0,
+				"initval": "kFalse"
+			},
+			{
+				"name": "lbOK",
+				"order": 1,
+				"type": "kBoolean",
+				"subtype": 0,
+				"sublen": 0
+			},
+			{
+				"name": "loSession",
+				"order": 2,
+				"type": "kObject",
+				"subtype": "",
+				"sublen": 0
+			},
+			{
+				"name": "loStatement",
+				"order": 3,
+				"type": "kObject",
+				"subtype": "",
+				"sublen": 0
+			},
+			{
+				"name": "lrInternalData",
+				"order": 7,
+				"type": "kRow",
+				"subtype": "sProductInternalData",
+				"sublen": 0
+			},
+			{
+				"name": "lrReferenceLocal",
+				"order": 6,
+				"type": "kRow",
+				"subtype": "ssysReferenceLocal",
+				"sublen": 0
+			}
+		]
+	},
+	{
+		"name": "$displayName",
+		"ident": 14,
+		"order": 20,
+		"pvardefs": [
+
+		],
+		"lvardefs": [
+
+		]
+	},
+	{
+		"name": "$fetchOurProductsGeneric",
+		"ident": 15,
+		"order": 21,
+		"pvardefs": [
+			{
+				"name": "pcReturnWhat",
+				"order": 8,
+				"type": "kCharacter",
+				"subtype": "kSimplechar",
+				"sublen": 10,
+				"param": 1,
+				"initval": "''"
+			},
+			{
+				"name": "pcSearchString",
+				"order": 6,
+				"type": "kCharacter",
+				"subtype": "kSimplechar",
+				"sublen": 100,
+				"param": 2
+			},
+			{
+				"name": "pnGroupOrgSEQ",
+				"order": 13,
+				"type": "kInteger",
+				"subtype": "k64bitint",
+				"sublen": 0,
+				"param": 3,
+				"initval": "#NULL"
+			},
+			{
+				"name": "pbSearchAllCols",
+				"order": 18,
+				"type": "kBoolean",
+				"subtype": 0,
+				"sublen": 0,
+				"param": 4,
+				"initval": "kFalse"
+			},
+			{
+				"name": "pbSearchAnywhere",
+				"order": 7,
+				"type": "kBoolean",
+				"subtype": 0,
+				"sublen": 0,
+				"param": 5,
+				"initval": "kFalse"
+			}
+		],
+		"lvardefs": [
+			{
+				"name": "lbImmediateSession",
+				"order": 5,
+				"type": "kBoolean",
+				"subtype": 0,
+				"sublen": 0,
+				"initval": "kFalse"
+			},
+			{
+				"name": "lbIsNumber",
+				"order": 10,
+				"type": "kBoolean",
+				"subtype": 0,
+				"sublen": 0,
+				"initval": "kFalse"
+			},
+			{
+				"name": "lbOK",
+				"order": 2,
+				"type": "kBoolean",
+				"subtype": 0,
+				"sublen": 0
+			},
+			{
+				"name": "lcColCode",
+				"order": 16,
+				"type": "kCharacter",
+				"subtype": "kSimplechar",
+				"sublen": 10
+			},
+			{
+				"name": "lcSearchColumn",
+				"order": 15,
+				"type": "kCharacter",
+				"subtype": "kSimplechar",
+				"sublen": 50
+			},
+			{
+				"name": "lcSearchText",
+				"order": 17,
+				"type": "kCharacter",
+				"subtype": "kSimplechar",
+				"sublen": 40
+			},
+			{
+				"name": "lnCount",
+				"order": 9,
+				"type": "kInteger",
+				"subtype": "k32bitint",
+				"sublen": 0
+			},
+			{
+				"name": "loSession",
+				"order": 3,
+				"type": "kObject",
+				"subtype": "",
+				"sublen": 0
+			},
+			{
+				"name": "loStatement",
+				"order": 4,
+				"type": "kObject",
+				"subtype": "",
+				"sublen": 0
+			},
+			{
+				"name": "lrInternalData",
+				"order": 11,
+				"type": "kRow",
+				"subtype": "sProductInternalData",
+				"sublen": 0
+			}
+		]
+	},
+	{
+		"name": "$fetchSupplierProductsGeneric",
+		"ident": 16,
+		"order": 22,
+		"pvardefs": [
+			{
+				"name": "pcReturnWhat",
+				"order": 8,
+				"type": "kCharacter",
+				"subtype": "kSimplechar",
+				"sublen": 10,
+				"param": 1,
+				"initval": "''"
+			},
+			{
+				"name": "pcSearchString",
+				"order": 6,
+				"type": "kCharacter",
+				"subtype": "kSimplechar",
+				"sublen": 100,
+				"param": 2
+			},
+			{
+				"name": "pnGO_SEQ",
+				"order": 13,
+				"type": "kInteger",
+				"subtype": "k64bitint",
+				"sublen": 0,
+				"param": 3
+			},
+			{
+				"name": "pnExtOrgSEQ",
+				"order": 14,
+				"type": "kInteger",
+				"subtype": "k64bitint",
+				"sublen": 0,
+				"param": 4,
+				"initval": "#NULL"
+			},
+			{
+				"name": "pbSearchAllCols",
+				"order": 18,
+				"type": "kBoolean",
+				"subtype": 0,
+				"sublen": 0,
+				"param": 5,
+				"initval": "kFalse"
+			},
+			{
+				"name": "pbSearchAnywhere",
+				"order": 7,
+				"type": "kBoolean",
+				"subtype": 0,
+				"sublen": 0,
+				"param": 6,
+				"initval": "kFalse"
+			}
+		],
+		"lvardefs": [
+			{
+				"name": "lbImmediateSession",
+				"order": 5,
+				"type": "kBoolean",
+				"subtype": 0,
+				"sublen": 0,
+				"initval": "kFalse"
+			},
+			{
+				"name": "lbIsNumber",
+				"order": 10,
+				"type": "kBoolean",
+				"subtype": 0,
+				"sublen": 0,
+				"initval": "kFalse"
+			},
+			{
+				"name": "lbOK",
+				"order": 2,
+				"type": "kBoolean",
+				"subtype": 0,
+				"sublen": 0
+			},
+			{
+				"name": "lcColCode",
+				"order": 16,
+				"type": "kCharacter",
+				"subtype": "kSimplechar",
+				"sublen": 10
+			},
+			{
+				"name": "lcSearchColumn",
+				"order": 15,
+				"type": "kCharacter",
+				"subtype": "kSimplechar",
+				"sublen": 50
+			},
+			{
+				"name": "lcSearchText",
+				"order": 17,
+				"type": "kCharacter",
+				"subtype": "kSimplechar",
+				"sublen": 40
+			},
+			{
+				"name": "lnCount",
+				"order": 9,
+				"type": "kInteger",
+				"subtype": "k32bitint",
+				"sublen": 0
+			},
+			{
+				"name": "loSession",
+				"order": 3,
+				"type": "kObject",
+				"subtype": "",
+				"sublen": 0
+			},
+			{
+				"name": "loStatement",
+				"order": 4,
+				"type": "kObject",
+				"subtype": "",
+				"sublen": 0
+			}
+		]
+	},
+	{
+		"name": "$fetchOurCalculatedProducts",
+		"ident": 17,
+		"order": 23,
+		"pvardefs": [
+			{
+				"name": "pcSearchString",
+				"order": 8,
+				"type": "kCharacter",
+				"subtype": "kSimplechar",
+				"sublen": 100,
+				"param": 1
+			},
+			{
+				"name": "pdFrom",
+				"order": 9,
+				"type": "kDate",
+				"subtype": "kDate2000",
+				"sublen": 0,
+				"param": 2
+			},
+			{
+				"name": "pdTo",
+				"order": 10,
+				"type": "kDate",
+				"subtype": "kDate2000",
+				"sublen": 0,
+				"param": 3
+			},
+			{
+				"name": "pbReturnCount",
+				"order": 6,
+				"type": "kBoolean",
+				"subtype": 0,
+				"sublen": 0,
+				"param": 4,
+				"initval": "kFalse"
+			}
+		],
+		"lvardefs": [
+			{
+				"name": "lbImmediateSession",
+				"order": 5,
+				"type": "kBoolean",
+				"subtype": 0,
+				"sublen": 0,
+				"initval": "kFalse"
+			},
+			{
+				"name": "lbOK",
+				"order": 2,
+				"type": "kBoolean",
+				"subtype": 0,
+				"sublen": 0
+			},
+			{
+				"name": "lnCount",
+				"order": 7,
+				"type": "kInteger",
+				"subtype": "k32bitint",
+				"sublen": 0
+			},
+			{
+				"name": "lnNumber",
+				"order": 1,
+				"type": "kNumber",
+				"subtype": "k0dp",
+				"sublen": 0
+			},
+			{
+				"name": "loSession",
+				"order": 3,
+				"type": "kObject",
+				"subtype": "",
+				"sublen": 0
+			},
+			{
+				"name": "loStatement",
+				"order": 4,
+				"type": "kObject",
+				"subtype": "",
+				"sublen": 0
+			},
+			{
+				"name": "lrCalcResult",
+				"order": 11,
+				"type": "kRow",
+				"subtype": "MEC.scalcProductResult",
+				"sublen": 0
+			}
+		]
+	},
+	{
+		"name": "$fetchIncomingProducts",
+		"ident": 18,
+		"order": 24,
+		"pvardefs": [
+			{
+				"name": "pnEOref",
+				"order": 12,
+				"type": "kInteger",
+				"subtype": "k64bitint",
+				"sublen": 0,
+				"param": 1
+			},
+			{
+				"name": "pcSearchString",
+				"order": 8,
+				"type": "kCharacter",
+				"subtype": "kSimplechar",
+				"sublen": 100,
+				"param": 2
+			},
+			{
+				"name": "pdFrom",
+				"order": 9,
+				"type": "kDate",
+				"subtype": "kDate2000",
+				"sublen": 0,
+				"param": 3
+			},
+			{
+				"name": "pdTo",
+				"order": 10,
+				"type": "kDate",
+				"subtype": "kDate2000",
+				"sublen": 0,
+				"param": 4
+			},
+			{
+				"name": "pbReturnCount",
+				"order": 6,
+				"type": "kBoolean",
+				"subtype": 0,
+				"sublen": 0,
+				"param": 5,
+				"initval": "kFalse"
+			}
+		],
+		"lvardefs": [
+			{
+				"name": "lbImmediateSession",
+				"order": 5,
+				"type": "kBoolean",
+				"subtype": 0,
+				"sublen": 0,
+				"initval": "kFalse"
+			},
+			{
+				"name": "lbOK",
+				"order": 2,
+				"type": "kBoolean",
+				"subtype": 0,
+				"sublen": 0
+			},
+			{
+				"name": "lnCount",
+				"order": 7,
+				"type": "kInteger",
+				"subtype": "k32bitint",
+				"sublen": 0
+			},
+			{
+				"name": "lnNumber",
+				"order": 1,
+				"type": "kNumber",
+				"subtype": "k0dp",
+				"sublen": 0
+			},
+			{
+				"name": "loSession",
+				"order": 3,
+				"type": "kObject",
+				"subtype": "",
+				"sublen": 0
+			},
+			{
+				"name": "loStatement",
+				"order": 4,
+				"type": "kObject",
+				"subtype": "",
+				"sublen": 0
+			},
+			{
+				"name": "lrPublication",
+				"order": 11,
+				"type": "kRow",
+				"subtype": "mcommon.secPublication",
+				"sublen": 0
+			}
+		]
+	},
+	{
+		"name": "$fetchGHGproducts",
+		"ident": 20,
+		"order": 25,
+		"pvardefs": [
+			{
+				"name": "pcSearchString",
+				"order": 7,
+				"type": "kCharacter",
+				"subtype": "kSimplechar",
+				"sublen": 100,
+				"param": 1
+			},
+			{
+				"name": "pdFrom",
+				"order": 8,
+				"type": "kDate",
+				"subtype": "kDate2000",
+				"sublen": 0,
+				"param": 2
+			},
+			{
+				"name": "pdTo",
+				"order": 9,
+				"type": "kDate",
+				"subtype": "kDate2000",
+				"sublen": 0,
+				"param": 3
+			},
+			{
+				"name": "pbReturnCount",
+				"order": 10,
+				"type": "kBoolean",
+				"subtype": 0,
+				"sublen": 0,
+				"param": 4,
+				"initval": "kFalse"
+			}
+		],
+		"lvardefs": [
+			{
+				"name": "lbImmediateSession",
+				"order": 4,
+				"type": "kBoolean",
+				"subtype": 0,
+				"sublen": 0,
+				"initval": "kFalse"
+			},
+			{
+				"name": "lbOK",
+				"order": 1,
+				"type": "kBoolean",
+				"subtype": 0,
+				"sublen": 0
+			},
+			{
+				"name": "lnCount",
+				"order": 5,
+				"type": "kInteger",
+				"subtype": "k32bitint",
+				"sublen": 0
+			},
+			{
+				"name": "loSession",
+				"order": 2,
+				"type": "kObject",
+				"subtype": "",
+				"sublen": 0
+			},
+			{
+				"name": "loStatement",
+				"order": 3,
+				"type": "kObject",
+				"subtype": "",
+				"sublen": 0
+			},
+			{
+				"name": "lrCalcResult",
+				"order": 6,
+				"type": "kRow",
+				"subtype": "MEC.scalcProductResult",
+				"sublen": 0
+			}
+		]
+	},
+	{
+		"name": "$addCalculatedColumns",
+		"ident": 21,
+		"order": 26,
+		"pvardefs": [
+
+		],
+		"lvardefs": [
+			{
+				"name": "liColRef",
+				"order": 1,
+				"type": "kItemref",
+				"subtype": "",
+				"sublen": 0
+			}
+		]
+	},
+	{
+		"name": "$calculatedValues",
+		"ident": 25,
+		"order": 27,
+		"pvardefs": [
+
+		],
+		"lvardefs": [
+
+		]
+	}
+]

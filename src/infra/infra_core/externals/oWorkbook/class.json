@@ -1,0 +1,34 @@
+{
+	"classtype": "kObjectclass",
+	"internalversion": 3,
+	"superclass": ".ExcelFormat.ExcelFormat\\Workbook",
+	"designtaskname": "Startup_Task",
+	"cvardefs": [
+
+	],
+	"ivardefs": [
+		{
+			"name": "iErrorInst",
+			"order": 1,
+			"type": "kCharacter",
+			"subtype": "kSimplechar",
+			"sublen": 100000000
+		}
+	],
+	"properties": {
+		"collectperformancedata": false,
+		"componenticon": 0,
+		"componenttype": "kCompStoreHidden",
+		"createdate": "2018-05-15 16:58:04",
+		"desc": "",
+		"editor": "",
+		"editordata": "",
+		"external": true,
+		"issupercomponent": false,
+		"moddate": "2018-05-15 16:58:04",
+		"selfcontained": false,
+		"showascheckedout": false,
+		"userinfo": "",
+		"version": "1.08"
+	}
+}

@@ -1,0 +1,8 @@
+Calculate $cinst.$objs.pbClose.$enabled as ilRemoteTasks.$line>0
+
+Calculate $cinst.$objs.inTimerSeconds.$enabled as not(ibAutoRefresh)
+Calculate $cinst.$objs.inTimerSeconds.$forecolor as pick(ibAutoRefresh,kWhite,rgb(238,238,238))
+
+Calculate $cinst.$objs.pbAutoRefresh.$text as con('auto refresh ',pick(ibAutoRefresh,'off > ON','ON > off'))
+
+Calculate $cinst.$objs.ibSpeakAppName.$enabled as ibAutoRefresh

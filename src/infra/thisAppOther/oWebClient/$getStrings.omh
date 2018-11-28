@@ -1,0 +1,21 @@
+;  fetch the string table entries for the library
+;  Breakpoint
+Calculate lcURI as con(tConstants.REST_URI,'table')
+
+Do ioRest.$init(lcURI,kOWEBhttpMethodGet,ilHeaders,icContent)
+
+Calculate ldStartTime as #D
+Do ioRest.$run() Returns lbStatus
+Calculate inServiceCallTime as ddiff(kCentiSecond,ldStartTime,#D)*10     ;; milliseconds
+
+If lbStatus
+	Do ioRest.$returnVal(irResponseHeaders,irResponse,irJSON) Returns icJSON
+	
+	Do $itasks.[tcCurrentLibrary].$returnKey() Returns lcTheKey
+	Do oUnfoldParams.$initkey(lcTheKey)     ;; was encstr(lcTheKey)
+	Calculate lbinResponse as binfromhex(irJSON.data)     ;; convert the return to binary and put it into a row variable
+	Do $cinst.$extractData(lbinResponse) Returns lrResult     ;; decrypt and return the original server data row
+	
+End If
+
+Quit method lrResult.result

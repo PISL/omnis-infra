@@ -1,0 +1,133 @@
+If tlDatabases.DAM='WebService'
+	;  pass parameters to web service
+	;  $callService (pFieldReference, row(TableClassName, CurrentMethodName, p1,...,pn) )     ;; result will be returned in pFieldReference, row() contains the parameters for the call
+	Breakpoint     ;; ### this will not work yet - two results returned - function and structure
+	
+	Do ioWeb.$callFetch(lrTotal,irErrorSQL,row($cinst.$class().$name,$cmethod().$name,row(pnInvoiceNo,pnDG_SEQ,pretStructure),lrTotal.$type,1,ilRESTextensions))
+	If ioWeb.irResponse.httpStatusCode=200
+		;  the result should be in this object     ;; however there may be a SQL error
+		If irErrorSQL.NativeErrorText<>''
+			Quit method kFalse
+		End If
+		Quit method lrTotal
+	Else
+		Quit method kFalse
+	End If
+End If
+
+If pnInvoiceNo>0
+	;  good
+Else If pnDG_SEQ>0
+	;  good
+Else
+	Quit method kFalse
+End If
+
+Do lrTotal.$cols.$add($cinst.FOH_INV_NO)
+Do lrTotal.$cols.$add(lrDetail.FOD_UNIT_PRICE)
+Do lrTotal.$cols.$add(lrDetail.FOD_UNIT_TAX)
+Do lrTotal.$cols.$add('countSpouse',kInteger,kShortint)
+Do lrTotal.$cols.$add('countMembershipP',kInteger,kShortint)
+Do lrTotal.$cols.$add('countMembershipC',kInteger,kShortint)
+
+Do $cinst.$ImmediateSession(loSession,loStatement) Returns lbImmediateSession
+If lbImmediateSession
+	Do $cinst.$SetSession(loSession,loStatement)
+Else If not(ibGoodConnectionToDb)
+	Quit method kFalse
+End If
+
+Begin statement
+Sta: {select FOH_INV_NO, sum(FOD_QTY*FOD_UNIT_PRICE), sum(FOD_QTY*FOD_UNIT_TAX)}
+Sta: {from [$cinst.$servertablenames()]}
+Sta: {join [lrDetail.$servertablenames()] on FOD_FOH_REF = FOH_SEQ}
+Sta: {where FOH_GO_REF = @[trGroupOrg.GO_SEQ]}
+If pnInvoiceNo>0
+	Sta: {and    FOH_INV_NO = @[pnInvoiceNo]}
+Else If pnDG_SEQ>0
+	Sta: {and   FOH_SEQ = ( select DIL_FOH_REF}
+	Sta: {from [lrDG_Invoice_Link.$servertablenames()]}
+	Sta: {where DIL_DG_REF = @[pnDG_SEQ] )}
+End If
+Sta: {group by FOH_INV_NO}
+End statement
+
+Do $cinst.$executesqlandfetch(lrTotal) Returns lbOk
+
+;  count memberships in invoice
+Begin statement
+Sta: {select count(*)}
+Sta: {from [$cinst.$servertablenames()]}
+Sta: {join [lrDetail.$servertablenames()] on FOD_FOH_REF = FOH_SEQ}
+Sta: {join [lrProduct.$servertablenames()] on FOD_PRD_REF = PRD_SEQ}
+Sta: {where FOH_GO_REF = @[trGroupOrg.GO_SEQ]}
+If pnInvoiceNo>0
+	Sta: {and    FOH_INV_NO = @[pnInvoiceNo]}
+Else If pnDG_SEQ>0
+	Sta: {and   FOH_SEQ = ( select DIL_FOH_REF}
+	Sta: {from [lrDG_Invoice_Link.$servertablenames()]}
+	Sta: {where DIL_DG_REF = @[pnDG_SEQ] )}
+End If
+;  memberships - personal
+Sta: {and    PRD_INT_PRODCODE like 'OW_MEMP%'}
+End statement
+
+Calculate lnCountMemberships as 0
+Do $cinst.$executesqlandfetchinto(lnCountMemberships) Returns lbOk
+Calculate lrTotal.countMembershipP as lnCountMemberships
+
+Begin statement
+Sta: {select count(*)}
+Sta: {from [$cinst.$servertablenames()]}
+Sta: {join [lrDetail.$servertablenames()] on FOD_FOH_REF = FOH_SEQ}
+Sta: {join [lrProduct.$servertablenames()] on FOD_PRD_REF = PRD_SEQ}
+Sta: {where FOH_GO_REF = @[trGroupOrg.GO_SEQ]}
+If pnInvoiceNo>0
+	Sta: {and    FOH_INV_NO = @[pnInvoiceNo]}
+Else If pnDG_SEQ>0
+	Sta: {and   FOH_SEQ = ( select DIL_FOH_REF}
+	Sta: {from [lrDG_Invoice_Link.$servertablenames()]}
+	Sta: {where DIL_DG_REF = @[pnDG_SEQ] )}
+End If
+;  memberships - corporate
+Sta: {and    PRD_INT_PRODCODE like 'OW_MEMC%'}
+End statement
+
+Calculate lnCountMemberships as 0
+Do $cinst.$executesqlandfetchinto(lnCountMemberships) Returns lbOk
+Calculate lrTotal.countMembershipC as lnCountMemberships
+
+;  count spouses in invoice
+Begin statement
+Sta: {select count(*)}
+Sta: {from [$cinst.$servertablenames()]}
+Sta: {join [lrDetail.$servertablenames()] on FOD_FOH_REF = FOH_SEQ}
+Sta: {join [lrProduct.$servertablenames()] on FOD_PRD_REF = PRD_SEQ}
+Sta: {where FOH_GO_REF = @[trGroupOrg.GO_SEQ]}
+If pnInvoiceNo>0
+	Sta: {and    FOH_INV_NO = @[pnInvoiceNo]}
+Else If pnDG_SEQ>0
+	Sta: {and   FOH_SEQ = ( select DIL_FOH_REF}
+	Sta: {from [lrDG_Invoice_Link.$servertablenames()]}
+	Sta: {where DIL_DG_REF = @[pnDG_SEQ] )}
+End If
+;  spouses
+Sta: {and   ( PRD_INT_PRODCODE like 'SPOUSE%' )}
+End statement
+
+Do $cinst.$executesqlandfetchinto(lnCountSpouses) Returns lbOk
+Calculate lrTotal.countSpouse as lnCountSpouses
+
+If lbImmediateSession
+	Do $cinst.$SetSession(#NULL,#NULL,kTrue)
+End If
+
+If isnull(lrTotal.FOD_UNIT_PRICE)
+	Calculate lrTotal.FOD_UNIT_PRICE as 0
+End If
+If isnull(lrTotal.FOD_UNIT_TAX)
+	Calculate lrTotal.FOD_UNIT_TAX as 0
+End If
+
+;  Quit method lrTotal.FOD_UNIT_PRICE+lrTotal.FOD_UNIT_TAX
+Quit method lrTotal

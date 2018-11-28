@@ -1,0 +1,20 @@
+On evClick
+	Calculate lcMode as icMode
+	Calculate icDisplayMessage as ''
+	Calculate icMode as ''
+	
+	If inCurrentTab=cnTabStructure
+		If icMode='I'
+			Do irCurrentStructure.$clear()
+			Do ilStructureType.$search(0)
+		Else     ;; 'E'dit
+			Do method ClickNow
+		End If
+		Do $cinst.$behaviour()
+	Else
+		Do irCurrentRecord.$clear()
+		Do $cinst.$displayListClick()
+		If isclear(irCurrentRecord.GO_MEC_ID)&ilCorpPersonCopy.$linecount>0     ;; we were editing because of a failure in registration
+			Calculate ilCorporatePerson as ilCorpPersonCopy
+		End If
+	End If

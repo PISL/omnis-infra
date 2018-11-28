@@ -1,0 +1,112 @@
+{
+	"ident": 1032,
+	"order": 2,
+	"objtype": "kComponent",
+	"componentlib": "jsPict",
+	"componentctrl": "Picture Control",
+	"properties": {
+		"alpha": 255,
+		"autoscroll": false,
+		"backalpha": 0,
+		"backcolor": "RGB(255,255,238)",
+		"bordercolor": "RGB(255,255,238)",
+		"borderradius": "0",
+		"contextmenu": "",
+		"cssclassname": "",
+		"dataname": "ipictBanner",
+		"desgroup": 0,
+		"designactive": true,
+		"deslock": false,
+		"disabledefaultcontextmenu": false,
+		"disablesystemfocus": false,
+		"dragmode": "kNoDragging",
+		"dropmode": "kAcceptNone",
+		"effect": "kJSborderNone",
+		"enabled": true,
+		"events": "",
+		"fieldstyle": "",
+		"horzscroll": false,
+		"iconid": 0,
+		"keepaspectratio": false,
+		"keepaspectratiomode": "kKARtopLeft",
+		"linestyle": 16,
+		"mediatype": "image/jpg",
+		"noscale": false,
+		"objlink": 65537,
+		"picturealign": "",
+		"preventlayoutanimation": false,
+		"tile": false,
+		"tooltip": "",
+		"userinfo": "",
+		"vertscroll": false,
+		"visible": true
+	},
+	"screensizes": [
+		{
+			"name": "kSSZDesktop",
+			"left": 2,
+			"top": 1,
+			"width": 1395,
+			"height": 49,
+			"edgefloat": "kEFnone",
+			"dragborder": false,
+			"errortextpos": "kJSErrorTextPosUnder"
+		},
+		{
+			"name": "kSSZjs320x480Portrait",
+			"left": 0,
+			"top": 0,
+			"edgefloat": "kEFnone",
+			"dragborder": false,
+			"errortextpos": "kJSErrorTextPosUnder"
+		},
+		{
+			"name": "kSSZjs320x480Landscape",
+			"left": 0,
+			"top": 0,
+			"edgefloat": "kEFnone",
+			"dragborder": false,
+			"errortextpos": "kJSErrorTextPosUnder"
+		},
+		{
+			"name": "kSSZjs768x1024Portrait",
+			"left": 0,
+			"top": 0,
+			"edgefloat": "kEFnone",
+			"dragborder": false,
+			"errortextpos": "kJSErrorTextPosUnder"
+		},
+		{
+			"name": "kSSZjs768x1024Landscape",
+			"left": 0,
+			"top": 0,
+			"edgefloat": "kEFnone",
+			"dragborder": false,
+			"errortextpos": "kJSErrorTextPosUnder"
+		},
+		{
+			"name": "kSSZjs345x345",
+			"left": 0,
+			"top": 0,
+			"edgefloat": "kEFnone",
+			"dragborder": false,
+			"errortextpos": "kJSErrorTextPosUnder"
+		},
+		{
+			"name": "kSSZjs360x640Portrait",
+			"left": 0,
+			"top": 0,
+			"edgefloat": "kEFnone",
+			"dragborder": false,
+			"errortextpos": "kJSErrorTextPosUnder"
+		},
+		{
+			"name": "kSSZjs360x640Landscape",
+			"left": 0,
+			"top": 0,
+			"edgefloat": "kEFnone",
+			"dragborder": false,
+			"errortextpos": "kJSErrorTextPosUnder"
+		}
+	]
+}

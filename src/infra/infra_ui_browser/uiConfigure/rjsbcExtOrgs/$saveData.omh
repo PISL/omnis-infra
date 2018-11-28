@@ -1,0 +1,82 @@
+;  reverse the hex coded EO_MEC_ID before saving
+;  Calculate lcMEChex as replaceall(replaceall(irCurrentRecord.MECID,'-',''),' ','')     ;; ### DEMO commented out
+;  Calculate irCurrentRecord.EO_MEC_ID as bintoint64(binfromhex(lcMEChex))     ;; ### DEMO commented out
+
+;  save the current Mode (the superclass $savedata clears it)
+Calculate lcMode as icMode
+;  make sure empty strings are null strings     ;; in the OrgLinks table
+If isclear(irOrgLink.EOL_FINACCT_CUID)
+	Calculate irOrgLink.EOL_FINACCT_CUID as #NULL
+End If
+If isclear(irOrgLink.EOL_FINACCT_SUID)
+	Calculate irOrgLink.EOL_FINACCT_SUID as #NULL
+End If
+
+If icMode='I'|icMode='E'     ;; insert or edit main record
+	Do irOrgLink.$valuesCheck(icSUPPorCUST) Returns lbProceed
+	If not(lbProceed)
+		Calculate icDisplayMessage as irOrgLink.icValidationMessage
+		Quit method
+	End If
+	
+	;  first save the master record
+	;  Do inherited Returns lbOK
+Else
+	Calculate lbOK as kTrue     ;; move on
+End If
+
+If icMode='I'
+	Do ioExternalOrgs.$insert(irCurrentRecord,irOrgLink) Returns lbOK
+Else If icMode='E'
+	Do ioExternalOrgs.$update(irCurrentRecord,irOrgLink) Returns lbOK
+Else If icMode='AL'
+	Breakpoint {not implemented in ioExternalOrgs object}
+End If
+If lbOK
+	;  if all is well and we can now create or update the link record between this EO and the current GO
+	;  reset the current mode
+	Calculate icMode as lcMode
+	
+	Calculate icDisplayMessage as ''
+	
+	;  If icMode='I'|icMode='AL'|icMode='E'     ;; inserting or adding a link
+	;  in theory a irOrgLink is always created on insert; during testing though this was not always the case
+	;  hence this more generous handling of irOrgLink
+	;  If isclear(irOrgLink.EOL_SEQ)
+	;  Calculate irOrgLink.EOL_GO_REF as trGroupOrg.GO_SEQ
+	;  Calculate irOrgLink.EOL_EO_REF as irCurrentRecord.EO_SEQ
+	;  End If
+	;
+	;  Do irOrgLink.$validation() Returns lbProceed
+	;  If not(lbProceed)
+	;  Calculate icDisplayMessage as irOrgLink.icValidationMessage
+	;  Quit method
+	;  End If
+	;  If isclear(irOrgLink.EOL_SEQ)
+	;  Do irOrgLink.$insert() Returns lbOK
+	;  Else
+	;  Do irOrgLink.$update() Returns lbOK
+	;  End If
+	;  End If
+	
+	If lbOK
+		If icMode='I'
+			Do ilDisplayRecords.$add()
+			Calculate ilDisplayRecords.$line as ilDisplayRecords.$linecount
+			;  Calculate ilDisplayRecords as irCurrentRecord
+			Do ilDisplayRecords.$assignrow(irCurrentRecord)
+			
+		Else If icMode='E'
+			;  Calculate ilDisplayRecords as irCurrentRecord
+			Do ilDisplayRecords.$assignrow(irCurrentRecord)
+		End If
+		Calculate icMode as ''
+	Else
+		Calculate icDisplayMessage as irOrgLink.irErrorSQL.NativeErrorText
+	End If
+Else
+	Calculate icDisplayMessage as ioExternalOrgs.icErrorMessage
+End If
+
+
+Quit method lbOK

@@ -1,0 +1,132 @@
+Calculate icValidationText as ''
+Calculate icValidationCodes as ''
+Calculate icInvalidChars as ''
+If pLangCode<>''
+	Do StringTable.$setcolumn(pLangCode) Returns #F
+End If
+
+If pEmail<>''
+	;  has an email address been provided?
+	If pos('@',pEmail)=0
+		;  not even an @ symbol !
+		Do $ctask.toStrings.$StringTableMessage('VAL_EMAIL_BADFORMAT',icValidationText,icValidationCodes) Returns lbStringTableEntryFound
+		If not(lbStringTableEntryFound)
+			Calculate icValidationText as con(icValidationText,pick(icValidationText<>'','',', '),lcDevMessageBadFormat)
+		End If
+	Else
+		;  check    robert@xxxx
+		Calculate lcTemp as pEmail
+		Calculate lcTokenBefore as strtok(nam(lcTemp),'@')     ;; local part
+		Calculate lcTokenAfter as strtok(nam(lcTemp),'@')     ;; domain portion
+		
+		If lcTokenBefore<>''&lcTokenAfter<>''
+			;  local part can contain     ;; A-Z, a-z, digits and full stop but not as first or last position
+			;  local part can contain     ;; ! # $ % & ' * + - / = ? ^ _ ` { | } ~ -
+			Calculate lcTest as strpbrk(lcTokenBefore,ccIllegalEmail)     ;; local part
+			If lcTest<>''
+				;  not testing for full stop as first or last char     ;; yet
+				Do $ctask.toStrings.$StringTableMessage('VAL_EMAIL_ILLEGAL_CHAR',icValidationText,icValidationCodes) Returns lbStringTableEntryFound
+				If not(lbStringTableEntryFound)
+					Calculate icValidationText as con(icValidationText,pick(icValidationText<>'','',', '),lcDevMessageBadChar)
+				End If
+			End If
+			;  domain can contain letters, digits and hyphens only + dots
+			Calculate lcTest as strpbrk(lcTokenAfter,ccIllegalDomain)     ;; local part
+			If lcTest<>''
+				Do $ctask.toStrings.$StringTableMessage('VAL_EMAIL_ILLEGAL_CHAR',icValidationText,icValidationCodes) Returns lbStringTableEntryFound
+				If not(lbStringTableEntryFound)
+					Calculate icValidationText as con(icValidationText,pick(icValidationText<>'','',', '),lcDevMessageBadChar)
+				End If
+			End If
+			
+			If len(lcTokenBefore)>1&len(lcTokenAfter)>4     ;; before must be at least 2 characters  & after must be at least 5 characters  xx@aa.net
+				If left(lcTokenBefore,1)='.'     ;; illegal
+					Do $ctask.toStrings.$StringTableMessage('VAL_EMAIL_ILLEGAL_CHAR',icValidationText,icValidationCodes) Returns lbStringTableEntryFound
+					If not(lbStringTableEntryFound)
+						Calculate icValidationText as con(icValidationText,pick(icValidationText<>'','',', '),lcDevMessageBadDot)
+					End If
+				Else If right(lcTokenBefore,1)='.'
+					Do $ctask.toStrings.$StringTableMessage('VAL_EMAIL_ILLEGAL_CHAR',icValidationText,icValidationCodes) Returns lbStringTableEntryFound
+					If not(lbStringTableEntryFound)
+						Calculate icValidationText as con(icValidationText,pick(icValidationText<>'','',', '),lcDevMessageBadDot)
+					End If
+				End If
+				If left(lcTokenAfter,1)='.'     ;; illegal
+					Do $ctask.toStrings.$StringTableMessage('VAL_EMAIL_ILLEGAL_CHAR',icValidationText,icValidationCodes) Returns lbStringTableEntryFound
+					If not(lbStringTableEntryFound)
+						Calculate icValidationText as con(icValidationText,pick(icValidationText<>'','',', '),lcDevMessageBadDot)
+					End If
+				Else If right(lcTokenAfter,1)='.'
+					Do $ctask.toStrings.$StringTableMessage('VAL_EMAIL_ILLEGAL_CHAR',icValidationText,icValidationCodes) Returns lbStringTableEntryFound
+					If not(lbStringTableEntryFound)
+						Calculate icValidationText as con(icValidationText,pick(icValidationText<>'','',', '),lcDevMessageBadDot)
+					End If
+				End If
+				If pos('.',lcTokenAfter)>0
+					;  good
+				Else
+					Do $ctask.toStrings.$StringTableMessage('VAL_EMAIL_BAD_FORMAT',icValidationText,icValidationCodes) Returns lbStringTableEntryFound
+					If not(lbStringTableEntryFound)
+						Calculate icValidationText as con(icValidationText,pick(icValidationText<>'','',', '),lcDevMessageMissingDot)
+					End If
+				End If
+				If pValidateServer
+					;  2017-03-06 GRS commented this out as we are now sending confirmation emails on registration
+					;  Calculate lcTemp as con('www.',lcTokenAfter)
+					;  TCPPing (lcTemp) Returns lnResponse
+					;  If lnResponse>0
+					;  server exists
+					;  Else
+					;  many servers are ping disabled now     ;; see if there is a web page
+					;  HTTPOpen (lcTemp) Returns lnSocket
+					;  If lnSocket>0
+					;  valid website
+					;  HTTPClose (lnSocket)
+					;  Else
+					;  there are also ww2 and no www addresses     ;; added 20 feb 09
+					;  Calculate lcTemp as con('ww2.',lcTokenAfter)     ;; ww2
+					;  HTTPOpen (lcTemp) Returns lnSocket
+					;  If lnSocket>0
+					;  valid website
+					;  HTTPClose (lnSocket)
+					;  Else
+					;  Calculate lcTemp as con(lcTokenAfter)     ;; no www prefix
+					;  HTTPOpen (lcTemp) Returns lnSocket
+					;  If lnSocket>0
+					;  valid website
+					;  HTTPClose (lnSocket)
+					;  Else
+					;  Do toStrings.$StringTableMessage('VAL_EMAIL_SERVERNOTFOUND',icValidationText,icValidationCodes) Returns lbStringTableEntryFound
+					;  If not(lbStringTableEntryFound)
+					;  Calculate icValidationText as con(icValidationText,pick(icValidationText<>'','',', '),'Email server ',mid(lcTemp,5,99),' not found')
+					;  End If
+					;  End If
+					;  End If
+					;  End If
+					;  End If
+				End If
+			Else
+				Do $ctask.toStrings.$StringTableMessage('VAL_EMAIL_BADFORMAT',icValidationText,icValidationCodes) Returns lbStringTableEntryFound
+				If not(lbStringTableEntryFound)
+					Calculate icValidationText as con(icValidationText,pick(icValidationText<>'','',', '),lcDevMessageBadFormat)
+				End If
+			End If
+		Else
+			Do $ctask.toStrings.$StringTableMessage('VAL_EMAIL_BADFORMAT',icValidationText,icValidationCodes) Returns lbStringTableEntryFound
+			If not(lbStringTableEntryFound)
+				Calculate icValidationText as con(icValidationText,pick(icValidationText<>'','',', '),lcDevMessageBadFormat)
+			End If
+		End If
+	End If
+	
+Else
+	Do toStrings.$StringTableMessage('VAL_EMAIL_MISSING',icValidationText,icValidationCodes) Returns lbStringTableEntryFound
+	If not(lbStringTableEntryFound)
+		Calculate icValidationText as con(icValidationText,pick(icValidationText<>'','',', '),'Email address missing')
+	End If
+End If
+
+If icValidationText<>''
+	Calculate icInvalidChars as ccIllegalEmail
+End If
+Quit method icValidationText

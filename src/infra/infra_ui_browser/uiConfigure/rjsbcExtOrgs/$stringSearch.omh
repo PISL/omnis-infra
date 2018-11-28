@@ -1,0 +1,42 @@
+Calculate ilCountries.$line as 0
+;  ### this is english only - how do we make it international?
+If pos(':',mid(icSearch,1,4))
+	Calculate lcColumn as mid(icSearch,1,pos(':',icSearch)-1)
+	Calculate lcString as mid(icSearch,pos(':',icSearch)+1,99)
+Else
+	Calculate lcString as icSearch
+End If
+
+Switch lcColumn
+	;  optional;  N=name, A=address, C=code, E=email, I=Instructions
+	Case 'N','A','C','E','I'     ;; ### string table
+		;  valid entries
+		Calculate lbIsValidColumn as kTrue
+	Case ''
+		;  also valid
+		Calculate lbIsValidColumn as kTrue
+	Default
+		Breakpoint
+End Switch
+
+If lbIsValidColumn
+	If icSUPPorCUST='CUSTOMER'
+		Do ilDisplayRecords.$searchStringCustomers('count',lcString,lcColumn) Returns inSearchCount
+	Else If icSUPPorCUST='SUPPLIER'
+		Do ilDisplayRecords.$searchStringSuppliers('count',lcString,lcColumn) Returns inSearchCount
+	Else
+		Do ilDisplayRecords.$searchString('count',lcString,lcColumn) Returns inSearchCount
+	End If
+	If inSearchCount<=100     ;; ### this needs to be made configurable
+		If icSUPPorCUST='CUSTOMER'
+			Do ilDisplayRecords.$searchStringCustomers('result',lcString,lcColumn)
+		Else If icSUPPorCUST='SUPPLIER'
+			Do ilDisplayRecords.$searchStringSuppliers('result',lcString,lcColumn)
+		Else
+			Do ilDisplayRecords.$searchString('result',lcString,lcColumn)
+		End If
+		
+		Do $cinst.$behaviour()
+		Do $cinst.$redraw()
+	End If
+End If

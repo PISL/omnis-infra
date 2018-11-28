@@ -1,0 +1,65 @@
+;  This just needs to be called once, from your top level/initial form.
+;  It will attempt to call the relevant form's client method named 'handleShortcutKey' event
+;  It passes a single parameter representing the character of the key which was pressed (in conjunction with Ctrl & Shift).
+
+;  Store the event listener, to be removed when the form instance is destroyed.
+JavaScript: window.omnisShortcutKeys1 = document.addEventListener("keydown", function(event) {
+JavaScript: lKey = event.key.toUpperCase();
+
+;  Shortcut keys here require Ctrl & Shift to also be held (could be changed - careful not to conflict with browser shortcut keys):
+;  2018-02-15 GRS changed to altKey, no joy
+;  checking event.charCode means we will only notify forms if Ctrl-Shift and a printable character are pressed.
+JavaScript: if (lKey.length == 1 && event.ctrlKey && event.shiftKey) {
+
+;  Climb the DOM from the target element to find the containing formElement:
+JavaScript: var targetElem = event.target;
+
+JavaScript: var form;
+JavaScript: while (form = getNextForm(targetElem)) {
+JavaScript: if (form.callMethodEx('handleShortcutKey', eDoMethodFlags.clientOnly|eDoMethodFlags.noLog, lKey))
+;  The form has handled the shortcut because it returned true (well, a truthy value).
+JavaScript: return;
+;  Set the target to this form's serverElem, so the loop will continue climbing the DOM from here, looking for the next parent form.
+JavaScript: targetElem = form.serverElem;
+JavaScript: var haveFoundAForm = true;
+JavaScript: }
+
+;  If the target was not inside a form, call the first (top-level) form's shortcut handler:
+JavaScript: if (!haveFoundAForm)
+JavaScript: jOmnis.omnisInsts[0].forms[0].callMethodEx('handleShortcutKey', eDoMethodFlags.clientOnly|eDoMethodFlags.noLog, lKey);
+
+JavaScript: }
+
+JavaScript: });
+
+
+;  Function to climb the DOM from the target element and find the next form Object (not Element):
+JavaScript: function getNextForm(fromElement) {
+
+JavaScript: var formElem = null;
+
+JavaScript: while (fromElement.parentNode) {
+JavaScript: fromElement = fromElement.parentNode;
+JavaScript: if (fromElement.classList && fromElement.classList.contains('omnisform')) {
+JavaScript: formElem = fromElement; break;
+JavaScript: }
+JavaScript: }
+
+JavaScript: if (formElem) {
+JavaScript: return findFormByID(formElem.id);
+JavaScript: }
+
+;  No form found
+JavaScript: return null;
+JavaScript: }
+
+;  Helper function to find a form Object (not element) by its serverElem's id attribute.
+JavaScript: function findFormByID(formID) {
+JavaScript: var forms = jOmnis.omnisInsts[0].forms;
+JavaScript: for (var i = 0; i < forms.length; i++) {
+JavaScript: if (forms[i] && forms[i].serverElem.id == formID)
+JavaScript: return forms[i];
+JavaScript: }
+
+JavaScript: return null;
+JavaScript: }

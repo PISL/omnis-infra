@@ -1,0 +1,127 @@
+Calculate pcReturnWhat as upp(pcReturnWhat)
+If pcText<>''
+	If isnumber(pcText)
+		Calculate lnInteger as pcText
+	End If
+	If pos('%',pcText)=0
+		Calculate pcText as con('%',pcText,'%')
+	End If
+End If
+
+Do $cinst.$cols.$findname('DisplayName') Returns liColRef
+If liColRef
+	Calculate lbIncludeDisplayName as kTrue
+End If
+
+Do $cinst.$cols.$findname('EO_SEQ') Returns liColRef
+If liColRef
+	;  extra columns already added
+Else
+	Do $cinst.$addSchemaColumns("infra.sentExtOrganisations")
+End If
+
+If tlDatabases.DAM='WebService'
+	;  pass parameters to web service
+	;  $callService (pFieldReference, row(TableClassName, CurrentMethodName, p1,...,pn) )     ;; result will be returned in pFieldReference, row() contains the parameters for the call
+	Breakpoint     ;; ### this will not work yet - two results returned - function and structure
+	
+	Do ioWeb.$callFetch($cinst,irErrorSQL,row($cinst.$class().$name,$cmethod().$name,row(pcReturnWhat,pcText,pcColumn),$cinst.$type,1,ilRESTextensions))
+	If ioWeb.irResponse.httpStatusCode=200
+		;  the result should be in this object     ;; however there may be a SQL error
+		If irErrorSQL.NativeErrorText<>''
+			Quit method kFalse
+		End If
+		Quit method lrTotal
+	Else
+		Quit method kFalse
+	End If
+End If
+
+If pcReturnWhat='COUNT'|pcReturnWhat='RESULT'
+	;  good
+Else
+	Quit method kFalse
+End If
+
+Do $cinst.$ImmediateSession(loSession,loStatement) Returns lbImmediateSession
+If lbImmediateSession
+	Do $cinst.$SetSession(loSession,loStatement)
+Else If not(ibGoodConnectionToDb)
+	Quit method kFalse
+End If
+
+Begin statement
+If pcReturnWhat='COUNT'
+	Sta: {select count(*) from (}
+End If
+Sta: {select [$cinst.$selectnames()]}
+If lbIncludeDisplayName
+	Sta: {, null}
+End If
+Sta: {, [lrCustomer.$selectnames()]}
+Sta: {from [$cinst.$servertablenames()]}
+Sta: {join [lrCustomer.$servertablenames()] on FOH_EO_REF = EO_SEQ}
+Sta: {join [lrExtGroupOrgLink.$servertablenames()] on EOL_EO_REF = EO_SEQ and EOL_GO_REF = @[trGroupOrg.GO_SEQ]}
+Sta: {where FOH_GO_REF = @[trGroupOrg.GO_SEQ]}
+If pnEO_SEQ<>0
+	Sta: {and EO_SEQ = @[pnEO_SEQ]}
+End If
+If pdFrom>dat('1 JAN 2010')&pdTo>=pdFrom
+	Sta: {and FOH_DATE between @[pdFrom] and  @[pdTo]}
+End If
+If pcText<>''
+	Switch upp(pcColumn)
+		Case 'N'     ;; name
+			Sta: {and EO_NAME ilike @[pcText]}
+		Case 'A'     ;; address - bill or ship
+			Sta: {and  (  EO_ADDR_BILL ilike @[pcText]}
+			Sta: {or       EO_ADDR_SHIP ilike @[pcText]   )}
+		Case 'C'
+			Sta: {and  EOL_FINACCT_CUID ilike @[pcText]}
+		Case 'E'
+			Sta: {and   EO_EMAIL ilike @[pcText]}
+		Case 'I'
+			Sta: {and  EO_INSTRUCTIONS ilike @[pcText]}
+		Case 'O'
+			Sta: {and  EO_CONTACT ilike @[pcText]}
+		Case 'M'
+			Sta: {and  EO_COMMENT ilike @[pcText]}
+			
+		Case ''     ;; all
+			Sta: {and ( EO_NAME ilike @[pcText]}
+			Sta: {or      EO_ADDR_BILL ilike @[pcText]}
+			Sta: {or      EO_ADDR_SHIP ilike @[pcText]}
+			Sta: {or      EOL_FINACCT_CUID ilike @[pcText]}
+			Sta: {or      EO_EMAIL ilike @[pcText]}
+			Sta: {or      EO_INSTRUCTIONS ilike @[pcText]}
+			Sta: {or      EO_CONTACT ilike @[pcText]}
+			Sta: {or      EO_COMMENT ilike @[pcText]}
+			If lnInteger<>0
+				Sta: {or      FOH_INV_NO = @[lnInteger]}
+			End If
+			Sta: {)}
+		Default
+			
+	End Switch
+End If
+If pcReturnWhat='COUNT'
+	;  PG requires an alias
+	Sta: {) as record_count}
+End If
+End statement
+
+If pcReturnWhat='COUNT'
+	Do $cinst.$executesqlandfetchinto(lnCount) Returns lbOk
+Else
+	Do $cinst.$executesqlandfetch() Returns lbOk
+End If
+
+If lbImmediateSession
+	Do $cinst.$SetSession(#NULL,#NULL,kTrue)
+End If
+
+If pcReturnWhat='COUNT'
+	Quit method lnCount
+Else
+	Quit method lbOk
+End If

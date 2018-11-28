@@ -1,0 +1,124 @@
+If ilUserGroups.$line>0     ;; the list object willl register a double click without a line being selected
+	Do $validUser(ilUserGroups.GO_SEQ)     ;; method in rtBusinessApp:  trGroupOrg  tlPermissions tlAuthorisedForms
+	
+	Calculate ilAuthorisedForms as tlAuthorisedForms
+	Do ilAuthorisedForms.$search($ref.visible=0,1,0,1,0)
+	Do ilAuthorisedForms.$remove(kListDeleteSelected)
+	
+	;  now we can reset the task timeout to the org specific value
+	Do $cinst.$setTimeout(kTrue)
+	
+	;  form colours may be overloaded so we get them again now we have an Organisation
+	Do $getFormColours()     ;; trFormColours
+	
+	;  fetch the company specific logo
+	;  a logo may have already been fetched from sysReferenceGlobal
+	;  We offer the user the change to apply a company specific GIF here.
+	;  Calculate lcPath as mid($clib().$pathname,1,rpos(sys(9),$clib().$pathname))
+	;
+	Do toValues.$initInherited('IMAGES','LOGO_POST_LOGIN') Returns lrReference
+	If lrReference.RFO_SEQ>0
+		Calculate tConstants.companyLogo as lrReference.RFO_BIN
+	Else
+		;  Do loFileOps.$openfile(con(lcPath,'myEcoCost_logo_white_text.gif'))
+		;  Do loFileOps.$readfile(tConstants.companyLogo) Returns lbOK
+		;  Do loFileOps.$closefile()
+	End If
+	;  Calculate $cinst.ipictLogo as tConstants.companyLogo
+	
+	Do toValues.$initInherited('IMAGES','LOGO_TOP_LEFT') Returns lrReference
+	If lrReference.RFO_SEQ>0
+		Calculate tConstants.topLeft as lrReference.RFO_BIN
+	Else
+		Calculate tConstants.topLeft as #NULL
+	End If
+	Calculate ipictTopLeft as tConstants.topLeft
+	
+	Do toValues.$initInherited('IMAGES','LOGO_TOP_RIGHT') Returns lrReference
+	If lrReference.RFO_SEQ>0
+		Calculate tConstants.topRight as lrReference.RFO_BIN
+	Else
+		Calculate tConstants.topRight as #NULL
+	End If
+	Calculate ipictTopRight as tConstants.topRight
+	
+	Do toValues.$initInherited('IMAGES','TOP_BANNER') Returns lrReference
+	If lrReference.RFO_SEQ>0
+		Calculate tConstants.topBanner as lrReference.RFO_BIN
+	Else
+		;  Do loFileOps.$openfile(con(lcPath,'myEcoCost_canvas_horizontal.jpg'))
+		;  Do loFileOps.$readfile(tConstants.topBanner) Returns lbOK
+		;  Do loFileOps.$closefile()
+	End If
+	
+	;  Calculate $cinst.ipictBanner as tConstants.topBanner
+	;  Calculate $cinst.ipictLogo as tConstants.companyLogo
+	
+	Calculate ipictTopLeft as tConstants.topLeft
+	Calculate ipictTopRight as tConstants.topRight
+	Calculate $cinst.$objs.ipictTopLeft.$visible as binlength(ipictTopLeft)>0
+	Calculate $cinst.$objs.ipictTopRight.$visible as binlength(ipictTopRight)>0
+	Calculate $cinst.$objs.app_navigation_area.$visible as kTrue
+	Calculate $cinst.$objs.app_navigation_area.$objs.app_navigation_bar.$visible as binlength(tConstants.topBanner)>0
+	
+	Do $cinst.$showObjsPostLogin()
+	Do $cinst.$setFormColours()
+	
+	;  for OmnisWorld we want to see activity stats
+	;  sDelegates  sDGstatusLog sDietRequests  sfinInvoiceOutH  sMembership  sPAX  sPaymentsIn  sPerson  sTopicConferenceLink  sTopicPersonLink  sTopics  sTravelPlans
+	;  select count on each table where MWHEN = CWHEN for insert and MWHEN <> CWHEN for updates  where MWHEN is in date range
+	Do ilActivity.$cols.$add('tableName',kCharacter,kSimplechar,100)
+	Do ilActivity.$cols.$add('countInsertTotal',kInteger,k32bitint)
+	Do ilActivity.$cols.$add('countUpdateTotal',kInteger,k32bitint)
+	For lnCountCols from 1 to 8 step 1
+		Do ilActivity.$cols.$add(con('countInsert',lnCountCols),kInteger,k32bitint)
+		Do ilActivity.$cols.$add(con('countUpdate',lnCountCols),kInteger,k32bitint)
+	End For
+	
+	;  some application specific code in a generic class     ;; be careful!  This could set a bad precedent.
+	;  2016-10-26 especially when the code fails and the app stops working!!!
+	;  If upp(trGroupOrg.GO_NAME_SHORT)='OMNISWORLD'&tlOpenConferences.$line>0
+	;  Do method getCounts ('tDelegates','Delegates',con('DG_CF_REF=',tlOpenConferences.CF_SEQ))     ;; ilActivity
+	;  Do method getCounts ('tPAX','PAX',con('DG_CF_REF=',tlOpenConferences.CF_SEQ),'tDelegates')
+	;  Do method getCounts ('tTravelPlans','Travel plans',con('DG_CF_REF=',tlOpenConferences.CF_SEQ),'tDelegates')
+	;  Do method getCounts ('tPaymentsIn','Payments in',con('DG_CF_REF=',tlOpenConferences.CF_SEQ),'tDelegates')
+	;  Do method getCounts ('tTopicConferenceLink','Topics to conference',con('TPF_CF_REF=',tlOpenConferences.CF_SEQ))
+	;  Do method getCounts ('tDGstatusLog','DG status change',con('DG_CF_REF=',tlOpenConferences.CF_SEQ),'tDelegates')
+	;
+	;  Do method getSents (con('DG_CF_REF=',tlOpenConferences.CF_SEQ))
+	;  only show activity - not inactivity
+	;  Calculate ilActivity.$line as 0
+	;  While $Loop(ilActivity)
+	;  If ilActivity.tableName<>''&ilActivity.countInsertTotal=0&ilActivity.countUpdateTotal=0
+	;  Calculate ilActivity.[ilActivity.$line].$selected as kTrue
+	;  End If
+	;  End While
+	;  Do ilActivity.$remove(kListDeleteSelected)
+	;
+	;  Calculate lcDateFormat as 'D:V D/M'
+	;  Calculate lcDateFormat as 'D:V d'
+	;  Calculate $cinst.$objs.ilActivity.$objs.label_col1.$text as jst(#D-7,lcDateFormat)
+	;  Calculate $cinst.$objs.ilActivity.$objs.label_col2.$text as jst(#D-6,lcDateFormat)
+	;  Calculate $cinst.$objs.ilActivity.$objs.label_col3.$text as jst(#D-5,lcDateFormat)
+	;  Calculate $cinst.$objs.ilActivity.$objs.label_col4.$text as jst(#D-4,lcDateFormat)
+	;  Calculate $cinst.$objs.ilActivity.$objs.label_col5.$text as jst(#D-3,lcDateFormat)
+	;  Calculate $cinst.$objs.ilActivity.$objs.label_col6.$text as jst(#D-2,lcDateFormat)
+	;  Calculate $cinst.$objs.ilActivity.$objs.label_col7.$text as 'yesterday'
+	;  Calculate $cinst.$objs.ilActivity.$objs.label_col8.$text as 'today'
+	;
+	;  Calculate $cinst.$objs.ilActivity.$visible as ilActivity.$linecount>0
+	;  End If
+	
+	If upp(trGroupOrg.GO_NAME_SHORT)='TIK'
+		;  always go to work ledger entry form by default
+		Do ilAuthorisedForms.$search($ref.code='FORM_HRS',1,0,0,0) Returns lbOK
+		If lbOK
+			Do $cinst.$mainMenuSelected()
+		Else
+			Do $cinst.$objs.PagedPane.$currentpage.$assign(cnPageBlank)
+		End If
+	Else
+		Do $cinst.$objs.PagedPane.$currentpage.$assign(cnPageBlank)
+	End If
+	Do $ctask.$installMenuForm()
+End If

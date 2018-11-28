@@ -1,0 +1,199 @@
+Calculate $cinst.$objs.PagedPane_REPORTS.$objs.inPrintDestination.$visible as ilDisplayRecords.reportCode<>''
+;  Do irReportAttributes.$cols.$findname('output_pdf') Returns liColRef
+;  If liColRef
+;  Calculate $cinst.$objs.PagedPane_REPORTS.$objs.inPrintDestination.$maxvalue as pick(irReportAttributes.output_pdf>0,1,2)
+;  End If
+Do irReportAttributes.$cols.$findname('output_text') Returns liColRef
+If liColRef
+	Calculate lnMaxValue as pick(irReportAttributes.output_text>0,1,2)
+	Calculate $cinst.$objs.PagedPane_REPORTS.$objs.inPrintDestination.$text as 'report in form,report in new window,output to text'     ;; ### stb
+	Calculate $cinst.$objs.PagedPane_REPORTS.$objs.inPrintDestination.$minvalue as 0
+	Calculate $cinst.$objs.PagedPane_REPORTS.$objs.inPrintDestination.$maxvalue as lnMaxValue
+	Calculate inPrintDestination as 1     ;; default
+End If
+
+Do irReportAttributes.$cols.$findname('output_chart') Returns liColRef
+If liColRef
+	Calculate lnMaxValue as 10
+	Calculate $cinst.$objs.PagedPane_REPORTS.$objs.inPrintDestination.$text as 'chart in form,chart in new window'     ;; ### stb
+	Calculate $cinst.$objs.PagedPane_REPORTS.$objs.inPrintDestination.$minvalue as 10
+	Calculate $cinst.$objs.PagedPane_REPORTS.$objs.inPrintDestination.$maxvalue as lnMaxValue
+	Calculate inPrintDestination as 10     ;; default
+End If
+
+;  filter list
+Calculate $cinst.$objs.PagedPane_REPORTS.$objs.label_ilFilterOptions.$visible as ilFilterOptions.$linecount
+Calculate $cinst.$objs.PagedPane_REPORTS.$objs.label_ilFilterOptions.$tooltip as irReportAttributes.filterlist_tt
+Calculate $cinst.$objs.PagedPane_REPORTS.$objs.ilFilterOptions.$visible as ilFilterOptions.$linecount
+Calculate $cinst.$objs.PagedPane_REPORTS.$objs.ilFilterOptions.$tooltip as irReportAttributes.filterlist_tt
+Do irReportAttributes.$cols.$findname('filterlist_column') Returns liColRef
+If liColRef
+	Do ilFilterOptions.$cols.$findname(irReportAttributes.filterlist_column) Returns liColRef
+	If liColRef
+		Calculate $cinst.$objs.PagedPane_REPORTS.$objs.ilFilterOptions.$listcolumn as liColRef.$ident
+	Else
+		Calculate $cinst.$objs.PagedPane_REPORTS.$objs.ilFilterOptions.$listcolumn as 2     ;; assuming list is structured code,desc
+	End If
+End If
+Do irReportAttributes.$cols.$findname('filterlist_default') Returns liColRef
+If liColRef
+	Calculate ilFilterOptions.$line as irReportAttributes.filterlist_default
+End If
+;  sort list
+Calculate $cinst.$objs.PagedPane_REPORTS.$objs.label_ilSortOptions.$visible as ilSortOptions.$linecount
+Calculate $cinst.$objs.PagedPane_REPORTS.$objs.label_ilSortOptions.$tooltip as irReportAttributes.sortlist_tt
+Calculate $cinst.$objs.PagedPane_REPORTS.$objs.ilSortOptions.$visible as ilSortOptions.$linecount
+Calculate $cinst.$objs.PagedPane_REPORTS.$objs.ilSortOptions.$tooltip as irReportAttributes.sortlist_tt
+Do irReportAttributes.$cols.$findname('sortlist_column') Returns liColRef
+If liColRef
+	Do ilFilterOptions.$cols.$findname(irReportAttributes.sortlist_column) Returns liColRef
+	If liColRef
+		Calculate $cinst.$objs.PagedPane_REPORTS.$objs.ilSortOptions.$listcolumn as liColRef.$ident
+	Else
+		Calculate $cinst.$objs.PagedPane_REPORTS.$objs.ilSortOptions.$listcolumn as 2     ;; assuming list is structured code,desc
+	End If
+End If
+Do irReportAttributes.$cols.$findname('sortlist_default') Returns liColRef
+If liColRef
+	Calculate ilSortOptions.$line as irReportAttributes.sortlist_default
+End If
+
+;  pbPrint
+Do irReportAttributes.$cols.$findname('print_lbl') Returns liColRef
+If liColRef
+	Calculate $cinst.$objs.pbPrint.$text as irReportAttributes.print_lbl
+End If
+
+;  date from
+Do irReportAttributes.$cols.$findname('datefrom_lbl') Returns liColRef
+If liColRef
+	Calculate $cinst.$objs.PagedPane_REPORTS.$objs.label_datefrom.$visible as irReportAttributes.datefrom_lbl<>''
+	Calculate $cinst.$objs.PagedPane_REPORTS.$objs.label_datefrom.$text as irReportAttributes.datefrom_lbl
+	Calculate $cinst.$objs.PagedPane_REPORTS.$objs.label_datefrom.$tooltip as irReportAttributes.datefrom_tt
+	Calculate $cinst.$objs.PagedPane_REPORTS.$objs.idFrom.$visible as irReportAttributes.datefrom_lbl<>''
+	Calculate $cinst.$objs.PagedPane_REPORTS.$objs.idFrom.$tooltip as irReportAttributes.datefrom_tt
+	Calculate idFrom as dat(irReportAttributes.datefrom_default)
+End If
+;  date to
+Do irReportAttributes.$cols.$findname('dateto_lbl') Returns liColRef
+If liColRef
+	Calculate $cinst.$objs.PagedPane_REPORTS.$objs.label_dateto.$visible as irReportAttributes.dateto_lbl<>''
+	Calculate $cinst.$objs.PagedPane_REPORTS.$objs.label_dateto.$text as irReportAttributes.dateto_lbl
+	Calculate $cinst.$objs.PagedPane_REPORTS.$objs.label_dateto.$tooltip as irReportAttributes.dateto_tt
+	Calculate $cinst.$objs.PagedPane_REPORTS.$objs.idTo.$visible as irReportAttributes.dateto_lbl<>''
+	Calculate $cinst.$objs.PagedPane_REPORTS.$objs.idTo.$tooltip as irReportAttributes.dateto_tt
+	Calculate idTo as dat(irReportAttributes.dateto_default)
+End If
+;  integer 1
+Do irReportAttributes.$cols.$findname('integer1_lbl') Returns liColRef
+If liColRef
+	Calculate $cinst.$objs.PagedPane_REPORTS.$objs.label_integer1.$visible as irReportAttributes.integer1_lbl<>''
+	Calculate $cinst.$objs.PagedPane_REPORTS.$objs.label_integer1.$text as irReportAttributes.integer1_lbl
+	Calculate $cinst.$objs.PagedPane_REPORTS.$objs.label_integer1.$tooltip as irReportAttributes.integer1_tt
+	Calculate $cinst.$objs.PagedPane_REPORTS.$objs.inInteger1.$visible as irReportAttributes.integer1_lbl<>''
+	Calculate $cinst.$objs.PagedPane_REPORTS.$objs.inInteger1.$tooltip as irReportAttributes.integer1_tt
+	Calculate inInteger1 as irReportAttributes.integer1_default
+End If
+;  integer 2
+Do irReportAttributes.$cols.$findname('integer2_lbl') Returns liColRef
+If liColRef
+	Calculate $cinst.$objs.PagedPane_REPORTS.$objs.label_integer2.$visible as irReportAttributes.integer2_lbl<>''
+	Calculate $cinst.$objs.PagedPane_REPORTS.$objs.label_integer2.$text as irReportAttributes.integer2_lbl
+	Calculate $cinst.$objs.PagedPane_REPORTS.$objs.label_integer2.$tooltip as irReportAttributes.integer2_tt
+	Calculate $cinst.$objs.PagedPane_REPORTS.$objs.inInteger2.$visible as irReportAttributes.integer2_lbl<>''
+	Calculate $cinst.$objs.PagedPane_REPORTS.$objs.inInteger2.$tooltip as irReportAttributes.integer2_tt
+	Calculate inInteger2 as irReportAttributes.integer2_default
+End If
+;  real 1
+Do irReportAttributes.$cols.$findname('real1_lbl') Returns liColRef
+If liColRef
+	Calculate $cinst.$objs.PagedPane_REPORTS.$objs.label_real1.$visible as irReportAttributes.real1_lbl<>''
+	Calculate $cinst.$objs.PagedPane_REPORTS.$objs.label_real1.$text as irReportAttributes.real1_lbl
+	Calculate $cinst.$objs.PagedPane_REPORTS.$objs.label_real1.$tooltip as irReportAttributes.real1_tt
+	Calculate $cinst.$objs.PagedPane_REPORTS.$objs.inreal1.$visible as irReportAttributes.real1_lbl<>''
+	Calculate $cinst.$objs.PagedPane_REPORTS.$objs.inreal1.$tooltip as irReportAttributes.real1_tt
+	Calculate inReal1 as irReportAttributes.real1_default
+End If
+;  real 2
+Do irReportAttributes.$cols.$findname('real2_lbl') Returns liColRef
+If liColRef
+	Calculate $cinst.$objs.PagedPane_REPORTS.$objs.label_real2.$visible as irReportAttributes.real2_lbl<>''
+	Calculate $cinst.$objs.PagedPane_REPORTS.$objs.label_real2.$text as irReportAttributes.real2_lbl
+	Calculate $cinst.$objs.PagedPane_REPORTS.$objs.label_real2.$tooltip as irReportAttributes.real2_tt
+	Calculate $cinst.$objs.PagedPane_REPORTS.$objs.inReal2.$visible as irReportAttributes.real2_lbl<>''
+	Calculate $cinst.$objs.PagedPane_REPORTS.$objs.inReal2.$tooltip as irReportAttributes.real2_tt
+	Calculate inReal2 as irReportAttributes.real2_default
+End If
+;  checkbox 1
+Do irReportAttributes.$cols.$findname('checkbox1_lbl') Returns liColRef
+If liColRef
+	Calculate $cinst.$objs.PagedPane_REPORTS.$objs.checkbox1.$visible as irReportAttributes.checkbox1_lbl<>''
+	Calculate $cinst.$objs.PagedPane_REPORTS.$objs.checkbox1.$tooltip as irReportAttributes.checkbox1_tt
+	Calculate $cinst.$objs.PagedPane_REPORTS.$objs.checkbox1.$text as irReportAttributes.checkbox1_lbl
+	Calculate ibCheckbox1 as irReportAttributes.checkbox1_default
+End If
+;  checkbox 2
+Do irReportAttributes.$cols.$findname('checkbox2_lbl') Returns liColRef
+If liColRef
+	Calculate $cinst.$objs.PagedPane_REPORTS.$objs.checkbox2.$visible as irReportAttributes.checkbox2_lbl<>''
+	Calculate $cinst.$objs.PagedPane_REPORTS.$objs.checkbox2.$tooltip as irReportAttributes.checkbox2_tt
+	Calculate $cinst.$objs.PagedPane_REPORTS.$objs.checkbox2.$text as irReportAttributes.checkbox2_lbl
+	Calculate ibCheckbox2 as irReportAttributes.checkbox2_default
+End If
+;  checkbox 3
+Do irReportAttributes.$cols.$findname('checkbox3_lbl') Returns liColRef
+If liColRef
+	Calculate $cinst.$objs.PagedPane_REPORTS.$objs.checkbox3.$visible as irReportAttributes.checkbox3_lbl<>''
+	Calculate $cinst.$objs.PagedPane_REPORTS.$objs.checkbox3.$tooltip as irReportAttributes.checkbox3_tt
+	Calculate $cinst.$objs.PagedPane_REPORTS.$objs.checkbox3.$text as irReportAttributes.checkbox3_lbl
+	Calculate ibCheckbox3 as irReportAttributes.checkbox3_default
+End If
+;  select list
+Do irReportAttributes.$cols.$findname('selectlist_lbl') Returns liColRef
+If liColRef     ;; ilSelectList
+	Calculate $cinst.$objs.PagedPane_REPORTS.$objs.label_selectlist.$visible as irReportAttributes.selectlist_lbl<>''
+	Calculate $cinst.$objs.PagedPane_REPORTS.$objs.label_selectlist.$text as irReportAttributes.selectlist_lbl
+	Calculate $cinst.$objs.PagedPane_REPORTS.$objs.label_selectlist.$tooltip as irReportAttributes.selectlist_tt
+	Calculate $cinst.$objs.PagedPane_REPORTS.$objs.ilSelectList.$visible as irReportAttributes.selectlist_lbl<>''
+	Calculate $cinst.$objs.PagedPane_REPORTS.$objs.ilSelectList.$tooltip as irReportAttributes.selectlist_tt
+	
+	Do irReportAttributes.$cols.$findname('selectlist_column') Returns liColRef
+	If liColRef
+		Do ilSelectList.$cols.$findname(irReportAttributes.selectlist_column) Returns liColRef
+		If liColRef
+			Calculate $cinst.$objs.PagedPane_REPORTS.$objs.ilSelectList.$listcolumn as liColRef.$ident
+			;  we don't know if we are using ilGroupBy yet but if we do, it will use same listcolumn for display
+			Calculate $cinst.$objs.PagedPane_REPORTS.$objs.ilGroupBy.$listcolumn as liColRef.$ident
+		Else
+			Calculate $cinst.$objs.PagedPane_REPORTS.$objs.ilSelectList.$listcolumn as 2     ;; same assumption as for filter list
+		End If
+	End If
+	
+	Do irReportAttributes.$cols.$findname('selectlist_ischecklist') Returns liColRef
+	If liColRef
+		Calculate $cinst.$objs.PagedPane_REPORTS.$objs.ilSelectList.$ischecklist as irReportAttributes.selectlist_ischecklist
+	End If
+	Do irReportAttributes.$cols.$findname('selectlist_max') Returns liColRef
+	If liColRef
+		Calculate inSelectListMax as irReportAttributes.selectlist_max
+	End If
+End If
+;  group by list
+Do irReportAttributes.$cols.$findname('groupbylist_lbl') Returns liColRef
+If liColRef     ;; ilGroupBy
+	Calculate $cinst.$objs.PagedPane_REPORTS.$objs.label_groupbylist.$visible as irReportAttributes.groupbylist_lbl<>''
+	Calculate $cinst.$objs.PagedPane_REPORTS.$objs.label_groupbylist.$text as irReportAttributes.groupbylist_lbl
+	Calculate $cinst.$objs.PagedPane_REPORTS.$objs.label_groupbylist.$tooltip as irReportAttributes.groupbylist_tt
+	Calculate $cinst.$objs.PagedPane_REPORTS.$objs.ilGroupBy.$visible as irReportAttributes.groupbylist_lbl<>''
+	Calculate $cinst.$objs.PagedPane_REPORTS.$objs.ilGroupBy.$tooltip as irReportAttributes.groupbylist_tt
+	
+	Calculate ilGroupBy as ilSelectList
+	Do ilGroupBy.$clear()
+	
+	Calculate ilSelectList.$smartlist as kTrue     ;; GRS setting this for Emissions chart, so we can filter the list based upon ilfilterOptions selection
+	
+	Do irReportAttributes.$cols.$findname('groupbylist_max') Returns liColRef
+	If liColRef
+		Calculate inSelectListMax as irReportAttributes.groupbylist_max
+	End If
+End If

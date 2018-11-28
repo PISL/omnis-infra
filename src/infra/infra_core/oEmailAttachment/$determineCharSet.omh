@@ -1,0 +1,6 @@
+If iMIMEtypeList.type='text/plain'
+	Do iCharsetList.$search($ref.iCharset=nam(kUniTypeUTF8),1,0,0,0) Returns lbFound
+Else
+	Calculate iCharsetList.$line as 1     ;; No charset
+End If
+Quit method iCharsetList.iCharsetId

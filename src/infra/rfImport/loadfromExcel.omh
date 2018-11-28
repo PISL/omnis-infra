@@ -1,0 +1,53 @@
+;  called from the import button to reload into ilContent when viewing fewer rows than are in the spreadsheet
+Do ilContent.$clear()
+;  Breakpoint
+;  $extractlist is rounding all numeric values to integers     ;; ### 2018-05-23
+;  so for now we have to read each cell's $value
+;  Calculate ilContent as ioTMexcelBook.$extractlist(kXLExtractNoHeader,ilContent)
+
+Do toValues.$initInherited('IMPORT','MAXROWSVIEW') Returns lrReference
+If lrReference.RFO_SEQ>0
+	Calculate lnMaxImportRows as lrReference.RFO_INT
+Else
+	Calculate lnMaxImportRows as 25
+End If
+
+;  this is the legacy code that reads each cell in the worksheet
+Calculate lxlSheet as ioTMexcelBook.$getsheet(1)     ;; kXLExtractCustomDefine,iList
+Calculate lxlLastColumn as lxlSheet.$lastcol()-1
+Calculate lxlLastRow as lxlSheet().$lastrow     ;; this number seems to be 1 more than we are expecting in Omnis terms
+
+If lnMaxImportRows<lxlLastRow
+	Calculate ibReimportExcel as kTrue
+	Calculate icTotalRows as con('total row count: ',lxlLastRow)
+End If
+Calculate $cinst.$objs.icTotalRows.$visible as lnMaxImportRows<lxlLastRow
+
+For inDataColCount from 1 to lxlLastColumn step 1
+	Do ilContent.$cols.$add(con('col',inDataColCount),kCharacter,kSimplechar,10000)
+End For
+
+
+;  now extract the data from the sheet into the Omnis list
+Calculate lnRowCount as 0
+Repeat
+	Calculate lnRowCount as lnRowCount+1
+	Do ilContent.$add() Returns lrefLine
+	Calculate lbActualContentExists as kFalse
+	
+	For inDataColCount from 1 to lxlLastColumn step 1
+		Calculate lxlCell as lxlSheet.$cell(lnRowCount,inDataColCount)
+		Calculate lcValue as trim(lxlCell.$value)
+		Calculate lrefLine.col[inDataColCount] as lcValue
+		If lcValue<>''
+			Calculate lbActualContentExists as kTrue
+		End If
+	End For
+	If not(lbActualContentExists)
+		;  a row has been added that has no content
+		;  if this is the last row being processed, discard it
+		;  If lnRowCount=lxlLastRow
+		Do ilContent.$remove(lrefLine)
+		;  End If
+	End If
+Until lnRowCount>=min(lxlLastRow,lnMaxImportRows)

@@ -1,0 +1,1 @@
+Do $cinst.$warnDelete(irCurrentRecord.PER_LABEL,'$deleteProceed')

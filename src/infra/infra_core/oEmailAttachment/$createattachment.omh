@@ -1,0 +1,17 @@
+Calculate icErrorMessage as ''
+Calculate pBodyPartID as 0
+If len(iPath)=0
+	;  This attachment is not required
+	Quit method kTrue
+End If
+Switch plAttachAs.iAttachAsId
+	Case cAttachAsFile
+		Quit method $cinst.$createattachmentasfile(pMessage,pBodyPartID,plAttachments)
+	Case cAttachAsCharacter
+		Quit method $cinst.$createattachmentascharacter(pMessage,pBodyPartID,plAttachments)
+	Case cAttachAsBinary
+		Quit method $cinst.$createattachmentasbinary(pMessage,pBodyPartID,plAttachments)
+End Switch
+;  OK message  {Invalid attach type ([plAttachAs.iAttachAsId]) - should never get to here}
+Calculate icErrorMessage as con('Invalid attach type ',plAttachAs.iAttachAsId,' - should never get to here')
+Quit method kFalse

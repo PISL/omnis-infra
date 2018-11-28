@@ -1,0 +1,13 @@
+Calculate icSearch as ''
+
+If ilSearch2.EO_SEQ>0
+	Do ilDisplayRecords.$fetchSupplierProducts(ilSearch2.EO_SEQ,#NULL,kFalse,kFalse)
+Else
+	Do ilDisplayRecords.$fetchOurProducts()
+End If
+
+Do irCurrentRecord.$clear()
+Do irInternalData.$clear()
+Do irExtOrg.$clear()
+
+Do $cinst.$behaviour()

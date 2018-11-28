@@ -1,0 +1,18 @@
+On evClick
+	If icDetailMode<>''
+		;  edit detail and insert detail are the same
+		Do irCurrentDetail.$validation(kTrue) Returns lbProceed
+		If not(lbProceed)
+			Calculate icDisplayMessage as irCurrentDetail.icValidationMessage
+			Quit event handler (Discard event)
+		Else
+			Do irCurrentDetail.$calculatedValues()
+			Do ilDetails.$assignrow(irCurrentDetail)
+			Do method calculateTotals
+		End If
+	End If
+	
+	Calculate $cinst.$objs.PagedPane.$currentpage as cnTabHeader     ;; was cnTabLines but as of 10 MAR 2016 lines are on tab cnTabHeader
+	Calculate inCurrentTab as cnTabHeader
+	
+	Do $cinst.$behaviour()

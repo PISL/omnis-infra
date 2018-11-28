@@ -1,0 +1,5 @@
+On evAfter
+	;  Calculate irCurrentRecord.Price as irCurrentRecord.FOD_QTY*irCurrentRecord.FOD_UNIT_PRICE
+	;  Calculate irCurrentRecord.Tax as irCurrentRecord.FOD_QTY*irCurrentRecord.FOD_UNIT_TAX
+	;  Calculate irCurrentRecord.Total as irCurrentRecord.Price+irCurrentRecord.Tax
+	Do irCurrentDetail.$calculatedValues()

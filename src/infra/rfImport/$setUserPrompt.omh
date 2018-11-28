@@ -1,0 +1,5 @@
+If ibExistingTemplate
+	Do toStrings.$StringTableEntry('MSG_SAVESETTINGSCHANGED',icUserPrompt,'The template has been changed.  If you wish to save it, click "ok".  To save it under a different name, change it here first.')
+Else
+	Do toStrings.$StringTableEntry('MSG_SAVESETTINGS',icUserPrompt,'If you wish to save your settings, please enter a name for the template and click "ok"')
+End If

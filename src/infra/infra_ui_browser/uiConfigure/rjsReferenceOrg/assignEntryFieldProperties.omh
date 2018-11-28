@@ -1,0 +1,70 @@
+If $cinst.icMode='E'|$cinst.icMode='I'     ;; We are creating or editing a Reference/Lookup record so override the defaults
+	Calculate lnlinestyle as 2
+	Calculate lrFieldAttributes as OJSON.$jsontolistorrow(trFormColours.FIELDCOLOURS)
+	Calculate lnbordercolour as eval(lrFieldAttributes.mandatory)
+	Calculate lneffect as kJSborderPlain
+	Calculate lnEnterable as eval(lrFieldAttributes.enterable)
+	Calculate lnUnique as eval(lrFieldAttributes.unique)
+End If
+
+;  set attributes for Unique and Mandatory fields
+If icMode='I'|icMode=''     ;; CLASS and VALUE are enterable during Insert only
+	;  Calculate $cinst.$objs.UniqueBox.$bordercolor as lnbordercolour
+	;  Calculate $cinst.$objs.UniqueBox.$backcolor as lnUnique
+	;  Calculate $cinst.$objs.UniqueBox.$backalpha as pick($cinst.icMode='',255,0)
+	
+	Calculate $cinst.$objs.RFO_CLASS.$linestyle as lnlinestyle
+	Calculate $cinst.$objs.RFO_CLASS.$bordercolor as lnbordercolour
+	Calculate $cinst.$objs.RFO_CLASS.$effect as lneffect
+	Calculate $cinst.$objs.RFO_CLASS.$backcolor as lnUnique
+	Calculate $cinst.$objs.RFO_CLASS.$backalpha as pick(icMode='',255,0)
+	
+	Calculate $cinst.$objs.RFO_VALUE.$linestyle as lnlinestyle
+	Calculate $cinst.$objs.RFO_VALUE.$bordercolor as lnbordercolour
+	Calculate $cinst.$objs.RFO_VALUE.$effect as lneffect
+	Calculate $cinst.$objs.RFO_VALUE.$backcolor as lnUnique
+	Calculate $cinst.$objs.RFO_VALUE.$backalpha as pick(icMode='',255,0)
+End If
+
+Calculate $cinst.$objs.RFO_DESC.$linestyle as lnlinestyle
+Calculate $cinst.$objs.RFO_DESC.$bordercolor as lnbordercolour
+Calculate $cinst.$objs.RFO_DESC.$effect as lneffect
+Calculate $cinst.$objs.RFO_DESC.$backcolor as lnEnterable
+Calculate $cinst.$objs.RFO_DESC.$backalpha as pick(icMode='',255,0)
+
+;  Calculate $cinst.$objs.RFO_EFFECTIVE.$linestyle as lnlinestyle
+;  Calculate $cinst.$objs.RFO_EFFECTIVE.$bordercolor as lnbordercolour
+;  Calculate $cinst.$objs.RFO_EFFECTIVE.$effect as lneffect
+
+;  now set Enterable on the remainder
+Calculate $cinst.$objs.RFO_ORDER.$backcolor as lnEnterable
+Calculate $cinst.$objs.RFO_ORDER.$backalpha as pick(icMode='',255,0)
+
+Calculate $cinst.$objs.RFO_ACTIVE.$backcolor as lnEnterable
+;  Calculate $cinst.$objs.RFO_ACTIVE.$backalpha as pick(icMode='',255,0)
+Calculate $cinst.$objs.RFO_INHERIT.$backcolor as lnEnterable
+;  Calculate $cinst.$objs.RFO_INHERIT.$backalpha as pick(icMode='',255,0)
+
+Calculate $cinst.$objs.RFO_EFFECTIVE.$backcolor as lnEnterable
+Calculate $cinst.$objs.RFO_EFFECTIVE.$backalpha as pick(icMode='',255,0)
+
+Calculate $cinst.$objs.RFO_EXPIRES.$backcolor as lnEnterable
+Calculate $cinst.$objs.RFO_EXPIRES.$backalpha as pick(icMode='',255,0)
+
+Calculate $cinst.$objs.RFO_CHAR.$backcolor as lnEnterable
+Calculate $cinst.$objs.RFO_CHAR.$backalpha as pick(icMode='',255,0)
+
+Calculate $cinst.$objs.RFO_JSON.$backcolor as lnEnterable
+Calculate $cinst.$objs.RFO_JSON.$backalpha as pick(icMode='',255,0)
+
+Calculate $cinst.$objs.RFO_INT.$backcolor as lnEnterable
+Calculate $cinst.$objs.RFO_INT.$backalpha as pick(icMode='',255,0)
+
+Calculate $cinst.$objs.RFO_NUMBER.$backcolor as lnEnterable
+Calculate $cinst.$objs.RFO_NUMBER.$backalpha as pick(icMode='',255,0)
+
+Calculate $cinst.$objs.RFO_DATE.$backcolor as lnEnterable
+Calculate $cinst.$objs.RFO_DATE.$backalpha as pick(icMode='',255,0)
+
+Calculate $cinst.$objs.RFO_BIN.$backcolor as lnEnterable
+Calculate $cinst.$objs.RFO_BIN.$backalpha as pick(icMode='',255,0)

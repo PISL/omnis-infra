@@ -1,0 +1,8 @@
+On evBefore     ;; Event Parameters - pRow ( Itemreference )
+	
+On evAfter     ;; Event Parameters - pClickedField, pClickedWindow, pMenuLine, pCommandNumber, pRow
+	If #MODIFIED
+		If inTimerSeconds>0
+			Do method updateWindowSettings
+		End If
+	End If

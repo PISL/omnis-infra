@@ -1,0 +1,87 @@
+If icMode='E'|icMode='I'     ;; We are creating or editing an Organisation record so override the defaults
+	Calculate lnlinestyle as 2
+	Calculate lrFieldAttributes as OJSON.$jsontolistorrow(trFormColours.FIELDCOLOURS)
+	Calculate lnbordercolour as eval(lrFieldAttributes.mandatory)
+	Calculate lneffect as kJSborderPlain
+	Calculate lnEnterable as eval(lrFieldAttributes.enterable)
+	Calculate lnUnique as eval(lrFieldAttributes.unique)
+End If
+
+Calculate $cinst.$objs.GO_NAME_FULL.$linestyle as lnlinestyle
+Calculate $cinst.$objs.GO_NAME_FULL.$bordercolor as lnbordercolour
+Calculate $cinst.$objs.GO_NAME_FULL.$effect as lneffect
+Calculate $cinst.$objs.GO_NAME_FULL.$backcolor as lnEnterable
+Calculate $cinst.$objs.GO_NAME_FULL.$backalpha as pick(icMode='',255,0)
+
+Calculate $cinst.$objs.GO_NAME_SHORT.$linestyle as lnlinestyle
+Calculate $cinst.$objs.GO_NAME_SHORT.$bordercolor as lnbordercolour
+Calculate $cinst.$objs.GO_NAME_SHORT.$effect as lneffect
+Calculate $cinst.$objs.GO_NAME_SHORT.$backcolor as lnEnterable
+Calculate $cinst.$objs.GO_NAME_SHORT.$backalpha as pick(icMode='',255,0)
+
+Calculate $cinst.$objs.GO_CURRENCY.$backcolor as lnEnterable
+Calculate $cinst.$objs.GO_CURRENCY.$backalpha as pick(icMode='',255,0)
+
+Calculate $cinst.$objs.GO_COMPANY_NO.$backcolor as lnEnterable
+Calculate $cinst.$objs.GO_COMPANY_NO.$backalpha as pick(icMode='',255,0)
+
+Calculate $cinst.$objs.GO_VAT_NO.$backcolor as lnEnterable
+Calculate $cinst.$objs.GO_VAT_NO.$backalpha as pick(icMode='',255,0)
+
+Calculate $cinst.$objs.GO_ADDR_BUILDING.$backcolor as lnEnterable
+Calculate $cinst.$objs.GO_ADDR_BUILDING.$backalpha as pick(icMode='',255,0)
+
+Calculate $cinst.$objs.GO_ADDR_STREET.$backcolor as lnEnterable
+Calculate $cinst.$objs.GO_ADDR_STREET.$backalpha as pick(icMode='',255,0)
+
+Calculate $cinst.$objs.GO_ADDR_LOCALITY.$backcolor as lnEnterable
+Calculate $cinst.$objs.GO_ADDR_LOCALITY.$backalpha as pick(icMode='',255,0)
+
+Calculate $cinst.$objs.GO_ADDR_TOWN.$backcolor as lnEnterable
+Calculate $cinst.$objs.GO_ADDR_TOWN.$backalpha as pick(icMode='',255,0)
+
+Calculate $cinst.$objs.GO_ADDR_STATE.$backcolor as lnEnterable
+Calculate $cinst.$objs.GO_ADDR_STATE.$backalpha as pick(icMode='',255,0)
+
+Calculate $cinst.$objs.GO_ADDR_POSTCODE.$backcolor as lnEnterable
+Calculate $cinst.$objs.GO_ADDR_POSTCODE.$backalpha as pick(icMode='',255,0)
+
+Calculate $cinst.$objs.GO_ADDR_COUNTRY.$backcolor as lnEnterable
+Calculate $cinst.$objs.GO_ADDR_COUNTRY.$backalpha as pick(icMode='',255,0)
+
+Calculate $cinst.$objs.GO_COMM_PH.$backcolor as lnEnterable
+Calculate $cinst.$objs.GO_COMM_PH.$backalpha as pick(icMode='',255,0)
+
+Calculate $cinst.$objs.GO_COMM_MOB.$backcolor as lnEnterable
+Calculate $cinst.$objs.GO_COMM_MOB.$backalpha as pick(icMode='',255,0)
+
+Calculate $cinst.$objs.GO_COMM_EMAIL.$backcolor as lnEnterable
+Calculate $cinst.$objs.GO_COMM_EMAIL.$backalpha as pick(icMode='',255,0)
+
+Calculate $cinst.$objs.GS_TYPE.$linestyle as lnlinestyle
+Calculate $cinst.$objs.GS_TYPE.$bordercolor as lnbordercolour
+Calculate $cinst.$objs.GS_TYPE.$effect as lneffect
+Calculate $cinst.$objs.GS_TYPE.$backcolor as lnEnterable
+Calculate $cinst.$objs.GS_TYPE.$backalpha as pick(icMode='',255,0)
+
+Calculate $cinst.$objs.GS_DESC_SHORT.$linestyle as lnlinestyle
+Calculate $cinst.$objs.GS_DESC_SHORT.$bordercolor as lnbordercolour
+Calculate $cinst.$objs.GS_DESC_SHORT.$effect as lneffect
+Calculate $cinst.$objs.GS_DESC_SHORT.$backcolor as lnEnterable
+Calculate $cinst.$objs.GS_DESC_SHORT.$backalpha as pick(icMode='',255,0)
+
+Calculate $cinst.$objs.GS_DESC_FULL.$linestyle as lnlinestyle
+Calculate $cinst.$objs.GS_DESC_FULL.$bordercolor as lnbordercolour
+Calculate $cinst.$objs.GS_DESC_FULL.$effect as lneffect
+Calculate $cinst.$objs.GS_DESC_FULL.$backcolor as lnEnterable
+Calculate $cinst.$objs.GS_DESC_FULL.$backalpha as pick(icMode='',255,0)
+
+Calculate $cinst.$objs.GS_ORDER.$linestyle as lnlinestyle
+Calculate $cinst.$objs.GS_ORDER.$bordercolor as lnbordercolour
+Calculate $cinst.$objs.GS_ORDER.$effect as lneffect
+Calculate $cinst.$objs.GS_ORDER.$backcolor as lnEnterable
+Calculate $cinst.$objs.GS_ORDER.$backalpha as pick(icMode='',255,0)
+
+Calculate $cinst.$objs.GS_ACTIVE.$effect as pick(icMode='',lneffect,kJSborderNone)
+Calculate $cinst.$objs.GS_ACTIVE.$backcolor as lnEnterable
+Calculate $cinst.$objs.GS_ACTIVE.$backalpha as pick(icMode='',255,0)

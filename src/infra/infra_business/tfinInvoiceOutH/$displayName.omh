@@ -1,0 +1,1 @@
+Calculate $cinst.DisplayName as con($cinst.FOH_CUST_NAME,': ',$cinst.FOH_INV_NO)

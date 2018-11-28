@@ -1,0 +1,55 @@
+If $cinst.$columnExists(tConstants,"emailDefaults")
+	;  ok
+Else
+	Do tConstants.$cols.$add("emailDefaults",kRow)
+End If
+
+If pbDBconnected
+	If pbPool
+		Do $cinst.$DynamicSession(loSession,loStatement)
+		Do loStatement.$execdirect("select * from infra.initInherited('EM_SRVR_FROM','DEFAULT')")
+		Do loStatement.$fetch(lrReference)
+		Do $ReleaseSession(loSession,loStatement)
+	Else
+		Do pStatement.$execdirect("select * from infra.initInherited('EM_SRVR_FROM','DEFAULT')")
+		Do pStatement.$fetch(lrReference)
+	End If
+End If
+
+If lrReference.RFO_SEQ
+	Do OJSON.$jsontolistorrow(lrReference.RFO_JSON) Returns lrEmailDefaults
+Else
+	;  we either do not have a connection to the database yet or have not set up the default record
+	
+	Do lrEmailDefaults.$cols.$add('server',kCharacter,kSimplechar,100)
+	Do lrEmailDefaults.$cols.$add('loginName',kCharacter,kSimplechar,100)
+	Do lrEmailDefaults.$cols.$add('loginPassword',kCharacter,kSimplechar,100)
+	Do lrEmailDefaults.$cols.$add('debugLog',kInteger,kShortint)     ;; sum of kOW3log... constants
+	Do lrEmailDefaults.$cols.$add('timeout',kInteger,k32bitint)
+	Do lrEmailDefaults.$cols.$add('senderName',kCharacter,kSimplechar,100)
+	Do lrEmailDefaults.$cols.$add('senderAddress',kCharacter,kSimplechar,100)
+	Do lrEmailDefaults.$cols.$add('emailTO',kList)
+	Do lrEmailDefaults.$cols.$add('emailCC',kList)
+	Do lrEmailDefaults.$cols.$add('emailBCC',kList)
+	Do lrEmailDefaults.$cols.$add('priority',kInteger,kShortint)     ;; 1-5
+	Do lrEmailDefaults.$cols.$add('OW3options',kRow)     ;; at 2018-09-20 these are "requireSecure" and "verifyPeer"
+	
+	Calculate lrEmailDefaults.server as "smtp.platformis.net"
+	Calculate lrEmailDefaults.loginName as "support@platformis.net"
+	Calculate lrEmailDefaults.loginPassword as "(aYiX!y5"     ;; ### password ###
+	Calculate lrEmailDefaults.debugLog as 0
+	Calculate lrEmailDefaults.timeout as 30
+	Calculate lrEmailDefaults.senderName as tcCurrentLibrary
+	Calculate lrEmailDefaults.senderAddress as "support@platformis.net"
+	Calculate lrEmailDefaults.emailTO as list(row("stevens@platformis.net"),row("mostyn@platformis.net"))
+	;  Calculate lrEmailDefaults.emailCC as
+	;  Calculate lrEmailDefaults.emailBCC as
+	Calculate lrEmailDefaults.priority as kOW3msgPriorityHigh
+	Do lrOptions.$cols.$add("verifyPeer",kInteger,kShortint)
+	Do lrOptions.$cols.$add("requireSecure",kInteger,kShortint)
+	Calculate lrOptions.requireSecure as 1
+	Calculate lrOptions.verifyPeer as 0
+	Calculate lrEmailDefaults.OW3options as lrOptions
+End If
+
+Calculate tConstants.emailDefaults as lrEmailDefaults

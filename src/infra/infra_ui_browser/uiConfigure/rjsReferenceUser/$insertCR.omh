@@ -1,0 +1,10 @@
+Do inherited
+
+Calculate $cinst.$objs.TabControl_RFU.$currenttab as 1
+Calculate $cinst.$objs.PagedPane.$currentpage as 1
+
+;  default values (repeated here because of RFO_CLASS)
+Do irCurrentRecord.$defaults(ilSearch1.RFU_CLASS)
+Calculate irOriginalRecord as irCurrentRecord
+
+Do $cinst.$behaviour()

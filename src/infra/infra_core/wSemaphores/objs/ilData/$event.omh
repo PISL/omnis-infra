@@ -1,0 +1,5 @@
+On evClick     ;; Event Parameters - pRow ( Itemreference )
+	If pLineNumber>0     ;; an actual data line
+		Calculate ilData.$line as pLineNumber
+	End If
+	Do $cinst.$behaviour()

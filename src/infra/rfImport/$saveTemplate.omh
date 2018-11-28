@@ -1,0 +1,39 @@
+;  Breakpoint
+Calculate lrTemplate as irChosenTemplate
+If isnull(lrTemplate.IMT_NAME)
+	Calculate lrTemplate.IMT_NAME as ''
+End If
+If not(ibExistingTemplate)|icUserInput<>lrTemplate.IMT_NAME
+	Do lrTemplate.$clear()
+	Calculate lrTemplate.IMT_NAME as icUserInput
+End If
+Calculate lrTemplate.IMT_GO_REF as trGroupOrg.GO_SEQ
+Calculate lrTemplate.IMT_SCHEMA as icTargetSchema
+Calculate lrTemplate.IMT_COL_COUNT as ilDataCols.$linecount
+Calculate lrTemplate.IMT_IMP_FLAGS as replaceall(replaceall(replaceall(toStrings.$ListToString(ilDataCols,'include',','),'YES','1'),'NO','0'),',','')     ;; convert the booleans to a YES/NO string, replace YES with 1 and NO with 0 and then remove the commas
+Calculate lrTemplate.IMT_COL_ORDER as toStrings.$ListToString(ilSchemaCols,'C1',',')
+Calculate lrTemplate.IMT_SEP_DEC as icSepDec
+Calculate lrTemplate.IMT_SEP_THOU as icSepThou
+Calculate lrTemplate.IMT_FMT_DATE as icFmtDate
+Calculate lrTemplate.IMT_HEADER as ibDoNotImportFirstLine
+If ibDoNotImportFirstLine
+	Calculate lrTemplate.IMT_IGNORE_ROWS as inRowsToIgnore
+Else
+	Calculate lrTemplate.IMT_IGNORE_ROWS as 0
+End If
+If lrTemplate.IMT_SEQ>0
+	Do lrTemplate.$update() Returns lbOK
+Else
+	Calculate lrTemplate.IMT_GO_REF as trGroupOrg.GO_SEQ
+	Do lrTemplate.$insert() Returns lbOK
+End If
+
+If lbOK
+	Do ilTemplates.$merge(lrTemplate,kTrue,kFalse,kFalse)
+	Do method assignTemplateMenu
+	Calculate ibExistingTemplate as kTrue
+	Calculate $cinst.$objs.ilTemplateMenu.$text as icUserInput
+	Calculate icUserInput as #NULL
+End If
+
+Do $cinst.$saveData()

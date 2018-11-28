@@ -1,0 +1,18 @@
+;  Do $DefineList(ilData,'tsysReferenceClobal')
+Do $DefineList(ilData,'infra.tsysSemaphores')
+Do ilData.$cols.$add('duration',kCharacter,kSimplechar,30)
+Calculate $cinst.$enterable as kTrue
+
+Do ilData.$WhichDatabase() Returns lcDatabase
+Calculate $cinst.$title as con('library ',tcCurrentLibrary,' table=',ilData.$servertablenames,' connected to ',lcDatabase)
+
+Do ilSortColumns.$cols.$add('Listname',kCharacter,kSimplechar,40)
+Do ilSortColumns.$cols.$add('SortCol1',kCharacter,kSimplechar,40)
+Do ilSortColumns.$cols.$add('SortDesc1',kInteger,kShortint)
+Do ilSortColumns.$cols.$add('SortCol2',kCharacter,kSimplechar,40)
+Do ilSortColumns.$cols.$add('SortDesc2',kInteger,kShortint)
+Do ilSortColumns.$cols.$add('SortCol3',kCharacter,kSimplechar,40)
+Do ilSortColumns.$cols.$add('SortDesc3',kInteger,kShortint)
+
+Do $cinst.$Refresh()
+Do $cinst.$behaviour()

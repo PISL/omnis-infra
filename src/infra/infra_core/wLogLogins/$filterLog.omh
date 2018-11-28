@@ -1,0 +1,5 @@
+Calculate ilIpAddressFilter.$line as 0
+While $Loop(ilIpAddressFilter,kTrue)
+	Do ilLogOfLogins.$search($ref.ULA_IP_ADDRESS=ilIpAddressFilter.RFL_DESC,1,0,1,0)
+End While
+Do ilLogOfLogins.$remove(kListDeleteSelected)

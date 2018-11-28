@@ -1,0 +1,30 @@
+;  Return true if this form has handled the shortcut key
+
+
+Switch pIdent
+	Case 1101
+		If irUserRights.canInsert&icMode=''     ;; from $behaviour()
+			Do $cinst.$insertCR()     ;; because of the complexity of the various tabs, handle validity of call in this method
+		End If
+		Quit method kTrue     ;; tell the parent that we've dealt with it
+		
+	Case 1102
+		If irUserRights.allOrgs
+			If irUserRights.canEdit&irCurrentRecord.EO_SEQ>0&icMode=''
+				Do $cinst.$editCR()     ;; because of the complexity of the various tabs, handle validity of call in this method
+			End If
+		Else
+			If irUserRights.canEdit&irCurrentRecord.EO_SEQ>0&icMode=''&irOrgLink.EOL_SEQ>0
+				Do $cinst.$editCR()     ;; because of the complexity of the various tabs, handle validity of call in this method
+			End If
+		End If
+		Quit method kTrue     ;; tell the parent that we've dealt with it
+		
+	Case 1201
+		Do method setupImport
+		Quit method kTrue     ;; tell the parent that we've dealt with it
+		
+	Default
+		Quit method kFalse
+		
+End Switch

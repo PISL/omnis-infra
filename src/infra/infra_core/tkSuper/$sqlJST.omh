@@ -1,0 +1,12 @@
+;  sepecial case to format numers for adding and subtracting from fields
+;  works around an OpenBase error where   set X=X+1 is ok (no spaces)
+;  but set X=X-1 will generate an error... unless there are spaces before and after the  '-'
+;
+;  Parameter
+;  pValue->  number to format into either   '+ value'   or ' - value'
+
+If pValue>=0
+	Quit method jst(pValue,'+')
+Else
+	Quit method con(' - ',abs(pValue))
+End If

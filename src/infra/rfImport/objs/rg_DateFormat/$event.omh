@@ -1,0 +1,2 @@
+On evClick
+	Calculate icFmtDate as pick(inFmtDate,'DMY','MDY','YMD')

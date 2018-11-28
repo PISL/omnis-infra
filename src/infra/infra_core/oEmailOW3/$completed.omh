@@ -1,0 +1,7 @@
+;  belt and braces
+Calculate inErrorCode as pResults.errorCode
+Calculate icErrorText as pResults.errorInfo
+Calculate icLog as pResults.log
+Calculate ilFailedRecipients as pResults.failedRecipients
+
+Do irefCallingInst.$emailCompleted(pResults)

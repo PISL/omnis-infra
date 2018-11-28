@@ -1,0 +1,7 @@
+Do irExtOrg.$clear()
+Do irOrglink.$clear()
+
+Calculate pretExtOrg as irExtOrg
+Calculate pretLink as irOrglink
+
+Quit method kTrue

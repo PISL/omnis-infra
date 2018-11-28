@@ -1,0 +1,6 @@
+
+Calculate queryValue as dat(pValue,'y-M-D')
+
+Calculate queryValue as con("DATE '",queryValue,"'")
+
+Quit method queryValue

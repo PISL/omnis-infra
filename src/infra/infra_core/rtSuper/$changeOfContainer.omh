@@ -1,0 +1,16 @@
+If pbKeepOpen     ;; requesting user input then returning to original form
+	Do $cinst.$openform(tlNavMenu.tag)     ;; the tag column contains the name of the container form
+	Do $ctask.$iremoteforms.[tlNavMenu.tag].$init
+Else If $ctask.tlAuthorisedForms.active=kTrue     ;; user is returning to previous form so destruct the current form
+	Calculate $ctask.tlAuthorisedForms.active as kFalse
+	Do $cinst.$openform(tlNavMenu.tag)
+	Do $cinst.$closeform(pcFormToClose)
+Else
+	Do ilRemoteFormsOpen.$search($ref.classname=tlNavMenu.tag,1,0,0,0) Returns lbFound
+	If lbFound
+		Do $cinst.$changeform(tlNavMenu.tag)
+	Else
+		Do $cinst.$openform(tlNavMenu.tag) Returns lbFound
+		Do ilRemoteFormsOpen.$add(tlNavMenu.tag)
+	End If
+End If

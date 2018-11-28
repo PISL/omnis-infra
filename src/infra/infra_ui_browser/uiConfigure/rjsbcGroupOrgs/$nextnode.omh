@@ -1,0 +1,8 @@
+If irParent.GS_SEQ
+	Do ilPrevious.$search(0)     ;; deselect all lines
+	Do ilPrevious.$search($ref.GS_SEQ=irParent.GS_SEQ,1,0,0,0)     ;; make current line
+	Calculate ilPrevious.[ilPrevious.$line].$selected as kTrue     ;; make it selected
+End If
+
+Do method PushDown
+Do method NewRecord

@@ -1,0 +1,31 @@
+
+;  If insert, edit and delete have a shortcut KEY then this will be detected and processed by handleShortcutKey     ;; and never run through this method.
+;  This method is here in anticipation of aditional menu items.
+Do ilMenuCommands.$search($ref.ident=pIdent,1,0,0,0) Returns lbFound
+If lbFound
+	Switch pIdent
+		Case 1101     ;; insert
+			If irUserRights.canInsert&icMode=''
+				Do $cinst.$insertCR()
+			End If
+			Quit method kTrue     ;; tell the parent that we've dealt with it
+			
+		Case 1102     ;; update
+			If irUserRights.canUpdate&icMode=''&ilDisplayRecords.USR_SEQ>0
+				Do $cinst.$editCR()
+			End If
+			Quit method kTrue
+			
+		Case 1103     ;; delete
+			If irUserRights.canDelete&ilDisplayRecords.USR_SEQ>0&ilUserRoles.$linecount=0&ilUserGroupOrgLinks.$linecount=0&icMode=''
+				Do $cinst.$deleteCR()
+			End If
+			Quit method kTrue
+			
+		Default
+			Quit method kFalse     ;; pass it back to the parent
+			
+	End Switch
+Else
+	Quit method kFalse     ;; pass it back to the parent
+End If

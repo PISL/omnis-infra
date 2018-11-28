@@ -1,0 +1,4 @@
+Do inherited
+
+;  save the window position for next time
+;  Calculate $cclass.$userinfo as row($cinst.$top,$cinst.$left)

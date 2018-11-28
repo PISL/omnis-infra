@@ -1,0 +1,12 @@
+;  USER ROLES - what they have
+Do ilRoleUsers.$clear()
+Do ilRoleUsers.$fetchRoleUsers(irCurrentRecord.ROL_SEQ)
+
+;  then what they haven't got (available roles)
+Calculate ilChoiceOfUsers as ilUsers
+Calculate ilRoleUsers.$line as 0
+While $Loop(ilRoleUsers)
+	Do ilChoiceOfUsers.$search($ref.USR_SEQ=ilRoleUsers.USR_SEQ,1,0,1,0)
+End While
+Do ilChoiceOfUsers.$remove(kListDeleteSelected)
+Calculate ilChoiceOfUsers.$line as 0

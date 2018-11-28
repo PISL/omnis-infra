@@ -1,0 +1,24 @@
+;  callback from $clientNoYes for flag true
+;
+Calculate icDisplayMessage as ''
+
+;  Breakpoint
+Do loPseudoService.$submitFinancialInvoice(irCurrentRecord,ilDetails) Returns lbOK
+If lbOK
+	Do irCurrentRecord.$fetch_pk()     ;; FOH_SWHEN was updated in $submitFinancalInvoice()
+	Do irCurrentRecord.$displayName()
+	Do ilDisplayRecords.$assignrow(irCurrentRecord)
+	Do $cinst.$displayListClick()     ;; to refresh everything from database as FOH_SWHEN will have been updated
+	Do toStrings.$StringTableEntry('MSG_SUBMITSUCCESS',icDisplayMessage,'Submission successful')
+Else
+	Calculate lrServiceInfo as loPseudoService.irServiceInfo
+	If loPseudoService.icValidationMessage<>''
+		Calculate icDisplayMessage as loPseudoService.icValidationMessage
+	Else
+		Calculate lrHeaders as lrServiceInfo.responseHeaders
+		Do toStrings.$StringTableEntry('MSG_SERVCALL_SUCCESS',icDisplayMessage,'Service call successful')
+		Calculate icDisplayMessage as con(icDisplayMessage,' ',lrServiceInfo.httpStatusCode,kCr,lrHeaders.omniserror)
+	End If
+End If
+
+Do $cinst.$behaviour()

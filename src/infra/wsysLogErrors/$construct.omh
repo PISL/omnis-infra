@@ -1,0 +1,12 @@
+Begin reversible block
+	Calculate #FD as 'D m Y'
+End reversible block
+
+Calculate idFrom as #D
+Calculate idTo as #D
+
+Do ilLog.$definefromsqlclass('tsysLogErrors')
+
+Calculate $cinst.$title as "System Errors Viewer"
+
+Do $cinst.$behaviour()

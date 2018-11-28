@@ -1,0 +1,13 @@
+Do ilDisplayRecords.$clear()
+If irUserRights.canViewAllOrgs
+	Do ilDisplayRecords.$fetch_all()
+Else
+	Do ilDisplayRecords.$fetchMyOrganisations()
+End If
+If ilDisplayRecords.irErrorSQL.NativeErrorText<>''
+	Calculate icDisplayMessage as ilDisplayRecords.irErrorSQL.NativeErrorText
+End If
+
+Do ilDisplayRecords.$sendall($sendallref.GO_NAME_FULL.$assign($sendallref.GON_NAME_FULL))
+
+Do ilDisplayRecords.$sort($ref.GON_NAME_FULL,0)

@@ -1,0 +1,14 @@
+;  overloaded to include the insert of the associated sysUnitSynonyms record
+
+Do inherited Returns lbOK
+
+If lbOK
+	Do $DefineList(lrSynonym,'infra.tsysUnitSynonyms')
+	Calculate lrSynonym.UOS_UOM_REF as $cinst.UOM_SEQ
+	Calculate lrSynonym.UOS_CODE as $cinst.UOM_CODE
+	Calculate lrSynonym.UOS_FACTOR as 1.00
+	Calculate lrSynonym.UOS_ACTIVE as 1
+	Do lrSynonym.$insert() Returns lbOK
+End If
+
+Quit method lbOK

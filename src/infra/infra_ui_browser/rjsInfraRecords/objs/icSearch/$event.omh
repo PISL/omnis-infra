@@ -1,0 +1,30 @@
+On evBefore
+	
+On evAfter
+	
+On evKeyPress
+	;  shift-tab
+	;  If pKeyList.[pKeyList.$linecount].systemKey=27&pKeyList.[pKeyList.$linecount].modifiers=kJSModShift
+	;  Calculate $cinst.$objs.TabControl_PRD.$currenttab as 1
+	;  Calculate $cinst.$objs.PagedPane.$currentpage as 1
+	;  End If
+	;  If pKeyList.$linecount>=3
+	Calculate lnPosSearchDelimiter as pos(':',icSearch)
+	If lnPosSearchDelimiter=2
+		Calculate lcPrefix as mid(icSearch,1,pos(':',icSearch)-1)
+		Calculate lcSearch as mid(icSearch,pos(':',icSearch)-1,99)
+		If len(lcSearch)>inMinSearchString
+			Do $cinst.$stringSearch()
+		End If
+	Else
+		If len(icSearch)>inMinSearchString
+			Do $cinst.$stringSearch()
+		Else If len(icSearch)=0
+			;  2018-09-21 GRS put this fix in for CONFERENCE.rjsMember which does not display the search drop lists
+			If ilSearch1.$linecount|ilSearch2.$linecount     ;; the lists will be visible if they contain any data
+				Do ilDisplayRecords.$clear()
+			Else
+				Do $cinst.$stringSearch()     ;; each form would have to have code to deal with the zero length string
+			End If
+		End If
+	End If

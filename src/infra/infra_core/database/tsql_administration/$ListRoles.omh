@@ -1,0 +1,25 @@
+Do $cinst.$ImmediateSession(loSession,loStatement) Returns lbImmediateSession
+If lbImmediateSession
+	Do $cinst.$SetSession(loSession,loStatement)
+Else If not(ibGoodConnectionToDb)
+	Quit method kFalse
+End If
+
+;  SELECT rolname FROM pg_roles;
+If $cinst.$sessionobject.$damname='PGSQLDAM'
+	Do llRoles.$cols.$add('rolname',kCharacter,kSimplechar,100)
+	
+	Begin statement
+	Sta: {SELECT * FROM pg_roles}
+	End statement
+	;  Do $cinst.$executesqldirectandfetch(llRoles) Returns lbOK
+	Do $cinst.$executesqldirectandfetch() Returns lbOK
+Else
+	Breakpoint
+End If
+
+If lbImmediateSession
+	Do $cinst.$SetSession(#NULL,#NULL,kTrue)
+End If
+
+Quit method llRoles

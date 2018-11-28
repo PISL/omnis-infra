@@ -1,0 +1,173 @@
+{
+	"classtype": "kRemoteForm",
+	"internalversion": 237,
+	"superclass": "rjsInfraDetail",
+	"designtaskname": "rtBusinessApp",
+	"nextident": 1062,
+	"lastgroupident": 0,
+	"cvardefs": [
+		{
+			"name": "clLabels",
+			"order": 5,
+			"type": "kList",
+			"subtype": "",
+			"sublen": 0
+		},
+		{
+			"name": "cnPageBlank",
+			"order": 2,
+			"type": "kNumber",
+			"subtype": "k0dpShortnum",
+			"sublen": 0,
+			"initval": "3"
+		},
+		{
+			"name": "cnPagePermissions",
+			"order": 4,
+			"type": "kNumber",
+			"subtype": "k0dpShortnum",
+			"sublen": 0,
+			"initval": "5"
+		},
+		{
+			"name": "cnPageRoles",
+			"order": 3,
+			"type": "kNumber",
+			"subtype": "k0dpShortnum",
+			"sublen": 0,
+			"initval": "4"
+		},
+		{
+			"name": "cnPageSelectGroupOrg",
+			"order": 1,
+			"type": "kNumber",
+			"subtype": "k0dpShortnum",
+			"sublen": 0,
+			"initval": "2"
+		}
+	],
+	"ivardefs": [
+		{
+			"name": "icLoginID",
+			"order": 2,
+			"type": "kCharacter",
+			"subtype": "kSimplechar",
+			"sublen": 15
+		},
+		{
+			"name": "icLoginPW",
+			"order": 3,
+			"type": "kCharacter",
+			"subtype": "kSimplechar",
+			"sublen": 15
+		},
+		{
+			"name": "ilActivity",
+			"order": 1,
+			"type": "kList",
+			"subtype": "",
+			"sublen": 0
+		},
+		{
+			"name": "ilUserGroups",
+			"order": 5,
+			"type": "kList",
+			"subtype": "",
+			"sublen": 0
+		},
+		{
+			"name": "inLoginFailed",
+			"order": 4,
+			"type": "kNumber",
+			"subtype": "k0dpShortnum",
+			"sublen": 0
+		},
+		{
+			"name": "ipictTopLeft",
+			"order": 6,
+			"type": "kPicture",
+			"subtype": 0,
+			"sublen": 0
+		},
+		{
+			"name": "ipictTopRight",
+			"order": 7,
+			"type": "kPicture",
+			"subtype": 0,
+			"sublen": 0
+		}
+	],
+	"properties": {
+		"aligntogrid": false,
+		"alpha": 255,
+		"alwaysenabledobject": "",
+		"animatelayouttransitions": false,
+		"backalpha": 255,
+		"backcolor": "RGB(255,255,255)",
+		"backpattern": 0,
+		"cancelkeyobject": "pbCancel",
+		"collectperformancedata": false,
+		"componenticon": 0,
+		"componenttype": "kCompStoreHidden",
+		"contextmenu": "",
+		"createdate": "2017-10-27 11:20:33",
+		"currentlayoutbreakpoint": 1280,
+		"defaultappearance": "kAppearanceiOS",
+		"desc": "",
+		"designshowmobiletitle": true,
+		"disabledefaultcontextmenu": false,
+		"editor": "",
+		"editordata": "",
+		"events": "evLayoutChanged",
+		"external": true,
+		"forecolor": "RGB(255,255,255)",
+		"horzgrid": 8,
+		"horzscroll": false,
+		"inheritedorder": 1,
+		"issupercomponent": false,
+		"layoutbreakpoints": "320,375,480,667,768,1024,1280",
+		"layouttype": "kLayoutTypeResponsive",
+		"left": 56,
+		"moddate": "2018-11-27 14:10:34",
+		"okkeyobject": "pbOK",
+		"serverlessclient": false,
+		"showascheckedout": false,
+		"showgrid": false,
+		"sizetogrid": false,
+		"startfield": 0,
+		"title": {
+			"type": 0,
+			"calc": "New remote form"
+		},
+		"top": 7,
+		"userinfo": "",
+		"version": "2",
+		"vertgrid": 8,
+		"vertscroll": false
+	},
+	"layout": {
+		"width": 1301,
+		"height": 1070,
+		"320": {
+			"height": 480
+		},
+		"375": {
+			"height": 667
+		},
+		"480": {
+			"height": 320
+		},
+		"667": {
+			"height": 375
+		},
+		"768": {
+			"height": 1024
+		},
+		"1024": {
+			"height": 768
+		},
+		"1280": {
+			"height": 800
+		}
+	}
+}

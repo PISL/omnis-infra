@@ -1,0 +1,18 @@
+On evClick
+	Calculate ilRolePermissions.$line as pLineNumber
+	Calculate icDisplayMessage as ''
+	
+	Do $cinst.$behaviour()
+	Do $cinst.$redraw()
+	
+On evDrop
+	If pDragField=nam(ilChoiceOfRoles)
+		;  user is ADDING this role to users profile
+		;  Breakpoint
+		Do method AddPermissionToRole Returns lbOK
+		
+		Do $cinst.$behaviour()
+		Do $cinst.$redraw()
+	Else
+		Calculate icDisplayMessage as 'Invliad drop object'
+	End If

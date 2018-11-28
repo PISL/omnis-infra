@@ -1,0 +1,20 @@
+{
+	"classtype": "kSchema",
+	"internalversion": 4,
+	"nextident": 32012,
+	"properties": {
+		"componenticon": 0,
+		"componenttype": "kCompStoreHidden",
+		"createdate": "2017-10-27 11:20:30",
+		"createinstancewhensubtype": true,
+		"desc": "",
+		"editor": "",
+		"editordata": "",
+		"external": true,
+		"moddate": "2018-01-16 11:34:12",
+		"servertablename": "infra.uaroles",
+		"showascheckedout": false,
+		"userinfo": "",
+		"version": "2"
+	}
+}

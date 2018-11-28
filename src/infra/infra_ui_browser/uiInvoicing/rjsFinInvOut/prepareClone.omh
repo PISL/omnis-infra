@@ -1,0 +1,27 @@
+;  called from either of the pbClone buttons to prepare the duplicated data for saving
+
+;  clear the Chain record, if any, and prepare it
+Do irChain.$clear()
+If pbAmendment
+	Calculate irChain.FOC_FOH_REF_PREV as irCurrentRecord.FOH_SEQ
+End If
+
+Calculate irCurrentRecord.FOH_SEQ as #NULL
+Calculate irCurrentRecord.FOH_GO_REF as $ctask.trGroupOrg.GO_SEQ
+Calculate irCurrentRecord.FOH_DATE as #D
+Calculate irCurrentRecord.FOH_STATUS as #NULL
+Calculate irCurrentRecord.FOH_SWHEN as #NULL
+Calculate irCurrentRecord.FOH_CWHEN as #NULL
+Calculate irCurrentRecord.FOH_CBY as #NULL
+Calculate irCurrentRecord.FOH_MWHEN as #NULL
+Calculate irCurrentRecord.FOH_MBY as #NULL
+
+Calculate ilDetails.$line as 0
+While $Loop(ilDetails)
+	Calculate ilDetails.FOD_SEQ as #NULL
+	Calculate ilDetails.FOD_FOH_REF as #NULL
+	Calculate ilDetails.FOD_CWHEN as #NULL
+	Calculate ilDetails.FOD_CBY as #NULL
+	Calculate ilDetails.FOD_MWHEN as #NULL
+	Calculate ilDetails.FOD_MBY as #NULL
+End While

@@ -1,0 +1,31 @@
+On evClick
+	;  if we have a relevant registration service URI, use it to fetch the details
+	;  but if this is disaster recovery, ie. we have an MEC_ID, but are reentering our details,
+	;  the call will go to the central regservice first to decode the MEC_ID and return the relevant reg. service
+	;  ### the code has yet to be written for this second option
+	If len(irCurrentRecord.GO_RRS)>0
+		Do oService.$callFetch(lrResult,irServiceInfo,row(irCurrentRecord.GO_MEC_ID,irBusinessDetailSubset),'register',irCurrentRecord.GO_RRS) Returns lnCountUpdateOrg
+	Else
+		;  call the central reg service first to get the GO_RRS
+	End If
+	If irServiceInfo.httpStatusCode=200
+		If lrResult.valid=1
+			Do toStrings.$StringTableEntry('MSG_SERVCALL_SUCCESS',lcMessage,'Service call successful')
+			Calculate icDisplayMessage as con(lcMessage,kCr)
+			Do toStrings.$StringTableEntry('MSG_INFOMATCH',lcMessage,'Information matches that on server.')
+			Calculate icDisplayMessage as con(icDisplayMessage,lcMessage)
+			Calculate ibRegistrationDoesNotMatchWithServer as kFalse
+		Else If lrResult.valid=2
+			Do toStrings.$StringTableEntry('MSG_SERVCALL_SUCCESS',lcMessage,'Service call successful')
+			Calculate icDisplayMessage as con(lcMessage,kCr)
+			Do toStrings.$StringTableEntry('MSG_INFOMISMATCH',lcMessage,'but information does NOT match that on server.')
+			Calculate icDisplayMessage as con(icDisplayMessage,lcMessage)
+			Calculate ibRegistrationDoesNotMatchWithServer as kTrue
+		End If
+	Else
+		Calculate lrHeaderInfo as irServiceInfo.responseHeaders
+		Do toStrings.$StringTableEntry('MSG_SERVCALL_FAILED',lcMessage,'Service call FAILURE ! ')
+		Calculate icDisplayMessage as con(lcMessage,kCr,irServiceInfo.httpStatusCode,': ',irServiceInfo.httpStatusText,kCr,lrHeaderInfo.omniserror)
+	End If
+	
+	Do $cinst.$behaviour()

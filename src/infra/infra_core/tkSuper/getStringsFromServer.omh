@@ -1,0 +1,7 @@
+Do ioWeb.$ping(lcErrorText) Returns lrResult
+If len(lcErrorText)>0
+	Quit method llStrings
+End If
+
+Do ioWeb.$getStrings(lcErrorText) Returns llStrings
+Quit method llStrings

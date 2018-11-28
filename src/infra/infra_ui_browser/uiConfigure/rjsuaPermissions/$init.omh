@@ -1,0 +1,8 @@
+Do $cinst.$container().$adjustToolsMenu()
+
+Calculate lcForm as $cinst.$name
+JavaScript: sessionStorage.setItem('currentForm', lcForm);
+Set reference lrefBackground to $cinst.$objs.greyBackground
+If lrefBackground
+	Do $cinst.$setcurfield(lrefBackground)
+End If

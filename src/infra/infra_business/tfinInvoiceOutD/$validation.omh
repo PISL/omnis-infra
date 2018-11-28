@@ -1,0 +1,76 @@
+Calculate icValidationMessage as ''
+Do ilValidation.$clear()
+
+If not(pbOmitForeignKeyCheck)
+	;  this foreign key out of the users control
+	If $cinst.FOD_FOH_REF>0
+		;  good
+	Else
+		Calculate lcMessage as con(lcMessage,pick(lcMessage<>'','',', '),'FOD_FOH_REF missing')
+		Do ilValidation.$add('FOD_FOH_REF_LBL','VAL_MISSING','FOD_FOH_REF missing',0)
+	End If
+End If
+
+If $cinst.FOD_PRD_REF>0
+	;  good
+Else
+	Calculate lcMessage as con(lcMessage,pick(lcMessage<>'','',', '),'FOD_PRD_REF missing')
+	Do ilValidation.$add('FOD_PRD_REF_LBL','VAL_MISSING','FOD_PRD_REF missing',0)
+End If
+
+If $cinst.FOD_DESC<>''
+	;  good
+Else
+	Calculate lcMessage as con(lcMessage,pick(lcMessage<>'','',', '),'FOD_DESC missing')
+	Do ilValidation.$add('FOD_DESC_LBL','VAL_MISSING','FOD_DESC missing',0)
+End If
+
+If isnull($cinst.FOD_UNIT_PRICE)
+	Calculate $cinst.FOD_UNIT_PRICE as 0
+End If
+
+If $cinst.FOD_UNIT_PRICE=0
+	;  good
+Else If ($cinst.FOD_QTY<0&$cinst.FOD_UNIT_PRICE<0)|($cinst.FOD_QTY>0&$cinst.FOD_UNIT_PRICE>0)
+	;  good
+Else If ($cinst.FOD_QTY>0&$cinst.FOD_UNIT_PRICE<0)
+	;  a product code with a negative number     ;; should this be allowed?  We are allowing it for early checkout product.
+	;  good     ;; not so good - but neccessary
+Else
+	Calculate lcMessage as con(lcMessage,pick(lcMessage<>'','',', '),'Quantity and Price mismatch')
+	Do ilValidation.$add('FOD_PRICE','VAL_MISMATCH','Quantity and Price mismatch',0)
+End If
+
+If isnull($cinst.FOD_UNIT_TAX)
+	Calculate $cinst.FOD_UNIT_TAX as 0
+End If
+
+If $cinst.FOD_UNIT_TAX=0
+	;  good
+Else If ($cinst.FOD_QTY<0&$cinst.FOD_UNIT_TAX<0)|($cinst.FOD_QTY>0&$cinst.FOD_UNIT_TAX>0)
+	;  good
+Else
+	Calculate lcMessage as con(lcMessage,pick(lcMessage<>'','',', '),'Quantity and Tax mismatch')
+	Do ilValidation.$add('FOD_TAX','VAL_MISMATCH','Quantity and Tax mismatch',0)
+End If
+
+If $cinst.FOD_QTY>0|$cinst.FOD_QTY<0
+	;  good
+Else
+	Calculate lcMessage as con(lcMessage,pick(lcMessage<>'','',', '),'FOD_QTY missing')
+	Do ilValidation.$add('FOD_QTY_LBL','VAL_MISSING','FOD_QTY missing',0)
+End If
+
+If $cinst.FOD_ORDER>0
+	;  good
+Else
+	Calculate lcMessage as con(lcMessage,pick(lcMessage<>'','',', '),'FOD_ORDER missing')
+	Do ilValidation.$add('FOD_ORDER_LBL','VAL_MISSING','FOD_ORDER missing',0)
+End If
+
+If lcMessage<>''
+	Calculate icValidationMessage as lcMessage
+	Quit method kFalse
+End If
+
+Quit method kTrue

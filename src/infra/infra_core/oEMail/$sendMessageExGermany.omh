@@ -1,0 +1,42 @@
+;  send internet e-mail message via a SMTP server.
+;  for access to German office we must login to POP3 before using SMTP so that we are "authorised" to send
+POP3Connect (ccInServer,ccPop3LoginName,ccInPassword) Returns lnPOP3socket
+
+If lnPOP3socket
+	Do method $sendMessage (pToAddresslist,pSubject,pBody,pCCAddresslist,pBCCAddresslist,pPriority,pEnclosureList,pExtraHeaders) Returns lcEmailStatus
+Else
+	;  OK message  {Login to POP3 server "[iInServer]" for authenticated SMTP Send using "[iOutServer]" failed.}
+	Calculate lcEmailStatus as con('Login to POP3 server "',ccInServer,'" for authenticated SMTP Send using "',ccOutServer,'" failed.')
+End If
+;  If (sys(8)='MAC68K'|sys(8)='WIN16')&pEnclosureList.$linecount>0
+;  use the old method of sending e-mails with enclosures for 68k Mac and Win16
+;  Do $cinst.$OLDSendMessage(pToAddresslist,pSubject,pBody,pCCAddresslist,pBCCAddresslist,pStatusCall,pPriority,pEnclosureList)
+;  Else
+;  use the new 32-bit mime content support added for O$ 2.10
+;  Do lMimeList.$define(lLevel,lContentType,lContentSubType,lFileName,lCharData,lBinData,lCharSet,lEncoding)
+;  If pEnclosureList.$linecount>0
+;  if the new e-mail contains enclosures, compose and send as multipart MIME content
+;  Do pEnclosureList.$redefine(lFileName,lFilePath)
+;
+;  Do lMimeList.$add(0,'multipart','mixed')
+;  Do lMimeList.$add(1,'text','plain',,pBody,,,)
+;  For lLineInList from 1 to pEnclosureList.$linecount step 1
+;  Do pEnclosureList.$line.$assign(lLineInList)
+;  Do pEnclosureList.$loadcols()
+;  Do lFileOps.$openfile(lFilePath)
+;  Do lFileOps.$readfile(lFileBinData)
+;  Do lFileOps.$closefile()
+;  Do lMimeList.$add(1,'application','octet-stream',lFileName,,lFileBinData,,)
+;  End For
+;  SMTPSend (iOutServer,iOutFrom,pToAddresslist,pSubject,lMimeList,pCCAddresslist,pBCCAddresslist,iOutFromName,pStatusCall,pPriority) Returns lcEmailStatus
+;  Else
+;  send message with no enclosures
+;  SMTPSend (iOutServer,iOutFrom,pToAddresslist,pSubject,pBody,pCCAddresslist,pBCCAddresslist,iOutFromName,pStatusCall,pPriority)
+;  End If
+;  End If
+
+If lnPOP3socket>0
+	POP3Disconnect (lnPOP3socket)
+End If
+
+Quit method lcEmailStatus

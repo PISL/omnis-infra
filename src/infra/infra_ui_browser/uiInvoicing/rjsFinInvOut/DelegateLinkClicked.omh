@@ -1,0 +1,113 @@
+
+Calculate $cinst.icDisplayMessage as ''
+Do irDelegateInvoiceLink.$assignrow(ilDelegatesRelatingToThisInvoice,kTrue)
+
+;  as the list is a check box list     ;; the evClick does not detect whether the checkox or text has actually been clicked
+;  if the check box has been clicked it will change selection state
+;  however if the text in the line is clicked, $selected does not change
+
+;  therefore the only way of using evClick to actually detect a CHANGE in selection state is to compare the selection to a previous version.
+;  Unfortunately we cannot use Omnis' Save selection commands on list
+;  because the javascript does not support the previously saved selection state.
+;  Therefore we force the issue by storing a copy of the list
+
+;  n.b. ilSaveLastSelection.[ilGroupOrgs.$line].$selected is not a mistake !
+If ilDelegatesRelatingToThisInvoice.[ilDelegatesRelatingToThisInvoice.$line].$selected=ilSaveLastSelection.[ilDelegatesRelatingToThisInvoice.$line].$selected
+	;  no change in state     ;; do nothing
+Else If $AboutNow()>ilDelegatesRelatingToThisInvoice.1.CF_DATE_TO
+	;  too late to change
+	Do toStrings.$StringTableEntry('MSG_DISALLOWDGLINKCHANGE',$cinst.icDisplayMessage,'delegate changes are no longer allowed on invoices ')
+Else
+	If ilDelegatesRelatingToThisInvoice.[ilDelegatesRelatingToThisInvoice.$line].$selected=kTrue
+		;  user has clicked the check box on
+		If pbOvertUserAction
+			If irUserRights.canAddDelegateLink
+				Calculate lbUpdateDatabase as kTrue
+				
+				Do irDelegateInvoiceLink.$clear()
+				;  mission critical foreign keys
+				Calculate irDelegateInvoiceLink.DIL_DG_REF as ilDelegatesRelatingToThisInvoice.DG_SEQ
+				Calculate irDelegateInvoiceLink.DIL_FOH_REF as irCurrentRecord.FOH_SEQ
+				Calculate irDelegateInvoiceLink.DIL_PRIMARY as pick(ilDelegatesRelatingToThisInvoice.$cols.DIL_PRIMARY.$total(),1,0)
+				;  display columns
+				Calculate irDelegateInvoiceLink.DG_COMPANY_NAME as ilDelegatesRelatingToThisInvoice.DG_COMPANY_NAME
+				Calculate irDelegateInvoiceLink.PSN_SURNAME as ilDelegatesRelatingToThisInvoice.PSN_SURNAME
+				Calculate irDelegateInvoiceLink.PSN_FIRST_NAME as ilDelegatesRelatingToThisInvoice.PSN_FIRST_NAME
+				Calculate irDelegateInvoiceLink.PSN_COMPANY as ilDelegatesRelatingToThisInvoice.PSN_COMPANY
+				Calculate irDelegateInvoiceLink.PSN_SEQ as ilDelegatesRelatingToThisInvoice.PSN_SEQ
+				Calculate irDelegateInvoiceLink.DG_SEQ as ilDelegatesRelatingToThisInvoice.DG_SEQ
+				Do irDelegateInvoiceLink.$DisplayName()
+				;  leave other columns empty
+				Do irDelegateInvoiceLink.$insert() Returns lbOK
+				If lbOK
+					Do ilDelegatesRelatingToThisInvoice.$assignrow(irDelegateInvoiceLink,kTrue)
+				Else
+					Calculate icDisplayMessage as irDelegateInvoiceLink.irErrorSQL.NativeErrorText
+				End If
+			Else
+				Do toStrings.$StringTableEntry('MSG_DISALLOWDGTOINV',icDisplayMessage,'you are not allowed to associate a delegate to an invoice')
+			End If     ;; canAddDelegateLink
+		End If     ;; pbOvertUserAction
+	Else
+		;  user has clicked the check box off
+		Calculate lnSelected as 0
+		Calculate lnCurrentLine as ilDelegatesRelatingToThisInvoice.$line
+		Do ilDelegatesRelatingToThisInvoice.$sendall(lnSelected.$assign(lnSelected+$sendallref.$selected))
+		Calculate ilDelegatesRelatingToThisInvoice.$line as lnCurrentLine
+		If lnSelected=0&not(pbShiftPressed)     ;; do not allow the last delegate to be removed unless the shift key is pressed
+			;  we cannot allow all delegates to be removed from this invoice or we will not be able to identify the event that the invoice is related to
+			;  so revert the change
+			Do toStrings.$StringTableEntry('MSG_DISALLOWLASTDGFROMINV',$cinst.icDisplayMessage,'you are not allowed to remove the only delegate from an invoice ')
+			Calculate lbUpdateDatabase as kFalse
+		Else
+			If irUserRights.canDeleteDelegateLink
+				If pbOvertUserAction
+					Calculate lbUpdateDatabase as kTrue
+					
+					Do irDelegateInvoiceLink.$assignrow(ilDelegatesRelatingToThisInvoice,kTrue)
+					If irDelegateInvoiceLink.DIL_PRIMARY=1&lnSelected>0     ;; if we've deleted the primary delegate and there is an alternative, make that one the primary
+						Calculate lbPrimaryDeleted as kTrue
+					End If
+					Do irDelegateInvoiceLink.$delete_pk() Returns lbOK
+					If lbOK
+						Do irDelegateInvoiceLink.$clear()
+						If lbPrimaryDeleted
+							;  set one of the remaining delegates as primary
+							Do ilDelegatesRelatingToThisInvoice.$first(kTrue) Returns ilDelegatesRelatingToThisInvoice.$line
+							Calculate ilDelegatesRelatingToThisInvoice.DIL_PRIMARY as 1
+							Do irDelegateInvoiceLink.$assignrow(ilDelegatesRelatingToThisInvoice,kTrue)
+							Do irDelegateInvoiceLink.$update() Returns lbOK
+						End If
+					Else
+						Calculate icDisplayMessage as irDelegateInvoiceLink.irErrorSQL.NativeErrorText
+					End If
+				End If     ;; pbOvertUserAction
+			Else
+				If pbOvertUserAction
+					Do toStrings.$StringTableEntry('MSG_DISALLOWDGFROMINV',icDisplayMessage,'you are not allowed to disassociate a delegate from an invoice ')
+				End If
+			End If
+		End If
+	End If
+End If
+If lbUpdateDatabase&lbOK
+	;  fine
+	Calculate ilSaveLastSelection as ilDelegatesRelatingToThisInvoice
+Else
+	;  restore previous state
+	Calculate ilDelegatesRelatingToThisInvoice.[ilDelegatesRelatingToThisInvoice.$line] as ilSaveLastSelection.[ilDelegatesRelatingToThisInvoice.$line]     ;; however this does not include the selected state!!
+	Calculate ilDelegatesRelatingToThisInvoice.[ilDelegatesRelatingToThisInvoice.$line].$selected as ilSaveLastSelection.[ilDelegatesRelatingToThisInvoice.$line].$selected
+End If
+
+Do ilAllUninvoicedDelegates.$clear()
+Do ilAllUninvoicedDelegates.$fetchForConference(irConference.CF_SEQ,#NULL,con("DG_ROLE <> 'SPEAKER' and not exists (select 'x' from conf.delegateInvoicelinks where DIL_DG_REF = DG_SEQ )"))
+;  Do $cinst.$displayListClick()     ;; clears the selected line though!
+;  Do ilTier2.$search($ref.RFG_VALUE=irDelegateInvoiceLink.OOL_SET_TIER2,1,0,0,0)
+
+Calculate irOriginalLink as irDelegateInvoiceLink
+
+;  following lines copied from ilDelegatesRelatingToThisInvoice.$event
+Calculate inLastGroupOrgLine as ilDelegatesRelatingToThisInvoice.$line
+
+Do $cinst.$behaviour()
+Do $cinst.$redraw()

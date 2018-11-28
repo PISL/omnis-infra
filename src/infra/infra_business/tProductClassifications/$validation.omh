@@ -1,0 +1,30 @@
+Calculate icValidationMessage as ''
+Do ilValidation.$clear()
+
+If $cinst.PCL_PRD_REF>0
+	;  good
+Else
+	Calculate lcMessage as con(lcMessage,pick(lcMessage<>'','',', '),'PCL_PRD_REF missing')
+	Do ilValidation.$add('PCL_PRD_REF_LBL','VAL_MISSING','PCL_PRD_REF missing',0)
+End If
+
+If $cinst.PCL_TYPE<>''
+	;  good
+Else
+	Calculate lcMessage as con(lcMessage,pick(lcMessage<>'','',', '),'PCL_TYPE missing')
+	Do ilValidation.$add('PCL_TYPE_LBL','VAL_MISSING','PCL_TYPE missing',0)
+End If
+
+If $cinst.PCL_CODE<>''
+	;  good
+Else
+	Calculate lcMessage as con(lcMessage,pick(lcMessage<>'','',', '),'PCL_CODE missing')
+	Do ilValidation.$add('PCL_CODE_LBL','VAL_MISSING','PCL_CODE missing',0)
+End If
+
+If lcMessage<>''
+	Calculate icValidationMessage as lcMessage
+	Quit method kFalse
+End If
+
+Quit method kTrue

@@ -1,0 +1,4 @@
+On evClick
+	Do $cinst.$refresh()
+	Do $cinst.$behaviour()
+	Do $cinst.$redraw()

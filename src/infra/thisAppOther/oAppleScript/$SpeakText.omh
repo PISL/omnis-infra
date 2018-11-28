@@ -1,0 +1,13 @@
+Begin text block
+Text: {tell application "Finder"} (Platform newline)
+;  Text: say "This is great." using "Alex" (Platform newline)
+If icSpeakTextVoice<>''     ;; $ctask.trConfig.SpeakTextVoice
+	Text: {say "[pcText]" using "[icSpeakTextVoice]"} (Platform newline)
+Else
+	Text: {say "[pcText]"} (Platform newline)
+End If
+Text: {end tell} (Platform newline)
+End text block
+Get text block lcApplescript
+
+Do $root.$runapplescript(lcApplescript,lcApplescriptResult,lcApplescriptError)

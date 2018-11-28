@@ -1,0 +1,22 @@
+Calculate icDisplayMessage as ''
+If irUserRights.canDeleteGroupOrg
+	Do $DefineList(lrTemp,'tuaGroupOrgLinks')
+	Do lrTemp.$fetch_pk(pDragValue.UGO_SEQ)
+	If lrTemp.UGO_SEQ>0
+		Do lrTemp.$delete() Returns lbOK
+		If lbOK
+			Do method UserGroupOrgs
+		Else If lrTemp.icValidationMessage<>''
+			Calculate icDisplayMessage as lrTemp.icValidationMessage
+		Else
+			Calculate icDisplayMessage as lrTemp.irErrorSQL.NativeErrorText
+		End If
+	End If
+Else
+	Calculate icDisplayMessage as $cell(clLabels,'objName','not_authorised','label')
+	If icDisplayMessage=''
+		Calculate icDisplayMessage as 'not_authorised'
+	End If
+End If
+
+Quit method lbOK

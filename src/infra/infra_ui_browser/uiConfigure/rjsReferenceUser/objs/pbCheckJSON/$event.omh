@@ -1,0 +1,26 @@
+On evClick
+	Calculate icDisplayMessage as ''
+	Calculate lrAttributes as OJSON.$jsontolistorrow(irCurrentRecord.RFU_JSON,icDisplayMessage)
+	If icDisplayMessage=''
+		Calculate $cobj.$errortext as 'JSON is valid'
+		Calculate irCurrentRecord.RFU_JSON as OJSON.$formatjson(irCurrentRecord.RFU_JSON)     ;; format it for readability, this is removed when saving to Postgres JSONB type
+		;  create an object on the fly
+		Calculate $cobj.$forecolor as kColorDefault
+		Calculate $cobj.$backcolor as kColorDefault
+		Calculate $cobj.$textcolor as kColorDefault
+		Calculate $cobj.$backalpha as 255     ;; opaque
+		Calculate $cobj.$alpha as 255     ;; opaque
+		
+		;  now apply the JSON to an object on the form - this button !
+		For lnCount from 1 to lrAttributes.$colcount step 1
+			Calculate lcProperty as lrAttributes.$cols.[lnCount].$name
+			If lcProperty=low(lcProperty)     ;; liklihood of an Omnis attribute is enhanced
+				Calculate $cobj.$[lcProperty] as eval(lrAttributes.[lcProperty])
+			End If
+		End For
+	Else
+		Calculate $cobj.$errortext as 'invalid JSON !'     ;; icDisplayMessage has details of error
+	End If
+	
+	Do $cinst.$behaviour()
+	Do $cinst.$redraw()

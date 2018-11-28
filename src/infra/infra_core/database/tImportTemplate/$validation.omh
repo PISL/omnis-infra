@@ -1,0 +1,44 @@
+Calculate icValidationMessage as ''
+Do ilValidation.$clear()
+
+If $cinst.IMT_NAME<>''
+	;  good
+Else
+	Calculate lcMessage as con(lcMessage,pick(lcMessage<>'','',', '),'NAME missing')
+	Do ilValidation.$add('IMT_NAME_LBL','VAL_MISSING','NAME missing',0)
+End If
+
+If $cinst.IMT_SCHEMA<>''
+	;  good
+Else
+	Calculate lcMessage as con(lcMessage,pick(lcMessage<>'','',', '),'SCHEMA missing')
+	Do ilValidation.$add('IMT_SCHEMA_LBL','VAL_MISSING','SCHEMA missing',0)
+End If
+
+If $cinst.IMT_COL_COUNT>0
+	;  good
+Else
+	Calculate lcMessage as con(lcMessage,pick(lcMessage<>'','',', '),'COL COUNT missing')
+	Do ilValidation.$add('IMT_COL_COUNT_LBL','VAL_MISSING','COL COUNT missing',0)
+End If
+
+If $cinst.IMT_IMP_FLAGS<>''
+	;  good
+Else
+	Calculate lcMessage as con(lcMessage,pick(lcMessage<>'','',', '),'FLAGS missing')
+	Do ilValidation.$add('IMT_IMP_FLAGS_LBL','VAL_MISSING','FLAGS missing',0)
+End If
+
+If $cinst.IMT_COL_ORDER<>''
+	;  good
+Else
+	Calculate lcMessage as con(lcMessage,pick(lcMessage<>'','',', '),'COLUMN NAMES missing')
+	Do ilValidation.$add('IMT_COL_ORDER_LBL','VAL_MISSING','COLUMN NAMES missing',0)
+End If
+
+If lcMessage<>''
+	Calculate icValidationMessage as lcMessage
+	Quit method kFalse
+End If
+
+Quit method kTrue

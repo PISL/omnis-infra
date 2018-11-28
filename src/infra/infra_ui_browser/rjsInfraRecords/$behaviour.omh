@@ -1,0 +1,15 @@
+Calculate $cinst.$objs.icSearch.$enabled as icMode=''
+Calculate $cinst.$objs.ilSearch1.$enabled as icMode=''
+Calculate $cinst.$objs.ilSearch2.$enabled as icMode=''
+Calculate $cinst.$objs.ilDisplayRecords.$enabled as icMode=''
+
+;  On small screens the icDisplayMessage is positioned at same position as Heading and Intro.
+;  So visibility of Heading and Intro is opposite to icDisplayMessage.
+;  If inBreakpoint<667
+Calculate $cinst.$objs.icFormHeading.$visible as icDisplayMessage=''
+Calculate $cinst.$objs.icFormIntro.$visible as icDisplayMessage=''
+;  Else
+;  Calculate $cinst.$objs.icFormHeading.$visible as kTrue
+;  Calculate $cinst.$objs.icFormIntro.$visible as kTrue
+;  End If
+Calculate $cinst.$objs.inBreakpoint.$visible as (sys(2)=17)     ;; shown while developing only

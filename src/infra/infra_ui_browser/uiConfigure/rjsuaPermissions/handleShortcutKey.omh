@@ -1,0 +1,21 @@
+;  Return true if this form has handled the shortcut key
+
+;  see if the key received is in our translation list
+JavaScript: transObj = JSON.parse(__form.get("icKeyTranslations"))
+JavaScript: for (x in transObj) {
+;  indexOf Returns -1 if not found
+JavaScript: if (transObj[x].indexOf(pKey) > -1) {
+JavaScript: pKey = x;
+JavaScript: break;
+JavaScript: }
+JavaScript: }
+
+Switch pKey
+	Case irKeyPress.insert,irKeyPress.edit,irKeyPress.delete
+		Do $cinst.$enterData(pKey)
+		Quit method kTrue     ;; tell the parent that we've dealt with it
+		
+	Default
+		Quit method kFalse     ;; pass it back to the parent
+		
+End Switch

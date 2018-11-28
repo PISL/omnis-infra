@@ -1,0 +1,9 @@
+On evClick     ;; Event Parameters - pRow ( Itemreference )
+	Do ilRemoteForms.$search(0)
+	Do ilRemoteForms.$search($ref.C3=ilRemoteTasks.C2,1,0,1,0)
+	Calculate ilRemoteForms.$line as 0
+	
+	Do $cinst.$behaviour()
+	Do $cinst.$redraw()
+	
+On evDoubleClick     ;; Event Parameters - pRow ( Itemreference )

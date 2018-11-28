@@ -1,0 +1,19 @@
+Calculate icDisplayMessage as ''
+If irUserRights.canDeleteRolePermission
+	Do $DefineList(lrTemp,'tuaRolePermissions')
+	Do lrTemp.$fetch_pk(pDragValue.RP_SEQ)
+	If lrTemp.RP_SEQ>0
+		Do lrTemp.$delete() Returns lbOK
+		If lbOK
+			Do method RolePermissions
+		Else If lrTemp.icValidationMessage<>''
+			Calculate icDisplayMessage as lrTemp.icValidationMessage
+		Else
+			Calculate icDisplayMessage as lrTemp.irErrorSQL.NativeErrorText
+		End If
+	End If
+Else
+	Calculate icDisplayMessage as $cell(clLabels,'objName','not_authorised','label')
+End If
+
+Quit method lbOK

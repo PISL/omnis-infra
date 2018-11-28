@@ -1,0 +1,2 @@
+;  Enter your termination code here
+;  Do $SetVar('irefProgressLog',#NULL)     ;; tell Startup_Task that this openonce() window is closing

@@ -1,0 +1,30 @@
+Calculate icValidationMessage as ''
+Do ilValidation.$clear()
+
+If $cinst.ACP_SPAN<>''
+	;  good
+Else
+	Calculate lcMessage as con(lcMessage,pick(lcMessage<>'','',', '),'ACP_SPAN missing')
+	Do ilValidation.$add('ACP_SPAN_LBL','VAL_MISSING','ACP_SPAN missing',0)
+End If
+
+If $cinst.ACP_FROM<>''
+	;  good
+Else
+	Calculate lcMessage as con(lcMessage,pick(lcMessage<>'','',', '),'ACP_FROM missing')
+	Do ilValidation.$add('ACP_FROM_LBL','VAL_MISSING','ACP_FROM missing',0)
+End If
+
+If $cinst.ACP_TO<>''
+	;  good
+Else
+	Calculate lcMessage as con(lcMessage,pick(lcMessage<>'','',', '),'ACP_TO missing')
+	Do ilValidation.$add('ACP_TO_LBL','VAL_MISSING','ACP_TO missing',0)
+End If
+
+If lcMessage<>''
+	Calculate icValidationMessage as lcMessage
+	Quit method kFalse
+End If
+
+Quit method kTrue

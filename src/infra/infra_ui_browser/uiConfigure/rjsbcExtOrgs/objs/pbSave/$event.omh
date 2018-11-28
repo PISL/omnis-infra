@@ -1,0 +1,11 @@
+On evClick
+	;  irCurrentRecord  irOrgLink
+	Do $cinst.$saveData() Returns lbOK     ;; icDisplayMessage and icMode explain the results of $saveData
+	If lbOK
+		;  Do ilDisplayRecords.$fetch_all()
+		Do $cinst.$search1ListClick()
+		;  Do ilDisplayRecords.$search($ref.EO_SEQ=irCurrentRecord.EO_SEQ,1,0,0,0)
+	End If
+	
+	Do $cinst.$behaviour()
+	Do $cinst.$redraw()

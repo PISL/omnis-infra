@@ -1,0 +1,9 @@
+;  may be called from pbAdd or enterData
+Calculate $cinst.$objs.TabControl_RFL.$currenttab as 1
+Calculate $cinst.$objs.PagedPane.$currentpage as 1
+
+Do inherited      ;; irCurrentRecord
+
+Do irCurrentRecord.$defaults(ilSearch1.RFL_CLASS)
+
+Do $cinst.$behaviour()

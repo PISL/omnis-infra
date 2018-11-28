@@ -1,0 +1,46 @@
+Calculate $cinst.$objs.inBreakpoint.$visible as kTrue
+
+
+Set reference irefContainer to $cinst.$container
+Do inherited
+
+Do method setTabColours
+
+Do $DefineList(irCurrentRecord,'infra.tsysFeedback')
+Calculate ilDisplayRecords as irCurrentRecord
+Do ilDisplayRecords.$cols.$add('displayCol',kCharacter,kSimplechar,100)
+
+Calculate ilClasses as tlAuthorisedForms
+Do ilClasses.$search(isclear($ref.code),1,0,1,1)
+Do ilClasses.$remove(kListDeleteSelected)
+Do ilClasses.$cols.desc.$removeduplicates(kTrue,kTrue)
+Do ilClasses.$search($ref.code=trCurrentForm.code,1,0,0,0)
+Calculate inCurrentClass as ilClasses.$line
+
+Do toValues.$init('SF_TYPE') Returns ilFeedbackType
+Do ilFeedbackType.$addbefore(1,#NULL,#NULL,#NULL,'-')
+
+Do toValues.$init('SF_RESP_TYPE') Returns ilResponseType
+Do ilResponseType.$addbefore(1,#NULL,#NULL,#NULL,'-')
+
+Do method TranslateText     ;; call this here to get the translations before setting superclass labels/values
+
+Calculate icFormHeading as $cell(clLabels,'objName','FEEDBACK_Heading','label')
+Calculate $cinst.$objs.icFormHeading.$tooltip as $cell(clLabels,'objName','FEEDBACK_Intro','label')
+
+Do $cinst.$initInsert
+
+If ilClasses.code<>''
+	Do ilDisplayRecords.$fetchOnClass(ilClasses.code)
+	Do ilDisplayRecords.$sort($ref.SF_CWHEN,1)
+	Do ilDisplayRecords.$sendall($ref.displayCol.$assign(con(ilDisplayRecords.SF_FROM,': ',ilDisplayRecords.SF_CWHEN)))
+End If
+Do ilDisplayRecords.$cols.$findname('displayCol') Returns liColRef
+
+
+;  no drop lists needed for this small group of records
+Do $cinst.$superObjects($cell(clLabels,'objName','disp_prev_comm','label'),liColRef.$ident,'','')
+
+Calculate icMode as 'I'
+
+Do $cinst.$behaviour()

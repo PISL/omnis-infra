@@ -1,0 +1,36 @@
+{
+	"classtype": "kMenu",
+	"internalversion": 3,
+	"designtaskname": "Startup_Task",
+	"nextident": 1011,
+	"cvardefs": [
+
+	],
+	"ivardefs": [
+
+	],
+	"properties": {
+		"collectperformancedata": false,
+		"componenticon": 0,
+		"componenttype": "kCompStoreHidden",
+		"createdate": "2017-10-27 11:20:30",
+		"desc": "",
+		"editor": "",
+		"editordata": "",
+		"enabled": true,
+		"external": true,
+		"helpfile": 0,
+		"helptext": "",
+		"inheritedorder": 0,
+		"issupercomponent": false,
+		"moddate": "2015-04-20 16:29:42",
+		"showascheckedout": false,
+		"title": {
+			"type": 0,
+			"calc": "Infrastructure"
+		},
+		"userinfo": "",
+		"users": "12345678",
+		"version": "1.00"
+	}
+}

@@ -1,0 +1,20 @@
+;  REF_CLASS, REF_VALUE, REF_DESC, REF_ORDER, REF_ACTIVE, REF_CHAR, REF_INT, REF_DATE
+;  Do pList.$add('','ref_value','ref_desc',0,1,'ref_char',0,#NULL)
+
+If pcREF_CLASS='SF_TYPE'     ;; system feedback
+	Do pList.$add(,pcREF_CLASS,'COMMENT','General comment',0,2)     ;; SEQ, CLASS, VALUE, ORDER, ACTIVE
+	Do pList.$add(,pcREF_CLASS,'BUG','Software bug',1,2)     ;; SEQ, CLASS, VALUE, ORDER, ACTIVE
+	Do pList.$add(,pcREF_CLASS,'ENHANCEMENT','Enhancement request',2,2)
+	Do pList.$add(,pcREF_CLASS,'BEHAVIOUR','Form behaviour query',3,2)
+	
+Else If pcREF_CLASS='SF_RESP_TYPE'     ;; system feedback response type
+	Do pList.$add(,pcREF_CLASS,'PHONE','Please call me',0,2)     ;; SEQ, CLASS, VALUE, ORDER, ACTIVE
+	Do pList.$add(,pcREF_CLASS,'EMAIL','Email',1,2)
+	
+Else If pcREF_CLASS='PHOTOID_TYPE'
+	Do pList.$add(,pcREF_CLASS,'PASSPORT','Passport',0,2)     ;; SEQ, CLASS, VALUE, DESC, ORDER, ACTIVE
+	Do pList.$add(,pcREF_CLASS,'NINO','National insurance no.',0,2)
+	Do pList.$add(,pcREF_CLASS,'DL','Drivers licence',0,2)
+	Do pList.$add(,pcREF_CLASS,'IDCARD','ID card',0,2)
+	
+End If

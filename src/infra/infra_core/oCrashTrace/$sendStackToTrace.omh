@@ -1,0 +1,8 @@
+Calculate llStack as sys(192)     ;; method stack
+For llStack.$line from 3 to llStack.$linecount step 1
+	;  line 1 is this method which we want to ignore in the message
+	;  line 2 is the method that calls this method
+	Set reference liClassItem to llStack.classitem
+	Send to trace log {[#D]  [#T]  [liClassItem.$name()]  [llStack.object]  mthd: [llStack.method]  ln: [llStack.line]  [llStack.linetext]}
+	
+End For

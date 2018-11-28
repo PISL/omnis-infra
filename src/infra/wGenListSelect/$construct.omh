@@ -1,0 +1,42 @@
+Set reference irefCallingWindow to prefCallingWindow
+Calculate icDoMethodOnOK as pcDoMethodOnOK
+Calculate icDoMethodOnCancel as pcDoMethodOnCancel
+
+Calculate iList as pList
+Calculate icHeading as pHeading
+If icHeading=''
+	Calculate icHeading as 'Please select a line from the list, or click cancel if none are appropriate'
+End If
+If pButtonText<>''
+	Calculate lcTemp as pButtonText
+	Calculate lcText as strtok(nam(lcTemp),',')
+	Calculate $cinst.$objs.pbOK.$text as lcText
+	Calculate lcText as strtok(nam(lcTemp),',')
+	If lcText<>''
+		Calculate $cinst.$objs.pbCancel.$text as lcText
+	End If
+End If
+
+If pos('iList.',pColumn)
+	Calculate icDisplayExpression as pColumn
+	Test for valid calculation {[icDisplayExpression]}
+	If flag true
+		Calculate #F as evalf(icDisplayExpression)
+	Else
+		Breakpoint
+	End If
+Else
+	Calculate icDisplayExpression as con('iList.',pColumn)
+	Calculate #F as evalf(icDisplayExpression)
+End If
+
+;  Enter data
+;  If flag true
+;  Calculate lbOK as kTrue
+;  Else
+;  Calculate iList.$line as 0
+;  Calculate lbOK as kFalse
+;  End If
+;  Calculate pList as iList
+;  Close window instance $cinst
+;  Calculate #F as lbOK

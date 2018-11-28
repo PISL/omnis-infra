@@ -1,0 +1,9 @@
+If pcCustOrSupp='C'
+	Do irExtOrg.$generateInternalCode(pcTemplate,#NULL) Returns lcCode
+	Calculate irOrglink.EOL_FINACCT_CUID as lcCode
+Else If pcCustOrSupp='S'
+	Do irExtOrg.$generateInternalCode(#NULL,pcTemplate) Returns lcCode
+	Calculate irOrglink.EOL_FINACCT_SUID as lcCode
+End If
+
+Quit method lcCode

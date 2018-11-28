@@ -1,0 +1,8 @@
+If inCurrentTab=4
+	Calculate inCurrentTab as 1
+	Calculate $cinst.$objs.TabControl_EO.$currenttab as inCurrentTab
+End If
+
+Do inherited
+
+Do $cinst.$setcurfield('EO_NAME',kTrue)

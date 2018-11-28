@@ -1,0 +1,52 @@
+Do $cinst.$getBrowser()     ;; populate icPlatform used in TranslateText to decide on tab shortcuts
+Set reference $cinst.irefContainer to $cinst.$container
+Do inherited
+Do method setTabColours
+
+Do $DefineList(ilDisplayRecords,'infra.tuaUsers')
+Do ilDisplayRecords.$addDisplayName()
+Calculate irCurrentRecord as ilDisplayRecords
+
+Do ilDisplayRecords.$cols.$findname('DisplayName') Returns liColRef
+Calculate $cinst.$objs.ilDisplayRecords.$listcolumn as liColRef.$ident
+Calculate lnDisplayListCol as liColRef.$ident
+
+Do $DefineList(ilUserRoles,'infra.tuaUserRoles')
+Do ilUserRoles.$addLinkedCols('ROL_NAME,ROL_SEQ,ROL_SU')
+Do ilUserRoles.$cols.$findname('ROL_NAME') Returns liColRef
+Calculate $cinst.$objs.PagedPane.$objs.ilUserRoles.$listcolumn as liColRef.$ident
+
+Do $DefineList(ilRoles,'infra.tuaRoles')
+Do ilRoles.$fetch_all()
+
+Do $DefineList(ilUserGroupOrgLinks,'infra.tuaGroupOrgLinks')
+Do ilUserGroupOrgLinks.$addLinkedCols('GO_SEQ,GON_NAME_FULL')
+Do ilUserGroupOrgLinks.$cols.$findname('GON_NAME_FULL') Returns liColRef
+Calculate $cinst.$objs.PagedPane.$objs.ilUserGroupOrgLinks.$listcolumn as liColRef.$ident
+
+Do method TranslateText     ;; call this here to get the translations before setting superclass labels/values
+
+Calculate icFormHeading as $cell(clLabels,'objName','USERS_Heading','label')
+Calculate icFormIntro as $cell(clLabels,'objName','USERS_Intro','label')
+
+Do method UserPermissions
+
+Do $DefineList(ilGroupOrganisations,'infra.tentGroupOrganisations')     ;; GON_NAME_FULL is added in $construct
+If irUserRights.allUsers
+	Do ilGroupOrganisations.$fetchOnShortName('CF')
+	Do ilGroupOrganisations.$fetch_all()
+Else
+	Do ilGroupOrganisations.$fetchMyOrganisations()
+End If
+Do ilGroupOrganisations.$sort($ref.GON_NAME_FULL,0)
+Do ilGroupOrganisations.$cols.$findname('GON_NAME_FULL') Returns liColRef
+Calculate $cinst.$objs.ilChoiceOfGroupOrgs.$listcolumn as liColRef.$ident
+
+Do method FetchRecords
+
+Do $cinst.$superObjects($cell(clLabels,'objName','disp_users','label'),lnDisplayListCol,'','',,kTrue,$cell(clLabels,'objName','text_search_LBL','label'))
+
+Do $cinst.$container().$initToolsMenu() Returns ilMenuCommands
+Do $cinst.$container().$setupToolsMenu('uaUser',ilMenuCommands)
+
+Do $cinst.$behaviour()

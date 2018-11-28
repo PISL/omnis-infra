@@ -1,0 +1,17 @@
+Do oEncrypt.$initkey(517)
+Do oEncrypt2.$initkey(9677)
+Do oEncrypt3.$initkey(1091)
+
+Do ilFolds1.$cols.$add('Positions',kCharacter,kSimplechar,50)
+Do ilFolds1.$add('8,13,24,9,11,6,2,15,7,12,21,10')
+Do ilFolds1.$add('8,5,23,14,9,1,26,2,17,11,19,20')
+Do ilFolds1.$add('9,21,16,2,25,7,18,3,4,26,8,12')
+Do ilFolds1.$add('14,9,11,6,28,3,2,15,7,18,21,25')
+Do ilFolds1.$add('28,12,3,4,19,1,6,5,27,9,17,23')
+Do ilFolds1.$add('15,7,8,13,4,19,1,6,2,12,28,21')
+Do ilFolds1.$add('4,9,21,28,3,6,2,25,7,19,15,13')
+Do ilFolds1.$add('6,2,15,7,8,3,14,9,1,25,22,18')
+Do ilFolds1.$add('5,17,18,3,24,9,1,6,2,13,29,20')
+
+;  Do $DefineList(irCountry,'tCountries')
+Do irCountry.$definefromsqlclass('tCountries')

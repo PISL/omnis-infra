@@ -1,0 +1,26 @@
+Do llPrivsUsedInThisForm.$cols.$add('permission',kCharacter,kSimplechar,100)
+Do llPrivsUsedInThisForm.$cols.$add('colName',kCharacter,kSimplechar,100)
+
+Do llPrivsUsedInThisForm.$add('usr_insert','canInsert')
+Do llPrivsUsedInThisForm.$add('usr_update','canUpdate')
+Do llPrivsUsedInThisForm.$add('usr_delete','canDelete')
+Do llPrivsUsedInThisForm.$add('usr_allUsers','allUsers')
+
+Do llPrivsUsedInThisForm.$add('ur_insert','canAddRole')
+Do llPrivsUsedInThisForm.$add('ur_insert_r','canAddRoleR')
+Do llPrivsUsedInThisForm.$add('ur_delete','canDeleteRole')
+
+Do llPrivsUsedInThisForm.$add('ugo_insert','canAddGroupOrg')
+Do llPrivsUsedInThisForm.$add('ugo_insert_r','canAddGroupOrgR')
+Do llPrivsUsedInThisForm.$add('ugo_delete','canDeleteGroupOrg')
+
+Do $cinst.$setPermissions(llPrivsUsedInThisForm)     ;; irUserRights
+
+Do $cinst.$setControlEvent(99)     ;; reset
+Do $cinst.$setControlEvent(irUserRights.canAddRole,nam(ilChoiceOfRoles),evDrag,nam(ilUserRoles),evDrop)
+Do $cinst.$setControlEvent(irUserRights.canDeleteRole,nam(ilUserRoles),evDrag,nam(ilChoiceOfRoles),evDrop)
+Do $cinst.$setControlEvent(irUserRights.canAddGroupOrg,nam(ilChoiceOfGroupOrgs),evDrag,nam(ilUserGroupOrgLinks),evDrop)
+Do $cinst.$setControlEvent(irUserRights.canDeleteGroupOrg,nam(ilUserGroupOrgLinks),evDrag,nam(ilChoiceOfGroupOrgs),evDrop)
+Do $cinst.$setControlEvent(100)     ;; apply
+
+Calculate $cinst.$objs.USR_SU.$visible as irUserRights.allUsers     ;; checkbox

@@ -1,0 +1,7 @@
+Calculate $cinst.$objs.ilSearch1.$visible as ilSearch1.$linecount>1
+Calculate $cinst.$objs.label_ilSearch1.$visible as ilSearch1.$linecount>1
+
+Calculate $cinst.$objs.label_ilSearch1.$text as pcLabelSearch
+
+Do ilSearch1.$cols.$findname(pcDisplayCols) Returns liColRef
+Calculate $cinst.$objs.ilSearch1.$listcolumn as liColRef.$ident

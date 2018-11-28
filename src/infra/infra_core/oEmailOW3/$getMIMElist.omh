@@ -1,0 +1,2 @@
+Do llMIMElist.$define(lnLevel,lcContentType,lcContentSubtype,lcFilename,lcCharData,lBinData,lnCharset,lcEncoding,lcDisposition)
+Quit method llMIMElist

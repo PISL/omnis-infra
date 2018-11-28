@@ -1,0 +1,3 @@
+Calculate ibEveryOtherLine as not(ibEveryOtherLine)
+Calculate $cinst.$objs.1085.$backcolor as pick(ibEveryOtherLine,rgb(238,238,238),rgb(255,255,255))
+Do default

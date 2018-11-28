@@ -1,0 +1,46 @@
+Do $cinst.$getBrowser()     ;; populate icPlatform used in TranslateText to decide on tab shortcuts
+Set reference irefContainer to $cinst.$container
+Do inherited
+Do method setTabColours
+
+;  Enter your initialization code here
+If tcCurrentLibrary='CONFERENCE'
+	Do $DefineList(ilDisplayRecords,'tProducts')
+Else
+	Do $DefineList(ilDisplayRecords,'infra.tProducts')
+End If
+Do ilDisplayRecords.$addSchemaColumns('infra.sProductInternalData')
+Do ilDisplayRecords.$AddLinkedCols('RFL_VALUE,RFL_DESC,RFL_NUMBER',kTrue)
+Calculate irCurrentRecord as ilDisplayRecords
+
+Do ilDisplayRecords.$fetchOurProducts(#NULL,#NULL,#NULL,#NULL,#NULL,#NULL,'rfl_value,rfl_desc,rfl_number')     ;; we want to load only those products belonging to the current Group Org
+If ilDisplayRecords.irErrorSQL.NativeErrorText<>''
+	Calculate icDisplayMessage as ilDisplayRecords.irErrorSQL.NativeErrorText
+End If
+
+Calculate icCurrency as trGroupOrg.GO_CURRENCY
+
+Do method TranslateText     ;; call this here to get the translations before setting superclass labels/values
+
+Calculate icFormHeading as $cell(clLabels,'objName','PRD_Heading','label')
+Calculate icFormIntro as $cell(clLabels,'objName','PRD_Intro','label')
+
+Do method UserPermissions
+
+Do ilDisplayRecords.$cols.$findname('PRD_INT_PRODCODE') Returns liColRef
+Calculate lnDisplayListCol as liColRef.$ident
+
+Do $cinst.$superObjects($cell(clLabels,'objName','disp_prods','label'),lnDisplayListCol,'',$cell(clLabels,'objName','sel_supplier','label'),,kTrue)
+
+Calculate $cinst.$objs.TabControl_PRD.$currenttab as 1
+
+Calculate $cinst.$objs.PagedPane.$bordercolor as rgb(255,0,0)
+Calculate $cinst.$objs.PagedPane.$linestyle as kLineSolidWidth2
+
+Do toValues.$initLocal('VAT_RATES') Returns irReference
+
+Do $cinst.$container().$initToolsMenu() Returns ilMenuCommands     ;; use defaults
+Do ilMenuCommands.$add('FACT_DUP',1201)
+Do $cinst.$container().$setupToolsMenu('PRD',ilMenuCommands)
+
+Do $cinst.$behaviour()

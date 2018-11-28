@@ -1,0 +1,7 @@
+Calculate icPrefix as 'EOL_'
+Calculate icPrimarykey as 'EOL_SEQ'
+
+Calculate icForeignKey as 'EOL_GO_REF'
+;  Calculate icForeignKey as 'EOL_EO_REF'
+
+Do inherited

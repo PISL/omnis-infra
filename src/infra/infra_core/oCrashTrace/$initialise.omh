@@ -1,0 +1,6 @@
+If len(pFilename)
+	Do oFileOps.$createfile(con(pFilename,'.txt')) Returns ibCrashTraceOpen
+Else
+	Do oFileOps.$createfile(con(tConstants.HostDirectory,tcCurrentLibrary,'_crash_trace.txt')) Returns ibCrashTraceOpen
+End If
+Quit method ibCrashTraceOpen

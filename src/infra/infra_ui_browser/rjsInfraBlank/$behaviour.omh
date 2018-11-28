@@ -1,0 +1,13 @@
+;  Breakpoint {abstract record - deal with this in subclass}
+Calculate $cinst.$objs.ilAuthorisedForms.$enabled as icMode=''
+Calculate $cinst.$objs.ilDisplayRecords.$enabled as icMode=''
+Calculate $cinst.$objs.ilDisplayRecords.$textcolor as pick(icMode='',kColorGrayText,inColourNavObjs)
+Calculate $cinst.$objs.ilSearch1.$visible as ilSearch1.$linecount
+Calculate $cinst.$objs.ilSearch1.$enabled as icMode=''
+Calculate $cinst.$objs.ilSearch1.$textcolor as pick(icMode='',kColorGrayText,inColourNavObjs)
+Calculate $cinst.$objs.ilSearch2.$visible as ilSearch2.$linecount
+Calculate $cinst.$objs.ilSearch2.$enabled as icMode=''
+Calculate $cinst.$objs.ilSearch2.$textcolor as pick(icMode='',kColorGrayText,inColourNavObjs)
+;  Calculate $cinst.$objs.app_navigation_bar.$objs.ilAuthorisedForms.$enabled as icMode=''
+Calculate $cinst.$objs.app_navigation_bar.$objs.ilAuthorisedForms.$textcolor as pick(icMode='',kColorGrayText,inColourDropList)
+Calculate $cinst.$objs.app_navigation_bar.$objs.pbFeedBack.$enabled as trCurrentForm.code<>'FORM_FEEDBACK'

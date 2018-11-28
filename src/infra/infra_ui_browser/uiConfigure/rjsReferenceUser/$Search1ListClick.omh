@@ -1,0 +1,7 @@
+Do method fetchDisplayList (ilSearch1.RFU_CLASS)
+Calculate ilDisplayRecords.$line as 1
+Calculate irCurrentRecord as ilDisplayRecords
+
+Do method displaySearchCount
+
+Do $cinst.$behaviour

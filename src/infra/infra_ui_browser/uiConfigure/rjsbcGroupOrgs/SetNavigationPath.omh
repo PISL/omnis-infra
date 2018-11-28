@@ -1,0 +1,7 @@
+;  Calculate icNavigationPath as ''
+;  Calculate ilNavCache.$line as 0
+;  While $Loop(ilNavCache)
+;  Calculate llTemp as ilNavCache.previous
+;  Calculate icNavigationPath as con(icNavigationPath,pick(icNavigationPath<>'','',' > '),llTemp.PB_NAME_SHORT)
+;  End While
+;  Calculate icParentOfParentName as llTemp.PB_NAME_LONG     ;; llTemp is still in memory with last entry in stack

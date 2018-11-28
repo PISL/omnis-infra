@@ -1,0 +1,16 @@
+Do inherited
+
+Calculate $cinst.$objs.TabControl_FEEDBACK.$enabled as $cinst.icMode=''
+
+Calculate $cinst.$objs.pbCancel.$visible as icMode<>''
+Calculate $cinst.$objs.pbSave.$visible as icMode<>''
+Calculate $cinst.$objs.pbBack.$visible as icMode=''
+Calculate $cinst.$objs.pbAdd.$visible as icMode=''
+
+Calculate $cinst.$objs.SF_CLASS.$enabled as icMode<>''
+Calculate $cinst.$objs.SF_TYPE.$enabled as icMode<>''
+Calculate $cinst.$objs.SF_COMMENT.$enabled as icMode<>''
+Calculate $cinst.$objs.SF_RESP_TYPE.$enabled as icMode<>''
+Calculate $cinst.$objs.SF_RESP_DUE.$enabled as icMode<>''
+
+Do method assignEntryFieldProperties

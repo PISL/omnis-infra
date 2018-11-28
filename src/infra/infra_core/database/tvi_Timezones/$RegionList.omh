@@ -1,0 +1,25 @@
+Do $cinst.$ImmediateSession(loSession,loStatement) Returns lbImmediateSession
+If lbImmediateSession
+	Do $cinst.$SetSession(loSession,loStatement)
+Else If not(ibGoodConnectionToDb)
+	Quit method kFalse
+End If
+
+Do pList.$cols.$findname('REGION') Returns lrefCol
+If lrefCol
+	Do pList.$clear()
+Else
+	Do pList.$cols.$add('REGION',kCharacter,kSimplechar,10)
+End If
+
+Begin statement
+Sta: {select distinct REGION from [$cinst.$servertablenames]}
+Sta: {order by REGION}
+End statement
+
+Do $cinst.$executesqlandfetch(pList) Returns lbOK
+If lbImmediateSession
+	Do $cinst.$SetSession(#NULL,#NULL,kTrue)
+End If
+
+Quit method lbOK

@@ -1,0 +1,43 @@
+Calculate ilCountries.$line as 0
+;  Do irCurrentRecord.$clear()
+If icSUPPorCUST='CUSTOMER'
+	If icSearch<>''
+		Do $cinst.$stringSearch()
+	Else
+		Do ilDisplayRecords.$FetchOurCustomers()
+	End If
+	
+Else If icSUPPorCUST='SUPPLIER'
+	If icSearch<>''
+		Do $cinst.$stringSearch()
+	Else
+		Do ilDisplayRecords.$FetchOurSuppliers()
+	End If
+	
+	;  Else If icSUPPorCUST='ALL'
+	;  If icSearch<>''
+	;  Do $cinst.$stringSearch()
+	;  Else
+	;  If irUserRights.allOrgs
+	;  Do ilDisplayRecords.$fetch_all()
+	;  End If
+	;  End If
+End If
+
+If ilDisplayRecords.$linecount=0
+	If irUserRights.allOrgs
+		Do ilDisplayRecords.$fetch_all()
+		Do toStrings.$StringTableEntry('MSG_ALLORGSPRIVS',icDisplayMessage,'with privileges to select all Organisations, all records have been fetched')
+	End If
+End If
+
+Do ilDisplayRecords.$sendall($ref.MECID.$assign(con(mid(bintohex(binfromint64($sendallref.EO_MEC_ID)),1,4),'-',mid(bintohex(binfromint64($sendallref.EO_MEC_ID)),5,4),'-',mid(bintohex(binfromint64($sendallref.EO_MEC_ID)),9,4),'-',mid(bintohex(binfromint64($sendallref.EO_MEC_ID)),13,4))))
+Do ilDisplayRecords.$sort(upp($ref.EO_NAME),0)
+
+If irCurrentRecord.EO_SEQ>0
+	Do ilDisplayRecords.$search($ref.EO_SEQ=irCurrentRecord.EO_SEQ,1,0,0,0)
+Else
+	Calculate ilDisplayRecords.$line as 1
+End If
+
+Do $cinst.$displayListClick()

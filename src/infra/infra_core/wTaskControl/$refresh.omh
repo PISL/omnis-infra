@@ -1,0 +1,66 @@
+Begin reversible block
+	Calculate #FDT as 'D/M/Y H:N:S'
+End reversible block
+Do $iremotetasks.$makelist($ref.$name,$ref.$connectionid,$ref.$connectiontime,$ref.$lastresponse,$ref.$clientaddress,$ref) Returns ilRemoteTasks
+Do $iremoteforms.$makelist($ref.$name,$ref,$ref.$task) Returns ilRemoteForms
+Do ilRemoteTasks.$sort($ref.connectionTime,1)
+
+Do ilRemoteTasks.$cols.1.$name.$assign('taskName')
+Do ilRemoteTasks.$cols.2.$name.$assign('connectionId')
+Do ilRemoteTasks.$cols.3.$name.$assign('connectionTime')
+Do ilRemoteTasks.$cols.4.$name.$assign('lastResponse')
+Do ilRemoteTasks.$cols.5.$name.$assign('ipAddress')
+Do ilRemoteTasks.$cols.6.$name.$assign('reference')
+
+Do ilRemoteTasks.$cols.$add('userName',kCharacter,kSimplechar,20)
+Do ilRemoteTasks.$cols.$add('company',kCharacter,kSimplechar,20)
+Do ilRemoteTasks.$cols.$add('currentForm',kRow)
+Do ilRemoteTasks.$cols.$add('runningDuration',kCharacter,kSimplechar,20)
+Do ilRemoteTasks.$cols.$add('idleLastResponse',kCharacter,kSimplechar,20)
+
+Do ilRemoteForms.$cols.$add('currentForm',kCharacter,kSimplechar,100)
+
+Begin reversible block
+	Set current list ilRemoteTasks
+End reversible block
+For each line in list from 1 to #LN step 1
+	Set reference lrefRemoteObject to ilRemoteTasks.reference
+	If lrefRemoteObject.$GetVar.$cando()
+		Do lrefRemoteObject.$GetVar('trCurrUser') Returns lrUser
+		Do lrefRemoteObject.$GetVar('trLogAccess') Returns lrLogin
+		Do lrefRemoteObject.$GetVar('trCurrentForm') Returns ilRemoteTasks.currentForm
+		Do lrefRemoteObject.$GetVar('trGroupOrg') Returns lrGroupOrg
+		;  trGroupOrg.GO_NAME_SHORT
+		If lrUser.USR_NAME<>''
+			Calculate ilRemoteTasks.userName as lrUser.USR_NAME
+		Else
+			Calculate ilRemoteTasks.userName as '* not logged in *'
+		End If
+		Calculate ilRemoteTasks.company as lrGroupOrg.GO_NAME_SHORT
+		;  Calculate ilRemoteTasks.ipAddress as lrLogin.ULA_IP_ADDRESS
+	End If
+	
+	Calculate lnSeconds as ddiff(kSecond,ilRemoteTasks.connectionTime,#D)
+	Do toStrings.$TimeLapse(kSecond,lnSeconds) Returns ilRemoteTasks.runningDuration
+	
+	Calculate lnSeconds as ddiff(kSecond,ilRemoteTasks.lastResponse,#D)
+	Do toStrings.$TimeLapse(kSecond,lnSeconds) Returns ilRemoteTasks.idleLastResponse
+	
+	Do ilRemoteForms.$search($ref.C1=ilRemoteTasks.currentForm.class,1,0,0,0)
+	Calculate ilRemoteForms.currentForm as ilRemoteTasks.currentForm.desc
+End For
+
+Calculate ilRemoteTasks.$line as 0
+Calculate ilRemoteForms.$line as 0
+
+Calculate icTimeLapse as ''
+Calculate ldtLastRefresh as idtRefresh
+Calculate idtRefresh as #D
+If isnull(ldtLastRefresh)     ;; first time this method is executed
+	;  do not calculate time lapse since last fetch
+Else
+	Calculate lnSeconds as ddiff(kSecond,ldtLastRefresh,idtRefresh)
+	If lnSeconds>0
+		Calculate icTimeLapse as toStrings.$TimeLapse(kSecond,lnSeconds)
+	End If
+End If

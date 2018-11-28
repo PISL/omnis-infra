@@ -1,0 +1,17 @@
+;  the assumption with this method is that the phone numbers HAVE BEEN VALIDATED
+
+Switch pCountry
+	Case 'GB','GBR','UK'
+		Calculate lcTemp as pPostcode
+		Calculate lcTemp as upp(lcTemp)
+		Calculate lcTemp as replaceall(lcTemp,' ','')
+		Calculate lcTokenBefore as upp(mid(lcTemp,1,len(lcTemp)-3))
+		Calculate lcTokenAfter as upp(mid(lcTemp,len(lcTemp)-2,3))
+		
+		Calculate lcPostcode as con(lcTokenBefore,' ',lcTokenAfter)     ;; correctly formatted, upper case
+		
+	Default
+		Calculate lcPostcode as upp(pPostcode)
+End Switch
+
+Quit method lcPostcode

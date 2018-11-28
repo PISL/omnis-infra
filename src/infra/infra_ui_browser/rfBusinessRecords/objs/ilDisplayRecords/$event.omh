@@ -1,0 +1,7 @@
+On evClick
+	Do $cinst.$displayListClick()
+	
+On evDrop
+	;  If $cinst.$dropEventDisplayRecords.$cando()
+	Do $cinst.$dropEventDisplayRecords(pDragField,pDragType,pDragValue,pDropId.pEventCode)
+	;  End If

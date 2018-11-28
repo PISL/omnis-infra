@@ -1,0 +1,5 @@
+Do ilUsers.$fetchRecent(idFrom,idTo)
+Do ilUsers.$sort($ref.USR_NAME,0)
+Do ilUsers.$add(#NULL,#NULL,'did not login')
+
+Calculate ilUsers.$line as 1

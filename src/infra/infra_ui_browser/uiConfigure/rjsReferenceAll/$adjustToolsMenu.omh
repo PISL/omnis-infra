@@ -1,0 +1,12 @@
+If inCurrentTab=1
+	Do $cinst.$container().$adjustToolsMenu('refUser') Returns lnCount     ;; irefContainer does not work with execute on client
+	
+Else If inCurrentTab=2
+	Do $cinst.$container().$adjustToolsMenu('refOrg') Returns lnCount     ;; irefContainer does not work with execute on client
+	
+Else If inCurrentTab=3
+	Do $cinst.$container().$adjustToolsMenu('refLocal') Returns lnCount     ;; irefContainer does not work with execute on client
+	
+Else If inCurrentTab=4
+	Do $cinst.$container().$adjustToolsMenu('refGlobal') Returns lnCount     ;; irefContainer does not work with execute on client
+End If

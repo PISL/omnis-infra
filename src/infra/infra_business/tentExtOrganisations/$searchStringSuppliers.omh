@@ -1,0 +1,102 @@
+If $ctask.trGroupOrg.GO_SEQ>0
+	;  proceed
+Else
+	Quit method kFalse
+End If
+Calculate pcReturnWhat as upp(pcReturnWhat)
+
+If tlDatabases.DAM='WebService'
+	;  pass parameters to web service
+	If pcReturnWhat='COUNT'     ;; result will be returned in pFieldReference, row() contains the parameters for the call
+		Do ioWeb.$callFetch(lnCount,irErrorSQL,row($cinst.$class().$name,$cmethod().$name,row(pcReturnWhat,pcText,pcColumn),lnCount.$type,0,ilRESTextensions))
+		If ioWeb.irResponse.httpStatusCode=200
+			;  the result should be in this object     ;; however there may be a SQL error
+			If irErrorSQL.NativeErrorText<>''
+				Quit method kFalse
+			End If
+			Quit method lnCount
+		Else
+			Quit method kFalse
+		End If
+	Else
+		;  pass parameters to web service
+		Do ioWeb.$callFetch($cinst,irErrorSQL,row($cinst.$class().$name,$cmethod().$name,row(pcReturnWhat,pcText,pcColumn),$cinst.$type,0,ilRESTextensions))
+		If ioWeb.irResponse.httpStatusCode=200
+			;  the result should be in this object     ;; however there may be a SQL error
+			If irErrorSQL.NativeErrorText<>''
+				Quit method kFalse
+			End If
+			Quit method kTrue
+		Else
+			Quit method kFalse
+		End If
+	End If
+End If
+
+Do $cinst.$ImmediateSession(loSession,loStatement) Returns lbImmediateSession
+If lbImmediateSession
+	Do $cinst.$SetSession(loSession,loStatement)
+Else If not(ibGoodConnectionToDb)
+	Quit method kFalse
+End If
+
+Begin statement
+If pcReturnWhat='COUNT'
+	Sta: {select count(*) from (}
+End If
+Sta: {select [$cinst.$selectnames()]}
+Sta: {from [$cinst.$servertablenames],  [lrLinkToGroupOrg.$servertablenames()], [lrGroupOrg.$servertablenames()]}
+;  join ExtOrganisations to link table
+Sta: {where EOL_EO_REF = EO_SEQ}
+;  join link table to groupOrganisation
+Sta: {and    EOL_GO_REF = GO_SEQ}
+Sta: {and    GO_SEQ = @[$ctask.trGroupOrg.GO_SEQ]}
+;  supplier code exists
+Sta: {and    EOL_FINACCT_SUID is not null}
+If pcText<>''
+	Calculate pcText as con('%',pcText,'%')
+	
+	If pcColumn='N'
+		Sta: {and EO_NAME ilike @[pcText]}
+	Else If pcColumn='A'
+		Sta: {and  (  EO_ADDR_BILL ilike @[pcText]}
+		Sta: {or       EO_ADDR_SHIP ilike @[pcText]   )}
+	Else If pcColumn='C'
+		Sta: {and  EOL_FINACCT_SUID ilike @[pcText]}
+	Else If pcColumn='E'
+		Sta: {and   EO_EMAIL ilike @[pcText]}
+	Else If pcColumn='I'
+		Sta: {and  EO_INSTRUCTIONS ilike @[pcText]}
+	Else
+		Sta: {and ( EO_NAME ilike @[pcText]}
+		Sta: {or  EO_ADDR_BILL ilike @[pcText]}
+		Sta: {or  EO_ADDR_SHIP ilike @[pcText]}
+		Sta: {or  EO_CONTACT ilike @[pcText]}
+		Sta: {or  EO_EMAIL ilike @[pcText]}
+		Sta: {or  EO_INSTRUCTIONS ilike @[pcText]}
+		
+		Sta: {or  EOL_FINACCT_SUID ilike @[pcText]}
+		Sta: {)}
+	End If
+	
+End If
+If pcReturnWhat='COUNT'
+	;  PG requires an alias
+	Sta: {) as record_count}
+End If
+End statement
+
+If pcReturnWhat='COUNT'
+	Do $cinst.$executesqlandfetchinto(lnCount) Returns lbOK
+Else
+	Do $cinst.$executesqlandfetch() Returns lbOK
+End If
+If lbImmediateSession
+	Do $cinst.$SetSession(#NULL,#NULL,kTrue)
+End If
+
+If pcReturnWhat='COUNT'
+	Quit method lnCount
+Else
+	Quit method lbOK
+End If

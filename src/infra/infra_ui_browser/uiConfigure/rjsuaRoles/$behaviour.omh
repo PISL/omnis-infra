@@ -1,0 +1,44 @@
+If irefContainer
+	Do irefContainer.$behaviour(icMode)     ;; set the TabControl $enabled
+End If
+
+Calculate $cinst.$objs.pbInsert.$enabled as irUserRights.canInsert&icMode=''
+Calculate $cinst.$objs.pbEdit.$enabled as irUserRights.canEdit&ilDisplayRecords.ROL_SEQ>0&icMode=''
+Calculate $cinst.$objs.pbDelete.$enabled as irUserRights.canDelete&ilDisplayRecords.ROL_SEQ>0&icMode=''&ilRolePermissions.$linecount=0&ilRoleUsers.$linecount=0
+
+;  Calculate $cinst.$objs.pbMinusRolePermission.$enabled as irUserRights.canDeleteRolePermission&ilRolePermissions.RP_SEQ>0&icMode=''
+;  Calculate $cinst.$objs.pbPlusRolePermission.$enabled as irUserRights.canAddRolePermission&ilDisplayRecords.ROL_SEQ>0&icMode=''
+
+;  Calculate $cinst.$objs.pbMinusRoleUser.$enabled as irUserRights.canDeleteUserRole&ilRoleUsers.UR_SEQ>0&icMode=''
+;  Calculate $cinst.$objs.pbPlusRoleUser.$enabled as irUserRights.canAddUserRole&ilDisplayRecords.ROL_SEQ>0&icMode=''
+
+;  Calculate $cinst.$objs.label_ROL_NAME.$visible as icMode='IR'
+Calculate $cinst.$objs.ROL_NAME.$enabled as icMode<>''
+Calculate $cinst.$objs.cb_ROL_ACTIVE.$enabled as icMode<>''
+Calculate $cinst.$objs.cb_ROL_REVOKE.$enabled as icMode<>''
+Calculate $cinst.$objs.cb_ROL_SU.$enabled as icMode<>''&ilRolePermissions.$linecount=0&ilRoleUsers.$linecount=0
+
+;  Calculate $cinst.$objs.label_AssignPermission.$visible as icMode='AP'
+;  Calculate $cinst.$objs.ilChoiceOfPermissions.$visible as icMode='AP'
+
+;  Calculate $cinst.$objs.label_AssignUser.$visible as icMode='AU'
+;  Calculate $cinst.$objs.ilChoiceOfUsers.$visible as icMode='AU'
+
+;  Calculate $cinst.$objs.ilChoiceOfRoles.$visible as icMode='CP'
+
+Calculate $cinst.$objs.TabControl_ROLES.$enabled as icMode=''
+
+Calculate $cinst.$objs.ilRolePermissions.$enabled as icMode=''
+Calculate $cinst.$objs.ilRoleUsers.$enabled as icMode=''
+Calculate $cinst.$objs.ilChoiceOfPermissions.$enabled as icMode=''
+Calculate $cinst.$objs.ilChoiceOfUsers.$enabled as icMode=''
+
+;  Calculate $cinst.$objs.pbCopyPermissions.$enabled as icMode=''&irUserRights.canAddRolePermission&ilRolePermissions.$linecount>0
+;  Calculate $cinst.$objs.pbDeselectAll.$enabled as icMode='CP'
+;  Calculate $cinst.$objs.pbSelectAll.$enabled as icMode='CP'
+
+Calculate $cinst.$objs.pbCancel.$visible as icMode<>''
+Calculate $cinst.$objs.pbSave.$visible as icMode<>''
+
+Do method assignEntryFieldProperties
+Do inherited

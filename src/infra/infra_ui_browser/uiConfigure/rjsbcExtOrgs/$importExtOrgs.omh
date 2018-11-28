@@ -1,0 +1,122 @@
+
+;  ============================================================
+;  ===  this section contains the form/schema specific code ===
+;  set the maximum error count to trigger aborting the import
+Calculate lnMaxErrors as 4
+Do $DefineList(lrExtOrg,'infra.tentExtOrganisations')
+Do $DefineList(lrOrgLink,'infra.tentOrgLinks')
+
+Do lrExtOrg.$beginTransaction(#NULL,loSession,loStatement) Returns lbRunningAsTransaction
+Do lrOrgLink.$setSession(loSession,loStatement)
+
+;  ============================================================
+
+Calculate lcSeparators as $root.$prefs.$separators()
+Do llErrors.$addcols('line',kInteger,k32bitint,,'message',kCharacter,kSimplechar,255)
+
+Calculate plDataCols.$line as 0
+While $Loop(plDataCols)
+	If plDataCols.include
+		Do plContent.$cols.$findident(plDataCols.$line) Returns lref
+		Calculate lref.$name as plSchemaCols.[plDataCols.$line].C1
+	End If
+End While     ;; $Loop(plDataCols)
+
+Calculate plContent.$line as 0
+
+While $Loop(plContent)
+	Do lrExtOrg.$clear()
+	If pbIgnoreFirst&plContent.$line<=pnRowsToIgnore
+		;  ignore this record
+	Else
+		;  ============================================================
+		;  ===  this section contains the form/schema specific code ===
+		;  Do lrInput.$assignrow(plContent.[plContent.$line],kTrue)
+		Do lrExtOrg.$assignrow(plContent,kTrue)
+		
+		If len(plContent.EO_NAME)>0
+			If len(plContent.FIN_ACCT_ID)>0
+				Do lrExtOrg.$insert() Returns lbOK
+			Else
+				;  register missing fin. accounts ID and move on
+				Do toStrings.$StringTableEntry('MSG_MiSSINGFINACCTID',lcMessage,'financial accounts ID missing')
+				Do llErrors.$add(plContent.$line,lcMessage)
+				If llErrors.$linecount>=lnMaxErrors
+					Do toStrings.$StringTableEntry('MSG_IMPABORTERRORS',lcMessage,'Import aborted due to excessive errors')
+					Do llErrors.$add(#NULL,lcMessage)
+					Break to end of loop
+				Else
+					Jump to start of loop
+				End If
+			End If     ;; SUPPID or CUSTID
+		Else
+			;  register missing company name and move on
+			Do toStrings.$StringTableEntry('MSG_MISSINGCONAME',lcMessage,'company name missing')
+			Do llErrors.$add(plContent.$line,lcMessage)
+			If llErrors.$linecount>=lnMaxErrors
+				Do toStrings.$StringTableEntry('MSG_IMPABORTERRORS',lcMessage,'Import aborted due to excessive errors')
+				Do llErrors.$add(#NULL,lcMessage)
+				Break to end of loop
+			Else
+				Jump to start of loop
+			End If
+		End If     ;; EO_NAME
+		
+		;  ============================================================
+		If lbOK
+			;  carry on, insert the OrgLink record
+			Do lrOrgLink.$clear()
+			Calculate lrOrgLink.EOL_GO_REF as trGroupOrg.GO_SEQ
+			Calculate lrOrgLink.EOL_EO_REF as lrExtOrg.EO_SEQ
+			If icSUPPorCUST="SUPPLIER"
+				Calculate lrOrgLink.EOL_FINACCT_SUID as plContent.FIN_ACCT_ID
+			Else
+				Calculate lrOrgLink.EOL_FINACCT_CUID as plContent.FIN_ACCT_ID
+			End If
+			Do lrOrgLink.$insert() Returns lbOK
+			If lbOK
+				;  carry on
+			Else
+				;  register error and carry on
+				If lrOrgLink.icValidationMessage<>''
+					Do llErrors.$add(plContent.$line,lrOrgLink.icValidationMessage)
+				Else
+					Do llErrors.$add(plContent.$line,lrOrgLink.irErrorSQL.NativeErrorText)
+					Do lrExtOrg.$rollbackTransaction(#NULL,loSession,loStatement)
+					Do lrOrgLink.$setSession(#NULL,#NULL,kTrue)
+					Do lrExtOrg.$beginTransaction(#NULL,loSession,loStatement) Returns lbRunningAsTransaction
+					Do lrOrgLink.$setSession(loSession,loStatement)
+				End If
+			End If
+		Else
+			;  register error and carry on
+			If lrExtOrg.icValidationMessage<>''
+				Do llErrors.$add(plContent.$line,lrExtOrg.icValidationMessage)
+			Else
+				Do llErrors.$add(plContent.$line,lrExtOrg.irErrorSQL.NativeErrorText)
+				Do lrExtOrg.$rollbackTransaction(#NULL,loSession,loStatement)
+				Do lrExtOrg.$setSession(#NULL,#NULL,kTrue)
+				Do lrExtOrg.$beginTransaction(#NULL,loSession,loStatement) Returns lbRunningAsTransaction
+				Do lrOrgLink.$setSession(loSession,loStatement)
+			End If
+		End If
+	End If
+	If llErrors.$linecount>=lnMaxErrors
+		Do toStrings.$StringTableEntry('MSG_IMPABORTERRORS',lcMessage,'Import aborted due to excessive errors')
+		Do llErrors.$add(#NULL,lcMessage)
+		Break to end of loop
+	End If
+End While
+
+If llErrors.$linecount
+	Do lrExtOrg.$rollbackTransaction(#NULL,loSession,loStatement)
+	Do lrExtOrg.$setSession(#NULL,#NULL,kTrue)
+	Do irefImport.$displayErrors(llErrors)
+Else
+	Do lrExtOrg.$commitTransaction(#NULL,loSession,loStatement)
+	Do lrExtOrg.$setSession(#NULL,#NULL,kTrue)
+	Calculate icMode as ''
+	Calculate $cinst.$objs.PagedPane.$currentpage as inCurrentTab
+	Do $cinst.$fetchOrgs()
+	Do $cinst.$behaviour()
+End If

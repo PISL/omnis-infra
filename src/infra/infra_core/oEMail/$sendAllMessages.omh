@@ -1,0 +1,6 @@
+;  send all e-mail messages held in the out-buffer via a SMTP server.
+For lLineInList from 1 to clOutBuffer.$linecount step 1
+	Do clOutBuffer.$line.$assign(lLineInList)
+	Do clOutBuffer.$loadcols()
+	Do $cinst.$sendMessage(iOutToAddressList,iOutSubject,iOutBody,iOutCCAddressList,iOutBCCAddressList,iOutPriority,iOutEnclosureList)
+End For

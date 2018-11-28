@@ -1,0 +1,143 @@
+Calculate pcReturnWhat as upp(pcReturnWhat)
+If pcReturnWhat='COUNT'|pcReturnWhat='RESULT'
+	;  continue
+Else
+	Quit method
+End If
+If isclear(pcSearchString)
+	Quit method
+End If
+If isnumber(pcSearchString)
+	Calculate lbIsNumber as kTrue
+End If
+Calculate pcSearchString as upp(pcSearchString)
+
+If pnGO_SEQ>0
+	;  proceed
+Else
+	Quit method
+End If
+
+If mid(pcSearchString,2,1)=':'     ;; user specifies a specific column to search on
+	Calculate lcColCode as upp(mid(pcSearchString,1,1))
+	If pbSearchAnywhere
+		Calculate lcSearchText as con('%',mid(pcSearchString,3,99),'%')
+	Else
+		Calculate lcSearchText as con(mid(pcSearchString,3,99),'%')
+	End If
+	
+	If lcColCode='N'
+		Calculate lcSearchColumn as 'PRD_NAME'
+	Else If lcColCode='D'
+		Calculate lcSearchColumn as 'PRD_DESC'
+	Else If lcColCode='S'
+		Calculate lcSearchColumn as 'PRD_SIZE'
+	Else If lcColCode='B'
+		Calculate lcSearchColumn as 'PRD_BRAND'
+	Else If lcColCode='P'
+		Calculate lcSearchColumn as 'PID_UNIT_PRICE'
+	End If
+Else     ;; product code search
+	;  If pnExtOrgSEQ>0
+	Calculate lcSearchColumn as 'PRD_SUPP_PRODCODE'
+	;  Else
+	;  Calculate lcSearchColumn as 'PRD_INT_PRODCODE'
+	;  End If
+	If pbSearchAnywhere
+		Calculate lcSearchText as con('%',pcSearchString,'%')
+	Else
+		Calculate lcSearchText as con(pcSearchString,'%')
+	End If
+End If
+
+If pnExtOrgSEQ>0
+	;  we'll be using PRD_EO_REF column as a predicate
+End If
+
+If tlDatabases.DAM='WebService'
+	If pcReturnWhat='COUNT'
+		Do ioWeb.$callFetch(lnCount,irErrorSQL,row($cinst.$class().$name,$cmethod().$name,row(pcReturnWhat,pcSearchString,pnGO_SEQ,pnExtOrgSEQ,pbSearchAllCols,pbSearchAnywhere),lnCount.$type,0,ilRESTextensions))
+		If ioWeb.irResponse.httpStatusCode=200
+			;  the result should be in this object     ;; however there may be a SQL error
+			If irErrorSQL.NativeErrorText<>''
+				Quit method kFalse
+			End If
+			Quit method lnCount
+		Else
+			Quit method kFalse
+		End If
+	Else If pcReturnWhat='RESULT'
+		Do ioWeb.$callFetch($cinst,irErrorSQL,row($cinst.$class().$name,$cmethod().$name,row(pcReturnWhat,pcSearchString,pnGO_SEQ,pnExtOrgSEQ,pbSearchAllCols,pbSearchAnywhere),$cinst.$type,0,ilRESTextensions))
+		If ioWeb.irResponse.httpStatusCode=200
+			;  the result should be in this object     ;; however there may be a SQL error
+			If irErrorSQL.NativeErrorText<>''
+				Quit method kFalse
+			End If
+			Quit method kTrue
+		Else
+			Quit method kFalse
+		End If
+	End If
+End If
+
+Do $cinst.$ImmediateSession(loSession,loStatement) Returns lbImmediateSession
+If lbImmediateSession
+	Do $cinst.$SetSession(loSession,loStatement)
+Else If not(ibGoodConnectionToDb)
+	Quit method kFalse
+End If
+
+;  the "search all columns" version will produce a table scan coupled with outer join !!
+;  it will never be an efficient query ! !
+Begin statement
+If pcReturnWhat='RESULT'
+	Sta: {select [$cinst.$selectnames()]}
+Else If pcReturnWhat='COUNT'
+	Sta: {select count(*)}
+End If
+
+Sta: {from [$cinst.$servertablenames]}
+Sta: {where PRD_GO_REF = @[pnGO_SEQ]}
+If tcCurrentLibrary<>'CONFERENCE'
+	Sta: {and PRD_META = @[inMeta]}
+End If
+If lcSearchColumn<>''&lcSearchText<>''&not(pbSearchAllCols)
+	Sta: {and     [lcSearchColumn] ilike @[lcSearchText]}
+Else If pbSearchAllCols
+	
+	;  cast the search net as widely as possible
+	Sta: {and     ( upper(PRD_SUPP_PRODCODE) like @[lcSearchText]}
+	Sta: {or       upper(PRD_INT_PRODCODE) like @[lcSearchText]}
+	Sta: {or       upper(PRD_BRAND) like @[lcSearchText]}
+	Sta: {or       upper(PRD_NAME) like @[lcSearchText]}
+	Sta: {or       upper(PRD_DESC) like @[lcSearchText]}
+	If lbIsNumber
+		Sta: {or       cast(PRD_SIZE as text) like @[lcSearchText]}
+		Sta: {or       cast(PID_UNIT_PRICE as text) like @[lcSearchText]}
+	End If
+	Sta: {)}
+End If
+
+If pnExtOrgSEQ>0
+	Sta: {and      PRD_EO_REF = @[pnExtOrgSEQ]}
+Else
+	;  Sta: and not exists ( select 'x' from [lrInternalData.$servertablenames()] where PID_PRD_REF = PRD_SEQ )
+	Sta: {and    PRD_EO_REF is not null}
+End If
+
+End statement
+
+If pcReturnWhat='RESULT'
+	Do $cinst.$executesqlandfetch() Returns lbOK
+Else If pcReturnWhat='COUNT'
+	Do $cinst.$executesqlandfetchinto(lnCount) Returns lbOK
+End If
+If lbImmediateSession
+	Do $cinst.$SetSession(#NULL,#NULL,kTrue)
+End If
+
+If pcReturnWhat='RESULT'
+	Quit method lbOK
+Else If pcReturnWhat='COUNT'
+	Quit method lnCount
+End If

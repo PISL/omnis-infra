@@ -1,0 +1,28 @@
+If ilData.$linecount>0
+	Calculate ilData.$line as 0
+	Do ilData.$search(0)
+	Do ilData.$search(len($ref.CO_ISO2)=0|len($ref.CO_ISO3)=0|len($ref.CO_NAME)=0,1,0,1,0)
+	While $Loop(ilData,kTrue)
+		Calculate lRow as ilData
+		If lRow.CO_SEQ>0
+			Do lRow.$delete() Returns lbOK
+		End If
+	End While
+	Do ilData.$remove(kListDeleteSelected)
+	
+	While $Loop(ilData)
+		If ilData.$status=kRowUpdated
+			Calculate lRow as ilData
+			If lRow.CO_SEQ>0
+				Do lRow.$update() Returns lbOK
+			Else
+				;  Do lRow.$insert_pk() Returns lbOK
+				Do lRow.$insert() Returns lbOK
+			End If
+			Calculate ilData.[ilData.$line] as lRow
+		End If
+	End While
+	
+	;  Do ilData.$dowork_()
+	;  Do ilData.$savelistwork()
+End If

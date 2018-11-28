@@ -1,0 +1,4 @@
+On evClick     ;; Event Parameters - pRow( Itemreference )
+	Do $iremotetasks.[ilRemoteTasks.C1].$close()
+	Do $cinst.$refresh()
+	Do $cinst.$redraw()

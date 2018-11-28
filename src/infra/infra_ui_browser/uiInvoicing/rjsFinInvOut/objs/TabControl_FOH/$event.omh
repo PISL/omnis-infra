@@ -1,0 +1,3 @@
+On evTabSelected
+	Calculate inCurrentTab as pTabNumber
+	Do $cinst.$behaviour()

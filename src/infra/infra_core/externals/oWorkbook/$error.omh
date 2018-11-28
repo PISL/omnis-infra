@@ -1,0 +1,5 @@
+;  $error(LongInt errorCode, Character errorDesc, Character longErrorText, Character methodName) is called when an error has occurred. (Override to receive messages)
+
+Signal error {-1,con(pMethodName,' Error - ',pErrorCode,': ',pErrorDesc,kCr,'Extra: ',pErrorText)}
+
+Quit method kTrue

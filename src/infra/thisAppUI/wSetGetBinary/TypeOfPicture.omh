@@ -1,0 +1,3 @@
+Calculate lcType as pictformat(ibinContent)
+Do ilPictFormat.$search($ref.code=lcType,1,0,0,0)
+Calculate $cinst.$objs.ibinContent.$rawpictformat as lcType

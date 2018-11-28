@@ -1,0 +1,8 @@
+Do method $SingleLine (pBuilding) Returns pBuilding
+Do method $SingleLine (pStreet) Returns pStreet
+Do method $SingleLine (pLocality) Returns pLocality
+Do method $SingleLine (pTown) Returns pTown
+Do method $SingleLine (pPostcode) Returns pPostcode
+Do method $SingleLine (pCounty) Returns pCounty
+
+Do method $SavePostcode (pPostcode,pCountry) Returns pPostcode

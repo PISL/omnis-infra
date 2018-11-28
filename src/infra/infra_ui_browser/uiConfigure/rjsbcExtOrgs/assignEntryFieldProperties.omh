@@ -1,0 +1,61 @@
+If icMode='E'|icMode='I'     ;; We are creating or editing an Organisation record so override the defaults
+	Calculate lnlinestyle as 2
+	Calculate lrFieldAttributes as OJSON.$jsontolistorrow(trFormColours.FIELDCOLOURS)
+	Calculate lnbordercolour as eval(lrFieldAttributes.mandatory)
+	Calculate lneffect as kJSborderPlain
+	Calculate lnEnterable as eval(lrFieldAttributes.enterable)
+	Calculate lnUnique as eval(lrFieldAttributes.unique)
+End If
+
+Calculate $cinst.$objs.EO_NAME.$linestyle as lnlinestyle
+Calculate $cinst.$objs.EO_NAME.$bordercolor as lnbordercolour
+Calculate $cinst.$objs.EO_NAME.$effect as lneffect
+Calculate $cinst.$objs.EO_NAME.$backcolor as lnUnique
+Calculate $cinst.$objs.EO_NAME.$backalpha as pick(icMode='',255,0)
+
+Calculate $cinst.$objs.EO_MEC_ID.$linestyle as lnlinestyle
+;  Calculate $cinst.$objs.EO_MEC_ID.$bordercolor as lnbordercolour
+;  Calculate $cinst.$objs.EO_MEC_ID.$effect as lneffect
+Calculate $cinst.$objs.EO_MEC_ID.$backcolor as lnUnique
+Calculate $cinst.$objs.EO_MEC_ID.$backalpha as pick(icMode='',255,0)
+
+Calculate $cinst.$objs.EO_CONTACT.$backcolor as lnEnterable
+Calculate $cinst.$objs.EO_CONTACT.$backalpha as pick(icMode='',255,0)
+Calculate $cinst.$objs.EO_PHONE.$backcolor as lnEnterable
+Calculate $cinst.$objs.EO_PHONE.$backalpha as pick(icMode='',255,0)
+Calculate $cinst.$objs.EO_FAX.$backcolor as lnEnterable
+Calculate $cinst.$objs.EO_FAX.$backalpha as pick(icMode='',255,0)
+Calculate $cinst.$objs.EO_MOBILE.$backcolor as lnEnterable
+Calculate $cinst.$objs.EO_MOBILE.$backalpha as pick(icMode='',255,0)
+Calculate $cinst.$objs.EO_EMAIL.$backcolor as lnEnterable
+Calculate $cinst.$objs.EO_EMAIL.$backalpha as pick(icMode='',255,0)
+Calculate $cinst.$objs.EO_CO_ISO3_REF.$backcolor as lnEnterable
+Calculate $cinst.$objs.EO_CO_ISO3_REF.$backalpha as pick(icMode='',255,0)
+Calculate $cinst.$objs.EO_ADDR_BILL.$backcolor as lnEnterable
+Calculate $cinst.$objs.EO_ADDR_BILL.$backalpha as pick(icMode='',255,0)
+Calculate $cinst.$objs.EO_ADDR_SHIP.$backcolor as lnEnterable
+Calculate $cinst.$objs.EO_ADDR_SHIP.$backalpha as pick(icMode='',255,0)
+Calculate $cinst.$objs.EO_INSTRUCTIONS.$backcolor as lnEnterable
+Calculate $cinst.$objs.EO_INSTRUCTIONS.$backalpha as pick(icMode='',255,0)
+Calculate $cinst.$objs.EO_COMMENT.$backcolor as lnEnterable
+Calculate $cinst.$objs.EO_COMMENT.$backalpha as pick(icMode='',255,0)
+
+If icSUPPorCUST='CUSTOMER'
+	Calculate $cinst.$objs.EOL_FINACCT_CUID.$linestyle as lnlinestyle
+	Calculate $cinst.$objs.EOL_FINACCT_CUID.$bordercolor as lnbordercolour
+	Calculate $cinst.$objs.EOL_FINACCT_CUID.$effect as lneffect
+	Calculate $cinst.$objs.EOL_FINACCT_CUID.$backcolor as lnUnique
+	Calculate $cinst.$objs.EOL_FINACCT_CUID.$backalpha as pick(icMode='',255,0)
+	
+	Calculate $cinst.$objs.EOL_FINACCT_SUID.$enabled as kFalse
+	
+Else If icSUPPorCUST='SUPPLIER'
+	Calculate $cinst.$objs.EOL_FINACCT_SUID.$linestyle as lnlinestyle
+	Calculate $cinst.$objs.EOL_FINACCT_SUID.$bordercolor as lnbordercolour
+	Calculate $cinst.$objs.EOL_FINACCT_SUID.$effect as lneffect
+	Calculate $cinst.$objs.EOL_FINACCT_SUID.$backcolor as lnUnique
+	Calculate $cinst.$objs.EOL_FINACCT_SUID.$backalpha as pick(icMode='',255,0)
+	
+	Calculate $cinst.$objs.EOL_FINACCT_CUID.$enabled as kFalse
+	
+End If

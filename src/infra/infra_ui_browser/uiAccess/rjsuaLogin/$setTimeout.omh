@@ -1,0 +1,13 @@
+If pbLoggedOn
+	;  we will have a trGroupOrg, so get the RFO value
+	Do toValues.$initInherited('SERVER','TIMEOUT') Returns lrReference
+	If lrReference.RFO_INT>0
+		Do $setTimeout(lrReference.RFO_INT)
+	End If
+Else
+	;  not logged in yet so this will come from RFL
+	Do toValues.$initInherited('SERVER','TIMEOUT_LOGIN') Returns lrReference
+	If lrReference.RFO_INT>0
+		Do $setTimeout(lrReference.RFO_INT)
+	End If
+End If

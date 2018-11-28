@@ -1,0 +1,6 @@
+Calculate $cinst.icDisplayMessage as ''
+Calculate irCurrentRecord as ilDisplayRecords
+Calculate irOriginalRecord as irCurrentRecord
+
+Do $cinst.$behaviour()
+Do $cinst.$redraw()

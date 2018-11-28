@@ -1,0 +1,4 @@
+Calculate $cinst.RFU_CLASS as pcClass     ;; this may be empty when called from superclass but should be called again in subclass
+Calculate $cinst.RFU_ACTIVE as 1     ;; default new records to Active
+Calculate $cinst.RFU_GO_REF as trGroupOrg.GO_SEQ
+Calculate $cinst.RFU_USR_REF as trCurrUser.USR_SEQ

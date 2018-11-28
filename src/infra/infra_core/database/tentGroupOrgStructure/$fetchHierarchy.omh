@@ -1,0 +1,76 @@
+If tlDatabases.DAM='WebService'
+	;  pass parameters to web service
+	;  $callService (pFieldReference, row(TableClassName, CurrentMethodName, p1,...,pn) )     ;; result will be returned in pFieldReference, row() contains the parameters for the call
+	Do ioWeb.$callFetch($cinst,irErrorSQL,row($cinst.$class().$name,$cmethod().$name,row(pnGS_SEQ,pbIncludeInactive),$cinst.$type,0,ilRESTextensions))
+	If ioWeb.irResponse.httpStatusCode=200
+		;  the result should be in this object     ;; however there may be a SQL error
+		If irErrorSQL.NativeErrorText<>''
+			Quit method kFalse
+		End If
+		Quit method kTrue
+	Else
+		Quit method kFalse
+	End If
+End If
+
+If $ctask.trCurrUser.USR_SEQ>0
+	;  proceed
+Else
+	Quit method kFalse
+End If
+
+Do $cinst.$cols.$findname('path') Returns lrefCol
+If lrefCol
+	;  good to go
+Else
+	Do $cinst.$cols.$add('path',kCharacter,kSimplechar,500)
+End If
+
+Do $cinst.$ImmediateSession(loSession,loStatement) Returns lbImmediateSession
+If lbImmediateSession
+	Do $cinst.$SetSession(loSession,loStatement)
+Else If not(ibGoodConnectionToDb)
+	Quit method kFalse
+End If
+
+Calculate lcRecursiveSelectNames as replaceall($cinst.$selectnames(),$cinst.$servertablenames,'e')
+;  Calculate lcRecursiveSelectNames as replaceall(lcRecursiveSelectNames,',',', e.')
+;  Do $cinst.$Sql(,,kFalse,kTrue) Returns lcSQL
+
+Begin statement
+Sta: {WITH RECURSIVE groupstructure AS (}
+Sta:
+Sta: {SELECT [$cinst.$selectnames()]}
+Sta: {, gs_desc_full::text as path, (gs_order + 1000)::text as hier}
+Sta:
+Sta: {FROM [$cinst.$servertablenames]}
+If pnGS_SEQ>0
+	Sta: {WHERE [icPrimarykey] = @[pnGS_SEQ]}
+Else
+	;  get the top level
+	Sta: {WHERE [icForeignKey] = @[trGroupOrg.GO_SEQ] and GS_TYPE = 'ORG'}
+End If
+Sta:
+Sta: {UNION}
+Sta:
+Sta: {SELECT [lcRecursiveSelectNames]}
+Sta: {, path || ':' || e.gs_desc_full::text, hier || (e.gs_order+1000)::text}
+Sta: {FROM [$cinst.$servertablenames] e}
+Sta: {INNER JOIN groupstructure gs ON gs.GS_SEQ = e.GS_SUPERIOR_GS_REF}
+If not(pbIncludeInactive)
+	Sta: {and   gs.GS_ACTIVE = 1}
+End If
+Sta: {)}
+Sta:
+Sta: {SELECT [replaceall(lcRecursiveSelectNames,'e.','')], path}
+Sta: {FROM groupstructure}
+Sta: {order by hier}
+End statement
+
+
+Do $cinst.$executesqlandfetch() Returns lbOK
+If lbImmediateSession
+	Do $cinst.$SetSession(#NULL,#NULL,kTrue)
+End If
+
+Quit method lbOK

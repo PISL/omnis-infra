@@ -1,0 +1,28 @@
+Calculate icDisplayMessage as ''
+Do irCurrentRecord.$clear()
+Do ilChains.$clear()
+Do ilDetails.$clear()
+Calculate ilOriginalDetails as ilDetails
+Do ilStatusChoice.$clear()
+Do ilDelegatesRelatingToThisInvoice.$clear()
+Do irDelegateInvoiceLink.$clear()
+Do irEcoInvoiceH.$clear()
+Do ilEcoInvoiceD.$clear()
+
+If ilDisplayRecords.FOH_SEQ
+	Calculate irCurrentRecord as ilDisplayRecords
+	Calculate irOriginalHeader as irCurrentRecord
+	Do method DropLists
+	
+	Do method setStatusChoices (#NULL)     ;; pbIsNew=kTrue
+	Do method fetchChainedInvoices
+	Do method fetchDetails
+	
+	If tcCurrentLibrary='CONFERENCE'
+		;  we're done here
+	Else
+		Do method fetchEcoInvoice
+	End If
+End If
+
+Do $cinst.$behaviour()

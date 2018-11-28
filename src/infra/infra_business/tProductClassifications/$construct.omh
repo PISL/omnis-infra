@@ -1,0 +1,6 @@
+Calculate icPrefix as 'PCL_'
+Calculate icPrimarykey as 'PCL_SEQ'
+Calculate ibHasSequence as kTrue
+Calculate icForeignKey as 'PCL_PRD_REF'
+
+Do inherited

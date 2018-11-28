@@ -1,0 +1,7 @@
+On evKeyPress
+	;  tab
+	If pKeyList.[pKeyList.$linecount].systemKey=kTabKey&pKeyList.[pKeyList.$linecount].modifiers<>kJSModShift
+		;  Calculate $cinst.$objs.TabControl_EO.$currenttab as 2
+		;  Calculate $cinst.$objs.PagedPane.$currentpage as 2
+		Do $cinst.$setcurfield('EO_ADDR_BILL',kTrue)
+	End If

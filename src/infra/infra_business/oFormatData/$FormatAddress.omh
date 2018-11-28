@@ -1,0 +1,114 @@
+Calculate icValidationText as ''
+Calculate icValidationCodes as ''
+Calculate icInvalidChars as ''
+Do StringTable.$setcolumn(pLangCode) Returns #F
+
+;  allowed punctuation in addresses:     ;; ccIllegalAddress
+;  '     ;; d'Arum St
+;  /     ;; 4/2 d'Aum St
+;  -     ;; 5 Burfitt-Williams Drive
+;  "     ;; "Eastwick Cottage"
+;  ,     ;; 5, The Grove
+;  #     ;; #214 34th St
+If pBuilding<>''
+	Calculate lcTest as strpbrk(pBuilding,ccIllegalAddress)
+	If lcTest<>''
+		Do toStrings.$StringTableMessage('VAL_ADDR_ILLEGAL_CHAR',icValidationText,icValidationCodes) Returns lbStringTableEntryFound
+		If not(lbStringTableEntryFound)
+			Calculate icValidationText as con(icValidationText,pick(icValidationText<>'','',', '),'illegal character in Building')
+		End If
+	End If
+End If
+
+If pStreet<>''
+	If len(pStreet)>7     ;; 1 Ady St    minimum
+		;  fine
+		Calculate lcTest as strpbrk(pStreet,ccIllegalAddress)
+		If lcTest<>''
+			Do toStrings.$StringTableMessage('VAL_ADDR_ILLEGAL_CHAR',icValidationText,icValidationCodes) Returns lbStringTableEntryFound
+			If not(lbStringTableEntryFound)
+				Calculate icValidationText as con(icValidationText,pick(icValidationText<>'','',', '),'illegal character in Street')
+			End If
+		End If
+	Else
+		Do toStrings.$StringTableMessage('VAL_ADDR_STREET_INSUFFICIENT',icValidationText,icValidationCodes) Returns lbStringTableEntryFound
+		If not(lbStringTableEntryFound)
+			Calculate icValidationText as con(icValidationText,pick(icValidationText<>'','',', '),'insufficient Street')
+		End If
+	End If
+Else
+	Do toStrings.$StringTableMessage('VAL_ADDR_STREET_MISSING',icValidationText,icValidationCodes) Returns lbStringTableEntryFound
+	If not(lbStringTableEntryFound)
+		Calculate icValidationText as con(icValidationText,pick(icValidationText<>'','',', '),'Street missing')
+	End If
+End If
+
+If pLocality<>''
+	Calculate lcTest as strpbrk(pLocality,ccIllegalAddress)
+	If lcTest<>''
+		Do toStrings.$StringTableMessage('VAL_ADDR_ILLEGAL_CHAR',icValidationText,icValidationCodes) Returns lbStringTableEntryFound
+		If not(lbStringTableEntryFound)
+			Calculate icValidationText as con(icValidationText,pick(icValidationText<>'','',', '),'illegal character in Locality')
+		End If
+	End If
+End If
+
+If pTown<>''
+	If len(pTown)>2     ;; Ely minimum
+		;  fine
+		Calculate lcTest as strpbrk(pTown,ccIllegalAddress)
+		If lcTest<>''
+			Do toStrings.$StringTableMessage('VAL_ADDR_ILLEGAL_CHAR',icValidationText,icValidationCodes) Returns lbStringTableEntryFound
+			If not(lbStringTableEntryFound)
+				Calculate icValidationText as con(icValidationText,pick(icValidationText<>'','',', '),'illegal character in Town')
+			End If
+		End If
+	Else
+		Do toStrings.$StringTableMessage('VAL_ADDR_TOWN_INSUFFICIENT',icValidationText,icValidationCodes) Returns lbStringTableEntryFound
+		If not(lbStringTableEntryFound)
+			Calculate icValidationText as con(icValidationText,pick(icValidationText<>'','',', '),'insufficient Town')
+		End If
+	End If
+Else
+	Do toStrings.$StringTableMessage('VAL_ADDR_TOWN_MISSING',icValidationText,icValidationCodes) Returns lbStringTableEntryFound
+	If not(lbStringTableEntryFound)
+		Calculate icValidationText as con(icValidationText,pick(icValidationText<>'','',', '),'Town missing')
+	End If
+End If
+
+If pPostcode<>''
+	Do method $FormatPostcode (pPostcode,pCountry,kTrue) Returns pPostcode     ;; Returnｓ correctly formatted postcode
+Else
+	Do toStrings.$StringTableMessage('VAL_ADDR_POSTCODE_MISSING',icValidationText,icValidationCodes) Returns lbStringTableEntryFound
+	If not(lbStringTableEntryFound)
+		Calculate icValidationText as con(icValidationText,pick(icValidationText<>'','',', '),'Postcode missing')
+	End If
+End If
+
+If pCountry<>''
+	;  fine     ;; valid country codes are checked elsewhere - rtMDMPages/CheckParameters
+Else
+	Do toStrings.$StringTableMessage('VAL_ADDR_COUNTRY_MISSING',icValidationText,icValidationCodes) Returns lbStringTableEntryFound
+	If not(lbStringTableEntryFound)
+		Calculate icValidationText as con(icValidationText,pick(icValidationText<>'','',', '),'Country missing')
+	End If
+End If
+
+Switch pCountry
+	Case 'GB','GBR','UK'
+		;  county is optional
+	Default
+		If pCounty<>''
+			;  fine
+		Else
+			;  Do toStrings.$StringTableMessage('VAL_ADDR_COUNTY_MISSING',icValidationText,icValidationCodes) Returns lbStringTableEntryFound
+			;  If not(lbStringTableEntryFound)
+			;  Calculate icValidationText as con(icValidationText,pick(icValidationText<>'','',', '),'County/state missing')
+			;  End If
+		End If
+End Switch
+
+If icValidationText<>''
+	Calculate icInvalidChars as ccIllegalAddress
+End If
+Quit method icValidationText

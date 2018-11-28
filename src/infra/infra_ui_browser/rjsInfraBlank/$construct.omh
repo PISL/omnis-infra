@@ -1,0 +1,89 @@
+;  Enter your initialization code here
+Do inherited      ;; handles setFormColours
+;  Calculate $cinst.$objs.ilAuthorisedForms.$::listheight as min(20,ilAuthorisedForms.$linecount)
+If $ctask.$showSupportTools.$cando()
+	Calculate $cinst.$objs.pbSupportTools.$visible as $ctask.$showSupportTools()
+End If
+If tConstants.$colcount=0
+	Breakpoint     ;; having trouble 31 OCT 2016
+End If
+
+Calculate icCurrentGroupOrg as trGroupOrg.GO_NAME_SHORT
+
+Calculate lcPath as mid($clib().$pathname,1,rpos(sys(9),$clib().$pathname))
+
+If binlength(tConstants.companyLogo)=0
+	Do toValues.$initInherited('IMAGES','LOGO_TOP_LEFT') Returns lrReference
+	If lrReference.RFO_SEQ>0
+		Calculate tConstants.companyLogo as lrReference.RFO_BIN
+		
+		Do toValues.$initInherited('IMAGES','TOP_BANNER') Returns lrReference
+		If lrReference.RFO_SEQ>0
+			Calculate tConstants.topBanner as lrReference.RFO_BIN
+		Else
+			Calculate tConstants.topBanner as #NULL
+		End If
+	Else
+		Do loFileOps.$openfile(con(lcPath,'myEcoCost_logo_white_text.gif'))
+		Do loFileOps.$readfile(tConstants.companyLogo) Returns lbOK
+		Do loFileOps.$closefile()
+		
+		Do loFileOps.$openfile(con(lcPath,'myEcoCost_canvas_horizontal.jpg'))
+		Do loFileOps.$readfile(tConstants.topBanner) Returns lbOK
+		Do loFileOps.$closefile()
+	End If
+End If
+
+Calculate ipictBanner as tConstants.topBanner
+Calculate ipictLogo as tConstants.companyLogo
+
+Calculate ipictTopLeft as tConstants.topLeft
+Calculate ipictTopRight as tConstants.topRight
+Calculate $cinst.$objs.ipictTopLeft.$visible as binlength(ipictTopLeft)>0
+Calculate $cinst.$objs.ipictTopRight.$visible as binlength(ipictTopRight)>0
+
+Calculate $cinst.$objs.app_navigation_area.$objs.app_navigation_bar.$visible as binlength(tConstants.topBanner)>0
+
+;  ;  Calculate tlDatabases.DB as iorefSysPrefsHandler.$GetVarFromSection($clib().$name,'DatabaseName')
+;  Calculate inColourEnterable as iorefSysPrefsHandler.$GetVarFromSection($clib().$name,'ColourEnterable')
+;  Calculate inColourDisabled as iorefSysPrefsHandler.$GetVarFromSection($clib().$name,'ColourDisabled')
+;  Calculate inColourMandatory as iorefSysPrefsHandler.$GetVarFromSection($clib().$name,'ColourMandatory')
+;  Calculate inColourUnique as iorefSysPrefsHandler.$GetVarFromSection($clib().$name,'ColourUnique')
+
+;  get the URLs for the navigation bar buttons
+Calculate lcClass as 'URL'
+Calculate lcValue as 'SUPPORT_TOOLS'
+Do toValues.$initGlobal(lcClass,lcValue) Returns llRef
+If llRef.1.RFG_CHAR<>''
+	Calculate icURLsupportTools as llRef.1.RFG_CHAR
+End If
+
+Calculate lcValue as 'EXIT'
+Do toValues.$initInherited(lcClass,lcValue) Returns llRef
+If llRef.1.RFO_CHAR<>''
+	Calculate icURLexit as llRef.1.RFO_CHAR
+End If
+
+;  get the textcolor values for the objects
+;  Calculate lcClass as 'FORMCOLOURS'
+;  Calculate lcValue as 'ANAVLIST'
+;  Do toValues.$initInherited(lcClass,lcValue) Returns llRef
+;  If llRef.1.RFO_CHAR<>''
+;  Calculate lrAttributes as OJSON.$jsontolistorrow(llRef.1.RFO_CHAR)
+;  If eval(lrAttributes.textcolor)<>0
+;  Calculate inColourDropList as eval(lrAttributes.textcolor)
+;  Else
+;  Calculate inColourDropList as kColorDefault
+;  End If
+;  End If
+;
+;  Calculate lcValue as 'RNAVOBJECTS'
+;  Do toValues.$initInherited(lcClass,lcValue) Returns llRef
+;  If llRef.1.RFO_CHAR<>''
+;  Calculate lrAttributes as OJSON.$jsontolistorrow(llRef.1.RFO_CHAR)
+;  If eval(lrAttributes.textcolor)<>0
+;  Calculate inColourNavObjs as eval(lrAttributes.textcolor)
+;  Else
+;  Calculate inColourNavObjs as kColorDefault
+;  End If
+;  End If

@@ -1,0 +1,37 @@
+Calculate icValidationMessage as ''
+Do ilValidation.$clear()
+
+If $cinst.GS_GO_REF>0
+	;  good
+Else
+	Calculate lcMessage as con(lcMessage,pick(lcMessage<>'','',', '),'GS_GO_REF missing')
+	Do ilValidation.$add('GS_GO_REF_LBL','VAL_MISSING','GS_GO_REF missing',0)
+End If
+;
+If $cinst.GS_TYPE<>''
+	;  good
+Else
+	Calculate lcMessage as con(lcMessage,pick(lcMessage<>'','',', '),'GS_TYPE missing')
+	Do ilValidation.$add('GS_TYPE_LBL','VAL_MISSING','GS_TYPE missing',0)
+End If
+
+If $cinst.GS_DESC_SHORT<>''
+	;  good
+Else
+	Calculate lcMessage as con(lcMessage,pick(lcMessage<>'','',', '),'GS_DESC_SHORT missing')
+	Do ilValidation.$add('GS_DESC_SHORT_LBL','VAL_MISSING','GS_DESC_SHORT missing',0)
+End If
+
+If $cinst.GS_DESC_FULL<>''
+	;  good
+Else
+	Calculate lcMessage as con(lcMessage,pick(lcMessage<>'','',', '),'GS_DESC_FULL missing')
+	Do ilValidation.$add('GS_DESC_FULL_LBL','VAL_MISSING','GS_DESC_FULL missing',0)
+End If
+
+If lcMessage<>''
+	Calculate icValidationMessage as lcMessage
+	Quit method kFalse
+End If
+
+Quit method kTrue

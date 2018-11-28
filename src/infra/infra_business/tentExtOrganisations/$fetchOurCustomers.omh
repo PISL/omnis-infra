@@ -1,0 +1,106 @@
+If $ctask.trGroupOrg.GO_SEQ>0
+	;  proceed
+Else
+	Quit method kFalse
+End If
+
+If pbSearchOR
+	Calculate lcPrecedence as ''
+End If
+
+If tlDatabases.DAM='WebService'
+	;  pass parameters to web service
+	Do ioWeb.$callFetch($cinst,irErrorSQL,row($cinst.$class().$name,$cmethod().$name,row(pcMEC_ID,pcNAME,pcADDR_BILL,pcADDR_SHIP,pcEMAIL,pcCOMPANY,pbSearchOR),$cinst.$type,0,ilRESTextensions))
+	If ioWeb.irResponse.httpStatusCode=200
+		;  the result should be in this object     ;; however there may be a SQL error
+		If irErrorSQL.NativeErrorText<>''
+			Quit method kFalse
+		End If
+		Quit method kTrue
+	Else
+		Quit method kFalse
+	End If
+End If
+
+Do $cinst.$ImmediateSession(loSession,loStatement) Returns lbImmediateSession
+If lbImmediateSession
+	Do $cinst.$SetSession(loSession,loStatement)
+Else If not(ibGoodConnectionToDb)
+	Quit method kFalse
+End If
+
+Begin statement
+Sta: {select [$cinst.$selectnames()]}
+Sta: {from [$cinst.$servertablenames],  [lrLinkToGroupOrg.$servertablenames()], [lrGroupOrg.$servertablenames()]}
+;  join ExtOrganisations to link table
+Sta: {where EOL_EO_REF = EO_SEQ}
+;  join link table to groupOrganisation
+Sta: {and    EOL_GO_REF = GO_SEQ}
+Sta: {and    GO_SEQ = @[$ctask.trGroupOrg.GO_SEQ]}
+;  customer code exists
+Sta: {and    EOL_FINACCT_CUID is not null}
+If len(pcMEC_ID)>0
+	Sta: {and      EO_MEC_ID = @[pcMEC_ID]}
+End If
+If pbSearchOR
+	;  open the precedence
+	Sta: {and (}
+	;  this assumes that some criteria has been provided     ;; reasonable given 7th parameter is kTrue
+End If
+If pcNAME<>''
+	Calculate pcNAME as con(pcNAME,'%')
+	If pbSearchOR
+		Sta: {[lcPrecedence]         EO_NAME like @[pcNAME]}
+		Calculate lcPrecedence as ' or '
+	Else
+		Sta: {and      EO_NAME ilike @[pcNAME]}
+	End If
+End If
+If pcADDR_BILL<>''
+	Calculate pcADDR_BILL as con('%',pcADDR_BILL,'%')
+	If pbSearchOR
+		Sta: {[lcPrecedence]         EO_ADDR_BILL like @[pcADDR_BILL]}
+		Calculate lcPrecedence as ' or '
+	Else
+		Sta: {and      EO_ADDR_BILL ilike @[pcADDR_BILL]}
+	End If
+End If
+If pcADDR_SHIP<>''
+	Calculate pcADDR_SHIP as con('%',pcADDR_SHIP,'%')
+	If pbSearchOR
+		Sta: {[lcPrecedence]         EO_ADDR_SHIP like @[pcADDR_SHIP]}
+		Calculate lcPrecedence as ' or '
+	Else
+		Sta: {and      EO_ADDR_SHIP ilike @[pcADDR_SHIP]}
+	End If
+End If
+If pcEMAIL<>''
+	Calculate pcEMAIL as con('%',pcEMAIL,'%')
+	If pbSearchOR
+		Sta: {[lcPrecedence]         EO_EMAIL like @[pcEMAIL]}
+		Calculate lcPrecedence as ' or '
+	Else
+		Sta: {and      EO_EMAIL ilike @[pcEMAIL]}
+	End If
+End If
+If pcCOMPANY<>''
+	Calculate pcCOMPANY as con('%',pcCOMPANY,'%')
+	If pbSearchOR
+		Sta: {[lcPrecedence]         EO_NAME like @[pcCOMPANY]}
+		Calculate lcPrecedence as ' or '
+	Else
+		Sta: {and      EO_NAME ilike @[pcCOMPANY]}
+	End If
+End If
+If pbSearchOR
+	;  close the precedence
+	Sta: {)}
+End If
+End statement
+
+Do $cinst.$executesqlandfetch() Returns lbOK
+If lbImmediateSession
+	Do $cinst.$SetSession(#NULL,#NULL,kTrue)
+End If
+
+Quit method lbOK

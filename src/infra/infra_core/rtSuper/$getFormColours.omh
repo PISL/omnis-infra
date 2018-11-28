@@ -1,0 +1,2 @@
+Do toValues.$initInherited('FORMCOLOURS') Returns llFormColours     ;; trGroupOrg may or may not be set at this point
+Do toStrings.$ListToRow(llFormColours,'RFO_VALUE','RFO_JSON') Returns trFormColours

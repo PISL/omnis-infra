@@ -1,0 +1,5 @@
+Calculate icPrefix as 'PER_'
+Calculate icPrimarykey as 'PER_SEQ'
+Calculate ibHasSequence as kTrue
+
+Do inherited

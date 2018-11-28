@@ -1,0 +1,50 @@
+;  Breakpoint
+Do $cwind.$login(icLoginID,icLoginPW,icDisplayMessage) Returns lbLoginOK
+
+If lbLoginOK     ;; we  have a successful login so now check for GroupOrg
+	Do $cwind.$getUserGroupOrgs() Returns ilUserGroups     ;; this form is about to disappear from users view
+	If $ctask.tWebParameters.param1<>''
+		If $ctask.trGroupOrg.GO_SEQ>0
+			;  the web page (e.g. omnisworld.onlineapps.uk.com/administration.htm) may have a param1 value
+			;  the web page is from a domain that is exclusive to a particular company so any validation must be constrained by that company also
+			Do ilUserGroups.$search($ref.UGO_GO_REF=$ctask.trGroupOrg.GO_SEQ,1,0,1,0) Returns lbFound
+			Do ilUserGroups.$remove(kListKeepSelected)
+			Do ilUserGroups.$search(0)
+			;  if there is only one line in the list
+			;  that will be picked up further down and everything is sweet
+		End If
+	End If
+	
+	If ilUserGroups.$linecount=1
+		;  we have only one so continue
+		Calculate ilUserGroups.$line as 1
+		Do method $completeLogin
+		
+	Else If ilUserGroups.$linecount>1     ;; ask the user to choose one of the Group Orgs
+		;  send this up to the task so we can display a user's choices later, eg. OrgMenu
+		Do $setVar(nam(ilUserGroups),ilUserGroups) Returns #F
+		;  hold on...
+		;  if so, this will determine the GroupOrg which should have been resolved in rtBusinessApp
+		Do ilUserGroups.$cols.$findname('GON_NAME_FULL') Returns liColRef
+		Calculate $cinst.$objs.PagedPane.$objs.ilUserGroups.$listcolumn as liColRef.$ident
+		Do $cinst.$objs.PagedPane.$currentpage.$assign(cnPageSelectGroupOrg)
+		Calculate icDisplayMessage as ''
+		Do $cinst.$redraw()
+	Else
+		;  login failed.  Actually it worked but due to trGroupOrg.GO_SEQ being set, user does not have access to this company
+		Calculate inLoginFailed as inLoginFailed+1
+		Do toStrings.$StringTableEntry('MSG_LOGINFAILEDCOMPANY',icDisplayMessage,'login failed for company')
+		Calculate icDisplayMessage as con(icDisplayMessage,' "',trGroupOrg.GON_NAME_FULL,'" ')
+		Do $cinst.$behaviour()
+		Do $cinst.$redraw()
+	End If
+	
+Else     ;; login failed so ask the user to try again
+	;  $login already populates icDisplayMessage on failure
+	;  Do toStrings.$StringTableEntry('LOGIN_FAILED',icDisplayMessage)
+	Calculate inLoginFailed as inLoginFailed+1
+	Do $cinst.$behaviour()
+	Do $cinst.$redraw()
+End If
+
+Quit method lbLoginOK

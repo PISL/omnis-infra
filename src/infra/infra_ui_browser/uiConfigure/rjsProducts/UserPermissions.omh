@@ -1,0 +1,11 @@
+Do llPrivsUsedInThisForm.$cols.$add('permission',kCharacter,kSimplechar,100)
+Do llPrivsUsedInThisForm.$cols.$add('colName',kCharacter,kSimplechar,100)
+
+Do llPrivsUsedInThisForm.$add('prd_insert','canInsert')
+Do llPrivsUsedInThisForm.$add('prd_delete','canDelete')
+Do llPrivsUsedInThisForm.$add('prd_update','canEdit')
+Do llPrivsUsedInThisForm.$add('prd_allOrgs','allOrgs')
+
+Do $cinst.$setPermissions(llPrivsUsedInThisForm)     ;; irUserRights
+
+;

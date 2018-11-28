@@ -1,0 +1,19 @@
+If pFormat='HTML'
+	If pcContent<>''
+		Text: {[pcCellBegin][pcContent][pcCellEnd]}
+	Else
+		Text: {[pcCellBegin]&nbsp;[pcCellEnd]}
+	End If
+Else If pFormat='XML'
+Else
+	If (pFormat='CSV'|pFormat='COMMA')
+		If not(isclear(pcContent))&not(isnumber(pcContent))
+			Calculate pcContent as con(kDq,pcContent,kDq)
+		End If
+	End If
+	If pnColCount=1
+		Text: {[pcContent]}
+	Else
+		Text: {[pcDelimiter][pcContent]}
+	End If
+End If

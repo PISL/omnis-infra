@@ -1,0 +1,10 @@
+Do ilDetails.$add()
+Calculate ilDetails.$line as ilDetails.$linecount
+
+Calculate ilDetails.FOD_PRD_REF as prProduct.PRD_SEQ
+Calculate ilDetails.FOD_DESC as prProduct.PRD_NAME
+;  Calculate ilDetails.FOD_UNIT_PRICE as prProduct.PRD_UNIT_PRICE
+Calculate ilDetails.FOD_UNIT_PRICE as prProduct.PID_UNIT_PRICE
+Calculate ilDetails.FOD_UNIT_TAX as ''
+Calculate ilDetails.FOD_QTY as 1
+Calculate ilDetails.FOD_ORDER as ilDetails.$line

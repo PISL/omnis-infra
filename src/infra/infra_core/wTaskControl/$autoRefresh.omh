@@ -1,0 +1,36 @@
+Calculate lnCountTasks as ilRemoteTasks.$linecount
+Calculate ldtConnectionTime as ilRemoteTasks.1.connectionTime
+
+Do $cinst.$refresh()
+
+If ilRemoteTasks.$linecount>lnCountTasks     ;; new connect
+	If icPathForNewConnection<>''
+		Do ioPlayWav.$playwavfile(icPathForNewConnection)
+	Else
+		Sound bell
+	End If
+	If ibSpeakAppName
+		Do sleep(1000)
+		Do ioApplescript.$SpeakText(icNameOfApplication)
+	End If
+Else If ilRemoteTasks.$linecount<lnCountTasks     ;; disconnect
+	If icPathForLostConnection<>''
+		Do ioPlayWav.$playwavfile(icPathForLostConnection)
+	Else
+		Sound bell
+	End If
+	If ibSpeakAppName
+		Do sleep(1000)
+		Do ioApplescript.$SpeakText(icNameOfApplication)
+	End If
+Else If ilRemoteTasks.1.connectionTime<>ldtConnectionTime
+	;  something has changed
+	Sound bell
+	If ibSpeakAppName
+		Do sleep(1000)
+		Do ioApplescript.$SpeakText(icNameOfApplication)
+	End If
+End If
+
+Do $cinst.$behaviour()
+Do $cinst.$redraw()

@@ -1,0 +1,4 @@
+;  callback method from clientmessage - No
+Calculate icDisplayMessage as $cell(clLabels,'objName','disp_del_canc','label')
+
+Do $cinst.$behaviour()

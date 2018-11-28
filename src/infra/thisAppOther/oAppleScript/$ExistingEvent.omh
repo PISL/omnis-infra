@@ -1,0 +1,64 @@
+;  tell application "iCal"
+;  tell calendar "My Calendar"
+;  set theCurrentDate to current date
+;  make new event at end with properties {description:"Event Description",
+;  summary:"Event Name", location:"Event Location", start date:theCurrentDate,
+;  end date:theCurrentDate + 120 * minutes}
+;  end tell
+;  end tell
+
+;  in applescript time does not exist outside a date object
+;  one can extract a time value but it will be returned as seconds since midnight
+
+;  If pdDateTimeEnd>dat('1 JAN 2010')
+;  a set value
+;  Else
+;  Calculate pdDateTimeEnd as dadd(kMinute,60,pdDateTimeStart)
+;  End If
+
+Begin text block
+Text: {tell application "iCal"} (Platform newline)
+
+Text: {tell calendar "[pcCalendar]"} (Platform newline)
+;  Text: tell calendar "[pcCalendarID]" (Platform newline)     ;; DOES NOT WORK !
+;  Text:       set theCalendar to first calendar whose uid = "[pcCalendarID]"𯿿 (Platform newline)
+Text: {      set theEvent to first event whose uid = "[pcEventID]"𯿿} (Platform newline)
+;  Text:       set theEventMinutes to end - start
+
+Text: {set theStartDate to date "[pdDateTimeStart]"} (Platform newline)
+If pdDateTimeEnd>dat('1 JAN 2010')
+	Text: {set theEndDate to date "[pdDateTimeEnd]"} (Platform newline)
+End If
+
+Text: {tell theEvent} (Platform newline)
+Text: { set summary to "[pcSummary]"} (Platform newline)
+Text: { set start date to theStartDate} (Platform newline)
+If pdDateTimeEnd>dat('1 JAN 2010')
+	Text: { set end date to theEndDate} (Platform newline)
+End If
+Text: { set allday event to [pick(pbAllDay,'false','true')]} (Platform newline)
+If pcLocation<>''
+	Text: { set location to "[pcLocation]"} (Platform newline)
+End If
+If pcNote<>''
+	;  note
+	Text: { set description to "[pcNote]"} (Platform newline)
+End If
+
+;  theEvent
+Text: {end tell} (Platform newline)
+;  calendar
+Text: {end tell} (Platform newline)
+;  application
+Text: {end tell} (Platform newline)
+End text block
+Get text block lcApplescript
+
+;  Breakpoint
+Do $root.$runapplescript(lcApplescript,lcApplescriptResult,lcApplescriptError)
+
+If lcApplescriptResult=''&lcApplescriptError=''
+	Quit method kTrue
+End If
+Calculate pReturnError as lcApplescriptError
+Quit method kFalse

@@ -1,0 +1,43 @@
+Calculate lcPhoneNoSpaces as replaceall(pPhoneNo,' ','')
+Calculate lcPhoneNoSpaces as replaceall(lcPhoneNoSpaces,'(','')
+Calculate lcPhoneNoSpaces as replaceall(lcPhoneNoSpaces,')','')
+Calculate lcPhoneNoSpaces as replaceall(lcPhoneNoSpaces,'-','')     ;; americans use hyphen to separate area code
+
+Calculate icValidationText as ''
+Calculate icValidationCodes as ''
+Calculate icInvalidChars as ''
+Do StringTable.$setcolumn(pLangCode) Returns #F
+
+If mid(lcPhoneNoSpaces,1,1)='+'
+	If isnumber(mid(lcPhoneNoSpaces,2,99))
+		;  fine
+	Else
+		Do toStrings.$StringTableMessage('VAL_PHONE_INVALID_DIGITS',icValidationText,icValidationCodes) Returns lbStringTableEntryFound
+		If not(lbStringTableEntryFound)
+			Calculate icValidationText as con(icValidationText,pick(icValidationText<>'','',', '),'invalid digits in phone number')
+		End If
+		Quit method icValidationText
+	End If     ;; isnumber(lcPhoneNoSpaces)
+Else
+	If isnumber(lcPhoneNoSpaces)
+		;  fine
+	Else
+		Do toStrings.$StringTableMessage('VAL_PHONE_INVALID_DIGITS',icValidationText,icValidationCodes) Returns lbStringTableEntryFound
+		If not(lbStringTableEntryFound)
+			Calculate icValidationText as con(icValidationText,pick(icValidationText<>'','',', '),'invalid digits in phone number')
+		End If
+		Quit method icValidationText
+	End If     ;; isnumber(lcPhoneNoSpaces)
+End If
+
+Switch pCountry
+	Case '','GB','GBR','UK'
+		Do method PhoneFormatGBR (lcPhoneNoSpaces,pType)
+	Default
+		
+End Switch
+
+If icValidationCodes<>''
+	Calculate icInvalidChars as ccIllegalPhone
+End If
+Quit method icValidationText

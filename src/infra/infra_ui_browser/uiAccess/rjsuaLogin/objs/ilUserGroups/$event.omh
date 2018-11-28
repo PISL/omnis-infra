@@ -1,0 +1,7 @@
+On evClick
+	Calculate $cinst.$objs.pbSelect.$enabled as ilUserGroups.$line
+	
+On evDoubleClick
+	If ilUserGroups.$line>0     ;; the list object willl register a double click without a line being selected
+		Do method $completeLogin
+	End If

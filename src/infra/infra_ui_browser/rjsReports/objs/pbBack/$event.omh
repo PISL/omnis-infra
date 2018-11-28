@@ -1,0 +1,11 @@
+On evClick
+	;  Do method ClearWorkArea
+	Calculate inCurrentTab as 1
+	Calculate $cinst.$objs.TabControl_REPORTS.$currenttab as inCurrentTab
+	Calculate $cinst.$objs.PagedPane_REPORTS.$currentpage as inCurrentTab
+	
+	Calculate icDataAsText as ''
+	Calculate icDisplayMessage as ''
+	Calculate icMode as ''
+	
+	Do $cinst.$behaviour()

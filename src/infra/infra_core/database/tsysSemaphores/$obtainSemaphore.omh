@@ -1,0 +1,86 @@
+Do $cinst.$clear()
+
+If tlDatabases.DAM='WebService'
+	;  pass parameters to web service
+	;  $callService (pFieldReference, row(TableClassName, CurrentMethodName, p1,...,pn) )     ;; result will be returned in pFieldReference, row() contains the parameters for the call
+	Do ioWeb.$callFetch(lbObtained,irErrorSQL,row($cinst.$class().$name,$cmethod().$name,row(pcTableID,pnKeyInt,pcKeyChar),lbObtained.$type,0,ilRESTextensions))
+	If ioWeb.irResponse.httpStatusCode=200
+		;  the result should be in this object     ;; however there may be a SQL error
+		If irErrorSQL.NativeErrorText<>''
+			Quit method kFalse
+		End If
+		Quit method lbObtained
+	Else
+		Quit method kFalse
+	End If
+End If
+
+Do $cinst.$ImmediateSession(loSession,loStatement) Returns lbImmediateSession
+If lbImmediateSession
+	Do $cinst.$SetSession(loSession,loStatement)
+Else If not(ibGoodConnectionToDb)
+	Quit method kFalse
+End If
+
+Begin statement
+Sta: {select [$cinst.$selectnames()]}
+Sta: {from   [$cinst.$servertablenames()]}
+Sta: {where SMH_TABLE_PRFX = @[pcTableID]}
+If pnKeyInt<>0
+	Sta: {and    SMH_PKEY_I = @[pnKeyInt]}
+Else If pcKeyChar<>''
+	Sta: {and    SMH_PKEY_C = @[pcKeyChar]}
+End If
+End statement
+Do $cinst.$executesqlandfetch() Returns lbOK
+
+If $cinst.SMH_TABLE_PRFX<>''
+	;  then someone else has the semaphore
+	;  the instance will have the name of person with semaphore in SMH_OWNER
+	If lbImmediateSession
+		Do $cinst.$SetSession(#NULL,#NULL,kTrue)
+	End If
+	Quit method kFalse
+Else
+	Calculate lcIgnoreDuplicateKeyConstraint as
+	
+	;  grab the semaphore by ceating record
+	Calculate $cinst.SMH_TABLE_PRFX as pcTableID
+	Calculate $cinst.SMH_PKEY_I as pnKeyInt
+	Calculate $cinst.SMH_PKEY_C as pcKeyChar
+	Calculate $cinst.SMH_OWNER as $ctask.trCurrUser.USR_NAME
+	Calculate $cinst.SMH_CWHEN as $cinst.$AboutNow()
+	Do $cinst.$insert(lcIgnoreDuplicateKeyConstraint) Returns lbOK
+	;  the unique constraint on the database table may deny this insert if someone else has grabbed it
+	;  or the insert may have failed $validation
+	If not(lbOK)
+		If icValidationMessage<>''
+			;  proceed     ;; calling object will get kFalse and its up to it to read icValidationMessage
+		Else
+			;  to re-read semaphore record
+			Calculate inRecursionCount as inRecursionCount+1
+			If inRecursionCount=1
+				Do $cinst.$obtainSempahore() Returns lbOK     ;; should be kFalse
+			Else
+				Do $cinst.$clear()
+				If lbImmediateSession
+					Do $cinst.$SetSession(#NULL,#NULL,kTrue)
+				End If
+				Calculate icValidationMessage as 'recursion failure when obtaining copy of semaphore'
+				Quit method kFalse
+			End If
+		End If
+	End If
+End If
+
+If lbImmediateSession
+	Do $cinst.$SetSession(#NULL,#NULL,kTrue)
+End If
+
+If lbOK
+	;  the semaphore has been obtained
+	Quit method kTrue
+End If
+;  what went wrong?
+;  icValidationMessage  or  irErrorSQL  will have the answer
+Quit method kFalse

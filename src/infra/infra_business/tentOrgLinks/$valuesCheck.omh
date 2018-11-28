@@ -1,0 +1,21 @@
+If pcContext='SUPPLIER'&isclear($cinst.EOL_FINACCT_SUID)
+	Calculate lcMessage as con(lcMessage,pick(lcMessage<>'','',', '),'a SUPPLIER code must be provided')
+	Do ilValidation.$add('EOL_FINACCT_SUID_LBL','VAL_MANDATORY','a SUPPLIER code must be provided',0)
+	
+Else If pcContext='CUSTOMER'&isclear($cinst.EOL_FINACCT_CUID)
+	Calculate lcMessage as con(lcMessage,pick(lcMessage<>'','',', '),'a CUSTOMER code must be provided')
+	Do ilValidation.$add('EOL_FINACCT_CUID_LBL','VAL_MANDATORY','a CUSTOMER code must be provided',0)
+	
+Else If pcContext='ALL'|isclear(pcContext)
+	If isclear($cinst.EOL_FINACCT_SUID)&isclear($cinst.EOL_FINACCT_CUID)
+		Calculate lcMessage as con(lcMessage,pick(lcMessage<>'','',', '),'either a SUPPLIER or CUSTOMER code must be provided')
+		Do ilValidation.$add('EOL_REFS','VAL_MANDATORY','either a SUPPLIER or CUSTOMER code must be provided',0)
+	End If
+End If
+
+If lcMessage<>''
+	Calculate icValidationMessage as lcMessage
+	Quit method kFalse
+End If
+
+Quit method kTrue

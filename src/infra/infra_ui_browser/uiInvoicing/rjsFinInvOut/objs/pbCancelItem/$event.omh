@@ -1,0 +1,15 @@
+On evClick
+	If icDetailMode='ID'
+		;  discard the row and delete the line from the list
+		Do ilDetails.$remove(ilDetails.$line)
+		Do irCurrentDetail.$clear()() Returns lbProceed
+		Calculate ilDetails.$line as 0
+		
+	Else If icDetailMode='ED'
+		Calculate irCurrentDetail as ilDetails
+	End If
+	Calculate $cinst.$objs.PagedPane.$currentpage as cnTabHeader     ;; was cnTabLines but as of 10 MAR 2016 lines are on tab cnTabHeader
+	Calculate inCurrentTab as cnTabHeader
+	Calculate icDetailMode as ''
+	
+	Do $cinst.$behaviour()

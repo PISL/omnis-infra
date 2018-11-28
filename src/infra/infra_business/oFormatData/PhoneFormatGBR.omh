@@ -1,0 +1,124 @@
+;  fine - all digits
+If mid(pPhoneNo,1,2)='0044'
+	Switch mid(pPhoneNo,5,1)
+		Case '7'
+			If pType='H'
+				Do toStrings.$StringTableMessage('VAL_PHONE_MOBILE_AS_HOME',icValidationText,icValidationCodes) Returns lbStringTableEntryFound
+				If not(lbStringTableEntryFound)
+					Calculate icValidationText as con(icValidationText,pick(icValidationText<>'','',', '),'mobile phone submitted as home phone')
+				End If
+			End If
+			If len(mid(pPhoneNo,5,99))=10
+				;  valid length
+			Else
+				Do toStrings.$StringTableMessage('VAL_PHONE_NOTENOUGH_DIGITS',icValidationText,icValidationCodes) Returns lbStringTableEntryFound
+				If not(lbStringTableEntryFound)
+					Calculate icValidationText as con(icValidationText,pick(icValidationText<>'','',', '),'invalid number of digits for phone number')
+				End If
+			End If
+			
+		Case '1','2','3'
+			If pType='M'
+				Do toStrings.$StringTableMessage('VAL_PHONE_HOME_AS_MOBILE',icValidationText,icValidationCodes) Returns lbStringTableEntryFound
+				If not(lbStringTableEntryFound)
+					Calculate icValidationText as con(icValidationText,pick(icValidationText<>'','',', '),'home phone submitted as mobile phone')
+				End If
+			End If
+			If len(mid(pPhoneNo,5,99))=10
+				;  valid length
+			Else
+				Do toStrings.$StringTableMessage('VAL_PHONE_NOTENOUGH_DIGITS',icValidationText,icValidationCodes) Returns lbStringTableEntryFound
+				If not(lbStringTableEntryFound)
+					Calculate icValidationText as con(icValidationText,pick(icValidationText<>'','',', '),'invalid number of digits for phone number')
+				End If
+			End If
+			
+		Default
+			Do toStrings.$StringTableMessage('VAL_PHONE_UNEXPECTED_DIGIT',icValidationText,icValidationCodes) Returns lbStringTableEntryFound
+			If lbStringTableEntryFound
+				Calculate icValidationText as con(icValidationText,' +44 (',mid(pPhoneNo,5,1),') ')
+			Else
+				Calculate icValidationText as con(icValidationText,pick(icValidationText<>'','',', '),'unexpected digit after ','+44 (',mid(pPhoneNo,5,1),') ')
+			End If
+	End Switch
+	
+Else If mid(pPhoneNo,1,3)='+44'
+	Switch mid(pPhoneNo,4,1)
+		Case '7'
+			If pType='H'
+				Do toStrings.$StringTableMessage('VAL_PHONE_MOBILE_AS_HOME',icValidationText,icValidationCodes) Returns lbStringTableEntryFound
+				If not(lbStringTableEntryFound)
+					Calculate icValidationText as con(icValidationText,pick(icValidationText<>'','',', '),'mobile phone submitted as home phone')
+				End If
+			End If
+			If len(mid(pPhoneNo,4,99))=10
+				;  valid length
+			Else
+				Do toStrings.$StringTableMessage('VAL_PHONE_NOTENOUGH_DIGITS',icValidationText,icValidationCodes) Returns lbStringTableEntryFound
+				If not(lbStringTableEntryFound)
+					Calculate icValidationText as con(icValidationText,pick(icValidationText<>'','',', '),'invalid number of digits for phone number')
+				End If
+			End If
+			
+		Case '1','2','3'
+			If pType='M'
+				Do toStrings.$StringTableMessage('VAL_PHONE_HOME_AS_MOBILE',icValidationText,icValidationCodes) Returns lbStringTableEntryFound
+				If not(lbStringTableEntryFound)
+					Calculate icValidationText as con(icValidationText,pick(icValidationText<>'','',', '),'home phone submitted as mobile phone')
+				End If
+			End If
+			If len(mid(pPhoneNo,4,99))=10
+				;  valid length
+			Else
+				Do toStrings.$StringTableMessage('VAL_PHONE_NOTENOUGH_DIGITS',icValidationText,icValidationCodes) Returns lbStringTableEntryFound
+				If not(lbStringTableEntryFound)
+					Calculate icValidationText as con(icValidationText,pick(icValidationText<>'','',', '),'invalid number of digits for phone number')
+				End If
+			End If
+			
+		Default
+			Do toStrings.$StringTableMessage('VAL_PHONE_UNEXPECTED_DIGIT',icValidationText,icValidationCodes) Returns lbStringTableEntryFound
+			If lbStringTableEntryFound
+				Calculate icValidationText as con(icValidationText,' +44 (',mid(pPhoneNo,5,1),') ')
+			Else
+				Calculate icValidationText as con(icValidationText,pick(icValidationText<>'','',', '),'unexpected digit after ','+44 (',mid(pPhoneNo,5,1),') ')
+			End If
+	End Switch
+	
+Else     ;; non international format
+	Switch mid(pPhoneNo,1,2)
+		Case '01','02','03'
+			If pType='M'
+				Do toStrings.$StringTableMessage('VAL_PHONE_HOME_AS_MOBILE',icValidationText,icValidationCodes) Returns lbStringTableEntryFound
+				If not(lbStringTableEntryFound)
+					Calculate icValidationText as con(icValidationText,pick(icValidationText<>'','',', '),'home phone submitted as mobile phone')
+				End If
+			End If
+			If len(pPhoneNo)<11
+				Do toStrings.$StringTableMessage('VAL_PHONE_NOTENOUGH_DIGITS',icValidationText,icValidationCodes) Returns lbStringTableEntryFound
+				If not(lbStringTableEntryFound)
+					Calculate icValidationText as con(icValidationText,pick(icValidationText<>'','',', '),'invalid number of digits for phone number')
+				End If
+			End If
+			
+		Case '07'
+			If pType='H'
+				Do toStrings.$StringTableMessage('VAL_PHONE_MOBILE_AS_HOME',icValidationText,icValidationCodes) Returns lbStringTableEntryFound
+				If not(lbStringTableEntryFound)
+					Calculate icValidationText as con(icValidationText,pick(icValidationText<>'','',', '),'mobile phone submitted as home phone')
+				End If
+			End If
+			If len(pPhoneNo)<11
+				Do toStrings.$StringTableMessage('VAL_PHONE_NOTENOUGH_DIGITS',icValidationText,icValidationCodes) Returns lbStringTableEntryFound
+				If not(lbStringTableEntryFound)
+					Calculate icValidationText as con(icValidationText,pick(icValidationText<>'','',', '),'invalid number of digits for phone number')
+				End If
+			End If
+			
+		Default
+			Do toStrings.$StringTableMessage('VAL_PHONE_INVALID_PREFIX',icValidationText,icValidationCodes) Returns lbStringTableEntryFound
+			If not(lbStringTableEntryFound)
+				Calculate icValidationText as con(icValidationText,pick(icValidationText<>'','',', '),'invalid phone number prefix')
+			End If
+	End Switch
+End If     ;; non international format

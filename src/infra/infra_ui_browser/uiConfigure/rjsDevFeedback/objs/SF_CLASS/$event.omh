@@ -1,0 +1,8 @@
+On evClick
+	If isclear(ilClasses.class)
+		Calculate ilClasses.$line as inCurrentClass
+	Else
+		Calculate irCurrentRecord.SF_CLASS as ilClasses.code     ;; FORM_RFG
+		Calculate inCurrentClass as ilClasses.$line
+		Do $cinst.$behaviour()
+	End If

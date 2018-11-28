@@ -1,0 +1,6 @@
+
+If pSubSelect     ;; PostgreSQL has VALUES() whether it is a sub-select or not.
+	Quit method con("INSERT INTO ",pTable,"(",pInsertCols,") ",pValuesSection)
+Else
+	Quit method con("INSERT INTO ",pTable,"(",pInsertCols,") VALUES(",pValuesSection,")")
+End If

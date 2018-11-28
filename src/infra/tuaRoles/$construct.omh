@@ -1,0 +1,5 @@
+Calculate icPrefix as 'ROL_'
+Calculate icPrimarykey as 'ROL_SEQ'
+Calculate ibHasSequence as kTrue
+
+Do inherited

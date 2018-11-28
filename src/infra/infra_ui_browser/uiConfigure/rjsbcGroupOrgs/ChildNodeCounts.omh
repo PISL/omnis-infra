@@ -1,0 +1,23 @@
+Calculate lnCurrentLine as ilNow.$line
+;
+Calculate lnDeltaMin as 10
+;  we have to count child nodes in a loop with Omnis
+Calculate ilNow.$line as 0
+While $Loop(ilNow)
+	Do ilNow.$checkChildren(ilNow.GS_SEQ) Returns ilNow.ChildNodeCount
+	Do ilNow.$ReturnChildNames(ilNow.GS_SEQ) Returns ilNow.ChildNodeNames
+	;  ChildDescNames is a combined count:names format
+	;  Calculate ilNow.ChildNodeCount as mid(ilNow.ChildNodeNames,1,pos(':',ilNow.ChildNodeNames)-1)
+	;  Calculate ilNow.ChildNodeNames as mid(ilNow.ChildNodeNames,pos(':',ilNow.ChildNodeNames)+1,999)
+	If ilNow.$line>1
+		Calculate lnDelta as ilNow.GS_ORDER-ilNow.[ilNow.$line-1].GS_ORDER
+		;
+		If lnDelta>0&lnDelta<lnDeltaMin
+			Calculate lnDeltaMin as lnDelta
+		End If
+	End If
+	;
+End While
+;
+;  Calculate inSortIncrement as lnDeltaMin
+;  Calculate ilNow.$line as lnCurrentLine

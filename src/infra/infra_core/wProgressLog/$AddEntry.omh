@@ -1,0 +1,41 @@
+If upp(pPushOrPop)='PUSH'
+	;  start a sequence     ;; push/pop allows nested sequences
+	Do ilPushPop.$addbefore(1,#CT)
+End If
+Calculate lcIndentation as jst('',con("'",(ilPushPop.$linecount-1)*4,"'"))
+
+Do ilLog.$addbefore(1,'','','',con(lcIndentation,pText))
+Calculate ilLog.$line as 1
+
+If upp(pPushOrPop)='PUSH'
+	;  then this is a new sequence being initiated
+	Calculate ilLog.Interval as tim(#D,'H:N:S')     ;; start time of log
+	Calculate ilLog.PushPop as 'begin'
+	
+Else If upp(pPushOrPop)='POP'
+	;  end of nested sequence     ;; display sequence duration, not since last entry
+	Calculate lnSeconds as (#CT-ilPushPop.1.TicksStart)/60
+	Calculate ilLog.Interval as toStrings.$TimeLapse(kSecond,lnSeconds)
+	Calculate ilLog.PushPop as 'end'
+	If ilPushPop.$linecount>1
+		;  time elapsed since beginning of job     ;; i.e. total sequence duration
+		Calculate lnSeconds as (#CT-ilPushPop.[ilPushPop.$linecount].TicksStart)/60
+		Calculate ilLog.SinceTheBeginning as toStrings.$TimeLapse(kSecond,lnSeconds)
+	Else
+		Calculate ilLog.SinceTheBeginning as ilLog.Interval
+	End If
+	;  Calculate ibSequenceRunning as kFalse     ;; redundant with push/pop
+	Do ilPushPop.$remove(1)
+	
+Else     ;; regular posting
+	Calculate lnSeconds as (#CT-inLastTicks)/60
+	;  running in the same sequence
+	If lnSeconds<1
+		Calculate ilLog.Interval as con(#CT-inLastTicks,'t')
+	Else
+		Calculate ilLog.Interval as toStrings.$TimeLapse(kSecond,lnSeconds)
+	End If
+End If
+
+Calculate inLastTicks as #CT
+Do $cinst.$redraw(kTrue,kTrue)

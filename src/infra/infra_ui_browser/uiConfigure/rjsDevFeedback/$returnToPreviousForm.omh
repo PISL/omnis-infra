@@ -1,0 +1,27 @@
+If irCurrentRecord.SF_SEQ>0
+	;  in addition to storing this feedback in database
+	;  send email to developer with this information
+	Do $DefineList(lrLookup,'infra.tsysReferenceLocal')
+	
+	Do lrLookup.$FetchClass('FEEDBACK','EMAILTO')
+	Do toStrings.$StringToList(lrLookup.RFL_CHAR,',') Returns llTo
+	If isclear(llTo)
+		Do llTo.$cols.$add('address',kCharacter,kSimplechar,100)
+		Do llTo.$add('stevensg@myecocost.eu')
+		Do llTo.$add('technicallead@myecocost.eu')
+	End If
+	
+	Calculate lcSubject as con('myEcoCost: T3.2  CONF Feedback on ',irCurrentRecord.SF_CLASS,': type ',irCurrentRecord.SF_TYPE)
+	
+	Calculate lcMessage as con(lcMessage,pick(lcMessage<>'','',con(kCr,kCr)),'from: ',irCurrentRecord.SF_FROM)
+	Calculate lcMessage as con(lcMessage,pick(lcMessage<>'','',con(kCr,kCr)),irCurrentRecord.SF_COMMENT)
+	If irCurrentRecord.SF_RESP_TYPE<>''
+		Calculate lcMessage as con(lcMessage,pick(lcMessage<>'','',con(kCr,kCr)),'response please: ',irCurrentRecord.SF_RESP_TYPE,' by ',irCurrentRecord.SF_RESP_DUE)
+	End If
+	
+	
+	Do $SendEmail(llTo,lcSubject,lcMessage)
+End If
+
+
+Do $cinst.$returnToForm()

@@ -1,0 +1,17 @@
+;  Enter your initialization code here
+Calculate ilAuthorisedForms as tlAuthorisedForms
+Do ilAuthorisedForms.$search($ref.visible=kFalse,1,0,1,1)
+Do ilAuthorisedForms.$remove(kListDeleteSelected)
+
+Set reference irefConsoleTask to $itasks.[tcCurrentLibrary]
+
+Do toValues.$initOrg('STB','SUFFIX') Returns irSTBsuffixGO
+
+;  Calculate $cinst.$objs.app_navigation_area.$objs.app_navigation_bar.$visible as binlength(tConstants.topBanner)>0
+If trFormColours.$colcount
+	;  we have already got the em
+Else
+	Do $getFormColours()     ;; 2016-09-30 moved from rtSuper
+End If
+
+Do method $setFormColours

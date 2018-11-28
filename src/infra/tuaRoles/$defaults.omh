@@ -1,0 +1,3 @@
+Calculate $cinst.ROL_ACTIVE as 1
+Calculate $cinst.ROL_SU as 0
+Calculate $cinst.ROL_REVOKE as 0

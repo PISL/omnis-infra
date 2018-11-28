@@ -1,0 +1,2 @@
+Do toValues.$initInherited('FORMCOLOURS') Returns llFormColours
+Do $ctask.toStrings.$ListToRow(llFormColours,'RFO_VALUE','RFO_JSON') Returns trFormColours

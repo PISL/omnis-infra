@@ -1,0 +1,5 @@
+On evClick
+	Do method checkJSON
+	
+	Do $cinst.$behaviour()
+	Do $cinst.$redraw()

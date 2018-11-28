@@ -1,0 +1,37 @@
+JavaScript: tempArray = [pTransposeCols]
+JavaScript: while (tempArray[0].length) {
+JavaScript: lcTransposeCol1 = strtok(tempArray, ",");
+JavaScript: lnAccumulate = 0;
+
+JavaScript: for (pTransposeList.setPropCli(-622,1); pTransposeList.getProperty(-622) <= pTransposeList.getProperty(-620); pTransposeList.setPropCli(-622,pTransposeList.getProperty(-622) + 1))
+JavaScript: {
+JavaScript: lcColName = lcTransposeCol1 + pTransposeList.getValue(pTransposeValCol);
+JavaScript: lnAccumulate = lnAccumulate + parseFloat(pNewList.getValue(lcColName));
+JavaScript: }
+
+JavaScript: if (pWithTotalCols) {
+JavaScript: lcColName = "TOTAL_" + lcTransposeCol1;
+JavaScript: lnAccumulate = NullToZero(lnAccumulate);
+JavaScript: pNewList.setValue(lcColName,lnAccumulate);
+JavaScript: }
+JavaScript: }
+
+JavaScript: if (pWithPercentCols)
+JavaScript: {
+JavaScript: for (pTransposeList.setPropCli(-622,1); pTransposeList.getProperty(-622) <= pTransposeList.getProperty(-620); pTransposeList.setPropCli(-622,pTransposeList.getProperty(-622) + 1))
+JavaScript: {
+JavaScript: tempArray = [pTransposeCols]
+JavaScript: while (tempArray[0].length) {
+JavaScript: lcToken = strtok(tempArray, ",");
+JavaScript: lcTransposeCol1 = lcToken + pTransposeList.getValue(pTransposeValCol) + "_PERCENT";
+JavaScript: lcToken = "TOTAL_" + lcToken
+JavaScript: if (pNewList.getValue(lcToken) > 0)
+JavaScript: {
+JavaScript: pNewList.setValue(lcTransposeCol1,pNewList.getValue(lcTransposeCol1) / pNewList.getValue(lcToken) * 100);
+JavaScript: // End If
+JavaScript: }
+JavaScript: }
+JavaScript: }
+JavaScript: }
+
+JavaScript: return pNewList;

@@ -1,0 +1,8 @@
+If irUserRights.canInsert&icMode=''
+	Calculate icMode as 'IMP'
+	Calculate $cinst.$objs.PagedPane.$currentpage as cnPageImport
+	Calculate $cinst.$objs.ilDisplayRecords.$enabled as kFalse
+	If irefImport     ;; the form has already been instantiated, so we can call $initImport here
+		Do $cinst.$initImport()
+	End If
+End If

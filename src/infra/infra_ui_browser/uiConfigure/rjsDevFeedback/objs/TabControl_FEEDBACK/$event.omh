@@ -1,0 +1,3 @@
+On evTabSelected
+	Do $cinst.$behaviour
+	Do $cinst.$redraw()

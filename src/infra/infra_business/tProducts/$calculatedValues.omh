@@ -1,0 +1,6 @@
+If isnull($cinst.RFL_NUMBER)
+	Calculate $cinst.Tax as 0
+Else
+	Calculate $cinst.Tax as $cinst.PID_UNIT_PRICE*$cinst.RFL_NUMBER/100
+End If
+Calculate $cinst.Total as $cinst.PID_UNIT_PRICE+$cinst.Tax

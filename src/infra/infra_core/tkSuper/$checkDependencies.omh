@@ -1,0 +1,28 @@
+;  check externals first
+Do $root.$extobjects.$makelist($ref.$name) Returns llExternals
+Do llExternals.$redefine(extName)
+
+;  this has to be called from Startup_Task which is application specific
+While pcExternalsToCheck<>''
+	Calculate lcExtName as strtok(nam(pcExternalsToCheck),",")
+	Do method externalItem (lcExtName,llExternals,lcMessage)
+End While
+
+;  Do method externalItem ('TMObjs',llExternals,lcMessage)
+;  Do method externalItem ('ExcelFormat',llExternals,lcMessage)     ;; reading .xlsx files
+;  Do method externalItem ('PGSQLDAM',llExternals,lcMessage)     ;; db access
+;  Do method externalItem ('FileOps',llExternals,lcMessage)
+;  Do method externalItem ('OXML',llExternals,lcMessage)     ;; reading docs
+;  Do method externalItem ('StringTable',llExternals,lcMessage)     ;; everywhere ! !
+;  Do method externalItem ('BlowFish Library',llExternals,lcMessage)
+;  Do method externalItem ('Server Web Services Library',llExternals,lcMessage)     ;; chem spider
+;  Do method externalItem ('Graph2 Library',llExternals,lcMessage)
+;  Do method externalItem ('Timer Library',llExternals,lcMessage)
+;  Do method externalItem ('Omnis PDF Device',llExternals,lcMessage)     ;; printing reports
+
+If lcMessage<>''
+	Send to trace log {Missing resources: [lcMessage]}
+	Send to trace log {* * * * *  The application WILL NOT RUN  * * * * *}
+	Quit method kFalse
+End If
+Quit method kTrue

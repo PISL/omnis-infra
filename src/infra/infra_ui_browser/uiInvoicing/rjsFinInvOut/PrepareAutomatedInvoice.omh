@@ -1,0 +1,71 @@
+;  irParameters.ParentRow     ;; hold Delegate record
+Calculate lrDelegate as irParameters.Delegate
+;  irParameters.PAX     ;; holds PAX records with Product numbers
+
+Calculate lrConference as irParameters.Conference
+
+Do ioRelationshipLogic.$prepareNewEOfromDelegate(lrDelegate,lrCustLookup,lrOrgLink)
+Do ioRelationshipLogic.$prepareNewFOHfromDelegate(lrDelegate,irCurrentRecord,irDelegateInvoiceLink)
+Calculate irCurrentRecord.FOH_CURRENCY as icCurrency
+
+;  we have a Delegate which is connected to Person
+;  but we have to create an EO record to work with Financial Invoices
+If lrCustLookup.EO_SEQ>0
+	;  existing customer
+	Do ilCustomers.$search($ref.EO_SEQ=lrCustLookup.EO_SEQ,1,0,0,0)
+Else
+	Calculate ilCustomers.$line as 0
+	
+	Do lrCustLookup.$validation() Returns lbProceed
+	If not(lbProceed)
+		Breakpoint
+	End If
+	
+	Do lrOrgLink.$validation() Returns lbProceed
+	If not(lbProceed)
+		Breakpoint
+	End If
+End If
+
+;  invoice detail records
+Calculate lrProduct as ilProducts
+
+Do ilDetails.$clear()
+Calculate ilOriginalDetails as ilDetails
+
+Calculate llList as irParameters.PAX
+Calculate llList.$line as 0
+While $Loop(llList)
+	If llList.$line=1
+		;  add extra line for OmnisWorld membership product
+		Do lrProduct.$clear()
+		;  OW_MEMC£, OW_MEMC€, OW_MEMP£, OW_MEMP€
+		If
+			Do lrProduct.$fetchIntCode(con('OW_MEMC',icCurrency))
+		Else
+			Do lrProduct.$fetchIntCode(con('OW_MEMP',icCurrency))
+		End If
+		If lrProduct.PRD_SEQ>0
+			Do method PopulateDetailRow (lrProduct)
+		End If
+	End If
+	
+	;  regular product entries
+	Do lrProduct.$clear()
+	Do lrProduct.$fetchIntCode(llList.PX_INT_PRODCODE)
+	If lrProduct.PRD_SEQ>0
+		Do method PopulateDetailRow (lrProduct)     ;; ilDetails
+	End If
+End While
+
+;  display the link record although it hasn't been saved yet
+Do ilDelegatesRelatingToThisInvoice.$add()
+Calculate ilDelegatesRelatingToThisInvoice.$line as ilDelegatesRelatingToThisInvoice.$linecount
+
+Do ilDelegatesRelatingToThisInvoice.$assignrow(irDelegateInvoiceLink,kTrue)
+Do ilDelegatesRelatingToThisInvoice.$assignrow(lrDelegate,kTrue)
+Do ilDelegatesRelatingToThisInvoice.$displayName(1)
+
+Calculate ilDelegatesRelatingToThisInvoice.[ilDelegatesRelatingToThisInvoice.$line].$selected as kTrue
+
+Do method calculateTotals

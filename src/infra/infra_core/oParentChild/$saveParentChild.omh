@@ -1,0 +1,126 @@
+If not(ibInitialised)
+	Calculate icLastError as 'object not initialised'
+	Quit method kFalse
+End If
+
+Do irHeader.$clear()
+Do toStrings.$HasRowBeenModified(prHeaderOriginal,prHeader) Returns lbModified
+If lbModified
+	Do irHeader.$assignrow(prHeader)
+	Do irHeader.$validation() Returns lbProceed
+	If lbProceed
+		If irHeader.[irHeader.icPrimaryKey]>0     ;; irHeader.FOH_SEQ
+			Do irHeader.$update() Returns lbOK
+		Else
+			Do irHeader.$insert(trGroupOrg.GO_NAME_SHORT) Returns lbOK     ;; pass the short name to identify the correct class for the invoice number
+			If lbOK
+				;  add appropriate link record depending on record
+				If tcCurrentLibrary='CONFERENCE'
+					If irHeader.icPrefix='FOH_'
+						Do irDIL.$clear()
+						Calculate irDIL.DIL_DG_REF as prDelegate.DG_SEQ
+						Calculate irDIL.DIL_FOH_REF as irHeader.FOH_SEQ
+						Do irDIL.$insert() Returns lbOkDIL
+					End If
+				End If
+			End If
+		End If
+		If lbOK
+			;  Calculate prHeader as irFOH
+			Do prHeader.$assignrow(irHeader)     ;; in case there are any extra columns in prHeader
+		Else
+			Calculate irErrorSQL as irHeader.irErrorSQL
+			If irErrorSQL.NativeErrorText<>''
+				Calculate icLastError as irErrorSQL.NativeErrorText
+			Else
+				Calculate icLastError as irHeader.icValidationMessage
+			End If
+			Quit method kFalse
+		End If
+	Else     ;; lbProceed
+		Calculate icLastError as irHeader.icValidationMessage
+		Quit method kFalse
+	End If     ;; lbProceed
+Else
+	Do irHeader.$assignrow(prHeader)     ;; referred to later
+	Calculate lbOK as kTrue     ;; for detail lines to be processed
+End If
+
+;  now deal with detail lines
+;  check which rows are new in each list
+Calculate plDetails.$line as 0
+While $Loop(plDetails)
+	If plDetails.[plDetails.icPrimaryKey]>0     ;; plDetails.FOD_SEQ
+		;  Do plDetailsOriginal.$search($ref.FOD_SEQ=plDetails.FOD_SEQ,1,0,0,0) Returns lbFound
+		Do plDetailsOriginal.$search($ref.[plDetails.icPrimaryKey]=plDetails.[plDetails.icPrimaryKey],1,0,0,0) Returns lbFound
+		If lbFound
+			Calculate plDetails.[plDetails.$line].$selected as kTrue
+			Calculate plDetailsOriginal.[plDetailsOriginal.$line].$selected as kTrue
+		End If
+	Else
+		;  it is a new row in plDetails - to be inserted     ;; later
+	End If
+End While
+
+;  always do deletes first
+;  any rows in plDetailsOriginal that are not selected will be to delete
+Calculate plDetailsOriginal.$line as 0
+While $Loop(plDetailsOriginal)
+	If plDetailsOriginal.[plDetailsOriginal.$line].$selected
+		;  this row stays
+	Else
+		Do irChild.$assignrow(plDetailsOriginal)
+		Do irChild.$delete_pk() Returns lbOK
+		If not(lbOK)
+			Calculate icLastError as irErrorSQL.NativeErrorText
+			Breakpoint
+		End If
+	End If
+End While
+Do plDetailsOriginal.$remove(kListKeepSelected)
+
+;  now do inserts and updates to detail lines
+Calculate plDetails.$line as 0
+While $Loop(plDetails)
+	Calculate lbOK as kFalse
+	Calculate lbToUpdate as kFalse
+	
+	If plDetails.[plDetails.$line].$selected
+		;  a row to update?     ;; see if its neccessary
+		Do plDetailsOriginal.$search($ref.FOD_SEQ=plDetails.FOD_SEQ,1,0,0,0) Returns lbFound
+		Do toStrings.$HasRowBeenModified(plDetailsOriginal,plDetails) Returns lbModified
+		If lbModified
+			Calculate lbToUpdate as kTrue
+			Do irChild.$assignrow(plDetails)
+			Do irChild.$update() Returns lbOK
+		End If
+	Else
+		;  a row to insert
+		Do irChild.$assignrow(plDetails)
+		;  Calculate irChild.FOD_FOH_REF as irHeader.FOH_SEQ
+		Calculate irChild.[irChild.icForeignKey] as irHeader.[irHeader.icPrimaryKey]
+		Do irChild.$validation() Returns lbProceed
+		If lbProceed
+			Calculate lbToUpdate as kTrue
+			Do irChild.$insert() Returns lbOK
+		Else
+			;  Calculate icDisplayMessage as irFOD.icValidationMessage
+		End If
+	End If
+	If lbToUpdate&lbOK
+		;  Calculate plDetails.[plDetails.$line] as irFOD
+		Do plDetails.$assignrow(irChild)     ;; in case there are any extra columns in plDetails
+	Else If not(lbToUpdate)
+		;  nothing to do
+	Else
+		Calculate irErrorSQL as irChild.irErrorSQL
+		If irErrorSQL.NativeErrorText<>''
+			Calculate icLastError as irErrorSQL.NativeErrorText
+		Else
+			Calculate icLastError as irChild.icValidationMessage
+		End If
+		Quit method kFalse
+	End If
+End While
+
+Quit method kTrue

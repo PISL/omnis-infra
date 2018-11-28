@@ -1,0 +1,2 @@
+Calculate $cinst.RFG_CLASS as pcClass     ;; this may be empty when called from superclass but should be called again in subclass
+Calculate $cinst.RFG_ACTIVE as 1     ;; default new records to Active

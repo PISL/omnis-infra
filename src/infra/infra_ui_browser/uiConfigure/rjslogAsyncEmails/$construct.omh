@@ -1,0 +1,26 @@
+Set reference $cinst.irefContainer to $cinst.$container
+Do inherited
+Do method setTabColours
+
+Do $DefineList(ilDisplayRecords,'infra.tsysAsyncEmails')
+Do ilDisplayRecords.$addDisplayName()
+Calculate irCurrentRecord as ilDisplayRecords
+
+Do ilDisplayRecords.$cols.$findname('DisplayName') Returns liColRef
+Calculate $cinst.$objs.ilDisplayRecords.$listcolumn as liColRef.$ident
+Calculate lnDisplayListCol as liColRef.$ident
+
+;  this is a queue, not a log, so sub-selection is much less important - irrelevant even.
+
+Do method TranslateText     ;; call this here to get the translations before setting superclass labels/values
+
+Calculate icFormHeading as $cell(clLabels,'objName','ASYNCEM_Heading','label')
+Calculate icFormIntro as $cell(clLabels,'objName','ASYNCEM_Intro','label')
+
+Do method UserPermissions
+
+Do method FetchRecords
+
+Do $cinst.$superObjects($cell(clLabels,'objName','disp_users','label'),lnDisplayListCol,'','',,kTrue,$cell(clLabels,'objName','text_search_LBL','label'))
+
+Do $cinst.$behaviour()

@@ -1,0 +1,43 @@
+Do $cinst.$ImmediateSession(loSession,loStatement) Returns lbImmediateSession
+If lbImmediateSession
+	Do $cinst.$SetSession(loSession,loStatement)
+Else If not(ibGoodConnectionToDb)
+	Quit method kFalse
+End If
+
+;  select * from pg_tables where tableowner = 'ME';
+If $cinst.$sessionobject.$damname='PGSQLDAM'
+	Do $cinst.$cols.$findname('schemaname') Returns liColRef
+	If liColRef
+		;  columns already defined
+	Else
+		Do $cinst.$cols.$add('schemaname',kCharacter,kSimplechar,100)
+		Do $cinst.$cols.$add('tablename',kCharacter,kSimplechar,100)
+		Do $cinst.$cols.$add('tableowner',kCharacter,kSimplechar,100)
+		Do $cinst.$cols.$add('tablespace',kCharacter,kSimplechar,100)
+		Do $cinst.$cols.$add('hasindexes',kInteger,kShortint)
+		Do $cinst.$cols.$add('hasrules',kInteger,kShortint)
+		Do $cinst.$cols.$add('hastriggers',kInteger,kShortint)
+	End If
+	
+	Calculate lcPredicate as 'where'
+	
+	Begin statement
+	Sta: {select schemaname, tablename, tableowner, tablespace, hasindexes, hasrules, hastriggers}
+	Sta: {from pg_tables}
+	If pcSchema<>''
+		Sta: {[lcPredicate] schemaname = @[pcSchema]}
+		Calculate lcPredicate as 'and'
+	End If
+	If pcTable<>''
+		Sta: {[lcPredicate] tablename like '[pcSchema]'}
+	End If
+	End statement
+	Do $cinst.$executesqldirectandfetch() Returns lbOK
+Else
+	Breakpoint
+End If
+
+If lbImmediateSession
+	Do $cinst.$SetSession(#NULL,#NULL,kTrue)
+End If

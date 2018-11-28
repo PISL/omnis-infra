@@ -1,0 +1,3 @@
+Calculate $cinst.RFL_CLASS as pcClass     ;; this may be empty when called from superclass but should be called again in subclass
+Calculate $cinst.RFL_ACTIVE as 1     ;; default new records to Active
+Calculate $cinst.RFL_INHERIT as 0     ;; if ACTIVE is true, INHERIT must be false; they can both be false.

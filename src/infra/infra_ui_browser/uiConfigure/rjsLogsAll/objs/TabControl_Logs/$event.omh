@@ -1,0 +1,3 @@
+On evTabSelected
+	Do $ctask.$setCurrentForm('code',pick(pTabNumber,'','FORM_USERS','FORM_ROLES','FORM_PERMISSIONS'))
+	Calculate inCurrentTab as pTabNumber

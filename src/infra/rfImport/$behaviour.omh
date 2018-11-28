@@ -1,0 +1,22 @@
+
+Calculate $cinst.$objs.pbPrevRow.$enabled as ilContent.$line>1
+Calculate $cinst.$objs.pbNextRow.$enabled as ilContent.$line<ilContent.$linecount
+
+Do toStrings.$StringTableEntry('word_record',lcMessage,'record')
+Calculate icRecordCount as con(cap(lcMessage),' ',ilContent.$line,' ')
+Do toStrings.$StringTableEntry('word_of',lcMessage,'of')
+Calculate icRecordCount as con(icRecordCount,lcMessage,' ',ilContent.$linecount)
+
+Calculate $cinst.$objs.pbLineUp.$enabled as ilSchemaCols.$line>1
+Calculate $cinst.$objs.pbLineDown.$enabled as ilSchemaCols.$line<ilSchemaCols.$linecount
+
+Calculate $cinst.$objs.ilTemplateMenu.$enabled as inDataColCount>0
+
+Calculate $cinst.$objs.PagedPane.$objs.pbSaveData.$enabled as icSepDec<>icSepThou
+
+Calculate $cinst.$objs.PagedPane.$objs.pbDataUp.$enabled as inVscrollPos>1
+Calculate $cinst.$objs.PagedPane.$objs.pbDataDown.$enabled as inVscrollPos<inVscrollMax
+
+Calculate $cinst.$objs.label_Ignore.$visible as ibDoNotImportFirstLine
+Calculate $cinst.$objs.label_rows.$visible as ibDoNotImportFirstLine
+Calculate $cinst.$objs.inRowsToIgnore.$visible as ibDoNotImportFirstLine

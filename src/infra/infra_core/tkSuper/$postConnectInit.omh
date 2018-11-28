@@ -1,0 +1,27 @@
+Do toValues.$initGlobal('.RESOURCE','LOGO_LICOR_SYMB') Returns irLogoLicensorSymbol
+;  read the checkum from init db to see if image has been tampered
+Do toConfig.$GetVarFromSection(tcCurrentLibrary,'.checksumlogosymb') Returns lnChecksum
+If binlength(irLogoLicensorSymbol.RFG_BIN)
+	Do binchecksum(irLogoLicensorSymbol.RFG_BIN) Returns lnInteger
+	If lnInteger=lnChecksum
+		;  all is good
+	Else
+		;  what consequences for tampering with the logo?
+		Send to trace log {Checksum of licensor image symbol does not match.  Logo suppressed.}
+		;  Do irLogoLicensor.$clear()
+	End If
+End If
+
+Do toValues.$initGlobal('.RESOURCE','LOGO_LICOR_COMP') Returns irLogoLicensorComplete
+;  read the checkum from init db to see if image has been tampered
+Do toConfig.$GetVarFromSection(tcCurrentLibrary,'.checksumlogocomp') Returns lnChecksum
+If binlength(irLogoLicensorComplete.RFG_BIN)
+	Do binchecksum(irLogoLicensorComplete.RFG_BIN) Returns lnInteger
+	If lnInteger=lnChecksum
+		;  all is good
+	Else
+		;  what consequences for tampering with the logo?
+		Send to trace log {Checksum of licensor image full does not match.  Logo suppressed.}
+		;  Do irLogoLicensor.$clear()
+	End If
+End If

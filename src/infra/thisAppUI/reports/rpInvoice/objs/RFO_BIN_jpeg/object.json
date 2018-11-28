@@ -1,0 +1,30 @@
+{
+	"ident": 1006,
+	"order": 3,
+	"objtype": "kComponent",
+	"componentlib": "JPEG Library",
+	"componentctrl": "JPEG Control",
+	"properties": {
+		"calculated": false,
+		"dataname": "irLogo.RFO_BIN",
+		"effect": "kBorderNone",
+		"fast": false,
+		"fontextra": 0,
+		"height": 2.009,
+		"horzdpi": 0,
+		"keepaspectratio": true,
+		"left": 0.005,
+		"lineno": 1,
+		"lineoffset": 0.069,
+		"nolineifempty": false,
+		"noscale": false,
+		"nosmooth": false,
+		"path": "",
+		"text": "",
+		"totalsifnoline": false,
+		"userinfo": "",
+		"vertdpi": 0,
+		"visible": false,
+		"width": 5.616
+	}
+}

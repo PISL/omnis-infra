@@ -1,0 +1,24 @@
+If isnumber(pPostcode)
+	If len(pPostcode)=4
+		Calculate lcFirstChars as mid(pPostcode,1,1)
+		Switch lcFirstChars
+			Case '2','3','4','7'     ;; 2=nsw, 3=vic, 4=qld, 5=sa, 7=wa
+				;  fine
+			Default
+				Do toStrings.$StringTableMessage('VAL_POSTCODE_INVALID_FORMAT',icValidationText,icValidationCodes) Returns lbStringTableEntryFound
+				If not(lbStringTableEntryFound)
+					Calculate icValidationText as con(icValidationText,pick(icValidationText<>'','',', '),'invalid postcode format')
+				End If
+		End Switch
+	Else
+		Do toStrings.$StringTableMessage('VAL_POSTCODE_INCORRECT_LENGTH',icValidationText,icValidationCodes) Returns lbStringTableEntryFound
+		If not(lbStringTableEntryFound)
+			Calculate icValidationText as con(icValidationText,pick(icValidationText<>'','',', '),'postcode incorrect length')
+		End If
+	End If
+Else
+	Do toStrings.$StringTableMessage('VAL_POSTCODE_INVALID_FORMAT',icValidationText,icValidationCodes) Returns lbStringTableEntryFound
+	If not(lbStringTableEntryFound)
+		Calculate icValidationText as con(icValidationText,pick(icValidationText<>'','',', '),'invalid postcode format')
+	End If
+End If

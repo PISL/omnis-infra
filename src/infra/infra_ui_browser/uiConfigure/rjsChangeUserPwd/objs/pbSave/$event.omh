@@ -1,0 +1,21 @@
+On evClick
+	Calculate icDisplayMessage as ''
+	If icNewPassword<>''
+		If icNewPassword=icCheckPassword
+			If len(icNewPassword)>6
+				;  good
+			Else
+				Do toStrings.$StringTableEntry('MSG_NEWPWORD',icDisplayMessage,'new password must be at least 7 characters in length')
+				Quit event handler (Discard event)
+			End If
+		Else
+			Do toStrings.$StringTableEntry('MSG_PWORDMISMATCH',icDisplayMessage,'passwords do not match')
+			Quit event handler (Discard event)
+		End If
+		
+		;  we have a good password
+		Do $cinst.$saveData
+		
+	End If
+	
+	Do $cinst.$behaviour()

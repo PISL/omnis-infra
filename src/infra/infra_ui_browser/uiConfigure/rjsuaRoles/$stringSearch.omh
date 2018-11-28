@@ -1,0 +1,6 @@
+If len(icSearch)>=2
+	Do method FetchRecords
+End If
+
+Do $cinst.$behaviour()
+Do $cinst.$redraw()

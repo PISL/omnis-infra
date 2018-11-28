@@ -1,0 +1,4 @@
+On evClick
+	;  exit the application by navigating to OmnisWorld.co.uk
+	
+	JavaScript: document.location.href=lcURL;

@@ -1,0 +1,31 @@
+Calculate icDisplayMessage as ''
+Calculate irCurrentRecord as ilDisplayRecords
+
+Do ilSortOptions.$clear()
+Do ilFilterOptions.$clear()
+Do ilSelectList.$clear()
+Do ilGroupBy.$clear()
+Calculate inSelectListMax as 0
+Calculate $cinst.$objs.PagedPane_REPORTS.$objs.ilSelectList.$ischecklist as kFalse
+
+Do orefReporting.$displayListClick(ilDisplayRecords,ilFilterOptions,ilSortOptions,ilSelectList) Returns irReportAttributes
+
+Do method hideAllControls
+Do method showRelevantControlsAndSetDefaults
+
+Do irReportAttributes.$cols.$findname('saveParamsUser') Returns liColRef
+If liColRef
+	;  found - fine
+	Calculate lbProceed as irReportAttributes.saveParamsUser
+Else
+	Do irReportAttributes.$cols.$findname('saveParams') Returns liColRef
+	If liColRef
+		Calculate lbProceed as irReportAttributes.saveParams
+	End If
+End If
+If liColRef&lbProceed
+	Do method restoreSavedParams (liColRef)
+End If
+
+Do $cinst.$behaviour()
+Do $cinst.$redraw()

@@ -1,0 +1,6 @@
+On evClick
+	Do irCurrentRecord.$clear()
+	Calculate icDisplayMessage as ''
+	Calculate icMode as ''
+	
+	Do $cinst.$displayListClick()

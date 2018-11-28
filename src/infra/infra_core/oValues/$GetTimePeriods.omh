@@ -1,0 +1,248 @@
+Do llTimePeriods.$cols.$add('code',kCharacter,kSimplechar,15)
+Do llTimePeriods.$cols.$add('desc',kCharacter,kSimplechar,100)
+
+;  18 APR 2018  RSM     ;; pcFilter enhancements
+;  A json string can be passed in with either sections or values.
+;  Sections work along the same as before, using a suffix to specify groups of ranges.
+;  Values is an exclusive or arrangement whereby specific codes are stated.
+If isclear(pcFilter)
+	Calculate pcFilter as 'DAY,WEEK,FNIGHT,MONTH,QTR,YEAR,OTHER'     ;; all sections
+End If
+If pcFilter<>''
+	Do OJSON.$jsontolistorrow(pcFilter,lcError) Returns lrJSON
+	If lrJSON.$colcount>0
+		Do lrJSON.$cols.$findname('sections') Returns liColRef
+		If liColRef
+			If lrJSON.sections<>''
+				Calculate lcSections as lrJSON.sections
+			End If
+		End If
+		
+		Do lrJSON.$cols.$findname('codes') Returns liColRef
+		If liColRef
+			If lrJSON.codes<>''
+				Calculate lcCodes as lrJSON.codes
+			End If
+		End If
+		;  codes take precedence over sections
+		If lcSections<>''&lcCodes<>''
+			Calculate lcSections as ''
+		End If
+	Else     ;; original comma searated for sections
+		Calculate lcSections as pcFilter
+	End If
+End If
+
+;  now convert any sections to codes so only codes get processed below
+If lcSections<>''
+	If pos('DAY',lcSections)
+		Calculate lcCodes as con(lcCodes,',TODAY,YESTERDAY,')
+	End If
+	If pos('WEEK',lcSections)
+		Calculate lcCodes as con(lcCodes,',THIS_WEEK,LAST_WEEK,PRV_LAST_WEEK,')
+	End If
+	If pos('FNIGHT',lcSections)
+		Calculate lcCodes as con(lcCodes,',THIS_FNIGHT,LAST_FNIGHT,PRV_LAST_FNIGHT,')
+	End If
+	If pos('MONTH',lcSections)
+		Calculate lcCodes as con(lcCodes,',THIS_MONTH,LAST_MONTH,PRV_LAST_MONTH,')
+	End If
+	If pos('QTR',lcSections)
+		Calculate lcCodes as con(lcCodes,',THIS_QTR,LAST_QTR,PRV_LAST_QTR,')
+	End If
+	If pos('YEAR',lcSections)
+		Calculate lcCodes as con(lcCodes,',THIS_YEAR,LAST_YEAR,PRV_LAST_YEAR,')
+	End If
+	If pos('OTHER',lcSections)
+		Calculate lcCodes as con(lcCodes,',OTHER,')
+	End If
+	
+	Calculate lcSections as ''
+End If
+
+;  now establish the correct entries to use
+Calculate lcSingleCode as 'TODAY'
+If pos(lcSingleCode,lcCodes)
+	Do toStrings.$StringTableEntry(con('TP_',lcSingleCode),lcDesc,'today')
+	Do llTimePeriods.$add(lcSingleCode,lcDesc)
+End If
+Calculate lcSingleCode as 'YESTERDAY'
+If pos(lcSingleCode,lcCodes)
+	Do toStrings.$StringTableEntry(con('TP_',lcSingleCode),lcDesc,'yesterday')
+	Do llTimePeriods.$add(lcSingleCode,lcDesc)
+End If
+
+Calculate lcSingleCode as 'THIS_WEEK'
+If pos(lcSingleCode,lcCodes)
+	Do toStrings.$StringTableEntry(con('TP_',lcSingleCode),lcDesc,'this  week')
+	Do llTimePeriods.$add(lcSingleCode,lcDesc)
+End If
+Calculate lcSingleCode as 'LAST_WEEK'
+If pos(lcSingleCode,lcCodes)
+	Do toStrings.$StringTableEntry(con('TP_',lcSingleCode),lcDesc,'last  week')
+	Do llTimePeriods.$add(lcSingleCode,lcDesc)
+End If
+Calculate lcSingleCode as 'PRV_LAST_WEEK'
+If pos(lcSingleCode,lcCodes)
+	Do toStrings.$StringTableEntry(con('TP_',lcSingleCode),lcDesc,'previous  to  last  week')
+	Do llTimePeriods.$add(lcSingleCode,lcDesc)
+End If
+
+Calculate lcSingleCode as 'THIS_FNIGHT'
+If pos(lcSingleCode,lcCodes)
+	Do toStrings.$StringTableEntry(con('TP_',lcSingleCode),lcDesc,'this  fortnight')
+	Do llTimePeriods.$add(lcSingleCode,lcDesc)
+End If
+Calculate lcSingleCode as 'LAST_FNIGHT'
+If pos(lcSingleCode,lcCodes)
+	Do toStrings.$StringTableEntry(con('TP_',lcSingleCode),lcDesc,'last  fortnight')
+	Do llTimePeriods.$add(lcSingleCode,lcDesc)
+End If
+Calculate lcSingleCode as 'PRV_LAST_FNIGHT'
+If pos(lcSingleCode,lcCodes)
+	Do toStrings.$StringTableEntry(con('TP_',lcSingleCode),lcDesc,'previous  to  last  fortnight')
+	Do llTimePeriods.$add(lcSingleCode,lcDesc)
+End If
+
+Calculate lcSingleCode as 'THIS_MONTH'
+If pos(lcSingleCode,lcCodes)
+	Do toStrings.$StringTableEntry(con('TP_',lcSingleCode),lcDesc,'this  month')
+	Do llTimePeriods.$add(lcSingleCode,lcDesc)
+End If
+Calculate lcSingleCode as 'LAST_MONTH'
+If pos(lcSingleCode,lcCodes)
+	Do toStrings.$StringTableEntry(con('TP_',lcSingleCode),lcDesc,'last  month')
+	Do llTimePeriods.$add(lcSingleCode,lcDesc)
+End If
+Calculate lcSingleCode as 'PRV_LAST_MONTH'
+If pos(lcSingleCode,lcCodes)
+	Do toStrings.$StringTableEntry(con('TP_',lcSingleCode),lcDesc,'previous  to  last  month')
+	Do llTimePeriods.$add(lcSingleCode,lcDesc)
+End If
+
+Calculate lcSingleCode as 'THIS_QTR'
+If pos(lcSingleCode,lcCodes)
+	Do toStrings.$StringTableEntry(con('TP_',lcSingleCode),lcDesc,'this  quarter')
+	Do llTimePeriods.$add(lcSingleCode,lcDesc)
+End If
+Calculate lcSingleCode as 'LAST_QTR'
+If pos(lcSingleCode,lcCodes)
+	Do toStrings.$StringTableEntry(con('TP_',lcSingleCode),lcDesc,'last  quarter')
+	Do llTimePeriods.$add(lcSingleCode,lcDesc)
+End If
+Calculate lcSingleCode as 'PRV_LAST_QTR'
+If pos(lcSingleCode,lcCodes)
+	Do toStrings.$StringTableEntry(con('TP_',lcSingleCode),lcDesc,'previous  to  last  quarter')
+	Do llTimePeriods.$add(lcSingleCode,lcDesc)
+End If
+
+Calculate lcSingleCode as 'THIS_YEAR'
+If pos(lcSingleCode,lcCodes)
+	Do toStrings.$StringTableEntry(con('TP_',lcSingleCode),lcDesc,'this  year')
+	Do llTimePeriods.$add(lcSingleCode,lcDesc)
+End If
+Calculate lcSingleCode as 'LAST_YEAR'
+If pos(lcSingleCode,lcCodes)
+	Do toStrings.$StringTableEntry(con('TP_',lcSingleCode),lcDesc,'last  year')
+	Do llTimePeriods.$add(lcSingleCode,lcDesc)
+End If
+Calculate lcSingleCode as 'PRV_LAST_YEAR'
+If pos(lcSingleCode,lcCodes)
+	Do toStrings.$StringTableEntry(con('TP_',lcSingleCode),lcDesc,'previous  to  last  year')
+	Do llTimePeriods.$add(lcSingleCode,lcDesc)
+End If
+
+Calculate lcSingleCode as 'PROJ_TO_DATE'
+If pos(lcSingleCode,lcCodes)
+	Do toStrings.$StringTableEntry(con('TP_',lcSingleCode),lcDesc,'project  to  date')
+	Do llTimePeriods.$add(lcSingleCode,lcDesc)
+End If
+Calculate lcSingleCode as 'OTHER'
+If pos(lcSingleCode,lcCodes)
+	Do toStrings.$StringTableEntry(con('TP_',lcSingleCode),lcDesc,'other  period')
+	Do llTimePeriods.$add(lcSingleCode,lcDesc)
+End If
+
+;  While $Loop(llTimePeriods)     ;; Studio 8.0.1 bug - losing scope with task
+;  For llTimePeriods.$line from 1 to llTimePeriods.$linecount step 1
+;  Do toStrings.$StringTableEntry(con('TP_',llTimePeriods.code),lcText) Returns lbValid
+;  If lbValid
+;  Calculate llTimePeriods.desc as lcText
+;  Else
+;  leave it with the original
+;  End If
+;  End While
+;  End For
+
+If pnExplicitDates>0
+	;  replace relative "desc" with explicit date values
+	Calculate lcHybridSeparator as ': '
+	
+	Calculate llTimePeriods.$line as 0
+	While $Loop(llTimePeriods)
+		Do method $SetPeriodDates (llTimePeriods,ldFrom,ldTo,pnFortnightDefinition)
+		If llTimePeriods.code='TODAY'|llTimePeriods.code='YESTERDAY'
+			If pnExplicitDates=1     ;; explicit
+				Calculate llTimePeriods.desc as con(ldFrom)
+			Else If pnExplicitDates=2     ;; hybrid
+				Calculate llTimePeriods.desc as con(llTimePeriods.desc,lcHybridSeparator,ldFrom)
+			Else If pnExplicitDates=3     ;; selected hybrid
+				;  stay relative
+			End If
+			
+		Else If pos('MONTH',llTimePeriods.code)
+			If pnExplicitDates=1     ;; explicit
+				Calculate llTimePeriods.desc as dtm(ldFrom)
+			Else If pnExplicitDates=2     ;; hybrid
+				Calculate llTimePeriods.desc as con(llTimePeriods.desc,lcHybridSeparator,mid(dtm(ldFrom),1,3))
+			Else If pnExplicitDates=3     ;; selected hybrid
+				;  stay relative
+			End If
+			
+		Else If pos('QTR',llTimePeriods.code)
+			If pnExplicitDates=1     ;; explicit
+				Calculate llTimePeriods.desc as con(dtm(ldFrom),' - ',dtm(ldTo))
+			Else If pnExplicitDates=2     ;; hybrid
+				Calculate llTimePeriods.desc as con(llTimePeriods.desc,lcHybridSeparator,mid(dtm(ldFrom),1,3),' - ',mid(dtm(ldTo),1,3))
+			Else If pnExplicitDates=3     ;; selected hybrid
+				;  stay relative
+			End If
+			
+		Else If pos('YEAR',llTimePeriods.code)
+			If pnExplicitDates=1     ;; explicit
+				Calculate llTimePeriods.desc as dtcy(ldFrom)
+			Else If pnExplicitDates=2     ;; hybrid
+				Calculate llTimePeriods.desc as con(llTimePeriods.desc,lcHybridSeparator,dtcy(ldFrom))
+			Else If pnExplicitDates=3     ;; selected hybrid
+				;  stay relative
+			End If
+			
+		Else If pos('OTHER',llTimePeriods.code)
+			If pnExplicitDates=1     ;; explicit
+				Calculate llTimePeriods.desc as '?? - ??'
+			Else If pnExplicitDates=2     ;; hybrid
+				Calculate llTimePeriods.desc as con(llTimePeriods.desc,lcHybridSeparator,'?? - ??')
+			Else If pnExplicitDates=3     ;; selected hybrid
+				;  stay relative
+			End If
+			
+		Else     ;; anything else spans a range of dates
+			If pnExplicitDates=1     ;; explicit
+				Calculate llTimePeriods.desc as con(ldFrom,' - ',ldTo)
+			Else If pnExplicitDates=2     ;; hybrid
+				Calculate llTimePeriods.desc as con(llTimePeriods.desc,lcHybridSeparator,ldFrom,' - ',ldTo)
+			Else If pnExplicitDates=3     ;; selected hybrid
+				If llTimePeriods.code='THIS_FNIGHT'|llTimePeriods.code='LAST_FNIGHT'|llTimePeriods.code='PRV_LAST_FNIGHT'
+					Calculate llTimePeriods.desc as con(llTimePeriods.desc,lcHybridSeparator,ldFrom,' - ',ldTo)
+				Else If llTimePeriods.code='OTHER'
+					Calculate llTimePeriods.desc as con(llTimePeriods.desc,lcHybridSeparator,'?? - ??')
+				Else
+					;  stay relative
+				End If
+			End If
+			
+		End If
+	End While
+End If
+
+Quit method llTimePeriods

@@ -1,0 +1,28 @@
+Do orefReporting.$checkTask() Returns lbTaskRecognised
+If lbTaskRecognised
+	Do orefReporting.$initChart(ilDisplayRecords,inPrintDestination,idFrom,idTo,ibCheckbox1,ibCheckbox2,ibCheckbox3,ilSortOptions,ilFilterOptions,ilSelectList,ilGroupBy,inInteger1,inInteger2,inReal1,inReal2,ilSearch1,ilSearch2) Returns lrChartDetails     ;; Returnｓ a 2 column row, C1 = chart data list, C2 = chart config JSON
+	If orefReporting.icDisplayMessage<>''
+		Calculate icDisplayMessage as orefReporting.icDisplayMessage
+		
+	Else
+		Do method $saveParams (ilDisplayRecords,inPrintDestination,idFrom,idTo,ibCheckbox1,ibCheckbox2,ibCheckbox3,ilSortOptions,ilFilterOptions,ilSelectList,ilGroupBy,inInteger1,inInteger2,inReal1,inReal2,ilSearch1,ilSearch2)
+		Calculate ilChartData as lrChartDetails.ilData
+		Calculate icChartConfig as lrChartDetails.icChartConfig
+		Calculate icBreakCols as lrChartDetails.icBreakCols
+		Calculate icTransposeCol as lrChartDetails.icTransposeCol
+		Calculate icTransposeValCols as lrChartDetails.icTransposeValCols
+		Calculate icFilterCriteria as pick(ilFilterOptions.$line=1,con("Division: ",ilFilterOptions.C2),trGroupOrg.GON_NAME_FULL)
+		Calculate icFilterCriteria as con(icFilterCriteria,kCr,kLf,pick(inInteger1=inInteger2,con("Years ",inInteger1," to ",inInteger2),con("Year: ",inInteger1)))
+		
+		Calculate irRawChartData as row(lrChartDetails.ilData,lrChartDetails.icAllConfigs,ilSelectList,ilGroupBy,"tco2e",irReportAttributes,icFilterCriteria)     ;; irRawData is set in the subform $parameters to send all data neceeded for the chart + irReportAttributes to mimic the ilSelectList & ilGroupBy
+		;  Calculate $cinst.$objs.MarqueeChart.$classname as "rjsMarqueeApp"
+		Calculate $cinst.$objs.MarqueeChart.$classname as "rjsMarqueeGrid"
+		Calculate inCurrentTab as 4
+		Calculate $cinst.$objs.PagedPane_REPORTS.$currentpage as inCurrentTab
+		
+	Else
+		Calculate icDisplayMessage as con("$checkTask on object ",orefReporting.$class.$name," returned ",lbTaskRecognised)
+	End If
+End If
+
+Do $cinst.$behaviour()

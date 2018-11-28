@@ -1,0 +1,28 @@
+Set reference irefCallingObject to prefCallingObject
+Calculate irReference as prReference
+Calculate icCallbackMethod as pcCallback
+
+Do ilPictFormat.$cols.$add('code',kCharacter,kSimplechar,10)
+Do ilPictFormat.$cols.$add('desc',kCharacter,kSimplechar,100)
+Do ilPictFormat.$add('CS8','CS8')
+Do ilPictFormat.$add('CS24','CS24')
+Do ilPictFormat.$add('PNG','PNG')
+Do ilPictFormat.$add('CSC8','CSC8')
+Do ilPictFormat.$add('CS32','CS32')
+Do ilPictFormat.$add('PICT','PICT')
+Do ilPictFormat.$add('GIF','GIF')
+Do ilPictFormat.$add('JPEG','JPEG')
+Do ilPictFormat.$add('PCX','PCX')
+Do ilPictFormat.$add('WBMP','WBMP')
+
+Calculate ibinContent as irReference.[irReference.icPrefix]BIN
+Do method TypeOfPicture
+
+If cnTop>0
+	Calculate $cinst.$top as cnTop
+End If
+If cnLeft>0
+	Calculate $cinst.$left as cnLeft
+End If
+
+Do $cinst.$behaviour()

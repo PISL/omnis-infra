@@ -1,0 +1,2 @@
+;  $cancelled() Method called when the request has been cancelled
+Do irefCallingInst.$cancelled

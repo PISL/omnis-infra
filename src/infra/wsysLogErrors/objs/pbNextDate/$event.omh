@@ -1,0 +1,5 @@
+On evClick     ;; Event Parameters - pRow( Itemreference )
+	Do $ctask.toStrings.$shiftDates(1,idFrom,idTo)
+	Do method FetchLog
+	Do $cinst.$behaviour()
+	Do $cinst.$redraw()

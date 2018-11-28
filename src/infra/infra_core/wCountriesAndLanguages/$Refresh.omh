@@ -1,0 +1,85 @@
+;  Do method $Save
+;
+Do ilLanguagesAndCountries.$clear()     ;; ilData
+If ibFetchSpecial
+	Switch ilSpecialSelections.code
+		Case 'FILTERED'
+			
+			If inSingleMulti=0
+				Do oDAO_CoLang.$FetchAllCountries() Returns ilCountries
+			Else If inSingleMulti=1
+				Do oDAO_CoLang.$CountriesWithSingleLanguage() Returns ilCountries
+			Else If inSingleMulti=2
+				Do oDAO_CoLang.$CountriesWithMultipleMainLanguages() Returns ilCountries
+			End If
+			;  Case 'UNOFF_LANG'
+			;  Do oDAO_CoLang.$CountriesWithUnofficialLanguage() Returns ilCountries
+			
+		Case 'ALL'
+			Do oDAO_CoLang.$FetchAllCountries() Returns ilCountries
+			
+		Case 'NO_ENDONYM'
+			Do oDAO_CoLang.$CountriesWithMissingEndonym(kFalse,kFalse) Returns ilCountries
+			
+		Case 'NO_EXONYM'
+			Do oDAO_CoLang.$CountriesWithMissingExonym(kFalse,kFalse) Returns ilCountries
+			
+		Default
+			;  do nothing
+	End Switch
+Else
+	;  regular fetching
+	
+	If ilCountries.$line>0&ilLanguages.$line>0
+		;  Do ilLanguagesAndCountries.$FetchLangForCountry(ilCountries.CO_ISO3,#NULL,#NULL,ilLanguages.LG_SEQ)
+		Do oDAO_CoLang.$FetchLangCoOnLangAndCo(ilCountries.CO_ISO3,ilLanguages.LG_SEQ) Returns ilLanguagesAndCountries
+		
+	Else If ilCountries.$line>0
+		;  Do ilLanguagesAndCountries.$FetchLanguagesForCountry(ilCountries.CO_ISO3)
+		Do oDAO_CoLang.$FetchLangCoOnCountry(ilCountries.CO_ISO3) Returns ilLanguagesAndCountries
+		
+	Else If ilLanguages.$line>0
+		;  Do ilLanguagesAndCountries.$FetchCountriesForLanguage(ilLanguages.LG_SEQ)
+		Do oDAO_CoLang.$FetchLangCoOnLanguage(ilLanguages.LG_SEQ) Returns ilLanguagesAndCountries
+		
+	End If
+	
+	If inLangMainUnofficial=0
+		;  all
+	Else If inLangMainUnofficial=1
+		Do ilLanguagesAndCountries.$search($ref.LC_MAINLANG=1,1,0,1,0)
+		Do ilLanguagesAndCountries.$remove(kListKeepSelected)
+		Do ilLanguagesAndCountries.$search(0)
+	Else If inLangMainUnofficial=2
+		Do ilLanguagesAndCountries.$search($ref.LC_MAINLANG=1,1,0,1,0)
+		Do ilLanguagesAndCountries.$remove(kListDeleteSelected)
+	End If
+	
+	;  Do ilLanguagesAndCountries.$sort($ref.LC_CO_EXONYM,0,$ref.LC_CAPITAL_EXONYM,0)
+	Do ilLanguagesAndCountries.$sort($ref.LC_OFFICIAL,1,$ref.LC_MAINLANG,1,$ref.LG_DESC,0,$ref.LC_CO_EXONYM,0,$ref.LC_CAPITAL_EXONYM,0)
+	Calculate ilLanguagesAndCountries.$smartlist as kTrue
+	
+	;  patch in language codes
+	While $Loop(ilLanguagesAndCountries)
+		If ilLanguagesAndCountries.LG_DESC<>''
+			Calculate ilLanguagesAndCountries.LG_DESC as low(ilLanguagesAndCountries.LG_DESC)     ;; easier to read in tight real estate
+		End If
+		
+		Do oDAO_CoLang.$FetchLanguage(#NULL,#NULL,ilLanguagesAndCountries.LC_LGREF) Returns lrLanguage
+		If ilLanguagesAndCountries.LC_LGREF_ISO3=lrLanguage.LG_ISO3
+			;  already patched
+		Else
+			If lrLanguage.LG_ISO3<>''
+				Calculate lRow as ilLanguagesAndCountries
+				Calculate lRow.LC_LGREF_ISO3 as lrLanguage.LG_ISO3
+				Do lRow.$update() Returns lbOK
+				If lbOK
+					Calculate ilLanguagesAndCountries.LC_LGREF_ISO3 as lrLanguage.LG_ISO3
+				End If
+			End If
+		End If
+	End While
+End If
+
+Do $cinst.$behaviour()
+Do $cinst.$redraw()

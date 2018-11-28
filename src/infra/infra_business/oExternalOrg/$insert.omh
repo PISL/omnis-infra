@@ -1,0 +1,49 @@
+Calculate lbProceed as kFalse
+If prSuppCustCodes.EOL_FINACCT_CUID<>''
+	Calculate lbProceed as kTrue
+End If
+If prSuppCustCodes.EOL_FINACCT_SUID<>''
+	Calculate lbProceed as kTrue
+End If
+If not(lbProceed)
+	Calculate icErrorMessage as 'validation error: Supplier or Customer code missing'
+	Quit method kFalse
+End If
+
+Do irExtOrg.$clear()
+Do irExtOrg.$assignrow(prOrg)
+Do irExtOrg.$validation() Returns lbProceed
+If lbProceed
+	Do irExtOrg.$insert() Returns lbOK
+	If lbOK
+		Do prOrg.$assignrow(irExtOrg)     ;; return result to calling object
+		
+		Do irOrglink.$clear()
+		Calculate irOrglink.EOL_EO_REF as irExtOrg.EO_SEQ
+		Calculate irOrglink.EOL_FINACCT_CUID as prSuppCustCodes.EOL_FINACCT_CUID
+		Calculate irOrglink.EOL_FINACCT_SUID as prSuppCustCodes.EOL_FINACCT_SUID
+		Calculate irOrglink.EOL_GO_REF as $ctask.trGroupOrg.GO_SEQ
+		
+		Do irOrglink.$validation() Returns lbProceed
+		If lbProceed
+			Do irOrglink.$insert() Returns lbOK
+			If lbOK
+				Do prSuppCustCodes.$assignrow(irOrglink)     ;; return result to calling object
+			Else
+				Calculate icErrorMessage as irOrglink.irErrorSQL.NativeErrorText
+				Quit method kFalse
+			End If
+		Else
+			Calculate icErrorMessage as con('validation error: ',irOrglink.icValidationMessage)
+			Quit method kFalse
+		End If
+	Else
+		Calculate icErrorMessage as irExtOrg.irErrorSQL.NativeErrorText
+		Quit method kFalse
+	End If
+Else
+	Calculate icErrorMessage as con('validation error: ',irExtOrg.icValidationMessage)
+	Quit method kFalse
+End If
+
+Quit method kTrue

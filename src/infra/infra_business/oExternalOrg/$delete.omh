@@ -1,0 +1,23 @@
+Do irOrglink.$clear()
+Do irOrglink.$assignrow(prSuppCustCodes)
+Do irOrglink.$delete_pk() Returns lbOK
+If lbOK
+	Do irOrglink.$clear()
+	Do prSuppCustCodes.$clear()     ;; return result to calling object
+Else
+	Calculate icErrorMessage as irOrglink.irErrorSQL.NativeErrorText
+	Quit method kFalse
+End If
+
+Do irExtOrg.$clear()
+Do irExtOrg.$assignrow(prOrg)
+Do irExtOrg.$delete_pk() Returns lbOK
+If lbOK
+	Do irExtOrg.$clear()
+	Do prOrg.$clear()     ;; return result to calling object
+Else
+	Calculate icErrorMessage as irExtOrg.irErrorSQL.NativeErrorText
+	Quit method kFalse
+End If
+
+Quit method kTrue

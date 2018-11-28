@@ -1,0 +1,112 @@
+If tlDatabases.DAM='WebService'
+	;  pass parameters to web service
+	;  $callService (pFieldReference, row(TableClassName, CurrentMethodName, p1,...,pn) )     ;; result will be returned in pFieldReference, row() contains the parameters for the call
+	If pcReturnWhat='RESULT'
+		
+		Do ioWeb.$callFetch($cinst,irErrorSQL,row($cinst.$class().$name,$cmethod().$name,row(pcReturnWhat,pcSearchString,pcSearchColumn),$cinst.$type,0,ilRESTextensions))
+		If ioWeb.irResponse.httpStatusCode=200
+			;  the result should be in this object     ;; however there may be a SQL error
+			If irErrorSQL.NativeErrorText<>''
+				Quit method kFalse
+			End If
+			Quit method kTrue
+		Else
+			Quit method kFalse
+		End If
+	Else If pcReturnWhat='COUNT'
+		;  pass parameters to web service
+		;  $callService (pFieldReference, row(TableClassName, CurrentMethodName, p1,...,pn) )     ;; result will be returned in pFieldReference, row() contains the parameters for the call
+		Do ioWeb.$callFetch(lnCount,irErrorSQL,row($cinst.$class().$name,$cmethod().$name,row(pcReturnWhat,pcSearchString,pcSearchColumn),lnCount.$type,0,ilRESTextensions))
+		If ioWeb.irResponse.httpStatusCode=200
+			;  the result should be in this object     ;; however there may be a SQL error
+			If irErrorSQL.NativeErrorText<>''
+				Quit method kFalse
+			End If
+			Quit method lnCount
+		Else
+			Quit method kFalse
+		End If
+		
+	Else
+		Breakpoint
+	End If
+End If
+
+If isnumber(pcSearchString)
+	Calculate lbIsNumber as kTrue
+End If
+Calculate pcReturnWhat as upp(pcReturnWhat)
+If pos('%',pcSearchString)
+	;  let users placement of wildcard remain
+Else
+	Calculate pcSearchString as con('%',upp(pcSearchString),'%')     ;; this will make isnumber() inneffective
+End If
+If pcReturnWhat='COUNT'|pcReturnWhat='RESULT'
+	;  continue
+Else
+	Quit method
+End If
+
+Do $cinst.$ImmediateSession(loSession,loStatement) Returns lbImmediateSession
+If lbImmediateSession
+	Do $cinst.$SetSession(loSession,loStatement)
+Else If not(ibGoodConnectionToDb)
+	Quit method kFalse
+End If
+
+Begin statement
+If pcReturnWhat='RESULT'
+	Sta: {select [$cinst.$selectnames()]}
+Else If pcReturnWhat='COUNT'
+	Sta: {select count(*)}
+End If
+
+Sta: {from  [$cinst.$servertablenames]}
+If pcSearchColumn<>''
+	If pcSearchColumn='C'
+		Sta: {where [icPrefix]CLASS like @[pcSearchString]}
+	Else If pcSearchColumn='V'
+		Sta: {where [icPrefix]VALUE like @[pcSearchString]}
+	Else If pcSearchColumn='D'
+		Sta: {where upper([icPrefix]DESC) like @[pcSearchString]}
+	Else If pcSearchColumn='H'
+		Sta: {where upper([icPrefix]CHAR) like @[pcSearchString]}
+	End If
+Else
+	;  cast the search net as widely as possible
+	Sta: {where ([icPrefix]CLASS ilike @[pcSearchString]}
+	Sta: {or       [icPrefix]VALUE ilike @[pcSearchString]}
+	Sta: {or       [icPrefix]DESC ilike @[pcSearchString]}
+	Sta: {or       [icPrefix]CHAR ilike @[pcSearchString]}
+	Sta: {or       cast([icPrefix]JSON as text) ilike @[pcSearchString]}
+	If lbIsNumber
+		Sta: {or       cast([icPrefix]INT as text) ilike @[pcSearchString]}
+		Sta: {or       cast([icPrefix]NUMBER as text) ilike @[pcSearchString]}
+	End If
+	;  close the brackets from "where (" with the series of OR conditions
+	Sta: {)}
+	;  this is to separate any additional criteria such as follows
+	If pos('ORG',upp($cinst.$servertablenames))
+		Sta: {and   RFO_GO_REF = @[trGroupOrg.GO_SEQ]}
+	Else If pos('USER',upp($cinst.$servertablenames))
+		Sta: {and   RFU_GO_REF = @[trGroupOrg.GO_SEQ]}
+		Sta: {and   RFU_USR_REF = @[trCurrUser.USR_SEQ]}
+	End If
+End If
+Sta: {and substring([icPrefix]CLASS,1,1) <> '.'}
+End statement
+
+If pcReturnWhat='RESULT'
+	Do $cinst.$executesqlandfetch() Returns lbOK
+Else If pcReturnWhat='COUNT'
+	Do $cinst.$executesqlandfetchinto(lnCount) Returns lbOK
+End If
+If lbImmediateSession
+	Do $cinst.$SetSession(#NULL,#NULL,kTrue)
+End If
+
+If pcReturnWhat='RESULT'
+	Quit method lbOK
+Else If pcReturnWhat='COUNT'
+	Quit method lnCount
+End If

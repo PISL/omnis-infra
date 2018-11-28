@@ -1,0 +1,47 @@
+If tlDatabases.DAM='WebService'
+	;  pass parameters to web service
+	;  $callService (pFieldReference, row(TableClassName, CurrentMethodName, p1,...,pn) )     ;; result will be returned in pFieldReference, row() contains the parameters for the call
+	Do ioWeb.$callFetch($cinst,irErrorSQL,row($cinst.$class().$name,$cmethod().$name,row(pcInternalCode,pbFetchInternalData),$cinst.$type,0,ilRESTextensions))
+	If ioWeb.irResponse.httpStatusCode=200
+		;  the result should be in this object     ;; however there may be a SQL error
+		If irErrorSQL.NativeErrorText<>''
+			Quit method kFalse
+		End If
+		Quit method kTrue
+	Else
+		Quit method kFalse
+	End If
+End If
+
+Do $cinst.$ImmediateSession(loSession,loStatement) Returns lbImmediateSession
+If lbImmediateSession
+	Do $cinst.$SetSession(loSession,loStatement)
+Else If not(ibGoodConnectionToDb)
+	Quit method kFalse
+End If
+
+Begin statement
+Sta: {select [$cinst.$selectnames()]}
+If pbFetchInternalData
+	Sta: {, [lrInternalData.$selectnames()]}
+	Sta: {, RFL_NUMBER}
+End If
+Sta: {from [$cinst.$servertablenames]}
+If pbFetchInternalData
+	Sta: {left join [lrInternalData.$servertablenames] on PID_PRD_REF = PRD_SEQ}
+	Sta: {left outer join [lrReferenceLocal.$servertablenames] on ( PID_TAX_BAND = RFL_VALUE and rfl_class='VAT_RATE' )}
+End If
+Sta: {where  PRD_GO_REF = @[$ctask.trGroupOrg.GO_SEQ]}
+If pos('%',pcInternalCode)
+	Sta: {and PRD_INT_PRODCODE like @[pcInternalCode]}
+Else
+	Sta: {and     PRD_INT_PRODCODE = @[pcInternalCode]}
+End If
+End statement
+Do $cinst.$executesqlandfetch() Returns lbOK
+
+If lbImmediateSession
+	Do $cinst.$SetSession(#NULL,#NULL,kTrue)
+End If
+
+Quit method lbOK

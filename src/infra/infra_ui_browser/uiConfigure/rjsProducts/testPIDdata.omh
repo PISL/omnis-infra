@@ -1,0 +1,8 @@
+;  check each column for entered data, we don't want to create an empty record
+For lnCol from 1 to irInternalData.$colcount step 1
+	If not(isclear(irInternalData.C[lnCol]))
+		Quit method kTrue
+	End If
+End For
+
+Quit method kFalse     ;; if we've arrived here, there must be nothing to save

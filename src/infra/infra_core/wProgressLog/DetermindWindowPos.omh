@@ -1,0 +1,12 @@
+Do $iwindows.$makelist($ref.$name,$ref.$cinst) Returns llWindows
+Do llWindows.$search(left($ref.C1,13)='wProgressLog_',1,0,1,0)
+Do llWindows.$remove(kListKeepSelected)
+Do llWindows.$sort($ref.C1,1)
+If llWindows.$linecount=0
+	Calculate cnPosnTopAndLeft as -25
+End If
+
+Calculate cnPosnTopAndLeft as cnPosnTopAndLeft+25
+If cnPosnTopAndLeft+$cinst.$height>sys(105)     ;; do not position window off screen, even the bottom of screen
+	Calculate cnPosnTopAndLeft as 0
+End If

@@ -1,0 +1,15 @@
+Calculate $cinst.$objs.ppRecordNavigation.$objs.icSearch.$visible as kFalse
+Calculate $cinst.$objs.ppRecordNavigation.$objs.inSearchCount.$visible as kFalse
+
+Calculate $cinst.$objs.app_navigation_bar.$objs.ilAuthorisedForms.$visible as kFalse
+Calculate $cinst.$objs.app_navigation_bar.$objs.label_NavigationList.$visible as kFalse
+
+Calculate $cinst.$objs.app_navigation_bar.$objs.pbFeedback.$visible as kFalse
+Calculate $cinst.$objs.app_navigation_bar.$objs.GO_NAME_SHORT.$visible as kFalse
+
+Calculate $cinst.$objs.ppRecordNavigation.$objs.label_ilSearch1.$visible as kFalse
+Calculate $cinst.$objs.ppRecordNavigation.$objs.ilSearch1.$visible as kFalse
+Calculate $cinst.$objs.ppRecordNavigation.$objs.label_ilSearch2.$visible as kFalse
+Calculate $cinst.$objs.ppRecordNavigation.$objs.ilSearch2.$visible as kFalse
+Calculate $cinst.$objs.ppRecordNavigation.$objs.label_ilDisplayRecords.$visible as kFalse
+Calculate $cinst.$objs.ppRecordNavigation.$objs.ilDisplayRecords.$visible as kFalse

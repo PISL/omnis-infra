@@ -1,0 +1,14 @@
+
+Calculate icAuthor as pcAuthor
+Calculate icTitle as pcTitle
+Calculate icSubject as pcSubject
+Calculate ibTempDir as pbTempDir
+Calculate inTimeout as pnTimeout
+Set reference irefReportClass to prefReportClass
+Calculate irReportParams as prReportParams
+Calculate ibSaveOnError as pbSaveOnError
+
+Do $objects.oTimerPDF.$newref($cinst,'$generatePDF') Returns irefTimerPDF
+Do irefTimerPDF.$starttimer()
+
+Quit method

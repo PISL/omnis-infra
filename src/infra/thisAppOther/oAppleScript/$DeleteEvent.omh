@@ -1,0 +1,42 @@
+;  tell application "iCal"
+;  tell calendar "My Calendar"
+;  set theCurrentDate to current date
+;  make new event at end with properties {description:"Event Description",
+;  summary:"Event Name", location:"Event Location", start date:theCurrentDate,
+;  end date:theCurrentDate + 120 * minutes}
+;  end tell
+;  end tell
+
+;  in applescript time does not exist outside a date object
+;  one can extract a time value but it will be returned as seconds since midnight
+
+;  If pdDateTimeEnd>dat('1 JAN 2010')
+;  a set value
+;  Else
+;  Calculate pdDateTimeEnd as dadd(kMinute,60,pdDateTimeStart)
+;  End If
+
+Begin text block
+Text: {tell application "iCal"} (Platform newline)
+
+Text: {tell calendar "[pcCalendar]"} (Platform newline)
+Text: {      set theEvent to first event whose uid = "[pcEventID]"𯿿} (Platform newline)
+;  Text:       tell theEvent (Platform newline)
+Text: {          delete theEvent} (Platform newline)
+
+;  Text: end tell (Platform newline)     ;; calendar
+;  calendar
+Text: {end tell} (Platform newline)
+;  application
+Text: {end tell} (Platform newline)
+End text block
+Get text block lcApplescript
+
+;  Breakpoint
+Do $root.$runapplescript(lcApplescript,lcApplescriptResult,lcApplescriptError)
+
+If lcApplescriptResult=''&lcApplescriptError=''
+	Quit method kTrue
+End If
+Calculate pReturnError as lcApplescriptError
+Quit method kFalse

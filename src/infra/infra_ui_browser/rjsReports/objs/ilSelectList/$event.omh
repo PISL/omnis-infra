@@ -1,0 +1,41 @@
+On evClick
+	Calculate $cobj.$errortext as ''
+	If inSelectListMax>0
+		If irReportAttributes.selectlist_ischecklist
+			If totc(ilSelectList,#LSEL)=inSelectListMax
+				Calculate $cobj.$errortext as 'maximum reached'
+				
+			Else If totc(ilSelectList,#LSEL)>inSelectListMax
+				;  deselect the most recently clicked line
+				Calculate ilSelectList.[pLineNumber].$selected as kFalse
+				Calculate $cobj.$errortext as con('you cannot exceed the maximum of ',inSelectListMax)
+				
+			Else If irReportAttributes.groupbylist_lbl<>''
+				If ilGroupBy.$linecount>=inSelectListMax
+					;  not allowed to go further
+					Calculate $cobj.$errortext as 'maximum reached'
+				Else
+					Calculate lbProceed as kTrue
+				End If
+			End If
+		Else
+			Calculate lbProceed as kTrue
+		End If
+	Else     ;; no max check
+		Calculate lbProceed as kTrue
+	End If
+	If lbProceed
+		If irReportAttributes.selectlist_ischecklist
+			;  Do ilGroupBy.$add(ilSelectList.C1,ilSelectList.C2)
+			;  Calculate ilGroupBy.$line as ilGroupBy.$linecount
+			;  Do ilGroupBy.$assignrow(ilSelectList)
+			;  Calculate ilGroupBy.$line as 0
+		Else
+			Do ilGroupBy.$add()
+			Calculate ilGroupBy.$line as ilGroupBy.$linecount
+			Do ilGroupBy.$assignrow(ilSelectList)
+			Calculate ilGroupBy.$line as 0
+			
+			Do ilSelectList.$remove(ilSelectList.$line)
+		End If
+	End If

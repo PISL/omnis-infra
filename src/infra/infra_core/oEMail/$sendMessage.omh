@@ -1,0 +1,59 @@
+If ibInitialised
+	;  send internet e-mail message via a SMTP server.
+	Calculate icEmailProtocolStatus as ''
+	If pOutFromEmail<>''
+		Begin reversible block
+			Calculate ccOutFrom as pOutFromEmail
+		End reversible block
+	End If
+	If pOutFromName<>''
+		Begin reversible block
+			Calculate ccOutFromName as pOutFromName
+		End reversible block
+	End If
+	
+	If isnull(pHTML)
+		Calculate pHTML as ''
+	End If
+	;  If pEnclosureList.$linecount>0|pHTML<>''
+	Do method CreateMimeList (pBody,pEnclosureList,pHTML) Returns lMimeList
+	;  End If
+	
+	If ibCaptureEmailProtocolExchange
+		Calculate lcNameOfCaptureMethod as '$MailProtocolLog'
+	End If
+	
+	;  what about Secure Password Authenitcation ?
+	If ccSMTP_AuthenticationMethod='POP3FIRST'
+		POP3Connect (ccInServer,ccPop3LoginName,ccInPassword) Returns lnPOP3socket
+		If lnPOP3socket>0
+			If ccSMTP_ID<>''
+				SMTPSend (ccOutServer,ccOutFrom,pToAddresslist,pSubject,lMimeList,pCCAddresslist,pBCCAddresslist,ccOutFromName,lcNameOfCaptureMethod,pPriority,pExtraHeaders,ccSMTP_ID,ccSMTP_PASSWORD) Returns lcEmailStatus
+			Else
+				SMTPSend (ccOutServer,ccOutFrom,pToAddresslist,pSubject,lMimeList,pCCAddresslist,pBCCAddresslist,ccOutFromName,lcNameOfCaptureMethod,pPriority,pExtraHeaders) Returns lcEmailStatus
+			End If
+			POP3Disconnect (lnPOP3socket)      ;; icEmailProtocolStatus
+		End If
+		
+		;  POP3Connect (iInServer,icPop3LoginName,iInPassword) Returns lnPOP3socket
+		;  If lnPOP3socket>0
+		;  POP3Disconnect (lnPOP3socket)
+		;  If icSMTP_ID<>''
+		;  SMTPSend (iOutServer,iOutFrom,pToAddresslist,pSubject,lMimeList,pCCAddresslist,pBCCAddresslist,iOutFromName,'$MailProtocolLog',pPriority,pExtraHeaders,icSMTP_ID,icSMTP_PASSWORD) Returns lcEmailStatus
+		;  Else
+		;  SMTPSend (iOutServer,iOutFrom,pToAddresslist,pSubject,lMimeList,pCCAddresslist,pBCCAddresslist,iOutFromName,'$MailProtocolLog',pPriority,pExtraHeaders) Returns lcEmailStatus
+		;  End If
+		;  End If
+		;  Else If ccSMTP_AuthenticationMethod='IDPASSWORD'|ccSMTP_AuthenticationMethod='LOGIN'
+		;  SMTPSend (ccOutServer,ccOutFrom,pToAddresslist,pSubject,lMimeList,pCCAddresslist,pBCCAddresslist,ccOutFromName,lcNameOfCaptureMethod,pPriority,pExtraHeaders,ccSMTP_ID,ccSMTP_PASSWORD) Returns lcEmailStatus
+	Else If ccSMTP_ID<>''     ;; 'SECUREPASSWORD'  'IDPASSWORD'  'LOGIN'
+		SMTPSend (ccOutServer,ccOutFrom,pToAddresslist,pSubject,lMimeList,pCCAddresslist,pBCCAddresslist,ccOutFromName,lcNameOfCaptureMethod,pPriority,pExtraHeaders,ccSMTP_ID,ccSMTP_PASSWORD,cnSecure,ibVerifyCertificate) Returns lcEmailStatus
+	Else
+		If lMimeList.$linecount
+			SMTPSend (ccOutServer,ccOutFrom,pToAddresslist,pSubject,lMimeList,pCCAddresslist,pBCCAddresslist,ccOutFromName,lcNameOfCaptureMethod,pPriority,pExtraHeaders) Returns lcEmailStatus
+		Else
+			SMTPSend (ccOutServer,ccOutFrom,pToAddresslist,pSubject,pBody,pCCAddresslist,pBCCAddresslist,ccOutFromName,lcNameOfCaptureMethod,pPriority,pExtraHeaders) Returns lcEmailStatus
+		End If
+	End If
+End If
+Quit method lcEmailStatus

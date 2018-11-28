@@ -1,0 +1,14 @@
+If pbModified
+	;  prompt the user for the template name
+	Calculate icUserInput as irChosenTemplate.IMT_NAME
+	JavaScript: inputText=prompt(__form.get("icUserPrompt"),__form.get("icUserInput"))
+	JavaScript: { {𯿿	var __form = this.form;𯿿	__form.set("icUserInput", inputText);𯿿}𯿿}
+	
+	If not(isclear($cinst.icUserInput))     ;; the user has not cancelled
+		Do $cinst.$saveTemplate()     ;; this calls $saveData
+	Else
+		Do $cinst.$updateTemplate()     ;; this calls $saveData after setting IMT_LAST_USED
+	End If
+Else
+	Do $cinst.$updateTemplate()     ;; this calls $saveData after setting IMT_LAST_USED
+End If

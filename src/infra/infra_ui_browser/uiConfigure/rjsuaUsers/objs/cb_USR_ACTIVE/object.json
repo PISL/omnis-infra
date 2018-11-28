@@ -1,0 +1,110 @@
+{
+	"ident": 1017,
+	"order": 9,
+	"objtype": "kComponent",
+	"componentlib": "jsCheckbox",
+	"componentctrl": "Checkbox Control",
+	"properties": {
+		"alpha": 255,
+		"backalpha": 255,
+		"backcolor": "RGB(255,255,255)",
+		"bordercolor": "kColorDefault",
+		"contextmenu": "",
+		"cssclassname": "",
+		"dataname": "irCurrentRecord.USR_ACTIVE",
+		"desgroup": 0,
+		"designactive": true,
+		"deslock": false,
+		"disabledefaultcontextmenu": false,
+		"disablesystemfocus": false,
+		"dropmode": "kAcceptNone",
+		"effect": "kJSborderNone",
+		"enabled": true,
+		"events": "evClick",
+		"fieldstyle": "",
+		"font": 1,
+		"fontsize": 9,
+		"fontstyle": "kPlain",
+		"iconid": 0,
+		"linestyle": 1,
+		"objlink": 0,
+		"preventlayoutanimation": false,
+		"text": "Allowed to login",
+		"textcolor": "kColorDefault",
+		"tooltip": "Needs to be checked for regular users.  Uncheck for workflow accounts.",
+		"userinfo": "",
+		"visible": true
+	},
+	"layout": {
+		"320": {
+			"left": 128,
+			"top": 208,
+			"width": 176,
+			"height": 25,
+			"dragborder": false,
+			"edgefloat": "kEFnone",
+			"errortextpos": "kJSErrorTextPosUnder",
+			"visible": true
+		},
+		"375": {
+			"left": 248,
+			"top": 216,
+			"width": 128,
+			"height": 25,
+			"dragborder": false,
+			"edgefloat": "kEFnone",
+			"errortextpos": "kJSErrorTextPosUnder",
+			"visible": true
+		},
+		"480": {
+			"left": 320,
+			"top": 192,
+			"width": 152,
+			"height": 25,
+			"dragborder": false,
+			"edgefloat": "kEFnone",
+			"errortextpos": "kJSErrorTextPosUnder",
+			"visible": true
+		},
+		"667": {
+			"left": 512,
+			"top": 88,
+			"width": 152,
+			"height": 25,
+			"dragborder": false,
+			"edgefloat": "kEFnone",
+			"errortextpos": "kJSErrorTextPosUnder",
+			"visible": true
+		},
+		"768": {
+			"left": 368,
+			"top": 224,
+			"width": 152,
+			"height": 25,
+			"dragborder": false,
+			"edgefloat": "kEFnone",
+			"errortextpos": "kJSErrorTextPosUnder",
+			"visible": true
+		},
+		"1024": {
+			"left": 408,
+			"top": 232,
+			"width": 152,
+			"height": 25,
+			"dragborder": false,
+			"edgefloat": "kEFnone",
+			"errortextpos": "kJSErrorTextPosUnder",
+			"visible": true
+		},
+		"1280": {
+			"left": 408,
+			"top": 232,
+			"width": 152,
+			"height": 25,
+			"dragborder": false,
+			"edgefloat": "kEFnone",
+			"errortextpos": "kJSErrorTextPosUnder",
+			"visible": true
+		}
+	}
+}

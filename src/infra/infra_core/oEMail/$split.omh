@@ -1,0 +1,88 @@
+;  split the header information and any enclosures from the body of the e-mail message.
+
+If sys(8)='MAC68K'|sys(8)='WIN16'
+	;  use the old method of decomposing e-mails for 68k Mac and Win16
+	Do $cinst.$OLDSplit(pMessage,pReturnPath,pDate,pPriority,pFrom,pSubject,pBody,pEnclosureList,pEnclosurePath)
+	Quit method
+Else
+	;  use the new 32-bit mime content support added for O$ 2.10
+	Calculate pReturnPath as ''
+	Calculate pDate as ''
+	Calculate pPriority as ''
+	Calculate pFrom as ''
+	Calculate pSubject as ''
+	Calculate pBody as ''
+	
+	Do lHeaderList.$define(lAttribute,lValue)
+	Do lMimeList.$define(lLevel,lContentType,lContentSubType,lFileName,lCharData,lBinData,lCharSet,lEncoding)
+	MailSplit (pMessage,lHeaderList,lMimeList)
+	
+	;  extract header information
+	Do lHeaderList.$search(upp(lAttribute)='RETURN-PATH'|upp(lAttribute)='DATE'|upp(lAttribute)='X-PRIORITY'|upp(lAttribute)='FROM'|upp(lAttribute)='SUBJECT')
+	Set reference lLineRef to lHeaderList.$first(kTrue,kFalse)
+	While lLineRef
+		Do lHeaderList.$loadcols()
+		Switch upp(lAttribute)
+			Case 'RETURN-PATH'
+				Calculate pReturnPath as lValue
+			Case 'DATE'
+				Calculate pDate as lValue
+			Case 'X-PRIORITY'
+				Calculate pPriority as lValue
+			Case 'FROM'
+				Calculate pFrom as lValue
+			Case 'SUBJECT'
+				Calculate pSubject as lValue
+		End Switch
+		Set reference lLineRef to lHeaderList.$next(lHeaderList.$line,kTrue,kFalse)
+	End While
+	
+	Calculate lSeperator as sys(9)
+	If mid(pEnclosurePath,len(pEnclosurePath),1)<>lSeperator
+		Calculate pEnclosurePath as con(pEnclosurePath,lSeperator)
+	End If
+	Do pEnclosureList.$define(lFileName,lFilePath)
+	
+	;  decompose the MIME content from 'MimeList'
+	For lMimeList.$line from 1 to lMimeList.$linecount step 1
+		Do lMimeList.$loadcols()
+		
+		If lContentType='text'&lContentSubType='plain'     ;; found body of e-mail in character format.
+			;  note : some mailers send e-mail in html format as well as in character format.
+			;  to return the html equivalent of the e-mail body, check for a 'lContentSubType' of 'html'.
+			Calculate pBody as lCharData
+		End If
+		
+		If lFileName<>''     ;; found file attachment
+			Calculate lSaveEnclosure as kTrue
+			Calculate lFilePath as con(pEnclosurePath,lFileName)
+			Do FileOps.$doesfileexist(lFilePath) Returns lReturnFlag
+			If lReturnFlag
+				No/Yes message  (Icon) {[lFileName] already exists in the enclosures folder[chr(13)]Replace existing file ?}
+				If flag false
+					Calculate lSaveEnclosure as kFalse
+				End If
+			End If
+			If lSaveEnclosure
+				;  write the file to the enclosures folder
+				Calculate lSuccess as kFalse
+				While lSuccess<>kTrue
+					Do lFileOps.$createfile(lFilePath)
+					Do lFileOps.$openfile(lFilePath)
+					Do lFileOps.$writefile(lBinData) Returns lSuccess
+					Do lFileOps.$closefile()
+					
+					If lSuccess<>kTrue
+						Yes/No message  (Icon) {An error has occured saving the enclosure [lFileName], ensure that you have read/write[chr(13)]access to your enclosures folder and sufficient disk space available.[chr(13)][chr(13)]Do you wish to try again ?}
+						If flag false
+							Break to end of loop
+						End If
+					End If
+				End While
+				If lSuccess=kTrue
+					Do pEnclosureList.$add(lFileName,lFilePath)
+				End If
+			End If
+		End If
+	End For
+End If

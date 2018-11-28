@@ -1,0 +1,6 @@
+Calculate icClassSignature as con($cinst().$name,'.',$ctask.trCurrUser.USR_SEQ)
+Calculate icNameOfCompany as $ctask.trGroupOrg.GON_NAME_FULL
+
+Do toStrings.$StringTableEntry('word_printed',icPrintedTimestamp,'printed')
+Calculate icPrintedTimestamp as jst(con(icPrintedTimestamp,'  '),1,#D,'D:D m Y',' @ ',1,#T,'T:H:N')
+Do toStrings.$StringTableEntry('endOfReport',icEndOfReport,'end of report')

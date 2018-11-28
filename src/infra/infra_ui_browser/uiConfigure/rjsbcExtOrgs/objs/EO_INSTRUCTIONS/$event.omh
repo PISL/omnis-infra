@@ -1,0 +1,8 @@
+On evKeyPress
+	;  tab
+	If pKeyList.[pKeyList.$linecount].systemKey=27&pKeyList.[pKeyList.$linecount].modifiers<>kJSModShift
+		Calculate $cinst.$objs.TabControl_EO.$currenttab as 2
+		Calculate $cinst.$objs.PagedPane.$currentpage as 2
+		Do $cinst.$setcurfield('EO_COMMENT',kTrue)
+		Quit event handler (Discard event)
+	End If

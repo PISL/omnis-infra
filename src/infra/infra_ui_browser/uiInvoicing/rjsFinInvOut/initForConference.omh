@@ -1,0 +1,11 @@
+;  CONFERENCE only
+
+Do $DefineList(ilDelegatesRelatingToThisInvoice,'tDelegateInvoiceLinks')
+Do ilDelegatesRelatingToThisInvoice.$AddLinkedCols("DG_COMPANY_NAME,PSN_SURNAME,PSN_FIRST_NAME,PSN_EMAIL,PSN_COMPANY,PSN_SEQ,DG_SEQ,DG_CF_REF,CF_DATE_TO")
+Do ilDelegatesRelatingToThisInvoice.$addDisplayName()
+Calculate irDelegateInvoiceLink as ilDelegatesRelatingToThisInvoice
+
+;  create a list of all Delegates attending this conference who are not speakers and have not yet been invoiced
+Do $DefineList(ilAllUninvoicedDelegates,'tDelegates')
+Do ilAllUninvoicedDelegates.$AddLinkedCols("PSN_FIRST_NAME,PSN_SURNAME,PSN_COMPANY,PSN_SEQ")
+Do ilAllUninvoicedDelegates.$addDisplayName()

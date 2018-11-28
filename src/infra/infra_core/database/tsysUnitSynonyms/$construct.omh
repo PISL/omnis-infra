@@ -1,0 +1,6 @@
+Calculate icPrefix as 'UOS_'
+;  this is a link table with multiple foreign keys
+Calculate icForeignKey as 'UOS_UOM_REF'
+Calculate ibHasSequence as kTrue
+
+Do inherited

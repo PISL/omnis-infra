@@ -1,0 +1,5 @@
+Calculate icPrefix as 'GS_'
+Calculate icPrimarykey as 'GS_SEQ'
+Calculate icForeignKey as 'GS_GO_REF'
+
+Do inherited

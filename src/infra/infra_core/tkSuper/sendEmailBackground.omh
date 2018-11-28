@@ -1,0 +1,44 @@
+
+;  we do not know here if the current library has a tkWorkerApp, so test for it
+Do $libs.[tcCurrentLibrary].$tasks.$findname("tkWorkerApp") Returns lrefWorkerTask
+If lrefWorkerTask
+	Do lrefWorkerTask.$open('*',tcCurrentLibrary,$cinst.$task()) Returns lrefWorkerTask
+Else
+	Do $tasks.tkWorker.$open('*',tcCurrentLibrary,$cinst.$task()) Returns lrefWorkerTask
+End If
+
+Calculate lrDefaults as tConstants.emailDefaults
+
+Do lrefWorkerTask.$getRowServer() Returns lrServer
+Do lrefWorkerTask.$getRowMessage() Returns lrMessage
+Do lrefWorkerTask.$getAttachmentsList() Returns llAttachments
+Do lrefWorkerTask.$getRowAttributes() Returns lrAttributes
+
+Calculate lrServer.server as lrDefaults.server
+Calculate lrServer.account as lrDefaults.loginName
+Calculate lrServer.pw as lrDefaults.loginPassword
+Calculate lrServer.debugLog as lrDefaults.debugLog
+Calculate lrServer.timeout as lrDefaults.timeout
+Calculate lrServer.senderName as lrDefaults.senderName
+Calculate lrServer.senderAddress as lrDefaults.senderAddress
+Calculate lrServer.OW3options as lrDefaults.OW3options
+
+Calculate lrMessage.text as pBody
+Calculate lrMessage.html as pHTML
+Calculate lrMessage.attachments as llAttachments
+
+Calculate lrAttributes.subject as pSubj
+If len(pTo)
+	Calculate lrAttributes.to as toStrings.$StringToList(pTo,",")
+Else
+	Calculate lrAttributes.to as lrDefaults.emailTO
+End If
+Calculate lrAttributes.cc as lrDefaults.emailCC
+Calculate lrAttributes.bcc as lrDefaults.emailBCC
+Calculate lrAttributes.priority as pick(lrDefaults.priority>0,1,lrDefaults.priority)     ;; email worker will fail if priority isn't set
+
+
+
+Do lrefWorkerTask.$sendEmail(lrServer,lrAttributes,lrMessage,,,kFalse) Returns lbOK
+
+Quit method lbOK

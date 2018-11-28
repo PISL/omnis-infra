@@ -1,0 +1,115 @@
+If $ctask.trGroupOrg.GO_SEQ>0
+	;  proceed
+Else
+	Quit method kFalse
+End If
+
+If tlDatabases.DAM='WebService'
+	;  pass parameters to web service
+	If pbReturnCount     ;; result will be returned in pFieldReference, row() contains the parameters for the call
+		Do ioWeb.$callFetch(lnCount,irErrorSQL,row($cinst.$class().$name,$cmethod().$name,row(pcNAME,pcDIVISION,pcPLANT,pcBUSUNIT,pcCATEGORY,pcBRAND,pcExtraCols,pbReturnCount),lnCount.$type,0,ilRESTextensions))
+		If ioWeb.irResponse.httpStatusCode=200
+			;  the result should be in this object     ;; however there may be a SQL error
+			If irErrorSQL.NativeErrorText<>''
+				Quit method kFalse
+			End If
+			Quit method lnCount
+		Else
+			Quit method kFalse
+		End If
+	Else
+		;  pass parameters to web service
+		Do ioWeb.$callFetch($cinst,irErrorSQL,row($cinst.$class().$name,$cmethod().$name,row(pcNAME,pcDIVISION,pcPLANT,pcBUSUNIT,pcCATEGORY,pcBRAND,pcExtraCols,pbReturnCount),$cinst.$type,0,ilRESTextensions))
+		If ioWeb.irResponse.httpStatusCode=200
+			;  the result should be in this object     ;; however there may be a SQL error
+			If irErrorSQL.NativeErrorText<>''
+				Quit method kFalse
+			End If
+			Quit method kTrue
+		Else
+			Quit method kFalse
+		End If
+	End If
+End If
+
+Calculate pcNAME as upp(pcNAME)
+Calculate pcDIVISION as upp(pcDIVISION)
+Calculate pcPLANT as upp(pcPLANT)
+Calculate pcBUSUNIT as upp(pcBUSUNIT)
+Calculate pcCATEGORY as upp(pcCATEGORY)
+Calculate pcBRAND as upp(pcBRAND)
+
+Do $cinst.$ImmediateSession(loSession,loStatement) Returns lbImmediateSession
+If lbImmediateSession
+	Do $cinst.$SetSession(loSession,loStatement)
+Else If not(ibGoodConnectionToDb)
+	Quit method kFalse
+End If
+
+If pcExtraCols<>''&left(pcExtraCols,1)<>','
+	Calculate pcExtraCols as con(',',pcExtraCols)
+End If
+
+;  out of Products
+;  a.  purchased     ;; they have a supplier number
+;       ;; PRD_SUPP_CODE will have a value
+;  b.  by-product     ;; is a product we make but not for sale - it is for input into another process
+;       ;; PRD_SUPP_CODE will be null
+;  c.  product     ;; something that we sell
+
+Begin statement
+If pbReturnCount
+	Sta: {select count(*)}
+Else
+	;  pcExtraCols can contain a comma separated list of PID column names
+	Sta: {select [$cinst.$selectnames()]}
+	Sta: {, [lrInternalData.$selectnames()]}
+	Sta: {[pcExtraCols]}
+End If
+Sta: {from [$cinst.$servertablenames]}
+
+If ibIncludeAll
+	Sta: {left join [lrInternalData.$servertablenames] on PID_PRD_REF = PRD_SEQ}
+Else
+	Sta: {join [lrInternalData.$servertablenames] on PID_PRD_REF = PRD_SEQ}
+End If
+
+Sta: {left outer join [lrReferenceLocal.$servertablenames] on ( PID_TAX_BAND = RFL_VALUE and rfl_class='VAT_RATE' )}
+;  include global products
+Sta: {where (PRD_GO_REF = @[$ctask.trGroupOrg.GO_SEQ] or PRD_GO_REF = -1)}
+If tcCurrentLibrary<>'CONFERENCE'
+	Sta: {and PRD_META = @[inMeta]}
+End If
+If pcNAME<>''
+	Calculate pcNAME as con(pcNAME,'%')
+	Sta: {and      upper(PRD_NAME) like @[pcNAME]}
+End If
+If pcBRAND<>''
+	Calculate pcBRAND as con(pcBRAND,'%')
+	Sta: {and      upper(PRD_BRAND) like @[pcBRAND]}
+End If
+Sta:
+If pbReturnCount
+	;  leave as is     ;; required by postgres
+Else
+	;  Sta: order by PRD_NAME
+	Sta: {order by PRD_INT_PRODCODE}
+End If
+End statement
+
+If pbReturnCount
+	Do $cinst.$executesqlandfetchinto(lnCount) Returns lbOK
+Else
+	Do $cinst.$executesqlandfetch() Returns lbOK
+End If
+If lbImmediateSession
+	Do $cinst.$SetSession(#NULL,#NULL,kTrue)
+End If
+
+If pbReturnCount
+	Quit method lnCount
+Else
+	Quit method lbOK
+End If
+
+Quit method lbOK

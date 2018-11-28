@@ -1,0 +1,235 @@
+Do llErrors.$cols.$add('errorCode',kCharacter,kSimplechar,100)
+Do llErrors.$cols.$add('objRef',kItemref)
+Do llErrors.$cols.$add('errorDefault',kCharacter,kSimplechar,100)
+
+;  INTEGER 1
+Do irReportAttributes.$cols.$findname('integer1_min') Returns liColRef
+If liColRef
+	Set reference liColRef to $cinst.$objs.PagedPane_REPORTS.$objs.inInteger1
+	Calculate liColRef.$errortext as ''
+	If inInteger1<irReportAttributes.integer1_min
+		Do llErrors.$add('VAL_INT1_MIN',liColRef,con('first integer below ',irReportAttributes.integer1_min))
+	End If
+End If
+
+Do irReportAttributes.$cols.$findname('integer1_max') Returns liColRef
+If liColRef
+	Set reference liColRef to $cinst.$objs.PagedPane_REPORTS.$objs.inInteger1
+	Calculate liColRef.$errortext as ''
+	If inInteger1>irReportAttributes.integer1_max
+		Do llErrors.$add('VAL_INT1_MAX',liColRef,con('first integer exceeds ',irReportAttributes.integer1_max))
+	End If
+End If
+
+;  INTEGER 2
+Do irReportAttributes.$cols.$findname('integer2_min') Returns liColRef
+If liColRef
+	Set reference liColRef to $cinst.$objs.PagedPane_REPORTS.$objs.inInteger2
+	Calculate liColRef.$errortext as ''
+	If inInteger2<irReportAttributes.integer2_min
+		Do llErrors.$add('VAL_INT2_MIN',liColRef,con('second integer below ',irReportAttributes.integer2_min))
+	End If
+End If
+
+Do irReportAttributes.$cols.$findname('integer2_max') Returns liColRef
+If liColRef
+	Set reference liColRef to $cinst.$objs.PagedPane_REPORTS.$objs.inInteger2
+	Calculate liColRef.$errortext as ''
+	If inInteger2>irReportAttributes.integer2_max
+		Do llErrors.$add('VAL_INT2_MAX',liColRef,con('second integer exceeds ',irReportAttributes.integer2_max))
+	End If
+End If
+
+;  COMBINED INTEGER
+Do irReportAttributes.$cols.$findname('combined_integer') Returns liColRef
+If liColRef
+	Set reference liColRef to $cinst.$objs.PagedPane_REPORTS.$objs.inInteger2
+	
+	Test for valid calculation {irReportAttributes.combined_integer}
+	If flag true
+		If not(eval(irReportAttributes.combined_integer))
+			Calculate lcError as con("failed ",replace(replace(irReportAttributes.combined_integer,"inInteger1",con(kDq,irReportAttributes.integer1_lbl,kDq)),"inInteger2",con(kDq,irReportAttributes.integer2_lbl,kDq)))     ;; replace(irReportAttributes.combined_integer,"inIInteger1",con(kDq,irReportAttributes.integer1_lbl,kDq))
+			Do llErrors.$add('VAL_INT2_MAX',liColRef,lcError)
+		End If
+	End If
+End If
+
+;  REAL 1
+Do irReportAttributes.$cols.$findname('real1_min') Returns liColRef
+If liColRef
+	Set reference liColRef to $cinst.$objs.PagedPane_REPORTS.$objs.inReal1
+	Calculate liColRef.$errortext as ''
+	If irReportAttributes.real1_min<>0|irReportAttributes.real1_max<>0
+		If inReal1<irReportAttributes.real1_min
+			Do llErrors.$add('VAL_REAL1_MIN',liColRef,con('first number below ',irReportAttributes.real1_min))
+		End If
+	End If
+End If
+
+Do irReportAttributes.$cols.$findname('real1_max') Returns liColRef
+If liColRef
+	Set reference liColRef to $cinst.$objs.PagedPane_REPORTS.$objs.inReal1
+	Calculate liColRef.$errortext as ''
+	If irReportAttributes.real1_min<>0|irReportAttributes.real1_max<>0
+		If inReal1>irReportAttributes.real1_max
+			Do llErrors.$add('VAL_REAL1_MAX',liColRef,con('first number exceeds ',irReportAttributes.real1_max))
+		End If
+	End If
+End If
+
+;  REAL 2
+Do irReportAttributes.$cols.$findname('real2_min') Returns liColRef
+If liColRef
+	Set reference liColRef to $cinst.$objs.PagedPane_REPORTS.$objs.inReal2
+	Calculate liColRef.$errortext as ''
+	If inReal2<irReportAttributes.real2_min
+		Do llErrors.$add('VAL_REAL2_MIN',liColRef,con('second number below ',irReportAttributes.real2_min))
+	End If
+End If
+
+Do irReportAttributes.$cols.$findname('real2_max') Returns liColRef
+If liColRef
+	Set reference liColRef to $cinst.$objs.PagedPane_REPORTS.$objs.inReal2
+	Calculate liColRef.$errortext as ''
+	If inReal2>irReportAttributes.real2_max
+		Do llErrors.$add('VAL_REAL2_MAX',liColRef,con('second number exceeds ',irReportAttributes.real2_max))
+	End If
+End If
+
+;  COMBINED REAL
+Do irReportAttributes.$cols.$findname('combined_real') Returns liColRef
+If liColRef
+	Set reference liColRef to $cinst.$objs.PagedPane_REPORTS.$objs.inReal2
+	
+	Test for valid calculation {irReportAttributes.combined_real}
+	If flag true
+		If not(eval(irReportAttributes.combined_real))
+			Calculate lcError as con("failed ",replace(replace(irReportAttributes.combined_real,"inReal1",con(kDq,irReportAttributes.real1_lbl,kDq)),"inReal2",con(kDq,irReportAttributes.real2_lbl,kDq)))
+			Do llErrors.$add('VAL_REAL2_MAX',liColRef,lcError)
+		End If
+	End If
+End If
+
+;  DATEFROM
+Do irReportAttributes.$cols.$findname('datefrom_min') Returns liColRef
+If liColRef
+	Set reference liColRef to $cinst.$objs.PagedPane_REPORTS.$objs.idFrom
+	Calculate liColRef.$errortext as ''
+	If idFrom<dat(irReportAttributes.datefrom_min)
+		Do llErrors.$add('VAL_DATEFROM_MIN',liColRef,con('date from before ',dat(irReportAttributes.datefrom_min)))
+	End If
+End If
+
+Do irReportAttributes.$cols.$findname('datefrom_max') Returns liColRef
+If liColRef
+	Set reference liColRef to $cinst.$objs.PagedPane_REPORTS.$objs.idFrom
+	Calculate liColRef.$errortext as ''
+	If idFrom>dat(irReportAttributes.datefrom_max)
+		Do llErrors.$add('VAL_DATEFROM_MAX',liColRef,con('date from after ',dat(irReportAttributes.datefrom_max)))
+	End If
+End If
+
+;  DATETO
+Do irReportAttributes.$cols.$findname('dateto_min') Returns liColRef
+If liColRef
+	Set reference liColRef to $cinst.$objs.PagedPane_REPORTS.$objs.idTo
+	Calculate liColRef.$errortext as ''
+	If idTo<dat(irReportAttributes.dateto_min)
+		Do llErrors.$add('VAL_DATETO_MIN',liColRef,con('date to before ',dat(irReportAttributes.dateto_min)))
+	End If
+End If
+
+Do irReportAttributes.$cols.$findname('dateto_max') Returns liColRef
+If liColRef
+	Set reference liColRef to $cinst.$objs.PagedPane_REPORTS.$objs.idTo
+	Calculate liColRef.$errortext as ''
+	If idTo>dat(irReportAttributes.dateto_max)
+		Do llErrors.$add('VAL_DATETO_MAX',liColRef,con('date to after ',dat(irReportAttributes.dateto_max)))
+	End If
+End If
+
+;  COMBINED DATE
+Do irReportAttributes.$cols.$findname('combined_date') Returns liColRef
+If liColRef
+	Set reference liColRef to $cinst.$objs.PagedPane_REPORTS.$objs.idTo
+	
+	Test for valid calculation {irReportAttributes.combined_date}
+	If flag true
+		If not(eval(irReportAttributes.combined_date))
+			Calculate lcError as con("failed ",replace(replace(irReportAttributes.combined_date,"idFrom",con(kDq,irReportAttributes.datefrom_lbl,kDq)),"idTo",con(kDq,irReportAttributes.dateto_lbl,kDq)))
+			Do llErrors.$add('VAL_DATE2_MAX',liColRef,lcError)
+		End If
+	End If
+End If
+
+;  SELECT LIST     ;; could be checklist or single click
+Do irReportAttributes.$cols.$findname('selectlist_min') Returns liColRef
+If liColRef
+	Set reference liColRef to $cinst.$objs.PagedPane_REPORTS.$objs.ilSelectList
+	Calculate liColRef.$errortext as ''
+	
+	If irReportAttributes.selectlist_ischecklist
+		If totc(ilSelectList,#LSEL)<irReportAttributes.selectlist_min
+			Do llErrors.$add('VAL_SELECTLIST_MIN',liColRef,con('number of selected items below ',irReportAttributes.selectlist_min))
+		End If
+	Else     ;; a single line select only
+		If ilSelectList.$line<irReportAttributes.selectlist_min
+			Do llErrors.$add('VAL_SELECTLIST_MIN',liColRef,con('There must be at least one line selected'))
+		End If
+	End If
+End If
+
+Do irReportAttributes.$cols.$findname('selectlist_max') Returns liColRef
+If liColRef
+	Set reference liColRef to $cinst.$objs.PagedPane_REPORTS.$objs.ilSelectList
+	Calculate liColRef.$errortext as ''
+	
+	If irReportAttributes.selectlist_ischecklist
+		If totc(ilSelectList,#LSEL)>irReportAttributes.selectlist_max
+			Do llErrors.$add('VAL_SELECTLIST_MAX',liColRef,con('number of selected items exceeds ',irReportAttributes.selectlist_max))
+		End If
+	Else     ;; a single line select only
+		;  this does not make any sense - probably will never execute
+		If ilSelectList.$line>irReportAttributes.selectlist_max
+			Do llErrors.$add('VAL_SELECTLIST_MAX',liColRef,'this does not make sense')
+		End If
+	End If
+End If
+
+;  GROUP BY LIST
+Do irReportAttributes.$cols.$findname('groupbylist_min') Returns liColRef
+If liColRef
+	Set reference liColRef to $cinst.$objs.PagedPane_REPORTS.$objs.ilGroupBy
+	Calculate liColRef.$errortext as ''
+	
+	If ilGroupBy.$linecount<irReportAttributes.groupbylist_min
+		Do llErrors.$add('VAL_GROUPBYLIST_MIN',liColRef,con('number of group by items below ',irReportAttributes.groupbylist_min))
+	End If
+End If
+
+Do irReportAttributes.$cols.$findname('groupbylist_max') Returns liColRef
+If liColRef
+	Set reference liColRef to $cinst.$objs.PagedPane_REPORTS.$objs.ilGroupBy
+	Calculate liColRef.$errortext as ''
+	
+	If ilGroupBy.$linecount>irReportAttributes.groupbylist_max
+		Do llErrors.$add('VAL_GROUPBYLIST_MAX',liColRef,con('number of group by items exceeds ',irReportAttributes.groupbylist_max))
+	End If
+End If
+
+Calculate llErrors.$line as 0
+While $Loop(llErrors)
+	Calculate lcError as ''
+	;  see if a report specific message exists first
+	Do toStrings.$StringTableEntry(con(irReportAttributes.reportCode,'_',llErrors.errorCode),lcError)     ;; no default message so missing entry Returnｓ negative number
+	If lcError<0
+		;  report specific does not exist - try a generic message, with developer message as backup
+		Do toStrings.$StringTableEntry(con(llErrors.errorCode),lcError,llErrors.errorDefault)
+	End If
+	Calculate llErrors.objRef.$errortext as lcError
+End While
+
+If llErrors.$linecount>0
+	Quit method kFalse
+End If
+Quit method kTrue     ;; proceed

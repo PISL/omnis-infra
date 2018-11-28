@@ -1,0 +1,19 @@
+;  GRS 14/2/14
+;       ;; modified to use the DB sequence to return the PK
+;  GRS 23/5/2014 overloaded so we can call $insert and let this method decide to insert or update
+
+;  clone the current instance so we can check the database for a previous record
+Calculate lrAutoSave.AS_TABLE_PREFIX as $cinst.AS_TABLE_PREFIX
+Do lrAutoSave.$fetch_fk($cinst.AS_PK,'AS_PK','AS_TABLE_PREFIX = @[$cinst.AS_TABLE_PREFIX]')
+
+If lrAutoSave.AS_SEQ>0
+	Calculate $cinst.AS_SEQ as lrAutoSave.AS_SEQ
+	Calculate $cinst.AS_CWHEN as lrAutoSave.AS_CWHEN
+	Calculate $cinst.AS_CBY as lrAutoSave.AS_CBY
+	Calculate $cinst.AS_MWHEN as lrAutoSave.AS_MWHEN
+	Do $cinst.$update() Returns lbOK
+Else
+	Do inherited Returns lbOK
+End If
+
+Quit method lbOK

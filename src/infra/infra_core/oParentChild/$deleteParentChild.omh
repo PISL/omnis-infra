@@ -1,0 +1,34 @@
+If not(ibInitialised)
+	Calculate icLastError as 'object not initialised'
+	Quit method kFalse
+End If
+
+Do irChild.$assignrow(plDetails)
+Do irChild.$delete_fk(prHeader.[prHeader.icPrimaryKey]) Returns lbOK
+If lbOK
+	If irHeader.icPrefix='FOH_'
+		;  delete the link records also
+		Do irDIL.$delete_fk(prHeader.[prHeader.icPrimaryKey],'DIL_FOH_REF') Returns lbOkDIL
+	End If
+	
+	Do irHeader.$delete_pk() Returns lbOK
+	If not(lbOK)
+		Calculate irErrorSQL as irHeader.irErrorSQL
+		If irErrorSQL.NativeErrorText<>''
+			Calculate icLastError as irErrorSQL.NativeErrorText
+		Else
+			Calculate icLastError as irHeader.icValidationMessage
+		End If
+		Quit method kFalse
+	End If
+Else
+	Calculate irErrorSQL as irChild.irErrorSQL
+	If irErrorSQL.NativeErrorText<>''
+		Calculate icLastError as irErrorSQL.NativeErrorText
+	Else
+		Calculate icLastError as irChild.icValidationMessage
+	End If
+	Quit method kFalse
+End If
+
+Quit method kTrue

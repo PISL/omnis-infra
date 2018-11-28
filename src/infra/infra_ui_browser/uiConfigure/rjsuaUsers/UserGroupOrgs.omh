@@ -1,0 +1,12 @@
+;  GROUP ORGANISATIONS - first what they have
+Do ilUserGroupOrgLinks.$clear()
+Do ilUserGroupOrgLinks.$fetchUserGroupOrgs(irCurrentRecord.USR_SEQ)
+
+;  then what they haven't been assigned to
+Calculate ilChoiceOfGroupOrgs as ilGroupOrganisations
+Calculate ilUserGroupOrgLinks.$line as 0
+While $Loop(ilUserGroupOrgLinks)
+	Do ilChoiceOfGroupOrgs.$search($ref.GON_NAME_FULL=ilUserGroupOrgLinks.GON_NAME_FULL,1,0,1,0)
+End While
+Do ilChoiceOfGroupOrgs.$remove(kListDeleteSelected)
+Calculate ilChoiceOfGroupOrgs.$line as 0

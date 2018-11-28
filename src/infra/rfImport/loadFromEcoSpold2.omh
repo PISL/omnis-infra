@@ -1,0 +1,71 @@
+;  Breakpoint
+
+Calculate llXML as plXML
+
+;  set up the EcoSpold columns to receive the data
+Calculate ilContent as #NULL
+Do ilContent.$cols.$add("InOrOut",kCharacter,kSimplechar,1000)
+Do ilContent.$cols.$add("groupNo",kCharacter,kSimplechar,1000)
+Do ilContent.$cols.$add("elementaryExchangeId",kCharacter,kSimplechar,1000)
+Do ilContent.$cols.$add("name",kCharacter,kSimplechar,1000)
+Do ilContent.$cols.$add("compartment",kCharacter,kSimplechar,1000)
+Do ilContent.$cols.$add("subcompartment",kCharacter,kSimplechar,1000)
+Do ilContent.$cols.$add("amount",kCharacter,kSimplechar,1000)
+Do ilContent.$cols.$add("unitName",kCharacter,kSimplechar,1000)
+Do ilContent.$cols.$add("casNumber",kCharacter,kSimplechar,1000)
+Do ilContent.$cols.$add("formula",kCharacter,kSimplechar,1000)
+Do ilContent.$cols.$add("id",kCharacter,kSimplechar,1000)
+Do ilContent.$cols.$add("unitId",kCharacter,kSimplechar,1000)
+Do ilContent.$cols.$add("subcompartmentId",kCharacter,kSimplechar,1000)
+
+Calculate inDataColCount as ilContent.$colcount
+Do ilContent.$add("InOrOut","groupNo","elementaryExchangeId","name","compartment","subcompartment","amount","unitName","casNumber","formula","id","unitId","subcompartmentId")
+
+Do llXML.$search(pos("/activityDataset/flowData/elementaryExchange",$ref.path))
+Do llXML.$remove(kListKeepSelected)
+While $Loop(llXML)
+	If llXML.path="/activityDataset/flowData/elementaryExchange"     ;; first line of a flow; get the attributes and add a row to ilContent
+		If ilContent.$line>0
+			If isclear(ilContent.compartment)
+				Calculate ilContent.compartment as "Unknown"
+				Calculate ilContent.subcompartment as "unspecified"
+			Else If isclear(ilContent.subcompartment)
+				Calculate ilContent.subcompartment as #NULL     ;; to avoid it being used in the ontology link lookup
+			End If
+		End If
+		Calculate llTemp as llXML.attributes
+		Do loStrings.$ListToRow(llTemp,"name","value") Returns lrTemp
+		Do ilContent.$add() Returns lrefCol
+		Do lrefCol.$assignrow(lrTemp,kTrue)
+		Calculate ilContent.$line as ilContent.$linecount
+	Else If llXML.path="/activityDataset/flowData/elementaryExchange/name"
+		Calculate ilContent.name as llXML.value
+		
+	Else If llXML.path="/activityDataset/flowData/elementaryExchange/unitName"
+		Calculate ilContent.unitName as llXML.value
+		
+	Else If llXML.path="/activityDataset/flowData/elementaryExchange/compartment"
+		;  get atrributes
+		Calculate llTemp as llXML.attributes
+		Do loStrings.$ListToRow(llTemp,"name","value") Returns lrTemp
+		Do ilContent.[ilContent.$line].$assignrow(lrTemp,kTrue)
+		
+	Else If llXML.path="/activityDataset/flowData/elementaryExchange/compartment/compartment"
+		Calculate ilContent.compartment as llXML.value
+		
+	Else If llXML.path="/activityDataset/flowData/elementaryExchange/compartment/subcompartment"
+		Calculate ilContent.subcompartment as llXML.value
+		
+	Else If llXML.path="/activityDataset/flowData/elementaryExchange/outputGroup"
+		Calculate ilContent.InOrOut as "output"
+		Calculate ilContent.groupNo as llXML.value
+		
+	Else If llXML.path="/activityDataset/flowData/elementaryExchange/inputGroup"
+		Calculate ilContent.InOrOut as "input"
+		Calculate ilContent.groupNo as llXML.value
+		
+	Else     ;; missed something
+		Breakpoint
+	End If
+	
+End While

@@ -1,0 +1,6 @@
+On evClick
+	;  send feedback to the developers
+	;  Breakpoint
+	Calculate tlAuthorisedForms.active as 1     ;; set the flag so we can return to the current form/pane after sending feedback
+	Do tlAuthorisedForms.$search($ref.code='FORM_FEEDBACK',1,0,0,0)
+	Do $changeOfForm(kTrue)     ;; kTrue = keep existing form open

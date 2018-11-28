@@ -1,0 +1,31 @@
+Do toValues.$initInherited('OH_REVIEW','ACP_SPAN') Returns lrSpanInfo
+;  firstly, ensure AccountingPeriod exists.
+;  If it exists, determine if AccountingPeriodLink exists.     ;; If not, create link.
+Do $DefineList(lrAccountingPeriod,'infra.tAccountingPeriod')
+Do lrAccountingPeriod.$addSchemaColumns('infra.sAccountingPeriodLinks')
+Do lrAccountingPeriod.$fetchPeriodForThisDate(pdInvoiceDate,lrSpanInfo.RFO_INT)
+If lrAccountingPeriod.ACP_SEQ>0
+	;  Successful ftch, however we must also check that link record exists.
+	If lrAccountingPeriod.ACL_SEQ>0
+		;  everything is in tact
+		Do $cinst.$assignrow(lrAccountingPeriod,kTrue)     ;; link data into this row
+		Calculate lbOK as kTrue
+	Else
+		;  we must create Link record and return that
+		Do $cinst.$clear()
+		Calculate $cinst.ACL_ACP_REF as lrAccountingPeriod.ACP_SEQ
+		Calculate $cinst.ACL_GO_REF as trGroupOrg.GO_SEQ
+		Calculate $cinst.ACL_FC_ADJUST as
+		Calculate $cinst.ACL_COMMENT as 'created using $assertLink'
+		Do $cinst.$insert() Returns lbOK
+	End If
+	Quit method lbOK
+Else
+	Calculate icValidationMessage as 'Accounting Period record does not exist'
+	Calculate irErrorSQL.ErrorCode as -10
+	Calculate irErrorSQL.ErrorText as 'Accounting Period record does not exist'
+	Calculate irErrorSQL.NativeErrorCode as -10
+	Calculate irErrorSQL.NativeErrorText as 'Accounting Period record does not exist'
+	
+	Quit method kFalse
+End If

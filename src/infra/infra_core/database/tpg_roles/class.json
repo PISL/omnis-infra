@@ -1,0 +1,48 @@
+{
+	"classtype": "kTable",
+	"internalversion": 8,
+	"superclass": "tMaster",
+	"designtaskname": "Startup_Task",
+	"cvardefs": [
+
+	],
+	"ivardefs": [
+		{
+			"name": "oSecurity",
+			"order": 1,
+			"type": "kObject",
+			"subtype": "oEncryption",
+			"sublen": 0
+		},
+		{
+			"name": "___ROW1",
+			"order": 2,
+			"type": "kRow",
+			"subtype": "",
+			"sublen": 0
+		},
+		{
+			"name": "___ROW2",
+			"order": 3,
+			"type": "kRow",
+			"subtype": "",
+			"sublen": 0
+		}
+	],
+	"properties": {
+		"collectperformancedata": false,
+		"componenticon": 0,
+		"componenttype": "kCompStoreHidden",
+		"createdate": "2017-10-27 11:20:34",
+		"desc": "",
+		"editor": "",
+		"editordata": "",
+		"external": false,
+		"issupercomponent": false,
+		"moddate": "2018-09-17 11:27:43",
+		"showascheckedout": false,
+		"sqlclassname": "_pg_roles",
+		"userinfo": "",
+		"version": "1.00"
+	}
+}

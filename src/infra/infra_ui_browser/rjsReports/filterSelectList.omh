@@ -1,0 +1,23 @@
+Switch irReportAttributes.reportCode
+	Case "GHG_EMISSIONS"
+		;  ilSelectList$smatlist MUST be kTrue
+		;  move any rows in ilGroupBy back to ilSelectList and $filter it
+		If pbRestoringParams
+			;  we do not want to clear the ilGroupBy, just filter the remaining lines in ilSelectList
+		Else
+			For ilGroupBy.$line from 1 to ilGroupBy.$linecount step 1
+				Do ilSelectList.$add() Returns lrefNewLine
+				Do lrefNewLine.$assignrow(ilGroupBy)
+			End For
+			Do ilGroupBy.$clear()
+		End If
+		
+		Switch ilFilterOptions.$line
+			Case 1     ;; Organisation wide so hide Plant
+				Do ilSelectList.$unfilter(0)
+				Do ilSelectList.$filter($ref.dataColumn<>'plant_code',1,0,1,1)
+			Default     ;; Division chosen so show Plant
+				Do ilSelectList.$unfilter(0)
+				Do ilSelectList.$filter($ref.dataColumn<>'division_code',1,0,1,1)
+		End Switch
+End Switch

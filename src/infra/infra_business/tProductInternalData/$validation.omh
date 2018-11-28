@@ -1,0 +1,16 @@
+Calculate icValidationMessage as ''
+Do ilValidation.$clear()
+
+If $cinst.PID_PRD_REF>0
+	;  good
+Else
+	Calculate lcMessage as con(lcMessage,pick(lcMessage<>'','',', '),'PID_PRD_REF missing')
+	Do ilValidation.$add('PID_PRD_REF_LBL','VAL_MISSING','PID_PRD_REF missing',0)
+End If
+
+If lcMessage<>''
+	Calculate icValidationMessage as lcMessage
+	Quit method kFalse
+End If
+
+Quit method kTrue

@@ -1,0 +1,67 @@
+;  called from parent form once this form has been instantiated
+Calculate $cinst.$objs.PagedPane.$currentpage as cnPageImport
+
+;  irefParent should have been set in $construct so this is just an override if prefParent is passed
+If prefParent
+	Set reference irefParent to prefParent
+End If
+
+If len(pcMethodImport)>0
+	Calculate icMethodImport as pcMethodImport
+Else
+	Calculate icMethodImport as '$importData'
+End If
+
+If len(pcMethodCancel)>0
+	Calculate icMethodCancel as pcMethodCancel
+Else
+	Calculate icMethodCancel as '$cancelImport'
+End If
+
+;  if pSchemaName is empty we must assume that we are required to just save the uploaded file
+If isclear(pSchemaName)
+	Calculate ibSaveUpload as kTrue
+Else
+	;  initialises ilSchemaCols for import
+	Calculate icTargetSchema as pSchemaName
+	;  Do toStrings.$StringTableEntry(con('',pSchemaName),icTargetDesc)
+	Do toStrings.$StringTableEntry(con('allstrings.',pSchemaName),icTargetDesc)
+	
+	Calculate ibIgnorePreviousErrors as kFalse
+	
+	Do ilSchemaCols.$clear()
+	Do ilSchemaCols.$addcols('name',kCharacter,kSimplechar,255,'desc',kCharacter,kSimplechar,255)
+	Do $libs.[tcCurrentLibrary].$schemas.[pSchemaName].$objs.$makelist($ref.$name,$ref.$desc) Returns llTemp
+	Do ilSchemaCols.$merge(llTemp,kFalse,kFalse,kTrue)
+	;  now remove the ones the user shouldn't see
+	Do ilSchemaCols.$search(pos('<eximport>',$ref.C2),1,0,1,1)
+	Do ilSchemaCols.$remove(kListDeleteSelected)
+	;  Do ilSchemaCols.$sendall(toStrings.$StringTableEntry(con('',$sendallref.C1,'_LBL'),$sendallref.C2))
+	Do ilSchemaCols.$sendall(toStrings.$StringTableEntry(con('allstrings.',$sendallref.C1,'_LBL'),$sendallref.C2))
+	;  We are not displaying a list column in the complex grid because the user cannot click on the line and it appear selected.
+	;  We are effecting this behaviour by displaying a button that, when clicked, changes its colour to appear selected.
+	Do method setSchemaColumnText
+	
+	;  now load all templates associated with the schema
+	Do $DefineList(ilTemplates,'tImportTemplate')
+	Calculate irChosenTemplate as ilTemplates
+	Do ilTemplates.$fetchMatches(icTargetSchema)
+	Calculate ilTemplates.$smartlist as kTrue
+	
+	Calculate $cinst.$objs.ilTemplateMenu.$text as ilTemplateMenu.1.colText
+	
+	Calculate lcSeparators as $root.$prefs.$separators()
+	Calculate icSepDec as mid(lcSeparators,1,1)
+	Calculate icSepThou as mid(lcSeparators,2,1)
+	
+	Do ilSepDec.$search($ref.char=icSepDec,1,0,0,0)
+	Do ilSepThou.$search($ref.char=icSepThou,1,0,0,0)
+	
+	Calculate inFmtDate as pos(left(upp(#FD),1),'DMY')-1
+	Calculate icFmtDate as pick(inFmtDate,'DMY','MDY','YMD')
+	
+	Calculate ibDoNotImportFirstLine as kFalse
+End If     ;; isclear(pSchemaName)
+
+;  prepare for file import
+Calculate $cinst.$objs.FileControl.$action as kJSFileActionUpload

@@ -1,0 +1,17 @@
+;  give the list column a meaningful name     ;; and add translation col
+Do plSchemaObjects.$redefine(objName)
+Do plSchemaObjects.$cols.$add('translation',kCharacter,kSimplechar,100)
+
+;  now translate
+Calculate plSchemaObjects.$line as 0
+While $Loop(plSchemaObjects)
+	Calculate lcText as ''
+	;  look in schemas string table first
+	Do toStrings.$StringTableEntry(con('',plSchemaObjects.objName),lcText) Returns lbValid
+	If lbValid
+		Calculate plSchemaObjects.translation as lcText
+		Calculate plSchemaObjects.translation as lcText
+	Else
+		;  the translation column remains empty
+	End If
+End While

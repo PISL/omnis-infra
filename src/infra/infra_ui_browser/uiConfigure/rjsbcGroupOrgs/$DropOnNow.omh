@@ -1,0 +1,11 @@
+Calculate lrDragged as ilNow.[ilNow.$line]
+Calculate lrDragged.GS_SUPERIOR_GS_REF as irDroppedOn.GS_SEQ
+Do lrDragged.$update() Returns lbOK
+If lbOK
+	Do ilNow.$remove(ilNow.$line)
+	Do ilNow.$search($ref.PB_SEQ=irDroppedOn.PB_SEQ,1,0,0,0) Returns lbFound
+	If lbFound
+		Calculate ilNow.ChildNodeCount as ilNow.ChildNodeCount+1
+		Calculate ilNow.ChildNodeNames as con(ilNow.ChildNodeNames,pick(ilNow.ChildNodeNames<>'','',', '),lrDragged.GS_DESC_SHORT)
+	End If
+End If

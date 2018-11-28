@@ -1,0 +1,29 @@
+;  This method is used to create a BETWEEN statement for PostgreSQL
+
+;  ASSUMPTION:  Date fields have been formatted already before being passed into this method.
+
+Calculate Start as pFirstValue
+Calculate Stop as pSecondValue
+
+;  version 7.12.03 use string field instead.
+Calculate fieldName as pField
+If pos('.',fieldName)
+	Calculate fieldName as mid(fieldName,pos('.',fieldName)+1,len(fieldName))
+End If
+
+Calculate FieldType as $ctask.tStringFields.$getFieldTypeFromFieldName(fieldName)
+
+Switch mid(FieldType,1,4)
+	Case 'char'
+		Calculate length as $ctask.tStringFields.$getFieldLengthFromFieldName(fieldName)     ;; V71900
+		
+		Do $ctask.tStringFields.$trim(Start)
+		Do $ctask.tStringFields.$trim(Stop)
+		
+		Calculate Start as $cinst.$sqlCHAR(mid(Start,1,length))     ;; V71900 no more than the length of the field
+		Calculate Stop as $cinst.$sqlCHAR(mid(con(Stop,'~'),1,length))     ;; V71900 no more than the length of the field
+End Switch
+
+Calculate Query as con(pField,' BETWEEN ',Start,' AND ',Stop)
+
+Quit method Query

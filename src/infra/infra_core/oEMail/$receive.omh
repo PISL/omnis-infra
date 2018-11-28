@@ -1,0 +1,5 @@
+;  retrieve internet e-mail messages
+Calculate icEmailProtocolStatus as ''
+Do lMailList.$define('lMessage')
+POP3Recv (ccInServer,ccInUsername,ccInPassword,lMailList,pDelete,pStatus)
+Quit method lMailList

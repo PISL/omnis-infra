@@ -1,0 +1,5 @@
+If ilData.$linecount>0
+	Do ilData.$dowork()
+End If
+
+;  Do $ReleaseSession(tSession,tStatement)

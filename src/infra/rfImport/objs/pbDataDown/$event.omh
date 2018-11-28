@@ -1,0 +1,5 @@
+On evClick
+	;  if we are viewing lines 1-19 then we want to see line 20
+	Do method moveViewDown
+	
+	Do $cinst.$behaviour()

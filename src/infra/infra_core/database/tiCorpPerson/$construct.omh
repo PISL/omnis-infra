@@ -1,0 +1,4 @@
+Calculate icPrefix as 'CPN_'
+Calculate icPrimarykey as 'CPN_SEQ'
+
+Do inherited

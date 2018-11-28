@@ -1,0 +1,11 @@
+
+If inCurrentTab=1
+	Do $cinst.$container().$adjustToolsMenu('uaUser') Returns lnCount
+	
+Else If inCurrentTab=2
+	Do $cinst.$container().$adjustToolsMenu('uaRole') Returns lnCount
+	
+Else If inCurrentTab=3
+	Do $cinst.$container().$adjustToolsMenu('uaPerm') Returns lnCount
+	
+End If

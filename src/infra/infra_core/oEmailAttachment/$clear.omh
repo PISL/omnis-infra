@@ -1,0 +1,8 @@
+Calculate iFilename as ""
+Calculate iPath as ""
+;  Calculate iMIMEtype as ""
+Calculate iMIMEtypeList.$line as 0
+Calculate iCharsetList.$line as 1
+Calculate iEncodingList.$line as 0
+Calculate iDispositionList.$line as 0
+Calculate iAttachAsList.$line as 1

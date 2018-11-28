@@ -1,0 +1,20 @@
+;  Breakpoint
+;  If sys(2)=1
+;  never start server     ;; everything goes potty
+;  Else
+If inMaxConnections>2
+	;  Calculate $root.$prefs.$serverstacks as inMaxConnections-1     ;; -1 so there is always a thread for the "console"
+	Calculate $root.$prefs.$serverstacks as inMaxConnections
+	Start server
+	If flag false
+		Do $AppError('multiple threads not running')
+		;  OK message  {Multiple threads not running}
+		If irefMessageWinExists
+			Open window instance wMessage_e/* ('Multiple threads not running')
+		End If
+	Else
+		Send to trace log {Web server started with [inMaxConnections] threads}
+		Sound bell
+	End If
+End If
+;  End If

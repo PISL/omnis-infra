@@ -1,0 +1,4 @@
+;  may be called from pbPrint or handleMenuCall
+Do method PrintReport
+
+Do $cinst.$behaviour()

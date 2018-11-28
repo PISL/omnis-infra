@@ -1,0 +1,9 @@
+;  if the form has just become visible, set the focus to greyBackground to activate the shortcut keys
+If pVisible
+	Calculate lcForm as $cinst.$name
+	JavaScript: sessionStorage.setItem('currentForm', lcForm);
+	Set reference lrefBackground to $cinst.$objs.greyBackground
+	If lrefBackground
+		Do $cinst.$setcurfield(lrefBackground)
+	End If
+End If

@@ -1,0 +1,25 @@
+Calculate llMimeList as irFileUpload.mime
+
+;  get the file name
+Do llMimeList.$search(low(llMimeList.name)='content-disposition',kTrue,kFalse,kFalse,kFalse)
+If llMimeList.$line>0
+	Calculate lcValue as low(llMimeList.value)
+	While len(lcValue)
+		Calculate lcString as strtok(nam(lcValue),";")
+		Calculate lcString as trim(lcString)     ;; strip leading and trailing spaces
+		If mid(lcString,1,8)='filename'
+			Calculate lcFileName as strtok(nam(lcString),kDq)     ;; chr(34) = "
+			Calculate lcFileName as strtok(nam(lcString),kDq)     ;; chr(34) = "
+			Break to end of loop
+		End If
+	End While
+End If
+
+;  is the file iof correct type     ;; is it text?  is it csv or tab or xls?
+Do llMimeList.$search(low(llMimeList.name)='content-type',kTrue,kFalse,kFalse,kFalse)
+If llMimeList.$line>0
+	Calculate lcFileType as trim(low(llMimeList.value))
+End If
+
+Calculate pretFileName as lcFileName
+Calculate pretFileType as lcFileType

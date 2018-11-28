@@ -1,0 +1,6 @@
+Calculate icSearch as ''
+Do method FetchRecords
+
+Do irCurrentRecord.$clear()
+Do $cinst.$behaviour()
+Do $cinst.$redraw()

@@ -1,0 +1,31 @@
+Calculate icDisplayMessage as ''
+Calculate irCurrentRecord as ilDisplayRecords
+Calculate irCurrentRecord.PW as ''
+Calculate icCheckPassword as ''
+
+Do method RolePermissions
+
+;  If this is a super user role, highlight any non super user permissions.
+;  If this is a non super user role, highlights any super user permissions.
+Calculate llHighlight as ilRolePermissions
+Do llHighlight.$search($ref.ROL_SU=1,1,0,1,0)
+If irCurrentRecord.PER_SU
+	Do llHighlight.$remove(kListDeleteSelected)
+Else
+	Do llHighlight.$remove(kListKeepSelected)
+End If
+If llHighlight.$linecount>0
+	Calculate llHighlight.$line as 0
+	While $Loop(llHighlight)
+		Calculate lcNames as con(lcNames,pick(lcNames<>'','',', '),llHighlight.ROL_NAME)
+	End While
+	
+	If llHighlight.$linecount=1
+		Calculate icDisplayMessage as con('WARNING:  The role ( ',lcNames,' ) is inconsistent with the super user restriction of this permission.')
+	Else
+		Calculate icDisplayMessage as con('WARNING:  The roles ( ',lcNames,' ) are inconsistent with the super user restriction of this permission.')
+	End If
+End If
+
+Do $cinst.$behaviour()
+Do $cinst.$redraw()

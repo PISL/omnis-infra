@@ -1,0 +1,20 @@
+;  called from the subform(s) rfSubAddRemoveLine
+;  prParams is a row variable contining whatever information necessary for this method
+
+Calculate icDetailMode as 'ID'
+
+Do irCurrentDetail.$clear()
+Calculate irCurrentDetail.FOD_ORDER as ilDetails.$linecount+1
+Calculate irCurrentDetail.FOD_FOH_REF as irCurrentRecord.FOH_SEQ
+Calculate irCurrentDetail.FOD_QTY as 1
+Calculate $cinst.$objs.PagedPane.$objs.PRD_INT_PRODCODE.$errortext as ''
+
+;  when user clicks "save" then list will be ready to receive results
+Do ilDetails.$add()
+Calculate ilDetails.$line as ilDetails.$linecount
+;  if user wants to cancel the add they have to say add then delete line
+
+Calculate $cinst.$objs.PagedPane.$currentpage as cnTabSingleLine
+Calculate inCurrentTab as cnTabSingleLine
+
+Do $cinst.$behaviour()

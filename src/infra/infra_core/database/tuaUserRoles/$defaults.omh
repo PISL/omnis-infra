@@ -1,0 +1,2 @@
+;  Calculate $cinst.UR_ACTIVE as 1
+Calculate $cinst.UR_DEFAULT as 1

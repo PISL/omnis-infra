@@ -1,0 +1,53 @@
+;  the assumption with this method is that the phone numbers HAVE BEEN VALIDATED
+Calculate lcPhoneNoSpaces as replaceall(pPhoneNoUser,' ','')
+Calculate lcPhoneNoSpaces as replaceall(lcPhoneNoSpaces,'(','')
+Calculate lcPhoneNoSpaces as replaceall(lcPhoneNoSpaces,')','')
+
+If lcPhoneNoSpaces<>''
+	Switch pCountry
+		Case 'GB','GBR','UK'
+			If mid(lcPhoneNoSpaces,1,1)='+'
+				If mid(lcPhoneNoSpaces,4,1)='2'|mid(lcPhoneNoSpaces,4,1)='3'     ;; +44
+					Calculate lcUser as con('0',mid(lcPhoneNoSpaces,4,2),' ',mid(lcPhoneNoSpaces,6,4),' ',mid(lcPhoneNoSpaces,10,4))
+				Else
+					Calculate lcUser as con('0',mid(lcPhoneNoSpaces,4,4),' ',mid(lcPhoneNoSpaces,8,3),' ',mid(lcPhoneNoSpaces,11,3))
+				End If
+				Calculate lcIndex as con('0',mid(lcPhoneNoSpaces,4,99))
+				
+			Else If mid(lcPhoneNoSpaces,1,2)='00'
+				If mid(lcPhoneNoSpaces,5,1)='2'|mid(lcPhoneNoSpaces,5,1)='3'     ;; 0044
+					Calculate lcUser as con('0',mid(lcPhoneNoSpaces,5,2),' ',mid(lcPhoneNoSpaces,7,4),' ',mid(lcPhoneNoSpaces,11,4))
+				Else
+					Calculate lcUser as con('0',mid(lcPhoneNoSpaces,5,4),' ',mid(lcPhoneNoSpaces,9,3),' ',mid(lcPhoneNoSpaces,12,3))
+				End If
+				Calculate lcIndex as con('0',mid(lcPhoneNoSpaces,5,99))
+				
+			Else     ;; assume its 01923
+				If mid(lcPhoneNoSpaces,2,1)='2'|mid(lcPhoneNoSpaces,2,1)='3'
+					Calculate lcPrefix as mid(lcPhoneNoSpaces,1,3)
+					Calculate lcPortion1 as mid(lcPhoneNoSpaces,4,4)
+					Calculate lcPortion2 as mid(lcPhoneNoSpaces,8,4)
+					
+					;  Calculate lcUser as con('0',mid(lcPhoneNoSpaces,2,2),' ',mid(lcPhoneNoSpaces,4,4),' ',mid(lcPhoneNoSpaces,8,4))
+					Calculate lcUser as con(lcPrefix,' ',lcPortion1,' ',lcPortion2)
+				Else
+					Calculate lcPrefix as mid(lcPhoneNoSpaces,1,5)
+					Calculate lcPortion1 as mid(lcPhoneNoSpaces,6,3)
+					Calculate lcPortion2 as mid(lcPhoneNoSpaces,9,3)
+					
+					;  Calculate lcUser as con(mid(lcPhoneNoSpaces,1,5),' ',mid(lcPhoneNoSpaces,6,3),' ',mid(lcPhoneNoSpaces,9,3))
+					Calculate lcUser as con(lcPrefix,' ',lcPortion1,' ',lcPortion2)
+				End If
+				Calculate lcIndex as lcPhoneNoSpaces
+				
+			End If
+			
+		Default
+			Calculate lcUser as pPhoneNoUser
+			Calculate lcIndex as lcPhoneNoSpaces
+			
+	End Switch
+End If
+
+Calculate pPhoneNoUser as lcUser
+Calculate pPhoneNoIndex as lcIndex

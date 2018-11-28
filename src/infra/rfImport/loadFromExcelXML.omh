@@ -1,0 +1,88 @@
+;  cut and pasted from $importLoaded
+;  WARNING:  untested
+;  continue
+;  which workbook?
+;  Breakpoint
+
+Calculate llXML as plXML
+
+Repeat
+	Do llXML.$search($ref.path='/Worksheet/Table/Row',0,0,0,0) Returns lnLineForSheetCount     ;; /ExcelWorkbook/SupBook/Xct/Count
+	;  Calculate lnNoOfRowsInSheet as llXML.value
+Until lnLineForSheetCount>0     ;; lnNoOfRowsInSheet>0|lnLineForSheetCount=0
+If lnLineForSheetCount>0     ;; lnNoOfRowsInSheet>0
+	;  we have work to do
+	Repeat
+		Do llXML.$search($ref.path='/Worksheet/Table/Row/Cell',0,0,0,0) Returns lnRowFound     ;; /ExcelWorkbook/SupBook/Xct/Crn/Row
+		Calculate lbRowFinished as kFalse
+		Calculate lnColStart as 0
+		Calculate inDataColCount as 0
+		Repeat
+			Calculate lcValue as ''
+			Calculate llXML.$line as llXML.$line+1
+			Switch llXML.path
+				Case '/ExcelWorkbook/SupBook/Xct/Crn/Row'
+					Calculate lnRowNo as llXML.value
+					If lnRowNo=0
+						Calculate ilContent as ''
+					End If
+				Case '/ExcelWorkbook/SupBook/Xct/Crn/ColFirst'
+					Calculate lnColStart as llXML.value     ;; start pos
+					Calculate inDataColNo as 0
+				Case '/ExcelWorkbook/SupBook/Xct/Crn/ColLast'
+					Calculate inDataColCount as llXML.value
+					If inDataColCount>0&ilContent.$colcount>0
+						Do ilContent.$add()
+						Calculate ilContent.$line as ilContent.$linecount
+					End If
+					
+				Case '/ExcelWorkbook/SupBook/Xct/Crn/Text'
+					Calculate lcValue as llXML.value
+					Calculate inDataColNo as inDataColNo+1
+					
+				Case '/ExcelWorkbook/SupBook/Xct/Crn'     ;; end of row
+					Calculate lbRowFinished as kTrue
+					
+				Case '/ExcelWorkbook/SupBook/Xct'     ;; end of sheet
+					Calculate lbRowFinished as kTrue
+					Calculate lbTableFinished as kTrue
+					
+				Case '/Worksheet/Table/Row/Cell'
+					;  ignore
+					
+				Case '/Worksheet/Table/Row/Cell/Data'
+					Calculate lcValue as llXML.value
+					Calculate inDataColNo as inDataColNo+1
+					
+				Case '/Worksheet/Table/Row'
+					Calculate lbRowFinished as kTrue
+					;  adding row at end of line marker will create an extra, empty row at end of import
+					;  except that the end of table "/Worksheet/WorksheetOptions" gets detected
+					Do ilContent.$add()
+					Calculate ilContent.$line as ilContent.$linecount
+					Calculate inDataColNo as 0
+					
+				Case '/Worksheet/WorksheetOptions'     ;; end of sheet
+					Calculate lbRowFinished as kTrue
+					Calculate lbTableFinished as kTrue
+					
+				Default
+					Breakpoint
+					Calculate lbRowFinished as kTrue
+			End Switch
+			If ilContent.$linecount=0&lcValue<>''
+				Do ilContent.$cols.$add(lcValue,kCharacter,kSimplechar,255)
+			Else If ilContent.$linecount>0&lcValue<>''
+				Calculate ilContent.C[inDataColNo] as lcValue
+			End If
+		Until lbRowFinished
+		;  If mod(llContent.$linecount,50)=0
+		;  Breakpoint
+		;  End If
+		;  If llContent.$linecount>=(lnNoOfRowsInSheet-3)
+		;  Breakpoint
+		;  End If
+		Calculate lnLastRowNo as llXML.$line
+		;  Do llXML.$search($ref.path='/ExcelWorkbook/SupBook/Xct/Count',0,0,0,0) Returns lnLineForSheetCount
+	Until lbTableFinished     ;; llContent.$linecount>=lnNoOfRowsInSheet
+End If     ;; lnNoOfRowsInSheet>0

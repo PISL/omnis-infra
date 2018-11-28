@@ -1,0 +1,43 @@
+If tlDatabases.DAM='WebService'
+	;  pass parameters to web service
+	;  $callService (pFieldReference, row(TableClassName, CurrentMethodName, p1,...,pn) )     ;; result will be returned in pFieldReference, row() contains the parameters for the call
+	Do ioWeb.$callFetch(lnCount,irErrorSQL,row($cinst.$class().$name,$cmethod().$name,row(pcCheckCol),lnCount.$type,0,ilRESTextensions))
+	If ioWeb.irResponse.httpStatusCode=200
+		;  the result should be in this object     ;; however there may be a SQL error
+		If irErrorSQL.NativeErrorText<>''
+			Quit method kFalse
+		End If
+		Quit method lnCount
+	Else
+		Quit method kFalse
+	End If
+End If
+
+Calculate lcChar as upp($cinst.[pcCheckCol])     ;; EO_NAME
+
+Do $cinst.$ImmediateSession(loSession,loStatement) Returns lbImmediateSession
+If lbImmediateSession
+	Do $cinst.$SetSession(loSession,loStatement)
+Else If not(ibGoodConnectionToDb)
+	Quit method kFalse
+End If
+
+Begin statement
+Sta: {select count(*)}
+Sta: {from [$cinst.$servertablenames], [lrEntOrgLinks.$servertablenames()]}
+;  join
+Sta: {where  EOL_EO_REF = EO_SEQ}
+;  connect to current GroupOrg
+Sta: {and      EOL_GO_REF = @[$ctask.trGroupOrg.GO_SEQ]}
+Sta: {and     upper([pcCheckCol]) = @[lcChar]}
+If lnPrimaryKey<>0
+	Sta: {and     [icPrimarykey] <> @[lnPrimaryKey]}
+End If
+End statement
+
+Do $cinst.$executesqlandfetchinto(lnCount) Returns lbOK
+If lbImmediateSession
+	Do $cinst.$SetSession(#NULL,#NULL,kTrue)
+End If
+
+Quit method lnCount

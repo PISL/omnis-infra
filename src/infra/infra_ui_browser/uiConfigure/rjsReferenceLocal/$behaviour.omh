@@ -1,0 +1,47 @@
+If irefContainer
+	Do irefContainer.$behaviour(icMode)     ;; set the TabControl $enabled
+End If
+Calculate $cinst.$objs.ilSearch1.$enabled as icMode=''
+Calculate $cinst.$objs.ilSearch2.$enabled as icMode=''
+Calculate $cinst.$objs.ilDisplayRecords.$enabled as icMode=''
+
+Calculate $cinst.$objs.PagedPane.$objs.pbCheckJSON.$enabled as len(irCurrentRecord.RFL_JSON)>0&icMode<>''
+
+Calculate $cinst.$objs.pbAdd.$enabled as irUserRights.canInsert&icMode=''
+Calculate $cinst.$objs.pbEdit.$enabled as irUserRights.canEdit&irCurrentRecord.RFL_SEQ>0&icMode=''
+Calculate $cinst.$objs.pbDelete.$enabled as irUserRights.canDelete&irCurrentRecord.RFL_SEQ>0&icMode=''
+
+Calculate $cinst.$objs.pbCancel.$visible as icMode<>''
+Calculate $cinst.$objs.pbSave.$visible as icMode<>''
+
+Calculate $cinst.$objs.label_RFL_INHERIT.$visible as irCurrentRecord.RFL_ACTIVE=0     ;; this column is releveant ONLY when active os OFF
+Calculate $cinst.$objs.RFL_INHERIT.$visible as irCurrentRecord.RFL_ACTIVE=0     ;; this column is releveant ONLY when active os OFF
+
+Set reference lirefPagedPaneObjs to $cinst.$objs.PagedPane.$objs
+;  Calculate lirefPagedPaneObjs.UniqueBox.$visible as icMode='I'
+Calculate lirefPagedPaneObjs.RFL_CLASS.$enabled as icMode<>''&icMode<>'E'     ;; cannot allow editing of Classification once set
+Calculate lirefPagedPaneObjs.RFL_VALUE.$enabled as icMode<>''&icMode<>'E'     ;; cannot allow editing of Value once saved
+Calculate lirefPagedPaneObjs.RFL_DESC.$enabled as icMode<>''
+Calculate lirefPagedPaneObjs.RFL_ORDER.$enabled as icMode<>''
+Calculate lirefPagedPaneObjs.RFL_ACTIVE.$enabled as icMode<>''
+Calculate lirefPagedPaneObjs.RFL_INHERIT.$enabled as icMode<>''
+Calculate lirefPagedPaneObjs.RFL_EFFECTIVE.$enabled as icMode<>''
+Calculate lirefPagedPaneObjs.RFL_EXPIRES.$enabled as icMode<>''
+
+Calculate lirefPagedPaneObjs.RFL_CHAR.$enabled as icMode<>''
+Calculate lirefPagedPaneObjs.RFL_INT.$enabled as icMode<>''
+Calculate lirefPagedPaneObjs.RFL_NUMBER.$enabled as icMode<>''
+Calculate lirefPagedPaneObjs.RFL_DATE.$enabled as icMode<>''
+Calculate lirefPagedPaneObjs.RFL_JSON.$enabled as icMode<>''
+
+Calculate lirefPagedPaneObjs.RFL_BIN.$enabled as icMode<>''
+
+If $cobj.$name='pbCheckJSON'
+	;  do not touch $errortext
+Else
+	Calculate $cinst.$objs.PagedPane.$objs.pbCheckJSON.$errortext as ''
+End If
+
+Do method assignEntryFieldProperties
+
+Do inherited      ;; handle objects in the navigation and results panes

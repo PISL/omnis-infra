@@ -1,0 +1,13 @@
+;  This method creates an IN statement for PostgreSQL.  It is assumed
+;  that you have already taken care of the quotes if it is a character field,
+;  or no-quotes if it is numeric.
+
+If pos('|',pValues)>0
+	;  Standard pipe packed list.  Alter for 'IN'
+	
+	Calculate pValues as $ctask.tStringFields.$makeINfromPackedList(pValues)
+End If
+
+Calculate Query as con(pField,pick(pNotIn,''," NOT")," IN(",pValues,")")
+
+Quit method Query

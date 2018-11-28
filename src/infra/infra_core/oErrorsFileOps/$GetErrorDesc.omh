@@ -1,0 +1,5 @@
+;  Do ilValues.$cols.$add('ErrorCode',kCharacter,kSimplechar,50)
+;  Do ilValues.$cols.$add('Value',kNumber,kLongint)
+;  Do ilValues.$cols.$add('Description',kCharacter,kSimplechar,255)
+Do ilValues.$search($ref.Value=pnFileOpsCode,1,0,0,0) Returns lbFound
+Quit method ilValues.Description

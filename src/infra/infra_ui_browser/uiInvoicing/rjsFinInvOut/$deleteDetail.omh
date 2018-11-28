@@ -1,0 +1,16 @@
+;  callback from $clientNoYesMsg with flag true
+Do irCurrentDetail.$checkChildren() Returns lnCountChildren
+If lnCountChildren=0
+	;  we don't delete records until user clicks "whole invoice" save
+	;  Do irCurrentDetail.$delete_pk() Returns lbOK
+	Do ilDetails.$remove(ilDetails.$line)
+	Do irCurrentDetail.$clear()
+	Calculate ilDetails.$line as 0
+	Calculate inTotalPrice as ilDetails.$totc(ilDetails.Price)
+	Calculate inTotalTax as ilDetails.$totc(ilDetails.Tax)
+	Calculate inTotalInvoice as ilDetails.$totc(ilDetails.Total)
+Else
+	Do toStrings.$StringTableEntry('ERR_NODEL_CHILDREN',icDisplayMessage,'record has associated child records, delete those first')
+End If
+
+Do $cinst.$behaviour()

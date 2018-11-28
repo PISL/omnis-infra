@@ -1,0 +1,68 @@
+If $ctask.trGroupOrg.GO_SEQ>0
+	;  proceed
+Else
+	Quit method kFalse
+End If
+
+If tlDatabases.DAM='WebService'
+	;  pass parameters to web service
+	Do ioWeb.$callFetch($cinst,irErrorSQL,row($cinst.$class().$name,$cmethod().$name,row(pcMEC_ID,pcNAME,pcADDR_BILL,pcADDR_SHIP,pcEMAIL),$cinst.$type,0,ilRESTextensions))
+	If ioWeb.irResponse.httpStatusCode=200
+		;  the result should be in this object     ;; however there may be a SQL error
+		If irErrorSQL.NativeErrorText<>''
+			Quit method kFalse
+		End If
+		Quit method kTrue
+	Else
+		Quit method kFalse
+	End If
+End If
+
+Do $cinst.$ImmediateSession(loSession,loStatement) Returns lbImmediateSession
+If lbImmediateSession
+	Do $cinst.$SetSession(loSession,loStatement)
+Else If not(ibGoodConnectionToDb)
+	Quit method kFalse
+End If
+
+Begin statement
+Sta: {select [$cinst.$selectnames()]}
+If $columnExists($cinst,'EOL_FINACCT_SUID')
+	Sta: {, EOL_FINACCT_SUID}
+End If
+Sta: {from [$cinst.$servertablenames],  [lrLinkToGroupOrg.$servertablenames()], [lrGroupOrg.$servertablenames()]}
+;  join ExtOrganisations to link table
+Sta: {where EOL_EO_REF = EO_SEQ}
+;  join link table to groupOrganisation
+Sta: {and    EOL_GO_REF = GO_SEQ}
+;  include global company suppliers
+Sta: {and    (GO_SEQ = @[$ctask.trGroupOrg.GO_SEQ] or GO_SEQ = -1)}
+;  supplier code exists
+Sta: {and    EOL_FINACCT_SUID is not null}
+If len(pcMEC_ID)>0
+	Sta: {and      EO_MEC_ID = @[pcMEC_ID]}
+End If
+If pcNAME<>''
+	Calculate pcNAME as con(pcNAME,'%')
+	Sta: {and      EO_NAME like @[pcNAME]}
+End If
+If pcADDR_BILL<>''
+	Calculate pcADDR_BILL as con('%',pcADDR_BILL,'%')
+	Sta: {and      EO_ADDR_BILL like @[pcADDR_BILL]}
+End If
+If pcADDR_SHIP<>''
+	Calculate pcADDR_SHIP as con('%',pcADDR_SHIP,'%')
+	Sta: {and      EO_ADDR_SHIP like @[pcADDR_SHIP]}
+End If
+If pcEMAIL<>''
+	Calculate pcEMAIL as con('%',pcEMAIL,'%')
+	Sta: {and      EO_EMAIL like @[pcEMAIL]}
+End If
+End statement
+
+Do $cinst.$executesqlandfetch() Returns lbOK
+If lbImmediateSession
+	Do $cinst.$SetSession(#NULL,#NULL,kTrue)
+End If
+
+Quit method lbOK

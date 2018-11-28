@@ -1,0 +1,5 @@
+;  callback method from clientmessage - No
+;  Calculate $cinst.icDisplayMessage as 'Deletion cancelled.'
+Calculate $cinst.icDisplayMessage as $cell($cinst.clLabels,'objName','disp_del_canc','label')
+
+Do $cinst.$behaviour()

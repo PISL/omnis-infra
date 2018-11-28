@@ -1,0 +1,2 @@
+Do ilLog.$clear()
+Do ilLog.$FetchDateRange(idFrom,idTo) Returns inCountPremptive

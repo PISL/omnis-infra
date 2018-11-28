@@ -1,0 +1,7 @@
+On evDrop
+	;  Breakpoint
+	;  For lnLine from 1 to pDragValue.$linecount step 1
+	Calculate lnLine as 1     ;; pDragValue may be a list but we will only process a single file
+	Do $cinst.$clientcommand('readfile',row(pDragValue.[lnLine].ident,nam(ibinFileContentsBase64),kTrue))
+	;  Calculate irCurrentRecord.RFL_BIN as binfrombase64(ibinFileContentsBase64)
+	;  End For

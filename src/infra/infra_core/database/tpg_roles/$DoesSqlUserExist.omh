@@ -1,0 +1,24 @@
+Do $cinst.$ImmediateSession(loSession,loStatement) Returns lbImmediateSession
+If lbImmediateSession
+	Do $cinst.$SetSession(loSession,loStatement)
+Else If not(ibGoodConnectionToDb)
+	Quit method kFalse
+End If
+
+If $cinst.$sessionobject.$damname='PGSQLDAM'
+	Calculate pcUsername as low(pcUsername)
+	;  SELECT rolname FROM pg_roles
+	
+	Begin statement
+	Sta: {SELECT [$cinst.$selectnames()] FROM [$cinst.$servertablenames()]}
+	If pcUsername<>''
+		Sta: {where rolname = @[pcUsername]}
+	End If
+	End statement
+	Do $cinst.$executesqlandfetch() Returns lbOK
+	
+End If
+
+If lbImmediateSession
+	Do $cinst.$SetSession(#NULL,#NULL,kTrue)
+End If

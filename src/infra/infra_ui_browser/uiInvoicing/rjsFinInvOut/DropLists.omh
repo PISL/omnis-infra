@@ -1,0 +1,2 @@
+Do ilCustomers.$search($ref.EO_SEQ=irCurrentRecord.FOH_EO_REF,1,0,0,0)
+Do ilStatusChoice.$search($ref.RFG_VALUE=irCurrentRecord.FOH_STATUS,1,0,0,0)

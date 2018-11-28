@@ -1,0 +1,17 @@
+On evLayoutChanged
+	Do inherited
+	Switch inBreakpoint
+		Case 320
+			Calculate lnHeightAdd as 860-$cinst.$objs.greyBackground.$height
+		Case 375
+			Calculate lnHeightAdd as 852-$cinst.$objs.greyBackground.$height
+		Case 480
+			Calculate lnHeightAdd as 858-$cinst.$objs.greyBackground.$height
+		Case 667
+			Calculate lnHeightAdd as 780-$cinst.$objs.greyBackground.$height
+		Default
+			Calculate lnHeightAdd as 0
+	End Switch
+	
+	Calculate $cinst.$objs.ppRecordNavigation.$height as lnHeightAdd+$cinst.$objs.ppRecordNavigation.$height
+	Calculate $cinst.$objs.greyBackground.$height as lnHeightAdd+$cinst.$objs.greyBackground.$height

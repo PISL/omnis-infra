@@ -1,0 +1,2 @@
+On evKeyPress
+	Calculate $cinst.$objs.pbCheckJSON.$enabled as len(irCurrentRecord.RFG_JSON)>0&icMode<>''

@@ -1,0 +1,29 @@
+Calculate $cinst.$objs.PagedPane_REPORTS.$objs.inPrintDestination.$visible as kFalse
+
+Calculate $cinst.$objs.PagedPane_REPORTS.$objs.label_ilFilterOptions.$visible as kFalse
+Calculate $cinst.$objs.PagedPane_REPORTS.$objs.ilFilterOptions.$visible as kFalse
+Calculate $cinst.$objs.PagedPane_REPORTS.$objs.label_ilSortOptions.$visible as kFalse
+Calculate $cinst.$objs.PagedPane_REPORTS.$objs.ilSortOptions.$visible as kFalse
+
+Calculate $cinst.$objs.PagedPane_REPORTS.$objs.label_datefrom.$visible as kFalse
+Calculate $cinst.$objs.PagedPane_REPORTS.$objs.idFrom.$visible as kFalse
+Calculate $cinst.$objs.PagedPane_REPORTS.$objs.label_dateto.$visible as kFalse
+Calculate $cinst.$objs.PagedPane_REPORTS.$objs.idTo.$visible as kFalse
+
+Calculate $cinst.$objs.PagedPane_REPORTS.$objs.label_integer1.$visible as kFalse
+Calculate $cinst.$objs.PagedPane_REPORTS.$objs.inInteger1.$visible as kFalse
+Calculate $cinst.$objs.PagedPane_REPORTS.$objs.label_integer2.$visible as kFalse
+Calculate $cinst.$objs.PagedPane_REPORTS.$objs.inInteger2.$visible as kFalse
+Calculate $cinst.$objs.PagedPane_REPORTS.$objs.label_real1.$visible as kFalse
+Calculate $cinst.$objs.PagedPane_REPORTS.$objs.inreal1.$visible as kFalse
+Calculate $cinst.$objs.PagedPane_REPORTS.$objs.label_real2.$visible as kFalse
+Calculate $cinst.$objs.PagedPane_REPORTS.$objs.inReal2.$visible as kFalse
+
+Calculate $cinst.$objs.PagedPane_REPORTS.$objs.checkbox1.$visible as kFalse
+Calculate $cinst.$objs.PagedPane_REPORTS.$objs.checkbox2.$visible as kFalse
+Calculate $cinst.$objs.PagedPane_REPORTS.$objs.checkbox3.$visible as kFalse
+
+Calculate $cinst.$objs.PagedPane_REPORTS.$objs.label_selectlist.$visible as kFalse
+Calculate $cinst.$objs.PagedPane_REPORTS.$objs.ilSelectList.$visible as kFalse
+Calculate $cinst.$objs.PagedPane_REPORTS.$objs.label_groupbylist.$visible as kFalse
+Calculate $cinst.$objs.PagedPane_REPORTS.$objs.ilGroupBy.$visible as kFalse

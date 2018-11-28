@@ -1,0 +1,1 @@
+Do $cinst.$warnDelete(con(irCurrentRecord.RFG_CLASS,'-',irCurrentRecord.RFG_VALUE),'$deleteProceed')

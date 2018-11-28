@@ -1,0 +1,6 @@
+Calculate icPrefix as 'PID_'
+Calculate icPrimarykey as 'PID_PRD_REF'
+Calculate ibHasSequence as kFalse
+Calculate icForeignKey as 'PID_PRD_REF'
+
+Do inherited

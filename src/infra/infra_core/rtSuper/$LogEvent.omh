@@ -1,0 +1,17 @@
+;  Do method $DynamicSession (loSession,loStatement) Returns lbOK
+Do method $DynamicSession (loSession,loStatement,irConfigFile.Name) Returns lbOK
+If lbOK
+	Do $DefineList(lrLog,'infra.tsysLogEvents')
+	Do lrLog.$SetSession(loSession,loStatement)
+	
+	Calculate lrLog.SLV_CWHEN as #D
+	Calculate lrLog.SLV_CODE as pCode
+	Calculate lrLog.SLV_SUBCODE as pSubCode
+	Calculate lrLog.SLV_MESSAGE as pMessage
+	Calculate lrLog.SLV_VHOST_REF as trVirtualHost.PGS_SEQ
+	Calculate lrLog.SLV_SERVER_IP as tDefaultData.D_WEB_INTERNAL_ROUTER_IP_ADDR
+	Calculate lrLog.SLV_SERVER_PORT as $root.$prefs.$serverport
+	
+	Do lrLog.$insert__()
+	;  Do method $ReleaseSession (loSession,loStatement)     ;; required to destroy this session from task var trSequences
+End If

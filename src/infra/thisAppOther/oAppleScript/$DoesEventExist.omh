@@ -1,0 +1,20 @@
+Begin text block
+Text: {tell application "iCal"} (Platform newline)
+Text: {tell calendar "[pcCalendar]"} (Platform newline)
+Text: {      set theEvent to first event whose uid = "[pcEventID]"𯿿} (Platform newline)
+;  Text:      return uid of theEvent (Platform newline)
+;  calendar
+Text: {end tell} (Platform newline)
+;  application
+Text: {end tell} (Platform newline)
+End text block
+Get text block lcApplescript
+
+Do $root.$runapplescript(lcApplescript,lcApplescriptResult,lcApplescriptError)
+
+If pos(pcEventID,lcApplescriptResult)>0
+	Quit method kTrue
+End If
+
+Calculate pReturnError as lcApplescriptError
+Quit method kFalse

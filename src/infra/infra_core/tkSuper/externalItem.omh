@@ -1,0 +1,9 @@
+Do plExternals.$search($ref.extName=pcName,1,0,0,0) Returns lbFound
+If not(lbFound)
+	Calculate pretMessage as con(pretMessage,pick(pretMessage<>'','',', '),pcName)
+Else
+	If pcName='ExcelFormat'
+		;  initialise libxl with our licence key
+		Do ExcelFormat.$setKey("Platform Independent Systems Ltd - 2 developers","mac-f30d09091c1e2ea5b759607943n1i1n7")
+	End If
+End If

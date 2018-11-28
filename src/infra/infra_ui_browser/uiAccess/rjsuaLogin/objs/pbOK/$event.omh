@@ -1,0 +1,9 @@
+On evClick
+	If inLoginFailed>=3
+		;  redirect to different page - user does not know how to logon
+		;  ***Commented out by responsive javascript migration tool*** Calculate lcURL as icURLexit
+		
+		JavaScript: document.location.href=lcURL;
+	Else
+		Do $cinst.$login() Returns lbSuccess
+	End If

@@ -1,0 +1,96 @@
+If pnEO_REF>0
+	;  proceed
+Else
+	Quit method kFalse
+End If
+
+If tlDatabases.DAM='WebService'
+	If pbReturnCount
+		;  $callService (pFieldReference, row(TableClassName, CurrentMethodName, p1,...,pn) )     ;; result will be returned in pFieldReference, row() contains the parameters for the call
+		Do ioWeb.$callFetch(lnCount,irErrorSQL,row($cinst.$class().$name,$cmethod().$name,row(pnEO_REF,pcSearchString,pbReturnCount,pbSearchOnProductCodeOnly),lnCount.$type,0,ilRESTextensions))
+		If ioWeb.irResponse.httpStatusCode=200
+			;  the result should be in this object     ;; however there may be a SQL error
+			If irErrorSQL.NativeErrorText<>''
+				Quit method kFalse
+			End If
+			Quit method lnCount
+		Else
+			Quit method kFalse
+		End If
+	Else
+		;  pass parameters to web service
+		;  $callService (pFieldReference, row(TableClassName, CurrentMethodName, p1,...,pn) )     ;; result will be returned in pFieldReference, row() contains the parameters for the call
+		Do ioWeb.$callFetch($cinst,irErrorSQL,row($cinst.$class().$name,$cmethod().$name,row(pnEO_REF,pcSearchString,pbReturnCount,pbSearchOnProductCodeOnly),$cinst.$type,0,ilRESTextensions))
+		If ioWeb.irResponse.httpStatusCode=200
+			;  the result should be in this object     ;; however there may be a SQL error
+			If irErrorSQL.NativeErrorText<>''
+				Quit method kFalse
+			End If
+			Quit method kTrue
+		Else
+			Quit method kFalse
+		End If
+	End If
+End If
+
+Do $cinst.$ImmediateSession(loSession,loStatement) Returns lbImmediateSession
+If lbImmediateSession
+	Do $cinst.$SetSession(loSession,loStatement)
+Else If not(ibGoodConnectionToDb)
+	Quit method kFalse
+End If
+
+;  out of Products
+;  a.  purchased     ;; they have a supplier number
+;       ;; PRD_SUPP_CODE will have a value
+;  b.  by-product     ;; is a product we make but not for sale - it is for input into another process
+;       ;; PRD_SUPP_CODE will be null
+;  c.  product     ;; something that we sell
+
+Begin statement
+If pbReturnCount
+	Sta: {select count(*)}
+Else
+	Sta: {select [$cinst.$selectnames()]}
+End If
+Sta: {from [$cinst.$servertablenames]}
+Sta: {join [lrSupplier.$servertablenames] on PRD_EO_REF = EO_SEQ}
+Sta: {where   EO_SEQ = @[pnEO_REF]}
+If tcCurrentLibrary<>'CONFERENCE'
+	Sta: {and PRD_META = @[inMeta]}
+End If
+If pbSearchOnProductCodeOnly
+	Sta: {and     upper(PRD_SUPP_PRODCODE) = @[pcSearchString]}
+Else
+	If pcSearchString<>''
+		Calculate pcSearchString as upp(con(pcSearchString,'%'))
+		Sta: {and  (upper(PRD_NAME) like @[pcSearchString]}
+		Sta: {or upper(PRD_INT_PRODCODE) like @[pcSearchString]}
+		Sta: {or upper(PRD_SUPP_PRODCODE) like @[pcSearchString]}
+		Sta: {or upper(PRD_BRAND) like @[pcSearchString]}
+		Sta: {or upper(PRD_DESC) like @[pcSearchString]}
+		Sta: {or upper(PRD_SERVICE_UNIT) like @[pcSearchString]}
+		Sta: {)}
+	End If
+End If
+If pbReturnCount
+	;  do nothing
+Else
+	Sta: {order by PRD_NAME}
+End If
+End statement
+
+If pbReturnCount
+	Do $cinst.$executesqlandfetchinto(lnCount) Returns lbOK
+Else
+	Do $cinst.$executesqlandfetch() Returns lbOK
+End If
+If lbImmediateSession
+	Do $cinst.$SetSession(#NULL,#NULL,kTrue)
+End If
+
+If pbReturnCount
+	Quit method lnCount
+Else
+	Quit method lbOK
+End If

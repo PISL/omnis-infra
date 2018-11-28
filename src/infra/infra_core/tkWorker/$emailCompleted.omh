@@ -1,0 +1,23 @@
+If pResults.errorCode     ;; non-zero is a failure
+	If ibSaveOnError     ;; this will be kFalse if we have no DB connection
+		;  parse the error and report it but also enter the email contents into an asyncemail to the developers
+		Calculate lcMessage as con("Attempting to send message: ",kCr,irEmailBody.text)
+		Calculate lcMessage as con(lcMessage,kCr,kCr,"returned error:",pResults.errorInfo)
+		If len(pResults.log)
+			Calculate lcMessage as con(lcMessage,kCr,kCr,"Transaction log: ",kCr,pResults.log)
+		End If
+		Do irefStartTask.$AppError(lcMessage,'email worker failure')
+	End If
+Else If len(icCompletionMethod)
+	Do $cinst.[icCompletionMethod]     ;; the completion method will pick up its parameters from irCompletionParams
+End If
+
+If irefCaller
+	If irCallerParams.$colcount
+		Do irefCaller.$emailCompleted(pResults,irCallerParams)
+	Else
+		Do irefCaller.$emailCompleted(pResults)
+	End If
+End If
+
+Do $cinst.$close()     ;; our job is done here

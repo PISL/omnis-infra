@@ -1,0 +1,35 @@
+On evClick
+	;  Calculate icDisplayMessage as ''
+	Calculate irCurrentDetail as ilDetails
+	If irCurrentRecord.FOH_SEQ>0
+		Do irCurrentDetail.$validation()
+	Else
+		Do irCurrentDetail.$validation(kTrue)     ;; omit parent foreign key check
+	End If
+	Calculate icDisplayMessage as irCurrentDetail.icValidationMessage
+	
+	;  because double-click over a long distance connection is dodgy     ;; assume user is editing
+	If icDisplayMessage=''
+		If icMode<>''     ;; inserting or editing an invoice
+			If irUserRights.canEdit&irCurrentRecord.FOH_SEQ>0&isclear(irCurrentRecord.FOH_SWHEN)
+				Calculate icDetailMode as 'ED'     ;; insert detail
+			End If
+		End If
+		Calculate $cinst.$objs.PagedPane.$currentpage as cnTabSingleLine
+		Calculate inCurrentTab as cnTabSingleLine
+	End If
+	
+	Do $cinst.$behaviour()
+	
+On evDoubleClick
+	If icMode<>''     ;; inserting or editing an invoice
+		If irUserRights.canEdit&irCurrentRecord.FOH_SEQ>0&isclear(irCurrentRecord.FOH_SWHEN)
+			Calculate icDetailMode as 'ED'     ;; insert detail
+		End If
+	Else
+		;  it is in read only
+	End If
+	Calculate $cinst.$objs.PagedPane.$currentpage as cnTabSingleLine
+	Calculate inCurrentTab as cnTabSingleLine
+	
+	Do $cinst.$behaviour()

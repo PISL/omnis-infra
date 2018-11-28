@@ -1,0 +1,10 @@
+Calculate lcDevice as $cdevice.$ident     ;; store current print destination
+Do $cdevice.$assign(kDevOmnisPDF)
+
+Do Omnis PDF Device.$setdocinfo(icAuthor,icTitle,icSubject) Returns lbOK
+Do Omnis PDF Device.$settemp(ibTempDir,inTimeout) Returns icPDFid
+
+Do irefReportClass.$open('*',irReportParams) Returns lrefReportInst
+Do lrefReportInst.$endprint()
+
+Do $cdevice.$assign(lcDevice)

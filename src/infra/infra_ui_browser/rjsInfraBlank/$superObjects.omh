@@ -1,0 +1,44 @@
+Calculate $cinst.$objs.ilSearch1.$visible as ilSearch1.$linecount>1
+Calculate $cinst.$objs.ilSearch2.$visible as ilSearch2.$linecount>1
+
+;  no need to set visibility... if text is empty label will not appear
+Calculate $cinst.$objs.label_ilSearch1.$text as pcLabelSearch1
+Calculate $cinst.$objs.label_ilSearch2.$text as pcLabelSearch2
+Calculate $cinst.$objs.label_ilSearch1.$visible as ilSearch1.$linecount>1&pcLabelSearch1<>''
+Calculate $cinst.$objs.label_ilSearch2.$visible as ilSearch2.$linecount>1&pcLabelSearch2<>''
+
+Calculate $cinst.$objs.label_ilDisplayRecords.$text as pcLabelList
+Calculate $cinst.$objs.ilDisplayRecords.$listcolumn as pcDisplayCols
+
+Calculate $cinst.$objs.ppRecordNavigation.$objs.icSearch.$visible as pbDisplaySearch
+If pbDisplaySearch&pcSearchContentTip<>''
+	Calculate $cinst.$objs.ppRecordNavigation.$objs.icSearch.$::contenttip as pcSearchContentTip
+End If
+Calculate $cinst.$objs.ppRecordNavigation.$objs.inSearchCount.$visible as pbDisplaySearch
+
+Quit method
+;  Omnis cannot have dynamically set column attributes     ;; making a data grid of no use
+While pcDisplayCols<>''
+	Calculate lcColumnParsing as strtok(nam(pcDisplayCols),';')
+	While lcColumnParsing<>''
+		Calculate lcColName as strtok(nam(lcColumnParsing),',')
+		Calculate lnListColNo as strtok(nam(lcColumnParsing),',')
+		Calculate lnColWidth as strtok(nam(lcColumnParsing),',')
+		Calculate lcColJst as strtok(nam(lcColumnParsing),',')
+		
+		Calculate lnColNo as lnColNo+1
+		Calculate $cinst.$objs.ilDisplayRecords.$currentcolumn as lnColNo
+		If lcColName<>''
+			Calculate $cinst.$objs.ilDisplayRecords.$columnname as lcColName
+		End If
+		If lnListColNo>0
+			Calculate $cinst.$objs.ilDisplayRecords.$columndatacol as lnListColNo
+		End If
+		If lnColWidth
+			Calculate $cinst.$objs.ilDisplayRecords.$columnwidth as lnColWidth
+		End If
+		If lcColJst<>''
+			Calculate $cinst.$objs.ilDisplayRecords.$columnjst as [lcColJst]
+		End If
+	End While
+End While

@@ -1,0 +1,86 @@
+Do lrReturn.$cols.$add('ApplescriptResult',kCharacter,kSimplechar,255)
+Do lrReturn.$cols.$add('ApplescriptError',kCharacter,kSimplechar,255)
+
+If pos(kDq,pcMessage)
+	;  RSM added this 30 JAN 2017 as kDq in message produced an applescript error     ;; although it didn't stop the action from working.
+	Calculate pcMessage as replaceall(pcMessage,kDq,con(kSq,kSq))
+End If
+
+Begin text block
+
+;  set variables to take our inputs
+;  Text: set theSubject to "[pcSubject]" (Platform newline)
+;  Text: set theText to "[pcMessage]" (Platform newline)
+;  If pcSenderAddress<>''
+;  Text: set theSender to "[pcSenderAddress]" (Platform newline)
+;  End If
+
+Text: {tell application "Mail"} (Platform newline)
+
+;  syntax
+Text: {set }
+;  variable name
+Text: {theNewMessage }
+;  syntax
+Text: {to }
+Text: {make }
+Text: {new outgoing message }
+;  syntax
+Text: {with }
+;  Text: properties {subject:theSubject, content:theText     ;; using variables - this seemed to crash Mail
+Text: {properties {subject:"[pcSubject]", content:"[pcMessage]"}
+If pcSenderAddress<>''
+	;  this does not seem to make any difference - only the default sender is presented by Mail
+	;  account name in Mail, raw email address - it makes no difference
+	;  31 JAN 2017 - worse still, it is now crashing Mail     ;; at least it is in the form   Rob OmnisWorld - rob@omnisworld.org
+	
+	;  TRICK:  have the Mail program open and select the email account you want to have be the sender of these messages.
+	
+	;  Text: , sender:theSender     ;; using AppleScript variables
+	;  Text: , sender:"[pcSenderAddress]"     ;; using our param directly
+End If
+If pcSenderName<>''
+	;  Text: , message signature:"[pcSenderName]"
+End If
+Text: {, visible:true}} (Platform newline)
+Text: (Platform newline)
+
+;  Text: set sender of theNewMessage to "Rob OmnisWorld " (Platform newline)
+
+Text: {tell theNewMessage} (Platform newline)
+
+Text: {make }
+Text: {new }
+Text: {to recipient }
+Text: {at end of  }
+Text: {to recipients }
+Text: {with }
+Text: {properties {address:"[pcRecipient]"}} (Platform newline)
+
+If pcEmailCC<>''
+	Text: {make }
+	Text: {new }
+	Text: {cc recipient }
+	Text: {at end of  }
+	Text: {cc recipients }
+	Text: {with }
+	Text: {properties {address:"[pcEmailCC]"}} (Platform newline)
+End If
+
+Text: {end tell} (Platform newline)
+
+If pbActivate
+	;  brings Mail to the front
+	Text: {activate} (Platform newline)
+End If
+
+Text: {end tell} (Platform newline)
+End text block
+Get text block lcApplescript
+
+Do $root.$runapplescript(lcApplescript,lrReturn.ApplescriptResult,lrReturn.ApplescriptError)
+If lrReturn.ApplescriptError<>''
+	Breakpoint
+End If
+
+Quit method lrReturn

@@ -1,0 +1,8 @@
+Do llPrivsUsedInThisForm.$cols.$add('permission',kCharacter,kSimplechar,100)
+Do llPrivsUsedInThisForm.$cols.$add('colName',kCharacter,kSimplechar,100)
+
+Do llPrivsUsedInThisForm.$add('rfg_insert','canInsert')
+Do llPrivsUsedInThisForm.$add('rfg_delete','canDelete')
+Do llPrivsUsedInThisForm.$add('rfg_update','canEdit')
+
+Do $cinst.$setPermissions(llPrivsUsedInThisForm)     ;; irUserRights

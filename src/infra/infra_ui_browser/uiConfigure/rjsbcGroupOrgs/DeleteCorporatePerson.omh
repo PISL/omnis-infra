@@ -1,0 +1,17 @@
+If ilCorporatePerson.$line>0
+	No/Yes message Are you sure you want to delete this record? {[ilCorporatePerson.CPN_EMAIL]}
+	If flag false
+		Quit method
+	End If
+	
+	If ilCorporatePerson.action='I'
+		;  then this record is in memory only and doesn't need to be deleted from server
+	Else
+		Do ilDeleteCorpPerson.$add()
+		Calculate ilDeleteCorpPerson.$line as ilDeleteCorpPerson.$linecount
+		Do ilDeleteCorpPerson.$assignrow(ilCorporatePerson)
+	End If
+	
+	Do ilCorporatePerson.$remove(ilCorporatePerson.$line)
+	Calculate ilCorporatePerson.$line as 0
+End If

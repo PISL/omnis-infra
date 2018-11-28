@@ -1,0 +1,9 @@
+;  Breakpoint
+
+Do irChosenTemplate.$update() Returns lbOK     ;; this will just change the IMT_LAST_USED timestamp
+
+If lbOK
+	Do ilTemplates.$merge(irChosenTemplate,kTrue,kFalse,kFalse)
+End If
+
+Do $cinst.$saveData()

@@ -1,0 +1,10 @@
+Do irExtOrg.$clear()
+Do irExtOrg.$fetchInternalCode(pcCustomerCode,pcSupplierCode)
+Calculate irOrigExtOrg as irExtOrg
+
+Do irOrglink.$clear()
+Do irOrglink.$fetchCompound(irExtOrg.EO_SEQ)
+Calculate irOrigOrgLink as irOrglink
+
+Do prOrg.$assignrow(irExtOrg)     ;; return result to calling object
+Do prSuppCustCodes.$assignrow(irOrglink)     ;; return result to calling object

@@ -1,0 +1,5 @@
+Do $cinst.$objs.ilData.$clearexceptions()
+Calculate $cinst.$objs.ilData.$objs.RFL_CLASS.[ilData.$line].$backcolor as kGray
+Calculate $cinst.$objs.ilData.$objs.RFL_VALUE.[ilData.$line].$backcolor as kGray
+
+Do inherited

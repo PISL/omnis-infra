@@ -1,0 +1,5 @@
+Calculate inPrevFormID as pPrevFormID
+If not(inPrevFormID)
+	JavaScript: formName = sessionStorage.getItem("currentForm");
+	Calculate icPrevForm as mid(formName,1,pos("_",formName)-1)
+End If

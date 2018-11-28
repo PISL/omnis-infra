@@ -1,0 +1,71 @@
+;  Breakpoint
+Calculate icDisplayMessage as ''
+
+Do trCurrUser.$validate(pcID,pcPW)
+If trCurrUser.USR_SEQ>0&$ctask.trCurrUser.USR_ACTIVE
+	;  correctly identified
+	If trCurrUser.USR_AC_EXPIRES<#D
+		Do $ctask.toStrings.$StringTableEntry('MSG_LOGINACEXPIRED',icDisplayMessage,'account has expired')
+	Else
+		Calculate lbLoginOK as kTrue
+		
+		;  does the app allow users to open multiple browser windows
+		If tConstants.allowMultipleForms
+			;  now create a session pool for this user
+			;  Breakpoint
+			Calculate lcPoolName as con(upp(pcID),$ctask.$connectionid)
+			Do $itasks.[tcCurrentLibrary].$OpenSessionPool(lcPoolName,tlDatabases.Host,pcID,pcPW,tlDatabases.DAM,2) Returns lbOK     ;; new sessions will be added as necessary
+			If lbOK
+				Do $setVar('icPoolName',lcPoolName)
+			Else
+				;  unable to create a new session pool
+				Quit method kFalse
+			End If
+		Else
+			;  app will use traditional one session pool functionality
+		End If
+		
+		;  Do trLogAccess.$clear()     ;; do not clear!  the remote task has inserted the users IP address into trLogAccess.ULA_IP_ADDRESS
+		Calculate trLogAccess.ULA_USR_REF as $ctask.trCurrUser.USR_SEQ
+		Calculate trLogAccess.ULA_LOGIN as $ServerTime()
+		;  Calculate trLogAccess.ULA_IP_ADDRESS as $ctask.$clientaddress
+		Do trLogAccess.$update() Returns lbOK     ;; the uaLogAccess record is now created in the remote task $construct
+		;  get the ecoaccountingmodule session ID     ;; ### GRS 12/11/14 API call with hardcoded values, not implementing employee registration at this point
+		;  Do $DefineList(lrUser,'infra.tuaUsers')
+		;  Calculate lrUser.USR_NAME as 'admin'
+		;  Calculate lrUser.USR_HASHPASS as 'admin'
+		;  Do lrUser.$Login()
+		;  Calculate $ctask.tcSessionID as lrUser.icID
+	End If
+Else If $ctask.trCurrUser.USR_SEQ>0&isclear(ctask.trCurrUser.USR_ACTIVE)
+	Do $ctask.toStrings.$StringTableEntry('MSG_LOGININVALID',icDisplayMessage,'invalid account')
+	
+Else
+	;  2015-01-19 GRS the login form now handles failed attempts and redirection after mutiple failures
+	;  2016-02-04 RSM - added db error information to help developer
+	Calculate lrErrorInfo as trCurrUser.irErrorSQL
+	If lrErrorInfo.NativeErrorText<>''
+		Breakpoint
+		Do toStrings.$StringTableEntry('MSG_LOGINFAILEDRETRY',lcMessage,'login failed - try again')
+		Calculate icDisplayMessage as con(lcMessage,kCr)
+		Do toStrings.$StringTableEntry('str_dbissue',lcMessage,'db issue')
+		Calculate icDisplayMessage as con(icDisplayMessage,lcMessage,': ',lrErrorInfo.NativeErrorText)
+	Else If lrErrorInfo.ErrorText<>''
+		Breakpoint
+		Do toStrings.$StringTableEntry('MSG_LOGINFAILEDRETRY',lcMessage,'login failed - try again')
+		Calculate icDisplayMessage as con(lcMessage,kCr)
+		Do toStrings.$StringTableEntry('str_dbissue',lcMessage,'db issue')
+		Calculate icDisplayMessage as con(icDisplayMessage,lcMessage,': ',lrErrorInfo.ErrorText)
+	Else
+		Do toStrings.$StringTableEntry('MSG_LOGINFAILEDRETRY',icDisplayMessage,'login failed - try again')
+	End If
+	
+	Calculate lbLoginOK as kFalse
+End If
+
+Calculate pretDisplayMessage as icDisplayMessage
+
+Do $cinst.$behaviour()
+Do $cinst.$redraw()
+
+Quit method lbLoginOK

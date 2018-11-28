@@ -1,0 +1,12 @@
+;  overloaded to include the insert of the associated sysUnitSynonyms record
+
+Do $cinst.$validation() Returns lbProceed
+
+If lbProceed
+	Do $cinst.$insert__(pcIgnoreTheseErrors) Returns lbOK
+	Quit method lbOK
+Else
+	Quit method lbProceed
+End If
+
+Quit method kFalse

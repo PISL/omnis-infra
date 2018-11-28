@@ -1,0 +1,19 @@
+Do lrReturn.$cols.$add('AppleScriptResult',kCharacter,kSimplechar,255)
+Do lrReturn.$cols.$add('AppleScriptError',kCharacter,kSimplechar,255)
+
+Begin text block
+Text: {tell application "Address Book"} (Platform newline)
+Text: {    set thePerson to (first person whose id = "[pcPersonID]")} (Platform newline)
+Text: {    delete thePerson} (Platform newline)
+;  application
+Text: {end tell} (Platform newline)
+End text block
+Get text block lcApplescript
+
+Do $root.$runapplescript(lcApplescript,lrReturn.AppleScriptResult,lrReturn.AppleScriptError)
+
+If lrReturn.AppleScriptResult=''&lrReturn.AppleScriptError=''
+	Quit method kTrue
+End If
+Calculate pReturnError as lcApplescriptError
+Quit method kFalse

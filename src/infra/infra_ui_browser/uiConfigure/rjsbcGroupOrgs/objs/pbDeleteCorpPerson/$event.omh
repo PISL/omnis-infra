@@ -1,0 +1,12 @@
+On evClick
+	Calculate icDisplayMessage as ''
+	
+	Do ilDeleteCorpPerson.$add()
+	Calculate ilDeleteCorpPerson.$line as ilDeleteCorpPerson.$linecount
+	Do ilDeleteCorpPerson.$assignrow(ilCorporatePerson)
+	
+	Do ilCorporatePerson.$remove(ilCorporatePerson.$line)
+	Calculate ilCorporatePerson.$line as 0
+	
+	Do $cinst.$behaviour()
+	Do $cinst.$redraw()

@@ -1,0 +1,4 @@
+If inLastSchemaCol>0
+	Calculate $cinst.$objs.PagedPane.$objs.ilSchemaCols.$objs.pbSelected.[inLastSchemaCol].$buttoncolor as kColorDefault     ;; kWhite  or pick(mod(ilSchemaCols.$line,2),kWhite,rgb(238,238,238))
+End If
+Calculate $cinst.$objs.PagedPane.$objs.ilSchemaCols.$objs.pbSelected.[ilSchemaCols.$line].$buttoncolor as kCyan

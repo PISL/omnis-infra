@@ -1,0 +1,21 @@
+;  check if the worker is still running and if it is, restart the timer, otherwise close this instance
+Switch icWorkerType
+	Case 'SMTP'
+		If iorEmail.$state=kWorkerStateRunning
+			;  if the worker is still running, let's wait another timeout
+			Do iorTimeout.$starttimer()
+		Else
+			Do $cinst.$close()
+		End If
+		
+	Case 'PDF'
+		;  as the PDF Device is not a worker, we can't check its $state
+		;  so assume 5 minutes has been enough time to complete it
+		Do $cinst.$close()
+		
+	Case 'HTTP','FTP','IMAP','HASH','CRYPTO'
+		Breakpoint {this is  a stub that will need extending for any of these workers}
+		
+	Default
+		Do $cinst.$close()
+End Switch

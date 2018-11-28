@@ -1,0 +1,57 @@
+;  create the SQL for all differences excluding any new records on either side
+
+;  create the prefix for the where clause comparison columns (tablename + ".")
+;  NB.  Omnis does this automatically in $selectnames() but we need to do it manually for "where" clause
+Calculate lcLocalTable as con($cinst.$servertablenames,'.')
+Calculate lcRemoteTable as con(pList.$servertablenames,'.')
+
+Sta: {with localdata as (}
+;  get the local data
+Sta: {select [con(lcLocalTable,replaceall(icKeyCols,',',con(', ',lcLocalTable)))], [con(lcLocalTable,replaceall(icComparisonCols,',',con(', ',lcLocalTable)))]}
+Sta: {from [$cinst.$servertablenames], [pList.$servertablenames]}
+;  prefix the columns with the local table name
+Sta: {where ([con(lcLocalTable,replaceall(icKeyCols,',',con(', ',lcLocalTable)))])}
+;  prefix the columns with the remote table name
+Sta: {= ([con(lcRemoteTable,replaceall(icKeyCols,',',con(', ',lcRemoteTable)))])}
+Sta: {)}
+Sta: {, remotedata as (}
+;  get the local data
+Sta: {select [con(lcRemoteTable,replaceall(icKeyCols,',',con(', ',lcRemoteTable)))], [con(lcRemoteTable,replaceall(icComparisonCols,',',con(', ',lcRemoteTable)))]}
+Sta: {from [$cinst.$servertablenames], [pList.$servertablenames]}
+;  prefix the columns with the local table name
+Sta: {where ([con(lcLocalTable,replaceall(icKeyCols,',',con(', ',lcLocalTable)))])}
+;  prefix the columns with the remote table name
+Sta: {= ([con(lcRemoteTable,replaceall(icKeyCols,',',con(', ',lcRemoteTable)))])}
+Sta: {)}
+
+Sta: {select [$cinst.$selectnames()], 'local'::text as server}
+;  join to
+Sta: {from [$cinst.$servertablenames],}
+;  ref: "with data" clause
+Sta: {( select * from localdata}
+;  subtract remote data from local data
+Sta: {except}
+Sta: {select * from remotedata}
+Sta: {) localdiffs}
+;  prefix the columns with the table name
+Sta: {where ([con(lcLocalTable,replaceall(icKeyCols,',',con(', ',lcLocalTable)))])}
+;  prefix the columns with the alias name
+Sta: {= ([con('localdiffs.',replaceall(icKeyCols,',',', localdiffs.'))])}
+
+Sta: {union}
+
+Sta: {select [pList.$selectnames()], 'remote'::text as server}
+;  join to
+Sta: {from [pList.$servertablenames],}
+Sta: {( select * from remotedata}
+;  subtract localdata from remotedata
+Sta: {except}
+Sta: {select * from localdata}
+Sta: {) remotediffs}
+
+;  prefix the columns with the table name
+Sta: {where ([con(lcRemoteTable,replaceall(icKeyCols,',',con(', ',lcRemoteTable)))])}
+;  prefix the columns with the alias name
+Sta: {= ([con('remotediffs.',replaceall(icKeyCols,',',', remotediffs.'))])}
+
+Sta: {order by server, [icKeyCols]}

@@ -1,0 +1,14 @@
+;  Begin reversible block
+;  If ilSearch1.GO_SEQ>0
+;  Calculate trGroupOrg.GO_SEQ as ilSearch1.GO_SEQ
+;  End If
+;  End reversible block
+Calculate icSearch as ''
+
+Do ilDisplayRecords.$fetchOurProducts()
+
+Do irCurrentRecord.$clear()
+Do irInternalData.$clear()
+Do irExtOrg.$clear()
+
+Do $cinst.$behaviour()

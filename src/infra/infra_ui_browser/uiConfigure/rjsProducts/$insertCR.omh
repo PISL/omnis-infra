@@ -1,0 +1,6 @@
+Calculate inCurrentTab as 1
+Calculate $cinst.$objs.TabControl_PRD.$currenttab as inCurrentTab
+
+Do inherited
+
+Do $cinst.$setcurfield('PRD_INT_PRODCODE',kTrue)

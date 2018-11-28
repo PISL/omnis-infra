@@ -1,0 +1,39 @@
+Load error handler $DummyErrorHandler     ;; prevent errors that arise in this method to trigger itself again
+Calculate lnErrorCode as #ERRCODE
+If lnErrorCode>0
+	Calculate lcError as con('runtime error no: ',#ERRCODE,kCr,#ERRTEXT)
+	Do method $ProcedureStack Returns lcDiagnosticInfo
+	;  Calculate llStack as sys(192)     ;; method stack
+	;  While $Loop(llStack)
+	;  If llStack.$line>1     ;; line 1 is this method which we want to ignore in the message
+	;  Calculate llParams as llStack.params
+	;  Calculate lcParams as ''
+	;  While $Loop(llParams)
+	;  Calculate lcParams as con(lcParams,pick(lcParams<>'','',kCr),llParams.name,' = ',llParams.value)
+	;  End While
+	;  Set reference liClassItem to llStack.classitem
+	;  Calculate lcDiagnosticInfo as con(lcDiagnosticInfo,pick(lcDiagnosticInfo<>'','',kCr),liClassItem.$name(),'  ',llStack.object,'  mthd:',llStack.method,'  ln:',llStack.line,'  ',llStack.linetext)
+	;  End If
+	;  End While
+	
+	;  If lnErrorCode=kerrBadnotation
+	;  ignore for now     ;; $DynamicSession triggers this error
+	;  Breakpoint
+	;  SEA continue execution
+	;  Else
+	Send to trace log {[$cmethod().$name]:  [lcError]   [lcDiagnosticInfo]}
+	If sys(2)=17
+		;  dont email from developer version
+		Breakpoint {[lcError]}
+	Else
+		If trCurrUser.$colcount>0
+			Calculate lcUserName as con(' - ',trCurrUser.USR_NAME)
+		Else
+			Calculate lcUserName as con(' - console')
+		End If
+		
+		Do $SendEmail(tConstants.EmailAddressWebmaster,con(tcCurrentLibrary,' Web App ( runtime) Error',lcUserName),con(lcError,kCr,kCr,lcDiagnosticInfo),#NULL,#NULL,#NULL,#NULL)
+		Do $root.$itasks.[tcCurrentLibrary].$LogWebError(con(tcCurrentLibrary,' Web runtime Error'),con(lcError,kCr,kCr,lcDiagnosticInfo)) Returns tConstants
+	End If
+	;  End If
+End If

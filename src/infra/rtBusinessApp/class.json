@@ -1,0 +1,83 @@
+{
+	"classtype": "kRemoteTask",
+	"internalversion": 20,
+	"superclass": "rtSuper",
+	"nextident": 1,
+	"tvardefs": [
+		{
+			"name": "tlAuthorisedForms",
+			"order": 4,
+			"type": "kList",
+			"subtype": "",
+			"sublen": 0
+		},
+		{
+			"name": "trChangingForm",
+			"order": 3,
+			"type": "kRow",
+			"subtype": "",
+			"sublen": 0
+		},
+		{
+			"name": "trCurrentForm",
+			"order": 6,
+			"type": "kRow",
+			"subtype": "",
+			"sublen": 0
+		},
+		{
+			"name": "trFormat",
+			"order": 12,
+			"type": "kRow",
+			"subtype": "",
+			"sublen": 0
+		},
+		{
+			"name": "trParameters",
+			"order": 8,
+			"type": "kRow",
+			"subtype": "",
+			"sublen": 0
+		}
+	],
+	"cvardefs": [
+
+	],
+	"ivardefs": [
+		{
+			"name": "ilRemoteFormsOpen",
+			"order": 1,
+			"type": "kList",
+			"subtype": "",
+			"sublen": 0
+		}
+	],
+	"properties": {
+		"basehttpresponseheaders": "",
+		"collectperformancedata": false,
+		"componenttype": "kCompStoreHidden",
+		"createdate": "2017-10-27 11:20:30",
+		"desc": "",
+		"editor": "",
+		"editordata": "",
+		"external": true,
+		"issupercomponent": false,
+		"localtestdata": "",
+		"localtime": true,
+		"maxtime": 0,
+		"maxusers": 0,
+		"moddate": "2018-11-27 14:10:34",
+		"restful": false,
+		"restfulapiname": "",
+		"showascheckedout": false,
+		"stringtable": "",
+		"timeout": 15,
+		"userinfo": "",
+		"version": "2",
+		"webservice": ""
+	},
+	"inheritedproperties": [
+		"designtaskname",
+		"componenticon"
+	]
+}

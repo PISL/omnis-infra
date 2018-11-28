@@ -1,0 +1,14 @@
+;  Return true if this form has handled the shortcut key
+
+
+Switch pIdent
+	Case 1201
+		If ilDisplayRecords.$line>0&ilDisplayRecords.reportCode<>''     ;; copied from $behaviour()
+			Do $cinst.$initPrint()
+		End If
+		Quit method kTrue     ;; tell the parent that we've dealt with it
+		
+	Default
+		Quit method kFalse
+		
+End Switch

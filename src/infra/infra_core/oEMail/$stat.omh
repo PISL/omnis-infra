@@ -1,0 +1,4 @@
+;  find out how many e-mail messages are waiting to be retrieved
+Calculate icEmailProtocolStatus as ''
+POP3Stat (ccInServer,ccInUsername,ccInPassword,'$MailProtocolLog') Returns lMailCount
+Quit method lMailCount

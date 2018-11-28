@@ -1,0 +1,40 @@
+
+;  take the result entered by the user and convert to date values
+If pos('-',icUserInput)
+	Calculate lcFrom as mid(icUserInput,1,pos('-',icUserInput)-1)
+	Calculate lcTo as mid(icUserInput,pos('-',icUserInput)+1,50)
+	Calculate ibExactDate as kFalse
+Else     ;; no hyphen so assume it is an exact date the user wants
+	Calculate lcFrom as icUserInput
+	Calculate ibExactDate as kTrue
+End If
+
+;  validate the entries
+If isclear(replace(lcFrom,' ',''))     ;; nothing entered
+	Calculate idFrom as ''     ;; clear any previous date and continue
+Else     ;; assign idFrom and Omnis will reject unrecognised date formats
+	Calculate idFrom as dat(replace(lcFrom,' ',''))
+	If isclear(idFrom)
+		Do $cinst.$clientcommand("okcancelmessage",row(con('"',lcFrom,'" ',$cell($cinst.clLabels,'objName','msg_invaliddate','label')),'Error','$jsOK'))
+		Quit method kFalse
+	End If
+End If
+
+If isclear(replace(lcTo,' ',''))
+	Calculate idTo as ''     ;; clear it and continue
+Else
+	Calculate idTo as dat(replace(lcTo,' ',''))
+	If isclear(idTo)
+		Do $cinst.$clientcommand("okcancelmessage",row(con('"',lcTo,'" ',$cell($cinst.clLabels,'objName','msg_invaliddate','label')),'Error','$jsOK'))
+		Quit method kFalse
+	End If
+End If
+
+If isclear(idFrom)|isclear(idTo)
+	;  that's OK
+Else If idFrom>idTo
+	Do $cinst.$clientcommand("okcancelmessage",row($cell($cinst.clLabels,'objName','msg_invaliddaterange','label'),'Error','$jsOK'))
+	Quit method kFalse
+End If
+
+Quit method kTrue

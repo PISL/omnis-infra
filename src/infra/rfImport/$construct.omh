@@ -1,0 +1,51 @@
+;  Enter your initialization code here
+Set reference irefParent to $cinst.$container
+
+;  prepare the file uploader
+Do ilUploadMime.$cols.$add('name',kCharacter,kSimplechar,50)
+Do ilUploadMime.$cols.$add('value',kCharacter,kSimplechar,255)
+
+Do irFileUpload.$cols.$add('mime',kList)
+Do irFileUpload.$cols.$add('taskVarName',kCharacter,kSimplechar,100)
+Calculate irFileUpload.mime as ilUploadMime
+Calculate irFileUpload.taskVarName as nam(tbinFileUpload)
+
+Do ilDataCols.$cols.$add('data',kCharacter,kSimplechar,255)
+Do ilDataCols.$cols.$add('include',kBoolean)
+
+Do ilTemplateMenu.$cols.$add('colText',kCharacter,kSimplechar,50)
+Do ilTemplateMenu.$cols.$add('colEnabled',kBoolean)
+Do ilTemplateMenu.$cols.$add('colCommandId',kNumber,k0dp)
+Do ilTemplateMenu.$cols.$add('colMenu',kList)
+
+Calculate ilMenuHier as ilTemplateMenu
+
+Do toStrings.$StringTableEntry('rm_notemplate',lcMessage,'No template')
+Do ilTemplateMenu.$add(lcMessage,kTrue,1000)
+Do toStrings.$StringTableEntry('rm_templates',lcMessage,'templates')
+Do ilTemplateMenu.$add(lcMessage,kTrue,1,ilMenuHier)
+
+Do ilErrors.$addcols('line',kInteger,k32bitint,,'message',kCharacter,kSimplechar,255)
+
+
+Do ilSepDec.$cols.$add('char',kCharacter,kSimplechar,1)
+Do ilSepDec.$add('.')
+Do ilSepDec.$add(',')
+
+Do ilSepThou.$cols.$add('display',kCharacter,kSimplechar,5)
+Do ilSepThou.$cols.$add('char',kCharacter,kSimplechar,1)
+Do ilSepThou.$add(',',',')
+Do ilSepThou.$add('.','.')
+Do ilSepThou.$add('Space',' ')
+Do ilSepThou.$add("'","'")
+Do ilSepThou.$add('None','')
+
+;  Calculate icMultiListAlignmentMethod as 'VERTCELL'
+;  Calculate icMultiListAlignmentMethod as 'VERTCELL'
+Calculate inListDisplayQuantum as 19
+
+Do $cinst.$setUserPrompt()
+
+Do irefParent.$initImport()
+
+Calculate inVscrollMax as ilSchemaCols.$linecount/inListDisplayQuantum     ;; inVscrollPos

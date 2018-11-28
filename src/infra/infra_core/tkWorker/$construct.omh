@@ -1,0 +1,48 @@
+;  Enter your initialization code here
+;  caller should check ibWorkerOK before proceeding
+;  if the email worker doesn't close this instance, the timer will in 5 minutes
+If isclear(pcCurrentLibrary)
+	;  Breakpoint {this object is in infra so it must be given the active application library}
+End If
+
+Calculate tcCurrentLibrary as pcCurrentLibrary
+Do prefTask.$GetVar(nam(tConstants)) Returns tConstants
+Do prefTask.$GetVar(nam(tlDatabases)) Returns tlDatabases
+Do prefTask.$GetVar(nam(irConfigFile)) Returns irConfigFile
+Do prefTask.$GetVar(nam(trGroupOrg)) Returns trGroupOrg
+Do prefTask.$GetVar(nam(trCurrUser)) Returns trCurrUser
+;  get a session and statement for DB access
+
+Do prefTask.$DynamicSession(loSession,loStatement)
+Do $cinst.$ConnectToDb(loSession.$hostname,loSession.$username,loSession.$password,$cinst().$name,loSession.$damname,loSession.$database,loSession.$port,tFormSession,tFormStatement,0)
+;  should we check tbDbConnectionOK?
+Calculate loSession as #NULL
+
+;  we may not need the application's Startup_Task to handle error logging     ;; now we have a session/statement
+Set reference irefStartTask to $itasks.[pcCurrentLibrary].$ref
+
+;  call self-destruct every 5 minutes, $timeToClose will restart the timer if the worker is still running
+Do $objects.oTimerWorker.$newref($cinst,'$timeToClose',5) Returns iorTimeout     ;; tes
+Do iorTimeout.$starttimer()
+
+;
+Calculate icWorkerType as pcWorker
+Switch pcWorker
+	Case 'SMTP'
+		Do $libs.infra.$objects.oEmailOW3.$newref($cinst,prefTask) Returns iorEmail
+		If not(isnull(iorEmail))
+			;  good to go
+			Calculate ibWorkerOK as kTrue
+		Else
+			Calculate ibWorkerOK as kFalse
+		End If
+		
+	Case 'PDF'
+		;  the Omnis PDF Device is not an external object so doesn't need instantiating
+		
+	Case 'HTTP','FTP','IMAP','HASH','CRYPTO'
+		Breakpoint {this is  a stub that will need extending for any of these workers}
+		
+	Default
+		Breakpoint {this ain't gonna work}
+End Switch

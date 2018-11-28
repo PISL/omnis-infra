@@ -1,0 +1,11 @@
+Calculate $cinst.$objs.label_ilDisplayRecords.$text as pcLabelList
+
+Do ilDisplayRecords.$cols.$findname(pcDisplayCols) Returns liColRef
+If liColRef
+	Calculate $cinst.$objs.ilDisplayRecords.$listcolumn as liColRef.$ident
+Else
+	Breakpoint
+	Calculate $cinst.$objs.ilDisplayRecords.$listcolumn as 1
+End If
+
+Calculate $cinst.$objs.ilDisplayRecords.$dragmode as pbDragMode

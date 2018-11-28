@@ -1,0 +1,16 @@
+;  take the irCurrentRecord.PRM_SEQ and check for autosaved data
+Do $DefineList(lrSteps,'infra.tautoSave') Returns lbOK
+Calculate lrSteps.AS_TABLE_PREFIX as 'PRM'
+Calculate lrSteps.AS_PK as ilLinkedProcessModels.PP_PRM_REF
+
+If pbCheckOnly
+	Do lrSteps.$fetch_fk(lrSteps.AS_PK,'AS_PK','AS_TABLE_PREFIX = @[$cinst.AS_TABLE_PREFIX]') Returns lbOK
+	
+	If lrSteps.AS_SEQ>0
+		Quit method con(lrSteps.AS_MBY,',',lrSteps.AS_MWHEN)
+	Else
+		Quit method ''
+	End If
+Else
+	Do lrSteps.$delete_fk(lrSteps.AS_PK,'AS_PK','AS_TABLE_PREFIX = @[$cinst.AS_TABLE_PREFIX]') Returns lbOK
+End If

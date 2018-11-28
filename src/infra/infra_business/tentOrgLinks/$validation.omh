@@ -1,0 +1,39 @@
+Calculate icValidationMessage as ''
+Do ilValidation.$clear()
+
+;  at least one of these columns must be populated
+If $cinst.EOL_GO_REF>0&$cinst.EOL_EO_REF>0
+	;  no problem if both are populated
+Else If pcContext='SUPPLIER'&isnull($cinst.EOL_FINACCT_SUID)
+	Calculate lcMessage as con(lcMessage,pick(lcMessage<>'','',', '),'a SUPPLIER code must be provided')
+	Do ilValidation.$add('EOL_FINACCT_SUID_LBL','VAL_MANDATORY','a SUPPLIER code must be provided',0)
+Else If pcContext='CUSTOMER'&isnull($cinst.EOL_FINACCT_CUID)
+	Calculate lcMessage as con(lcMessage,pick(lcMessage<>'','',', '),'a CUSTOMER code must be provided')
+	Do ilValidation.$add('EOL_FINACCT_CUID_LBL','VAL_MANDATORY','a CUSTOMER code must be provided',0)
+Else If isclear(pcContext)
+	If isnull($cinst.EOL_FINACCT_SUID)&isnull($cinst.EOL_FINACCT_CUID)
+		Calculate lcMessage as con(lcMessage,pick(lcMessage<>'','',', '),'either a SUPPLIER ot CUSTOMER code must be provided')
+		Do ilValidation.$add('EOL_REFS','VAL_MANDATORY','either a SUPPLIER ot CUSTOMER code must be provided',0)
+	End If
+Else
+	If $cinst.EOL_GO_REF>0
+		;  good
+	Else
+		Calculate lcMessage as con(lcMessage,pick(lcMessage<>'','',', '),'EOL_GO_REF missing')
+		Do ilValidation.$add('EOL_GO_REF_LBL','VAL_MISSING','EOL_GO_REF missing',0)
+	End If
+	
+	If $cinst.EOL_EO_REF>0
+		;  good
+	Else
+		Calculate lcMessage as con(lcMessage,pick(lcMessage<>'','',', '),'EOL_EO_REF missing')
+		Do ilValidation.$add('EOL_EO_REF_LBL','VAL_MISSING','EOL_EO_REF missing',0)
+	End If
+End If
+
+If lcMessage<>''
+	Calculate $cinst.icValidationMessage as lcMessage
+	Quit method kFalse
+End If
+
+Quit method kTrue

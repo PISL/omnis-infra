@@ -1,0 +1,15 @@
+Do llPrivsUsedInThisForm.$cols.$add('permission',kCharacter,kSimplechar,100)
+Do llPrivsUsedInThisForm.$cols.$add('colName',kCharacter,kSimplechar,100)
+
+Do llPrivsUsedInThisForm.$add('go_AllOrgs','canViewAllOrgs')
+
+Do llPrivsUsedInThisForm.$add('go_insert_r','canInsertR')
+Do llPrivsUsedInThisForm.$add('go_delete_r','canDeleteR')
+Do llPrivsUsedInThisForm.$add('go_update','canEdit')
+Do llPrivsUsedInThisForm.$add('go_update_r','canEditR')
+;  structure
+Do llPrivsUsedInThisForm.$add('gs_insert','canInsertS')
+Do llPrivsUsedInThisForm.$add('gs_update','canEditS')
+Do llPrivsUsedInThisForm.$add('gs_delete','canDeleteS')
+
+Do $cinst.$setPermissions(llPrivsUsedInThisForm)     ;; irUserRights

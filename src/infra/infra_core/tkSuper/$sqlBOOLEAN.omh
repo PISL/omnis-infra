@@ -1,0 +1,12 @@
+
+If $cparmcount<1
+	Breakpoint {need to pass a parameter to this routine}
+End If
+
+If pos(low(pValue),'yes`true`ktrue')>0|int(pValue)=kTrue     ;; v70501 - expanded to allow more options of what kTrue can be. DDS
+	Calculate queryValue as "TRUE"
+Else
+	Calculate queryValue as "FALSE"
+End If
+
+Quit method queryValue

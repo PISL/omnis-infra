@@ -1,0 +1,17 @@
+;  this method relies on a sqlLink to sfinInvoiceOutH
+Do $cinst.$ImmediateSession(loSession,loStatement) Returns lbImmediateSession
+If lbImmediateSession
+	Do $cinst.$SetSession(loSession,loStatement)
+Else If not(ibGoodConnectionToDb)
+	Quit method kFalse
+End If
+
+Do $cinst.$Sql(,con(" where FOH_DATE between '",dat(pdFrom,'CY-M-D'),"' and '",dat(pdTo,'CY-M-D'),"' and FOH_GO_REF = ",trGroupOrg.GO_SEQ),0,0)     ;; only load the models with the latest version number for the current Group Org
+
+Do $cinst.$executesqlandfetch() Returns lbOK
+If lbImmediateSession
+	Do $cinst.$SetSession(#NULL,#NULL,kTrue)
+End If
+
+Do $cinst.$sort($ref.FOH_DATE,0)
+Quit method lbOK

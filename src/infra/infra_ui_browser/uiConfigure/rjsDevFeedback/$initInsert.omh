@@ -1,0 +1,10 @@
+;  initialise irCurrentRecord for insert
+Do irCurrentRecord.$clear()
+Calculate irCurrentRecord.SF_CLASS as ilClasses.code
+Calculate irCurrentRecord.SF_CLASS_VSN as $classes.[ilClasses.class].$version
+Calculate irCurrentRecord.SF_TYPE as ''
+Calculate irCurrentRecord.SF_FROM as $ctask.trCurrUser.USR_NAME
+
+Calculate ilFeedbackType.$line as 1
+Calculate ilResponseType.$line as 1
+Calculate ilDisplayRecords.$line as 0

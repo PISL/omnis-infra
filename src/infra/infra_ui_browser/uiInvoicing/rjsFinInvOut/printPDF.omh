@@ -1,0 +1,28 @@
+Calculate iPdfFilePath as ''
+
+Calculate lcdevice as $cdevice.$ident     ;; store current print destination
+Do $cdevice.$assign(kDevOmnisPDF)
+
+Calculate iPdfFilePath as "/tmp/"
+If pos(kSp,irCurrentRecord.EO_NAME)
+	Calculate iPdfFilePath as con(iPdfFilePath,"invoice_",irCurrentRecord.FOH_INV_NO,'_',mid(irCurrentRecord.EO_NAME,1,pos(kSp,irCurrentRecord.EO_NAME)-1),".pdf")
+Else
+	Calculate iPdfFilePath as con(iPdfFilePath,"invoice_",irCurrentRecord.FOH_INV_NO,'_',irCurrentRecord.EO_NAME,".pdf")
+End If
+
+Do Omnis PDF Device.$setdocinfo(iAuthor,iTitle,iSubject) Returns #F
+Do Omnis PDF Device.$settemp(kTrue,2) Returns lID
+
+Do $clib.$reports.rpInvoice.$open('*',irCurrentRecord) Returns lReportInst
+
+;  Do lReportInst.$printrecord()     ;; executed within the report class
+Do lReportInst.$endprint()
+
+Do $cdevice.$assign(lcdevice)     ;; restore print destination
+
+;  If iNewPDFWindow
+Do $cinst.$clientcommand("showpdf",row(lID))
+;  Else
+;  Do $cinst.$objs.PagedPane_REPORTS.$currentpage.$assign(2)
+;  Do $cinst.$clientcommand("assignpdf",row("HTML","toolbar=1&zoom=100",lID,20))
+;  End If

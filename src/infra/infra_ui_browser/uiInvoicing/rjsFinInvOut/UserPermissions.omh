@@ -1,0 +1,11 @@
+Do llPrivsUsedInThisForm.$cols.$add('permission',kCharacter,kSimplechar,100)
+Do llPrivsUsedInThisForm.$cols.$add('colName',kCharacter,kSimplechar,100)
+
+Do llPrivsUsedInThisForm.$add('foh_insert','canInsert')
+Do llPrivsUsedInThisForm.$add('foh_delete','canDelete')
+Do llPrivsUsedInThisForm.$add('foh_update','canEdit')
+Do llPrivsUsedInThisForm.$add('foh_idLink_add','canAddDelegateLink')
+Do llPrivsUsedInThisForm.$add('foh_idLink_del','canDeleteDelegateLink')
+Do llPrivsUsedInThisForm.$add('foh_print_inv','canPrintInvoice')
+
+Do $cinst.$setPermissions(llPrivsUsedInThisForm)     ;; irUserRights

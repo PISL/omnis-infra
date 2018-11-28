@@ -1,0 +1,28 @@
+;  ### this is english only - how do we make it international?
+If pos(':',mid(icSearch,1,4))
+	Calculate lcColumn as mid(icSearch,1,pos(':',icSearch)-1)
+	Calculate lcString as mid(icSearch,pos(':',icSearch)+1,99)
+Else
+	Calculate lcString as icSearch
+End If
+
+Switch lcColumn
+	Case 'S','I','B','N','D','V','L','U','C','O','P'
+		;  valid entries
+		Calculate lbIsValidColumn as kTrue
+	Case ''
+		;  also valid
+		Calculate lbIsValidColumn as kTrue
+	Default
+		Breakpoint
+End Switch
+
+If lbIsValidColumn
+	Do ilDisplayRecords.$searchString('count',lcString,lcColumn,ilSearch1.GO_SEQ,ilSearch2.EO_SEQ) Returns lnCount
+	If lnCount<=100     ;; ### this needs to be made configurable
+		Do ilDisplayRecords.$fetchOurProducts(#NULL,#NULL,#NULL,#NULL,#NULL,#NULL,'rfl_value,rfl_desc,rfl_number')     ;; we want to load only those products belonging to the current Group Org
+		Do ilDisplayRecords.$searchString('result',lcString,lcColumn,ilSearch1.GO_SEQ,ilSearch2.EO_SEQ)
+		
+		Do $cinst.$behaviour()
+	End If
+End If

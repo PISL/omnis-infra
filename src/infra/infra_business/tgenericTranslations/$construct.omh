@@ -1,0 +1,6 @@
+Calculate icPrefix as 'GT_'
+Calculate icPrimarykey as 'GT_SEQ'
+
+Calculate icForeignKey as 'GT_FT_REF'
+
+Do inherited

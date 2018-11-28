@@ -1,0 +1,4 @@
+On evClick     ;; Event Parameters - pRow( Itemreference )
+	Calculate icMode as 'EL'
+	Do $cinst.$behaviour()
+	Do $cinst.$redraw()

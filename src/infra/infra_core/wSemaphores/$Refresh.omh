@@ -1,0 +1,12 @@
+Do ilData.$clear()
+Do ilData.$fetch_all()
+Do ilData.$sort($ref.SMH_TABLE_PRFX,0,$ref.SMH_PKEY_I,0,$ref.SMH_PKEY_C,0)
+
+Calculate ilData.$line as 0
+While $Loop(ilData)
+	Calculate lnSeconds as ddiff(kSecond,ilData.SMH_CWHEN,#D)
+	Do toStrings.$TimeLapse(kSecond,lnSeconds) Returns ilData.duration
+End While
+
+Do $cinst.$behaviour()
+Do $cinst.$redraw()

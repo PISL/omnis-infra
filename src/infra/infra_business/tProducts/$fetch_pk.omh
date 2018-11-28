@@ -1,0 +1,68 @@
+If isclear(pnPRD_SEQ)
+	If $cinst.PRD_SEQ<>0
+		Calculate pnPRD_SEQ as $cinst.PRD_SEQ
+	Else
+		Quit method kFalse     ;; nothing to fetch on !
+	End If
+End If
+
+If tlDatabases.DAM='WebService'
+	;  pass parameters to web service
+	;  $callService (pFieldReference, row(TableClassName, CurrentMethodName, p1,...,pn) )     ;; result will be returned in pFieldReference, row() contains the parameters for the call
+	Do ioWeb.$callFetch($cinst,irErrorSQL,row($cinst.$class().$name,$cmethod().$name,row(pnPRD_SEQ),$cinst.$type,0,ilRESTextensions))
+	If ioWeb.irResponse.httpStatusCode=200
+		;  the result should be in this object     ;; however there may be a SQL error
+		If irErrorSQL.NativeErrorText<>''
+			Quit method kFalse
+		End If
+		Quit method kTrue
+	Else
+		Quit method kFalse
+	End If
+End If
+
+Do $cinst.$cols.$findname('PID_PRD_REF') Returns liColRefInternal     ;; unit price and tax band
+Do $cinst.$cols.$findname('RFL_NUMBER') Returns liColRefReference     ;; actual tax rate
+
+Do $cinst.$ImmediateSession(loSession,loStatement) Returns lbImmediateSession
+If lbImmediateSession
+	Do $cinst.$SetSession(loSession,loStatement)
+Else If not(ibGoodConnectionToDb)
+	Quit method kFalse
+End If
+
+Begin statement
+Sta: {select [$cinst.$selectnames()]}
+If liColRefInternal
+	Sta: {, [lrInternal.$selectnames()]}
+	If liColRefReference
+		Sta: {, RFL_NUMBER}
+	End If
+End If
+Sta: {from [$cinst.$servertablenames]}
+If liColRefInternal
+	If pbFetchAll
+		Sta: {left outer join [lrInternal.$servertablenames] on PID_PRD_REF = PRD_SEQ}
+	Else
+		Sta: {join [lrInternal.$servertablenames] on PID_PRD_REF = PRD_SEQ}
+	End If
+	
+	;  we can only join to VAT rate if we have joined to InternalData first
+	If liColRefReference
+		If pbFetchAll
+			Sta: {left outer join [lrReferenceLocal.$servertablenames] on PID_TAX_BAND = RFL_VALUE and RFL_CLASS = 'VAT_RATE'}
+		Else
+			Sta: {join [lrReferenceLocal.$servertablenames] on PID_TAX_BAND = RFL_VALUE and RFL_CLASS = 'VAT_RATE'}
+		End If
+	End If
+End If
+
+Sta: {where   PRD_SEQ = @[pnPRD_SEQ]}
+End statement
+
+Do $cinst.$executesqlandfetch() Returns lbOK
+If lbImmediateSession
+	Do $cinst.$SetSession(#NULL,#NULL,kTrue)
+End If
+
+Quit method lbOK

@@ -1,0 +1,73 @@
+Calculate lrAttributes as OJSON.$jsontolistorrow(trFormColours.ANAVAREA)
+For lnCount from 1 to lrAttributes.$colcount step 1
+	Calculate lcProperty as lrAttributes.$cols.[lnCount].$name
+	Calculate $cinst.$objs.app_navigation_area.$[lcProperty] as eval(lrAttributes.[lcProperty])     ;; pagedPane covering whole area
+	Calculate $cinst.$objs.app_navigation_area.$objs.app_navigation_img.$[lcProperty] as eval(lrAttributes.[lcProperty])     ;; banner image
+End For
+
+Calculate lrAttributes as OJSON.$jsontolistorrow(trFormColours.ANAVLABELS)
+For lnCount from 1 to lrAttributes.$colcount step 1
+	Calculate lcProperty as lrAttributes.$cols.[lnCount].$name
+	Calculate $cinst.$objs.icCurrentGroupOrg.$[lcProperty] as eval(lrAttributes.[lcProperty])     ;; company name
+End For
+
+Calculate lrAttributes as OJSON.$jsontolistorrow(trFormColours.ANAVLIST)
+For lnCount from 1 to lrAttributes.$colcount step 1
+	Calculate lcProperty as lrAttributes.$cols.[lnCount].$name
+	Calculate $cinst.$objs.NavMenu.$[lcProperty] as eval(lrAttributes.[lcProperty])
+	Calculate $cinst.$objs.NavMenuCascade.$[lcProperty] as eval(lrAttributes.[lcProperty])
+	Calculate $cinst.$objs.UserMenu.$[lcProperty] as eval(lrAttributes.[lcProperty])
+	Calculate $cinst.$objs.ToolsMenu.$[lcProperty] as eval(lrAttributes.[lcProperty])
+	Calculate $cinst.$objs.OrgMenu.$[lcProperty] as eval(lrAttributes.[lcProperty])
+	Calculate $cinst.$objs.icCurrentGroupOrg.$[lcProperty] as eval(lrAttributes.[lcProperty])
+End For
+
+Calculate lrAttributes as OJSON.$jsontolistorrow(trFormColours.WORKAREA)
+For lnCount from 1 to lrAttributes.$colcount step 1
+	Calculate lcProperty as lrAttributes.$cols.[lnCount].$name
+	Calculate $cinst.$objs.greyBackground.$[lcProperty] as eval(lrAttributes.[lcProperty])
+End For
+
+Calculate lrAttributes as OJSON.$jsontolistorrow(trFormColours.WORKHEADING)
+For lnCount from 1 to lrAttributes.$colcount step 1
+	Calculate lcProperty as lrAttributes.$cols.[lnCount].$name
+	Calculate $cinst.$objs.icFormHeading.$[lcProperty] as eval(lrAttributes.[lcProperty])
+	Calculate $cinst.$objs.icFormIntro.$[lcProperty] as eval(lrAttributes.[lcProperty])
+End For
+
+Calculate lrAttributes as OJSON.$jsontolistorrow(trFormColours.WORKMESSAGE)
+For lnCount from 1 to lrAttributes.$colcount step 1
+	Calculate lcProperty as lrAttributes.$cols.[lnCount].$name
+	Calculate $cinst.$objs.icDisplayMessage.$[lcProperty] as eval(lrAttributes.[lcProperty])
+End For
+
+If pos('rjsInfraRecords',$cinst.$class().$superclass)|pos('rjsInfraDetail',$cinst.$class().$superclass)
+	Calculate lrAttributes as OJSON.$jsontolistorrow(trFormColours.RNAVAREA)
+	For lnCount from 1 to lrAttributes.$colcount step 1
+		Calculate lcProperty as lrAttributes.$cols.[lnCount].$name
+		Calculate $cinst.$objs.ppRecordNavigation.$[lcProperty] as eval(lrAttributes.[lcProperty])
+	End For
+	
+	Calculate lrAttributes as OJSON.$jsontolistorrow(trFormColours.RNAVLABELS)
+	For lnCount from 1 to lrAttributes.$colcount step 1
+		Calculate lcProperty as lrAttributes.$cols.[lnCount].$name
+		Calculate $cinst.$objs.label_ilSearch1.$[lcProperty] as eval(lrAttributes.[lcProperty])
+		Calculate $cinst.$objs.label_ilSearch2.$[lcProperty] as eval(lrAttributes.[lcProperty])
+		Calculate $cinst.$objs.label_ilDisplayRecords.$[lcProperty] as eval(lrAttributes.[lcProperty])
+	End For
+	
+	Calculate lrAttributes as OJSON.$jsontolistorrow(trFormColours.RNAVLIST)
+	For lnCount from 1 to lrAttributes.$colcount step 1
+		Calculate lcProperty as lrAttributes.$cols.[lnCount].$name
+		Calculate $cinst.$objs.ilDisplayRecords.$[lcProperty] as eval(lrAttributes.[lcProperty])
+	End For
+	
+	Calculate lrAttributes as OJSON.$jsontolistorrow(trFormColours.RNAVOBJECTS)
+	For lnCount from 1 to lrAttributes.$colcount step 1
+		Calculate lcProperty as lrAttributes.$cols.[lnCount].$name
+		Calculate $cinst.$objs.icSearch.$[lcProperty] as eval(lrAttributes.[lcProperty])
+		Calculate $cinst.$objs.ilSearch1.$[lcProperty] as eval(lrAttributes.[lcProperty])
+		Calculate $cinst.$objs.ilSearch2.$[lcProperty] as eval(lrAttributes.[lcProperty])
+	End For
+	
+End If

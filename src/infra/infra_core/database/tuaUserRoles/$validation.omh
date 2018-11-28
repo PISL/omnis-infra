@@ -1,0 +1,32 @@
+Calculate icValidationMessage as ''
+Do ilValidation.$clear()
+
+If $cinst.UR_USR_REF>0
+	;  good
+Else
+	Calculate lcMessage as con(lcMessage,pick(lcMessage<>'','',', '),'UR_USR_REF missing')
+	Do ilValidation.$add('UR_USR_REF_LBL','VAL_MISSING','UR_USR_REF missing',0)
+End If
+
+If $cinst.UR_ROL_REF>0
+	;  good
+Else
+	Calculate lcMessage as con(lcMessage,pick(lcMessage<>'','',', '),'UR_ROL_REF missing')
+	Do ilValidation.$add('UR_ROL_REF_LBL','VAL_MISSING','UR_ROL_REF missing',0)
+End If
+
+;  If isnull($cinst.UR_ACTIVE)
+;  Calculate lcMessage as con(lcMessage,pick(lcMessage<>'','',', '),'UR_ACTIVE not assigned')
+;  Do ilValidation.$add('UR_ACTIVE_LBL','VAL_UNASSIGNED','UR_ACTIVE not assigned',0)
+;  End If
+If isnull($cinst.UR_DEFAULT)
+	Calculate lcMessage as con(lcMessage,pick(lcMessage<>'','',', '),'UR_DEFAULT not assigned')
+	Do ilValidation.$add('UR_DEFAULT_LBL','VAL_UNASSIGNED','UR_DEFAULT not assigned',0)
+End If
+
+If lcMessage<>''
+	Calculate icValidationMessage as lcMessage
+	Quit method kFalse
+End If
+
+Quit method kTrue

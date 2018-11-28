@@ -1,0 +1,30 @@
+Calculate icValidationMessage as ''
+Do ilValidation.$clear()
+
+If $cinst.PER_LABEL<>''
+	;  good
+	If pos('_',$cinst.PER_LABEL)
+		;  good
+	Else
+		Calculate lcMessage as con(lcMessage,pick(lcMessage<>'','',', '),'bad format for PER_LABEL - requires an _')
+		Do ilValidation.$add('PER_LABEL_LBL','VAL_LABEL_FORMAT','bad format for PER_LABEL - requires an _',0)
+	End If
+Else
+	Calculate lcMessage as con(lcMessage,pick(lcMessage<>'','',', '),'PER_LABEL missing')
+	Do ilValidation.$add('PER_LABEL_LBL','VAL_MISSING','PER_LABEL missing',0)
+End If
+
+If $cinst.PER_DESC_EN<>''
+	;  good
+Else
+	Calculate lcMessage as con(lcMessage,pick(lcMessage<>'','',', '),'Description missing')
+	Do ilValidation.$add('PER_DESC_EN_LBL','VAL_MISSING','Description missing',0)
+End If
+
+
+If lcMessage<>''
+	Calculate icValidationMessage as lcMessage
+	Quit method kFalse
+End If
+
+Quit method kTrue

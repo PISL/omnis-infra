@@ -1,0 +1,12 @@
+
+Calculate ilColumns as #NULL
+Do ilColumns.$cols.$add('SCHEMA',kCharacter,kSimplechar,100)
+Do ilColumns.$cols.$add('TABLE',kCharacter,kSimplechar,100)
+Do ilColumns.$cols.$add('COLUMN',kCharacter,kSimplechar,100)
+
+;  loop over each open library and get its schema classes' columns
+For tlTableClasses.$line from 1 to tlTableClasses.$linecount step 1
+	Do $libs.[tlTableClasses.lib].$schemas.$sendall($ref.$objs.$sendall(ilColumns.$add(con(tlTableClasses.lib,'.',$ref.$class().$name),$ref.$class().$servertablename,$ref.$name)),(left($ref.$desc,4)<>'VIEW'&left($ref.$desc,10)<>'WEBSERVICE'))
+End For
+
+Quit method ilColumns

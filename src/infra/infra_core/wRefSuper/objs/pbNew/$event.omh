@@ -1,0 +1,13 @@
+On evClick     ;; Event Parameters - pRow( Itemreference )
+	Do ilData.$add()
+	Calculate ilData.$line as ilData.$linecount
+	Do ilData.$defaults()
+	
+	If ilData.$line>1
+		Calculate ilData.[icColPrefix]CLASS as ilData.[ilData.$line-1].[icColPrefix]CLASS
+	Else
+		Calculate ilData.[icColPrefix]CLASS as ''
+	End If
+	Calculate ilData.[icColPrefix]VALUE as ''
+	Calculate ilData.[icColPrefix]DATE as #NULL
+	Do $cinst.$redraw()

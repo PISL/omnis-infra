@@ -1,0 +1,19 @@
+Switch pKey
+	Case irKeyPress.insert
+		If irUserRights.canInsert&$cinst.icMode=''
+			Do $cinst.$insertCR()
+		End If
+		
+	Case irKeyPress.edit
+		If irUserRights.canEdit&$cinst.icMode=''&irCurrentRecord.[irCurrentRecord.icPrimaryKey]>0     ;; check permissions and validity
+			Do $cinst.$editCR()
+		End If
+		
+	Case irKeyPress.delete
+		If irUserRights.canDelete&$cinst.icMode=''&irCurrentRecord.[irCurrentRecord.icPrimaryKey]>0
+			Do $cinst.$deleteCR()
+		End If
+		
+	Default
+		;  ignore
+End Switch

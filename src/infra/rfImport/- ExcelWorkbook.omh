@@ -1,0 +1,65 @@
+Do llXML.$search($ref.path='/ExcelWorkbook',1,0,0,0) Returns lbExcelXML
+If lbExcelXML
+	;  continue
+	;  which workbook?
+	Breakpoint
+	Repeat
+		Do llXML.$search($ref.path='/ExcelWorkbook/SupBook/Xct/Count',0,0,0,0) Returns lnLineForSheetCount
+		Calculate lnNoOfRowsInSheet as llXML.value
+	Until lnNoOfRowsInSheet>0|lnLineForSheetCount=0
+	If lnNoOfRowsInSheet>0
+		;  we have work to do
+		Repeat
+			Do llXML.$search($ref.path='/ExcelWorkbook/SupBook/Xct/Crn/Row',0,0,0,0) Returns lnRowFound
+			Calculate lbRowFinished as kFalse
+			Calculate lnColStart as 0
+			Calculate lnColCount as 0
+			Repeat
+				Calculate lcValue as ''
+				Calculate llXML.$line as llXML.$line+1
+				Switch llXML.path
+					Case '/ExcelWorkbook/SupBook/Xct/Crn/Row'
+						Calculate lnRowNo as llXML.value
+						If lnRowNo=0
+							Calculate llContent as ''
+						End If
+					Case '/ExcelWorkbook/SupBook/Xct/Crn/ColFirst'
+						Calculate lnColStart as llXML.value     ;; start pos
+						Calculate lnColNo as 0
+					Case '/ExcelWorkbook/SupBook/Xct/Crn/ColLast'
+						Calculate lnColCount as llXML.value
+						If lnColCount>0&llContent.$colcount>0
+							Do llContent.$add()
+							Calculate llContent.$line as llContent.$linecount
+						End If
+						
+					Case '/ExcelWorkbook/SupBook/Xct/Crn/Text'
+						Calculate lcValue as llXML.value
+						Calculate lnColNo as lnColNo+1
+						
+					Case '/ExcelWorkbook/SupBook/Xct/Crn'     ;; end of row
+						Calculate lbRowFinished as kTrue
+						
+					Case '/ExcelWorkbook/SupBook/Xct'     ;; end of sheet
+						Calculate lbRowFinished as kTrue
+						
+						
+					Default
+						Breakpoint
+						Calculate lbRowFinished as kTrue
+				End Switch
+				If llContent.$linecount=0&lcValue<>''
+					Do llContent.$cols.$add(lcValue,kCharacter,kSimplechar,255)
+				Else If llContent.$linecount>0&lcValue<>''
+					Calculate llContent.C[lnColNo] as lcValue
+				End If
+			Until lbRowFinished
+			If mod(llContent.$linecount,50)=0
+				Breakpoint
+			End If
+			If llContent.$linecount>=(lnNoOfRowsInSheet-3)
+				Breakpoint
+			End If
+			Calculate lnLastRowNo as llXML.$line
+			;  Do llXML.$search($ref.path='/ExcelWorkbook/SupBook/Xct/Count',0,0,0,0) Returns lnLineForSheetCount
+		Until llContent.$linecount>=lnNoOfRowsInSheet     ;; lnRowFound=0

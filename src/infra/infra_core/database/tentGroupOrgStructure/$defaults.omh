@@ -1,0 +1,2 @@
+Calculate $cinst.GS_GO_REF as trGroupOrg.GO_SEQ
+Calculate $cinst.GS_ACTIVE as 1

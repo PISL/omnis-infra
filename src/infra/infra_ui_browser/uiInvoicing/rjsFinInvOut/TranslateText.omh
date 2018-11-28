@@ -1,0 +1,44 @@
+;  If clLabels.$linecount=0
+;  prepare list of super class objects
+Do llSuperLabels.$cols.$add('objName',kCharacter,kSimplechar,50)
+
+Do llSuperLabels.$add('sel_customer')
+Do llSuperLabels.$add('sel_daterange')
+Do llSuperLabels.$add('msg_del_detail')
+Do llSuperLabels.$add('msg_submit_fininv')
+Do llSuperLabels.$add('disp_del_canc')
+Do llSuperLabels.$add('disp_submit_canc')
+Do llSuperLabels.$add('disp_cust_inv')
+Do llSuperLabels.$add('FOH_Heading')
+Do llSuperLabels.$add('FOH_Intro')
+Do llSuperLabels.$add('FOH_FromDelegate')
+Do llSuperLabels.$add('msg_enterdates')
+Do llSuperLabels.$add('msg_daterangeformat')
+Do llSuperLabels.$add('msg_invaliddate')
+Do llSuperLabels.$add('msg_invaliddaterange')
+Do llSuperLabels.$add('TP_ALL')
+Do llSuperLabels.$add('OTHER')
+Do llSuperLabels.$add('ilChains')
+Do llSuperLabels.$add('word_to')
+Do llSuperLabels.$add('word_from')
+
+Do $cinst.$objs.$makelist($ref.$name,$ref) Returns llLabels
+Do llLabels.$sendall($sendallref.C1.$assign(mid($sendallref.C1,1,len($sendallref.C1)-2)),isnumber(right($sendallref.C1,1))&left(right($sendallref.C1,2),1)='_')     ;; remove the "_digit" from the end of duplicated object names
+;  now we have to identify field objects with labels so we can add the tooltip to them in $assigntext
+Calculate llEntryFields as llLabels
+Do llEntryFields.$search(0)
+For llLabels.$line from 1 to llLabels.$linecount step 1
+	If left(llLabels.C1,6)='label_'
+		Do llEntryFields.$search($ref.C1=mid(llLabels.C1,7),1,0,1,0)
+	End If
+End For
+Do llEntryFields.$remove(kListKeepSelected)
+Do $cinst.$translateLabels(llLabels,llSuperLabels)
+Calculate clLabels as llLabels
+;  End If
+
+Do $cinst.$assignText(llEntryFields)     ;; get the super class to set the objects' properties
+
+;  set the strings for the JS prompt
+Calculate icDatePrompt as $cell(clLabels,'objName','msg_enterdates','label')
+Calculate icDateFormat as $cell(clLabels,'objName','msg_daterangeformat','label')

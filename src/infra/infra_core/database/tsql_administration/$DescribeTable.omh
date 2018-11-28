@@ -1,0 +1,67 @@
+Do llDictionary.$cols.$add('number',kInteger,k32bitint)
+Do llDictionary.$cols.$add('name',kCharacter,kSimplechar,100)
+Do llDictionary.$cols.$add('attnum',kInteger,k32bitint)
+Do llDictionary.$cols.$add('notnull',kBoolean)
+Do llDictionary.$cols.$add('type',kInteger,k32bitint)
+Do llDictionary.$cols.$add('primarykey',kBoolean)
+Do llDictionary.$cols.$add('uniquekey',kBoolean)
+Do llDictionary.$cols.$add('foreignkey',kCharacter,kSimplechar,100)
+Do llDictionary.$cols.$add('foreignkey_fieldnum',kInteger,k32bitint)
+Do llDictionary.$cols.$add('foreignkey',kCharacter,kSimplechar,100)
+Do llDictionary.$cols.$add('foreignkey_connnum',kInteger,k32bitint)
+Do llDictionary.$cols.$add('default',kCharacter,kSimplechar,100)
+
+;  Do $cinst.$ImmediateSession(loSession,loStatement) Returns lbImmediateSession
+;  If lbImmediateSession
+;  Do $cinst.$SetSession(loSession,loStatement)
+;  Else If not(ibGoodConnectionToDb)
+;  Quit method kFalse
+;  End If
+
+Do $cinst.$ImmediateSession(loSession,loStatement) Returns lbImmediateSession
+If lbImmediateSession
+	Do $cinst.$SetSession(loSession,loStatement)
+Else If not(ibGoodConnectionToDb)
+	Quit method kFalse
+End If
+
+Begin statement
+Sta: {SELECT f.attnum AS number,}
+Sta: {f.attname AS name,}
+Sta: {f.attnum,}
+Sta: {f.attnotnull AS notnull,}
+Sta: {pg_catalog.format_type(f.atttypid,f.atttypmod) AS type,}
+Sta: {CASE WHEN p.contype = 'p' THEN 't' ELSE 'f' END AS primarykey,}
+Sta: {CASE WHEN p.contype = 'u' THEN 't' ELSE 'f' END AS uniquekey,}
+Sta: {CASE WHEN p.contype = 'f' THEN g.relname END AS foreignkey,}
+Sta: {CASE WHEN p.contype = 'f' THEN p.confkey END AS foreignkey_fieldnum,}
+Sta: {CASE WHEN p.contype = 'f' THEN g.relname END AS foreignkey,}
+Sta: {CASE WHEN p.contype = 'f' THEN p.conkey END AS foreignkey_connnum,}
+Sta: {CASE WHEN f.atthasdef = 't' THEN d.adsrc END AS default 𯿿𯿿}
+Sta:
+Sta: {FROM pg_attribute f}
+Sta: {JOIN pg_class c ON c.oid = f.attrelid 𯿿}
+Sta: {JOIN pg_type t ON t.oid = f.atttypid 𯿿}
+Sta: {LEFT JOIN pg_attrdef d ON d.adrelid = c.oid AND d.adnum = f.attnum 𯿿}
+Sta: {LEFT JOIN pg_namespace n ON n.oid = c.relnamespace 𯿿}
+Sta: {LEFT JOIN pg_constraint p ON p.conrelid = c.oid AND f.attnum = ANY ( p.conkey ) 𯿿}
+Sta: {LEFT JOIN pg_class AS g ON p.confrelid = g.oid 𯿿𯿿}
+Sta:
+Sta: {WHERE c.relkind = 'r'::char 𯿿}
+Sta: {AND n.nspname = @[pcSchemaName]}
+Sta: {AND c.relname = @[pcTableName] 𯿿}
+Sta: {AND f.attnum > 0 𯿿}
+Sta: {ORDER BY number;}
+End statement
+
+Do $cinst.$executesqldirectandfetch(llDictionary) Returns lbOK
+;  If lbImmediateSession
+;  Do $cinst.$SetSession(#NULL,#NULL,kTrue)
+;  End If
+
+;  Quit method llDictionary
+If lbImmediateSession
+	Do $cinst.$SetSession(#NULL,#NULL,kTrue)
+End If
+
+Quit method lbOK

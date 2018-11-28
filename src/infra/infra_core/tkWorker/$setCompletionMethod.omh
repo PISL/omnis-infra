@@ -1,0 +1,3 @@
+;  pcMethodName is the method in the subclass instance to call after the worker completes, prParams is a row of parameters for the method
+Calculate icCompletionMethod as pcMethodName
+Calculate irCompletionParams as prParams

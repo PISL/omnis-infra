@@ -1,0 +1,110 @@
+Do clFromCache.$search($ref.code=pcFromCode,1,0,0,0) Returns lbFoundInCache
+If lbFoundInCache
+	Calculate lrEmailFrom as clFromCache.attributes
+Else
+	Do toValues.$initOrg('EM_SRVR_FROM',pcFromCode) Returns lrReference     ;; relies on trGroupOrg
+	If lrReference.RFO_SEQ>0
+		Do OJSON.$jsontolistorrow(lrReference.RFO_CHAR) Returns lrEmailFrom     ;; lrEmailFrom.address lrEmailFrom.name
+	Else
+		Quit method kFalse
+	End If
+End If
+
+If lrEmailFrom.$colcount>0     ;; lrEmailFrom.address lrEmailFrom.name
+	If not(lbFoundInCache)
+		;  valid JSON that was fetched from DB - put in cache
+		Do clFromCache.$add(pcFromCode,lrEmailFrom)
+	End If
+	;  SMTPSend (ccOutServer,ccOutFrom,pToAddresslist,pSubject,pBody,pCCAddresslist,pBCCAddresslist,ccOutFromName,'$MailProtocolLog',pPriority,pExtraHeaders) Returns lcEmailStatus
+	;  Begin reversible block
+	Calculate ccOutServer as toStrings.$extractEmailServer(lrEmailFrom,ccOutServer)
+	;  Do lrEmailFrom.$cols.$findname('server') Returns liColRef
+	;  If liColRef
+	;  Calculate ccOutServer as lrEmailFrom.server
+	;  End If
+	
+	Calculate ccMailFromAddress as $ctask.toStrings.$extractEmailFromAddress(lrEmailFrom,ccOutFrom)
+	;  Do lrEmailFrom.$cols.$findname('address') Returns liColRef
+	;  If liColRef
+	;  Calculate ccMailFromAddress as lrEmailFrom.address
+	;  Calculate lbFromExplicitlySet as kTrue
+	;  Else
+	;  Do lrEmailFrom.$cols.$findname('senderAddress') Returns liColRef
+	;  If liColRef
+	;  Calculate ccMailFromAddress as lrEmailFrom.senderAddress
+	;  Calculate lbFromExplicitlySet as kTrue
+	;  Else
+	;  Calculate ccMailFromAddress as ccOutFrom
+	;  End If
+	;  End If
+	
+	Calculate ccMailFromName as $ctask.toStrings.$extractEmailFromName(lrEmailFrom,ccOutFromName)
+	;  Do lrEmailFrom.$cols.$findname('name') Returns liColRef
+	;  If liColRef
+	;  Calculate ccMailFromName as lrEmailFrom.name
+	;  Else
+	;  Do lrEmailFrom.$cols.$findname('senderName') Returns liColRef
+	;  If liColRef
+	;  Calculate ccMailFromName as lrEmailFrom.senderName
+	;  Else
+	;  Calculate ccMailFromName as ccOutFromName
+	;  End If
+	;  End If
+	
+	Calculate ccSMTP_AuthenticationMethod as $ctask.toStrings.$extractEmailAuthentication(lrEmailFrom)
+	;  Do lrEmailFrom.$cols.$findname('authentication') Returns liColRef     ;; 'POP3FIRST'  'IDPASSWORD'  'LOGIN'  'SECUREPASSWORD'
+	;  If liColRef
+	;  Calculate ccSMTP_AuthenticationMethod as lrEmailFrom.authentication
+	;  End If
+	
+	Calculate ccSMTP_ID as $ctask.toStrings.$extractEmailLogin(lrEmailFrom,ccOutFrom)
+	;  Do lrEmailFrom.$cols.$findname('loginName') Returns liColRef
+	;  If liColRef
+	;  Calculate ccSMTP_ID as lrEmailFrom.loginName
+	;  Else
+	;  Calculate ccSMTP_ID as ccOutFrom
+	;  End If
+	
+	Calculate ccSMTP_PASSWORD as $ctask.toStrings.$extractEmailPassword(lrEmailFrom)
+	;  Do lrEmailFrom.$cols.$findname('loginPassword') Returns liColRef
+	;  If liColRef
+	;  Calculate ccSMTP_PASSWORD as lrEmailFrom.loginPassword
+	;  End If
+	
+	Calculate cnSecure as $ctask.toStrings.$extractEmailSecurity(lrEmailFrom)
+	;  Do lrEmailFrom.$cols.$findname('secure') Returns liColRef
+	;  If liColRef
+	;  Calculate cnSecure as lrEmailFrom.secure
+	;  End If
+	
+	Calculate ibVerifyCertificate as $ctask.toStrings.$extractEmailCertificate(lrEmailFrom)
+	;  Do lrEmailFrom.$cols.$findname('verifyCertificate') Returns liColRef
+	;  If liColRef
+	;  Calculate ibVerifyCertificate as lrEmailFrom.verifyCertificate
+	;  End If
+	
+	;  End reversible block
+	
+	;  static email to addresses for automated workflow messages
+	Calculate ccStaticTo as $ctask.toStrings.$extractEmailTo(lrEmailFrom)
+	;  Do lrEmailFrom.$cols.$findname('emailTO') Returns liColRef
+	;  If liColRef
+	;  Calculate ccStaticTo as lrEmailFrom.emailTO
+	;  End If
+	
+	Calculate ccStaticCC as $ctask.toStrings.$extractEmailCC(lrEmailFrom)
+	;  Do lrEmailFrom.$cols.$findname('emailCC') Returns liColRef
+	;  If liColRef
+	;  Calculate ccStaticCC as lrEmailFrom.emailCC
+	;  End If
+	
+	Calculate ccStaticBCC as $ctask.toStrings.$extractEmailBCC(lrEmailFrom)
+	;  Do lrEmailFrom.$cols.$findname('emailBCC') Returns liColRef
+	;  If liColRef
+	;  Calculate ccStaticBCC as lrEmailFrom.emailBCC
+	;  End If
+	
+	Quit method kTrue
+End If
+
+Quit method kFalse

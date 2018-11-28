@@ -1,0 +1,13 @@
+If ilCorporatePerson.$line>0
+	Do toStrings.$DoesDataExist(ilCorporatePerson,kFalse,'action') Returns lbDataExists
+	If lbDataExists
+		;  Do ilCorporatePerson.$assignrow(irCorporatePerson)
+	Else
+		Do ilCorporatePerson.$remove(ilCorporatePerson.$line)
+	End If
+	;  Do irCorporatePerson.$clear()
+End If
+Do ilCorporatePerson.$add()
+Calculate ilCorporatePerson.$line as ilCorporatePerson.$linecount
+Calculate ilCorporatePerson.action as 'I'     ;; insert
+;  Calculate irCorporatePerson as ilCorporatePerson

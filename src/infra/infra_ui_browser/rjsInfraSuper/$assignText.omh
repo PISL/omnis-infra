@@ -1,0 +1,55 @@
+;  called from the sub form's TranslateText method to assign the translations to the objects
+;  Quit method
+Calculate $cinst.clLabels.$line as 0
+While $Loop($cinst.clLabels)
+	Set reference lrefObj to $cinst.clLabels.objRef
+	If lrefObj
+		If $cinst.clLabels.label<>''
+			If left($cinst.clLabels.objName,11)='TabControl_'
+				Do toStrings.$StringToList($cinst.clLabels.label,'\') Returns llLabels
+				Calculate llLabels.$line as 0
+				While $Loop(llLabels)
+					Calculate lrefObj.$selectedtab as llLabels.$line
+					Calculate lrefObj.$tabtext as llLabels.C1
+				End While
+			Else If left($cinst.clLabels.objName,5)='Grid_'
+				Calculate lcLabel as $cinst.clLabels.label
+				Calculate lrefObj.$headertext as strtok('lcLabel',',')
+				Calculate lrefObj.$columnnames as lcLabel
+			Else
+				Calculate lrefObj.$text as $cinst.clLabels.label
+			End If
+		End If
+		If $cinst.clLabels.tooltip<>''
+			If left($cinst.clLabels.objName,11)='TabControl_'
+				Do toStrings.$StringToList($cinst.clLabels.tooltip,'\') Returns llLabels
+				Calculate llLabels.$line as 0
+				While $Loop(llLabels)
+					Calculate lrefObj.$selectedtab as llLabels.$line
+					Calculate lrefObj.$::tabtooltip as llLabels.C1
+				End While
+			Else
+				Calculate lrefObj.$tooltip as $cinst.clLabels.tooltip
+			End If
+			
+			If mid($cinst.clLabels.objName,1,6)='label_'
+				;  put the tooltip on the field also - that's where people expect to see it
+				;  Calculate $cinst.$objs.[mid($cinst.clLabels.objName,7,99)].$tooltip as $cinst.clLabels.tooltip
+				Do plEntryFields.$search($ref.C1=mid($cinst.clLabels.objName,7),1,0,1,1)
+				Calculate plEntryFields.$line as 0
+				While $Loop(plEntryFields,kTrue)
+					Calculate plEntryFields.C2.$tooltip as $cinst.clLabels.tooltip
+				End While
+			End If
+		End If
+		If $cinst.clLabels.text<>''     ;; for radio groups    clLabels
+			;  Breakpoint
+			;  because of tghe way our generic code is written, a label for RG_xxx and the object RG_xxx
+			;  will have the same content in the clLabels.text column
+			;  however the text column ONLY applies to RG_ objects     ;; not their labels!
+			If mid($cinst.clLabels.objName,1,3)='RG_'
+				Calculate lrefObj.$text as $cinst.clLabels.text
+			End If
+		End If
+	End If
+End While

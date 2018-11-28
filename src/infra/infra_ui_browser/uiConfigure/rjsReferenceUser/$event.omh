@@ -1,0 +1,7 @@
+On evLayoutChanged
+	Do inherited
+	If inBreakpoint<=375
+		Calculate $cinst.$objs.TabControl_RFU.$fontsize as 6
+	Else
+		Calculate $cinst.$objs.TabControl_RFU.$fontsize as 8
+	End If

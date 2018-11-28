@@ -1,0 +1,26 @@
+On evClick
+	If inCurrentTab=cnTabStructure
+		;  stay on this tab
+		Do irCurrentStructure.$fetch_pk()
+		Do ilStructureType.$search($ref.RFO_VALUE=irCurrentStructure.GS_TYPE,1,0,0,0)
+	Else
+		Calculate $cinst.$objs.TabControl_GO.$currenttab as 1
+		Calculate $cinst.$objs.PagedPane.$currentpage as 1
+		
+		;  get the internal name record
+		Do irCurrentOrgName.$fetchInternalName(irCurrentRecord.GO_SEQ)
+		
+		Calculate irOriginalRecord as irCurrentRecord
+		Calculate irOriginalName as irCurrentOrgName
+		
+		;  if we are editing because of an error when registering, keep the corpPersons that have been entered
+		If isclear(irCurrentRecord.GO_MEC_ID)&ilCorporatePerson.$linecount>0
+			Calculate ilCorpPersonCopy as ilCorporatePerson
+		End If
+	End If
+	
+	Calculate icDisplayMessage as ''
+	Calculate icMode as 'E'     ;; edit
+	
+	Do $cinst.$behaviour()
+	Do $cinst.$setcurfield('GO_NAME_FULL')

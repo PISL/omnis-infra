@@ -1,0 +1,14 @@
+Do $cinst.$ProcedureStack() Returns lcDiagnosticInfo
+If trCurrUser.$colcount>0
+	Calculate lcUserName as con(' - ',trCurrUser.USR_NAME)
+Else
+	Calculate lcUserName as con(' - console')
+End If
+If len(trVirtualHost.PGS_URL)     ;; this will be true for HTMLp
+	Do $SendEmail(tConstants.EmailAddressWebmaster,con(tcCurrentLibrary,' Web App Error (',trVirtualHost.PGS_URL,'): ',pSubjectSuffix,lcUserName),con(pMessage,kCr,kCr,lcDiagnosticInfo))
+	Do $root.$itasks.[tcCurrentLibrary].$LogWebError(con(tcCurrentLibrary,' Web App Error (',trVirtualHost.PGS_URL,'): '),con(pMessage,kCr,kCr,lcDiagnosticInfo))     ;; removed Returnｓ tConstants 24-Jan-17  RSM
+Else
+	Do $SendEmail(tConstants.EmailAddressWebmaster,con(tcCurrentLibrary,' Web App Error: ',pSubjectSuffix,lcUserName),con(pMessage,kCr,kCr,lcDiagnosticInfo))
+	Do $root.$itasks.[tcCurrentLibrary].$LogWebError(con(tcCurrentLibrary,' Web App Error'),con(pMessage,kCr,kCr,lcDiagnosticInfo))     ;; removed Returnｓ tConstants 24-Jan-17  RSM
+End If
+;  Do $SendEmailBackground($ctask.tConstants.EmailAddressWebmaster,con($clib().$name,' Web App Error: ',pSubjectSuffix,lcUserName),con(pMessage,kCr,kCr,lcDiagnosticInfo),#NULL,#NULL,#NULL,#NULL,kTrue)

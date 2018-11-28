@@ -1,0 +1,19 @@
+Do llPrivsUsedInThisForm.$cols.$add('permission',kCharacter,kSimplechar,100)
+Do llPrivsUsedInThisForm.$cols.$add('colName',kCharacter,kSimplechar,100)
+
+;  What is particular about this form is that every user has the same privileges.  Then can alter their user configurable values.
+If 1=1
+	;  the thing is... users cannot create new configurable items, nor can they delete them.
+	;  Do irUserRights.$cols.$add('canInsert',kBoolean)
+	Do irUserRights.$cols.$add('canEdit',kBoolean)
+	;  Do irUserRights.$cols.$add('canDelete',kBoolean)
+	;  Calculate irUserRights.canInsert as kTrue
+	Calculate irUserRights.canEdit as kTrue
+	;  Calculate irUserRights.canDelete as kTrue
+Else
+	Do llPrivsUsedInThisForm.$add('rfu_insert','canInsert')
+	Do llPrivsUsedInThisForm.$add('rfu_delete','canDelete')
+	Do llPrivsUsedInThisForm.$add('rfu_update','canEdit')
+	
+	Do $cinst.$setPermissions(llPrivsUsedInThisForm)     ;; irUserRights
+End If

@@ -1,0 +1,102 @@
+Calculate $cinst.icDisplayMessage as ''
+Do lrKeys.$cols.$add('MEC_ID',kCharacter,kSimplechar,50)
+Do lrKeys.$cols.$add('EMAIL',kCharacter,kSimplechar,255)
+
+If irCurrentRecord.GO_MEC_ID<>''
+	;  proceed
+Else
+	Breakpoint
+	Quit method kFalse
+End If
+
+Calculate inCountUpdatedGO as 0
+Calculate inCountInserts as 0
+Calculate inCountUpdates as 0
+Calculate inCountDeletes as 0
+
+Calculate lrKeys.MEC_ID as irCurrentRecord.GO_MEC_ID
+
+;  do any corporate person deletes first
+If ilDeleteCorpPerson.$linecount>0
+	Calculate ilDeleteCorpPerson.$line as 0
+	While $Loop(ilDeleteCorpPerson)
+		;  If ilDeleteCorpPerson.CPN_MWHEN is empty then this record has never been sent to registration server.
+		;  In other words the user has added a name to list, filled it in, then deleted it from list before sending to server.
+		If not(isclear(ilDeleteCorpPerson.CPN_MWHEN))
+			Calculate lrKeys.EMAIL as ilDeleteCorpPerson.CPN_EMAIL
+			;  Calculate lrCorporatePerson as ilDeleteCorpPerson
+			
+			Do oService.$callDelete(lrResult,irServiceInfo,row(lrKeys),'corpPerson',irCurrentRecord.GO_RRS) Returns lbOK
+			Calculate lbServiceCalled as kTrue
+			If irServiceInfo.httpStatusCode<>200
+				Calculate icDisplayMessage as con(icDisplayMessage,pick(icDisplayMessage<>'','',kCr),irServiceInfo.httpStatusCode,': ',irServiceInfo.httpStatusText)
+				Quit method lbServiceCalled
+			Else
+				;  lrResult.rowsaffected
+				Calculate inCountDeletes as inCountDeletes+lrResult.rowsaffected
+			End If
+		End If
+	End While
+End If
+If lbServiceCalled&inCountDeletes>0
+	Do ilDeleteCorpPerson.$clear()
+End If
+
+;  then do any inserts and updates
+If ilCorporatePerson.$linecount>0
+	;  any row in ilCorporatePerson with null CPN_MWHEN means it is a new record     ;; CPN_MWHEN is only set AFTER it has been sent to registration server.
+	;  any row that has a CPN_MWHEN value means the CPN_EMAIL column will be disabled - this becomes the key
+	
+	Calculate ilCorporatePerson.$line as 0
+	While $Loop(ilCorporatePerson)
+		Calculate lrCorporatePerson as ilCorporatePerson
+		
+		If isclear(ilCorporatePerson.CPN_MWHEN)
+			;  INSERT
+			Do oService.$callInsert(lrResult,irServiceInfo,row(lrKeys,lrCorporatePerson),'corpPerson',irCurrentRecord.GO_RRS) Returns lbOK
+			If irServiceInfo.httpStatusCode<>200
+				Calculate icDisplayMessage as con(icDisplayMessage,pick(icDisplayMessage<>'','',kCr),irServiceInfo.httpStatusCode,': ',irServiceInfo.httpStatusText)
+				Quit method
+			Else     ;; 200 - OK on insert
+				;  lrResult.rowsaffected
+				Do ilCorporatePerson.$assignrow(lrResult.row,kTrue)
+				Do ilOriginalCorpPersons.$add()
+				Calculate ilOriginalCorpPersons.$line as ilOriginalCorpPersons.$linecount
+				Do ilOriginalCorpPersons.$assignrow(lrResult.row,kTrue)
+				Calculate inCountInserts as inCountInserts+lrResult.rowsaffected
+			End If
+			Calculate lbServiceCalled as kTrue
+			
+		Else
+			Do ilOriginalCorpPersons.$search($ref.CPN_EMAIL=ilCorporatePerson.CPN_EMAIL,1,0,0,0) Returns lbFound
+			If lbFound
+				Calculate lrOriginal as ilOriginalCorpPersons
+				Do toStrings.$HasRowBeenModified(lrCorporatePerson,lrOriginal) Returns lbModified
+				If lbModified
+					;  UPDATE
+					Calculate lrKeys.EMAIL as lrCorporatePerson.CPN_EMAIL
+					Do oService.$callUpdate(lrResult,irServiceInfo,row(lrKeys,lrCorporatePerson),'corpPerson',irCurrentRecord.GO_RRS) Returns lbOK
+					If irServiceInfo.httpStatusCode<>200
+						Calculate icDisplayMessage as con(icDisplayMessage,pick(icDisplayMessage<>'','',kCr),irServiceInfo.httpStatusCode,': ',irServiceInfo.httpStatusText)
+						Quit method
+					Else     ;; 200 - OK on update
+						;  lrResult.rowsaffected
+						Do lrResult.$cols.$findname('row') Returns liColRef
+						If liColRef
+							Do ilCorporatePerson.$assignrow(lrResult.row,kTrue)
+							Do ilOriginalCorpPersons.$assignrow(lrResult.row,kTrue)
+							Calculate inCountUpdates as inCountUpdates+lrResult.rowsaffected
+						End If
+					End If
+					Calculate lbServiceCalled as kTrue
+				End If     ;; lbModified
+			End If     ;; lbFound
+			
+		End If
+		
+	End While
+End If
+;  Calculate pretResult as lrResult
+;  Calculate pretServiceInfo as irServiceInfo
+
+Quit method lbServiceCalled

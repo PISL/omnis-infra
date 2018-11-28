@@ -1,0 +1,17 @@
+On evClick
+	Calculate ilChoiceOfRoles.$line as pLineNumber
+	Calculate icDisplayMessage as ''
+	
+	Do $cinst.$behaviour()
+	Do $cinst.$redraw()
+	
+On evDrop
+	If pDragField=nam(ilRolePermissions)
+		;  user is REMOVING this role from users profile
+		Do method DeletePermissionFromRole Returns lbOK
+		
+		Do $cinst.$behaviour()
+		Do $cinst.$redraw()
+	Else
+		Calculate icDisplayMessage as 'Invalid drop object.'
+	End If

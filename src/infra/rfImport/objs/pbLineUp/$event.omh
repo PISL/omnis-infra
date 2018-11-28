@@ -1,0 +1,36 @@
+On evClick
+	Calculate lnLine as ilSchemaCols.$line
+	Calculate lrTemp as ilSchemaCols
+	Do ilSchemaCols.$assignrow(ilSchemaCols.[lnLine-1])
+	Calculate ilDataCols.$line as ilSchemaCols.$line
+	If ilSchemaCols.C1=''
+		Calculate ilDataCols.include as kFalse
+		Calculate $cinst.$objs.Grid_ilDataCols.$objs.pbInclude.[ilDataCols.$line].$iconid as pick(ilDataCols.[ilDataCols.$line].include,1758,1750)
+		Calculate $cinst.$objs.Grid_ilDataCols.$objs.pbInclude.[ilDataCols.$line].$enabled as kFalse
+	Else
+		Calculate $cinst.$objs.Grid_ilDataCols.$objs.pbInclude.[ilDataCols.$line].$enabled as kTrue
+	End If
+	Do ilSchemaCols.[lnLine-1].$assignrow(lrTemp)
+	Calculate ilSchemaCols.$line as lnLine-1
+	Calculate ilDataCols.$line as ilSchemaCols.$line
+	If ilSchemaCols.C1=''
+		Calculate ilDataCols.include as kFalse
+		Calculate $cinst.$objs.Grid_ilDataCols.$objs.pbInclude.[ilDataCols.$line].$iconid as pick(ilDataCols.[ilDataCols.$line].include,1758,1750)
+		Calculate $cinst.$objs.Grid_ilDataCols.$objs.pbInclude.[ilDataCols.$line].$enabled as kFalse
+	Else
+		Calculate $cinst.$objs.Grid_ilDataCols.$objs.pbInclude.[ilDataCols.$line].$enabled as kTrue
+	End If
+	
+	Calculate lnLineNo as ilSchemaCols.$line
+	Do method setSchemaColumnText
+	Calculate ilSchemaCols.$line as lnLineNo
+	Do method setSchemaColumnColour
+	Calculate inLastSchemaCol as ilSchemaCols.$line
+	
+	If lnLineNo<inVscrollPos*inListDisplayQuantum
+		;  The schema column is being shuffled down and going to out of view.
+		;  do a click downwards so Schema column remains in human view
+		Do method moveViewUp
+	End If
+	
+	Do $cinst.$behaviour()

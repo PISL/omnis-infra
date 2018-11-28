@@ -1,0 +1,10 @@
+On evAfter
+	If ilTaxRates.RFO_NUMBER<>0
+		Calculate irCurrentDetail.FOD_UNIT_TAX as irCurrentDetail.FOD_UNIT_PRICE*ilTaxRates.RFO_NUMBER/100
+	Else
+		Calculate irCurrentDetail.FOD_UNIT_TAX as 0
+	End If
+	;  Calculate irCurrentRecord.Price as irCurrentRecord.FOD_QTY*irCurrentRecord.FOD_UNIT_PRICE
+	;  Calculate irCurrentRecord.Tax as irCurrentRecord.FOD_QTY*irCurrentRecord.FOD_UNIT_TAX
+	;  Calculate irCurrentRecord.Total as irCurrentRecord.Price+irCurrentRecord.Tax
+	Do irCurrentDetail.$calculatedValues()

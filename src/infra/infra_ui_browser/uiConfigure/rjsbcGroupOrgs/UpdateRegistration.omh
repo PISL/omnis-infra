@@ -1,0 +1,108 @@
+Calculate icDisplayMessage as ''
+Calculate inCountUpdatedGO as 0
+
+Do method RationaliseCorporatePersons
+If $cinst.icDisplayMessage<>''
+	Quit method
+End If
+
+Do irServiceInfo.$clear()
+
+Switch inRegisterType
+	Case 0     ;; unset
+		;  OK message Invalid submission {User type not specified.}
+		Do toStrings.$StringTableEntry('MSG_INVALIDSUBMISSION',lcMessage,'INVALID SUBMISSION')
+		Calculate icDisplayMessage as con(lcMessage,kCr)
+		Do toStrings.$StringTableEntry('MSG_UNSPECIFIEDUSER',lcMessage,'User type not specified')
+		Calculate icDisplayMessage as con(icDisplayMessage,lcMessage)
+		Quit method
+		
+	Case 1,2     ;; organisation & sole trader
+		Do irCurrentRecord.$validateRegistration(inRegisterType) Returns lbProceed
+		If not(lbProceed)
+			;  OK message Invalid submission {[irCurrentRecord.icValidationMessage]}
+			Do toStrings.$StringTableEntry('MSG_INVALIDSUBMISSION',lcMessage,'INVALID SUBMISSION')
+			Calculate icDisplayMessage as con(lcMessage,kCr,irCurrentRecord.icValidationMessage)
+			;  Sound bell
+			Do $cinst.$redraw()
+			Quit method
+		End If
+		Do ilCorporatePerson.$validation() Returns lbProceed
+		If not(lbProceed)
+			;  OK message Invalid submission {[ilCorporatePerson.icValidationMessage]}
+			Do toStrings.$StringTableEntry('MSG_INVALIDSUBMISSION',lcMessage,'INVALID SUBMISSION')
+			Calculate icDisplayMessage as con(lcMessage,kCr,ilCorporatePerson.$translateValidationErrors())
+			;  Sound bell
+			Do $cinst.$redraw()
+			Quit method
+		End If
+		
+		;  update the Registration record with permissable column changes     ;; in irBusinessDetailSubset and irBusinessDetailSubsetOrig
+		Calculate irCurrentRecord.UserType as inRegisterType
+		Do irBusinessDetailSubset.$assignrow(irCurrentRecord,kTrue)
+		Do toStrings.$HasRowBeenModified(irBusinessDetailSubset,irBusinessDetailSubsetOrig) Returns lbModified
+		If lbModified|ibRegistrationDoesNotMatchWithServer
+			Do oService.$callUpdate(lrResult,irServiceInfo,row(irCurrentRecord.GO_MEC_ID,irBusinessDetailSubset),'register',irCurrentRecord.GO_RRS) Returns lbOK
+			If irServiceInfo.httpStatusCode=200
+				;  Calculate irGroupOrgOrig as irCurrentRecord
+				;  Calculate ibModifiedOrg as kFalse
+				Calculate inCountUpdatedGO as inCountUpdatedGO+1
+				Calculate ibRegistrationDoesNotMatchWithServer as kFalse
+			End If
+			Calculate lbServiceCalledRegistration as kTrue
+			Calculate irBusinessDetailSubsetOrig as irBusinessDetailSubset
+		End If
+		
+		Do method UpdateCorporatePersons Returns lbServiceCalledCorpPerson
+	Default
+		Breakpoint
+		
+End Switch
+
+If irServiceInfo.httpStatusCode=200
+	If inCountUpdatedGO>0
+		Do toStrings.$StringTableEntry('MSG_UPDATEBUSRECORD',lcMessage,'updated business record')
+		Calculate lcSummary as con(lcSummary,pick(lcSummary<>'','',';  '),lcMessage)
+	End If
+	If inCountInserts>0
+		If inCountInserts>1
+			Do toStrings.$StringTableEntry('MSG_NEWCONTACTPLURAL',lcMessage,'new contacts')
+		Else
+			Do toStrings.$StringTableEntry('MSG_NEWCONTACTSINGLE',lcMessage,'new contact')
+		End If
+		Calculate lcSummary as con(lcSummary,pick(lcSummary<>'','',';  '),inCountInserts,' ',lcMessage)
+	End If
+	If inCountUpdates>0
+		If inCountUpdates>1
+			Do toStrings.$StringTableEntry('MSG_UPDATEDCONTACTPLURAL',lcMessage,'updated contacts')
+		Else
+			Do toStrings.$StringTableEntry('MSG_UPDATEDCONTACTSINGLE',lcMessage,'updated contact')
+		End If
+		Calculate lcSummary as con(lcSummary,pick(lcSummary<>'','',';  '),inCountUpdates,' ',lcMessage)
+	End If
+	If inCountDeletes>0
+		If inCountDeletes>1
+			Do toStrings.$StringTableEntry('MSG_DELETEDCONTACTPLURAL',lcMessage,'deleted contacts')
+		Else
+			Do toStrings.$StringTableEntry('MSG_DELETEDCONTACTSINGLE',lcMessage,'deleted contact')
+		End If
+		Calculate lcSummary as con(lcSummary,pick(lcSummary<>'','',';  '),inCountDeletes,' ',lcMessage)
+	End If
+	Do toStrings.$StringTableEntry('MSG_SERVCALL_SUCCESS',lcMessage,'Service call successful')
+	Calculate icDisplayMessage as con(lcMessage,kCr,lcSummary)
+Else
+	If lbServiceCalledRegistration
+		Calculate lrHeaderInfo as irServiceInfo.responseHeaders
+		Do toStrings.$StringTableEntry('MSG_SERVCALL_FAILED',lcMessage,'Service call FAILURE ! ')
+		Calculate icDisplayMessage as con(lcMessage,kCr,irServiceInfo.httpStatusCode,': ',irServiceInfo.httpStatusText,kCr,lrHeaderInfo.omniserror)
+	Else If lbServiceCalledCorpPerson
+		Calculate lrHeaderInfo as irServiceInfo.responseHeaders
+		Do toStrings.$StringTableEntry('MSG_SERVCALL_FAILED',lcMessage,'Service call FAILURE ! ')
+		Calculate icDisplayMessage as con(lcMessage,kCr,irServiceInfo.httpStatusCode,': ',irServiceInfo.httpStatusText,kCr,lrHeaderInfo.omniserror)
+	Else
+		Do toStrings.$StringTableEntry('MSG_NOSERVCALL',lcMessage,'No service call made.')
+		Calculate icDisplayMessage as lcMessage
+	End If
+End If
+
+Do $cinst.$behaviour()

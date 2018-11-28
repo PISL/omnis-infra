@@ -1,0 +1,19 @@
+On evClick
+	Calculate ilChoiceOfPermissions.$line as pLineNumber
+	Calculate icDisplayMessage as ''
+	
+	Do $cinst.$behaviour()
+	Do $cinst.$redraw()
+	
+	
+On evDrop
+	If pDragField=nam(ilRoleUsers)
+		;  user is REMOVING this group org to users profile
+		;  Breakpoint
+		Do method DeleteUserFromRole Returns lbOK
+		
+		Do $cinst.$behaviour()
+		Do $cinst.$redraw()
+	Else
+		Calculate icDisplayMessage as 'Invalid object drop.'
+	End If

@@ -1,0 +1,190 @@
+;  $linecount
+JavaScript: if (pList.getProperty(-620) == 0)
+JavaScript: {
+JavaScript: return pList;
+JavaScript: }
+
+JavaScript: tempArray = [pBreakCols];
+JavaScript: // strtok is a JS function in pis.js but it takes a JS array with one element, the string to be parsed
+JavaScript: lcBreak1 = strtok(tempArray,",");
+JavaScript: lcBreak2 = strtok(tempArray,",");
+JavaScript: lcBreak3 = strtok(tempArray,",");
+JavaScript: lcBreak4 = strtok(tempArray,",");
+JavaScript: lcBreak5 = strtok(tempArray,",");
+
+JavaScript: if (lcBreak5 != '')
+JavaScript: {
+JavaScript: pList.$sort(function($ref) { return jOmnis.getValue($ref,lcBreak1); },0,function($ref) { return jOmnis.getValue($ref,lcBreak2); },0,function($ref) { return jOmnis.getValue($ref,lcBreak3); },0,function($ref) { return jOmnis.getValue($ref,lcBreak4); },0,function($ref) { return jOmnis.getValue($ref,lcBreak5); },0,function($ref) { return jOmnis.getValue($ref,pTransposeCol); },0);
+JavaScript: }
+JavaScript: else if (lcBreak4 != '')
+JavaScript: {
+JavaScript: pList.$sort(function($ref) { return jOmnis.getValue($ref,lcBreak1); },0,function($ref) { return jOmnis.getValue($ref,lcBreak2); },0,function($ref) { return jOmnis.getValue($ref,lcBreak3); },0,function($ref) { return jOmnis.getValue($ref,lcBreak4); },0,function($ref) { return jOmnis.getValue($ref,pTransposeCol); },0);
+JavaScript: }
+JavaScript: else if (lcBreak3 != '')
+JavaScript: {
+JavaScript: pList.$sort(function($ref) { return jOmnis.getValue($ref,lcBreak1); },0,function($ref) { return jOmnis.getValue($ref,lcBreak2); },0,function($ref) { return jOmnis.getValue($ref,lcBreak3); },0,function($ref) { return jOmnis.getValue($ref,pTransposeCol); },0);
+JavaScript: }
+JavaScript: else if (lcBreak2 != '')
+JavaScript: {
+JavaScript: pList.$sort(function($ref) { return jOmnis.getValue($ref,lcBreak1); },0,function($ref) { return jOmnis.getValue($ref,lcBreak2); },0,function($ref) { return jOmnis.getValue($ref,pTransposeCol); },0);
+JavaScript: }
+JavaScript: else if (lcBreak1 != '')
+JavaScript: {
+JavaScript: pList.$sort(function($ref) { return jOmnis.getValue($ref,lcBreak1); },0,function($ref) { return jOmnis.getValue($ref,pTransposeCol); },0);
+JavaScript: }
+JavaScript: else
+JavaScript: {
+JavaScript: return "";
+JavaScript: }
+
+JavaScript: lrefCol = pList.$cols().$findname(pTransposeCol);
+JavaScript: if (lrefCol)
+JavaScript: {
+JavaScript: llTransposeValues = jOmnis.copyValue(pList);
+JavaScript: llTransposeValues.$cols().getValue(pTransposeCol).$removeduplicates(true);
+JavaScript: }
+JavaScript: else
+JavaScript: {
+JavaScript: alert("Column " + pTransposeCol + " does not exist in the list.");
+;  bail out
+JavaScript: return null;
+JavaScript: }
+
+JavaScript: lNewList = jOmnis.doMethod(eAnums.priv,this,"setupColumns",eDoMethodFlags.completionEvent,pBreakCols,pTransposeValCols,pWithPercentCols,llTransposeValues,pTransposeCol,pWithTotalCols);
+
+JavaScript: // setup the transpose columns
+JavaScript: tempArray = [pTransposeValCols];
+JavaScript: lcTransposeCol1 = strtok(tempArray,",");
+JavaScript: lcTransposeCol2 = strtok(tempArray,",");
+JavaScript: lcTransposeCol3 = strtok(tempArray,",");
+JavaScript: lcTransposeCol4 = strtok(tempArray,",");
+JavaScript: lcTransposeCol5 = strtok(tempArray,",");
+
+JavaScript: lcPrevValue1 = "";
+JavaScript: lcPrevValue2 = "";
+JavaScript: lcPrevValue3 = "";
+JavaScript: lcPrevValue4 = "";
+JavaScript: lcPrevValue5 = "";
+
+JavaScript: for (pList.setPropCli(-622,1); pList.getProperty(-622) <= pList.getProperty(-620); pList.setPropCli(-622,pList.getProperty(-622) + 1))
+JavaScript: {
+JavaScript: lcValue1 = NullToEmpty(pList.getValue(lcBreak1));
+JavaScript: lcValue2 = NullToEmpty(pList.getValue(lcBreak2));
+JavaScript: lcValue3 = NullToEmpty(pList.getValue(lcBreak3));
+JavaScript: lcValue4 = NullToEmpty(pList.getValue(lcBreak4));
+JavaScript: lcValue5 = NullToEmpty(pList.getValue(lcBreak5));
+
+JavaScript: if (lcPrevValue1 != lcValue1)
+JavaScript: {
+JavaScript: jOmnis.doMethod(eAnums.priv,this,"TotalLine",eDoMethodFlags.completionEvent,lNewList,llTransposeValues,pTransposeCol,pTransposeValCols,pWithPercentCols,pWithTotalCols);
+JavaScript: lNewList.$add(null);
+JavaScript: lNewList.setPropCli(-622,lNewList.getProperty(-620));
+JavaScript: }
+JavaScript: else if (lcPrevValue2 != lcValue2)
+JavaScript: {
+JavaScript: jOmnis.doMethod(eAnums.priv,this,"TotalLine",eDoMethodFlags.completionEvent,lNewList,llTransposeValues,pTransposeCol,pTransposeValCols,pWithPercentCols,pWithTotalCols);
+JavaScript: lNewList.$add(null);
+JavaScript: lNewList.setPropCli(-622,lNewList.getProperty(-620));
+JavaScript: }
+JavaScript: else if (lcPrevValue3 != lcValue3)
+JavaScript: {
+JavaScript: jOmnis.doMethod(eAnums.priv,this,"TotalLine",eDoMethodFlags.completionEvent,lNewList,llTransposeValues,pTransposeCol,pTransposeValCols,pWithPercentCols,pWithTotalCols);
+JavaScript: lNewList.$add(null);
+JavaScript: lNewList.setPropCli(-622,lNewList.getProperty(-620));
+JavaScript: }
+JavaScript: else if (lcPrevValue4 != lcValue4)
+JavaScript: {
+JavaScript: jOmnis.doMethod(eAnums.priv,this,"TotalLine",eDoMethodFlags.completionEvent,lNewList,llTransposeValues,pTransposeCol,pTransposeValCols,pWithPercentCols,pWithTotalCols);
+JavaScript: lNewList.$add(null);
+JavaScript: lNewList.setPropCli(-622,lNewList.getProperty(-620));
+JavaScript: }
+JavaScript: else if (lcPrevValue5 != lcValue5)
+JavaScript: {
+JavaScript: jOmnis.doMethod(eAnums.priv,this,"TotalLine",eDoMethodFlags.completionEvent,lNewList,llTransposeValues,pTransposeCol,pTransposeValCols,pWithPercentCols,pWithTotalCols);
+JavaScript: lNewList.$add(null);
+JavaScript: lNewList.setPropCli(-622,lNewList.getProperty(-620));
+JavaScript: }
+JavaScript: lcTransposeValue = pList.getValue(pTransposeCol);
+
+JavaScript: lNewList.setValue(lcBreak1,pList.getValue(lcBreak1));
+JavaScript: if (lcBreak2 != '')
+JavaScript: {
+JavaScript: lNewList.setValue(lcBreak2,pList.getValue(lcBreak2));
+JavaScript: }
+JavaScript: if (lcBreak3 != '')
+JavaScript: {
+JavaScript: lNewList.setValue(lcBreak3,pList.getValue(lcBreak3));
+JavaScript: }
+JavaScript: if (lcBreak4 != '')
+JavaScript: {
+JavaScript: lNewList.setValue(lcBreak4,pList.getValue(lcBreak4));
+JavaScript: }
+JavaScript: if (lcBreak5 != '')
+JavaScript: {
+JavaScript: lNewList.setValue(lcBreak5,pList.getValue(lcBreak5));
+JavaScript: }
+
+JavaScript: lcColName = lcTransposeCol1 + lcTransposeValue;
+
+JavaScript: lNewList.setValue(lcColName, NullToZero(lNewList.getValue(lcColName)) + NullToZero(pList.getValue(lcTransposeCol1)));
+JavaScript: if (lcTransposeCol2 != '')
+JavaScript: {
+JavaScript: lcColName = lcTransposeCol2 + lcTransposeValue;
+JavaScript: lNewList.setValue(lcColName, NullToZero(lNewList.getValue(lcColName)) + NullToZero(pList.getValue(lcTransposeCol2)));
+JavaScript: }
+JavaScript: if (lcTransposeCol3 != '')
+JavaScript: {
+JavaScript: lcColName = lcTransposeCol3 + lcTransposeValue;
+JavaScript: lNewList.setValue(lcColName, NullToZero(lNewList.getValue(lcColName)) + NullToZero(pList.getValue(lcTransposeCol3)));
+JavaScript: }
+JavaScript: if (lcTransposeCol4 != '')
+JavaScript: {
+JavaScript: lcColName = lcTransposeCol4 + lcTransposeValue;
+JavaScript: lNewList.setValue(lcColName, NullToZero(lNewList.getValue(lcColName)) + NullToZero(pList.getValue(lcTransposeCol4)));
+JavaScript: }
+JavaScript: if (lcTransposeCol5 != '')
+JavaScript: {
+JavaScript: lcColName = lcTransposeCol5 + lcTransposeValue;
+JavaScript: lNewList.setValue(lcColName, NullToZero(lNewList.getValue(lcColName)) + NullToZero(pList.getValue(lcTransposeCol5)));
+JavaScript: }
+
+JavaScript: lcPrevValue1 = lcValue1;
+JavaScript: lcPrevValue2 = lcValue2;
+JavaScript: lcPrevValue3 = lcValue3;
+JavaScript: lcPrevValue4 = lcValue4;
+JavaScript: lcPrevValue5 = lcValue5;
+JavaScript: }
+
+JavaScript: lNewList = jOmnis.doMethod(eAnums.priv,this,"TotalLine",eDoMethodFlags.completionEvent,lNewList,llTransposeValues,pTransposeCol,pTransposeValCols,pWithPercentCols,pWithTotalCols);
+
+JavaScript: if (pWithGrandTotal)
+JavaScript: {
+JavaScript: // now provide a totals line
+JavaScript: llTemp = jOmnis.copyValue(lNewList);
+JavaScript: lNewList.$add(null);
+JavaScript: lNewList.setPropCli(-622,lNewList.getProperty(-620));
+
+JavaScript: tempArray = [pTransposeValCols]
+JavaScript: while (tempArray[0].length) {
+JavaScript: lcToken = "TOTAL_" + strtok(tempArray, ",");
+JavaScript: lNewList.setValue(lcToken,llTemp.$cols().getValue(lcToken).callMethod("$total",null));
+JavaScript: }
+
+JavaScript: for (llTransposeValues.setPropCli(-622,1); llTransposeValues.getProperty(-622) <= llTransposeValues.getProperty(-620); llTransposeValues.setPropCli(-622,llTransposeValues.getProperty(-622) + 1))
+JavaScript: {
+JavaScript: tempArray = [pTransposeValCols];
+JavaScript: while (tempArray[0].length) {
+JavaScript: lcToken = strtok(tempArray, ",");
+JavaScript: lcColName = lcToken + llTransposeValues.getValue(pTransposeCol);
+
+JavaScript: lNewList.setValue(lcColName,llTemp.$cols().getValue(lcColName).callMethod("$total",null));
+JavaScript: if (pWithPercentCols)
+JavaScript: {
+JavaScript: lNewList.setValue(lcColName_PERCENT,lNewList.getValue(lcColName) / lNewList.getValue(TOTAL_lcToken) * 100);
+JavaScript: }
+JavaScript: }
+
+JavaScript: }
+JavaScript: }
+
+JavaScript: return lNewList;

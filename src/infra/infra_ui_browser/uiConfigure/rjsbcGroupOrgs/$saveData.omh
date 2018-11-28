@@ -1,0 +1,96 @@
+;  we need to do three inserts so start a transaction
+If inCurrentTab=cnTabStructure
+	;  Altering the entOrgStructure record.
+	Do irCurrentStructure.$validation() Returns lbProceed
+	If lbProceed
+		Calculate lbOK as kTrue
+		If icMode='I'
+			If ilPrevious.GS_SEQ>0
+				Calculate irCurrentStructure.GS_SUPERIOR_GS_REF as ilPrevious.GS_SEQ
+			End If
+			Do irCurrentStructure.$insert() Returns lbOK
+		Else If icMode='E'
+			Do toStrings.$HasRowBeenModified(irOrgStructure,irCurrentStructure) Returns lbModified
+			Do irCurrentStructure.$update() Returns lbOK
+		End If
+		If lbOK
+			Calculate icMode as ''
+			If ilPrevious.$line
+				Calculate ilPrevious.ChildNodeCount as ilPrevious.ChildNodeCount+1
+			End If
+		Else
+			Calculate icDisplayMessage as irCurrentStructure.irErrorSQL.NativeErrorText
+		End If
+	Else
+		Calculate icDisplayMessage as irCurrentStructure.icValidationMessage
+	End If
+Else
+	;  Editing the entGroupOrganisation record.
+	Do irCurrentRecord.$beginTransaction(#NULL,loSession,loStatement) Returns lbRunningAsTransaction
+	If lbRunningAsTransaction
+		Do irCurrentOrgName.$setSession(loSession,loStatement)
+		Do irUserOrgLink.$setSession(loSession,loStatement)
+	Else
+		Breakpoint
+		Quit method kFalse
+	End If
+	
+	Calculate lcMode as icMode     ;; Do inherited clears icMode
+	Calculate irCurrentOrgName.GON_NAME_FULL as irCurrentRecord.GO_NAME_FULL
+	Calculate irCurrentRecord.GO_NAME_FULL as #NULL
+	
+	Do inherited Returns lbOK
+	Calculate icMode as lcMode     ;; reset the instance variable
+	
+	
+	If lbOK
+		If icMode='I'     ;; insert
+			Calculate irCurrentOrgName.GON_GO_REF as irCurrentRecord.GO_SEQ
+		End If
+		Do irCurrentOrgName.$validation() Returns lbOK
+		If not(lbOK)
+			Calculate icDisplayMessage as irCurrentOrgName.icValidationMessage
+		Else
+			If icMode='I'     ;; insert
+				Calculate irCurrentOrgName.GON_GO_REF as irCurrentRecord.GO_SEQ
+				Calculate irCurrentOrgName.GON_TYPE as 'I'     ;; internal name
+				Do irCurrentOrgName.$insert() Returns lbOK
+				If lbOK
+					Calculate irUserOrgLink.UGO_GO_REF as irCurrentRecord.GO_SEQ
+					Calculate irUserOrgLink.UGO_USR_REF as trCurrUser.USR_SEQ
+					Do irUserOrgLink.$insert() Returns lbOK
+					If not(lbOK)
+						Calculate icDisplayMessage as irUserOrgLink.irErrorSQL.NativeErrorText
+					End If
+				Else
+					Calculate icDisplayMessage as irCurrentOrgName.irErrorSQL.NativeErrorText
+				End If
+				
+			Else     ;; 'E'
+				Do $ctask.toStrings.$HasRowBeenModified(irOriginalName,irCurrentOrgName) Returns lbProceed
+				If lbProceed
+					Do irCurrentOrgName.$update() Returns lbOK
+				End If
+			End If
+		End If
+	Else
+		Calculate icDisplayMessage as irCurrentRecord.irErrorSQL.NativeErrorText
+	End If
+	
+	If lbOK
+		Calculate icMode as ''
+		Do irCurrentRecord.$commitTransaction(#NULL,loSession,loStatement)
+	Else
+		Calculate irCurrentRecord.GO_NAME_FULL as irCurrentOrgName.GON_NAME_FULL
+		If icMode='I'
+			Calculate irCurrentRecord.GO_SEQ as #NULL
+			Calculate irCurrentOrgName.GON_SEQ as #NULL
+		End If
+		Do irCurrentRecord.$rollbackTransaction()
+	End If
+	
+	Do irCurrentOrgName.$setSession(#NULL,#NULL,kTrue)
+	Do irUserOrgLink.$setSession(#NULL,#NULL,kTrue)
+End If
+
+Quit method lbOK

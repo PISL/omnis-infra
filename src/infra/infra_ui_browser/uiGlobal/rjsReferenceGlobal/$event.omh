@@ -1,0 +1,22 @@
+On evLayoutChanged
+	Do inherited
+	;  extend the background objects where form objects are outside the normal height
+	Switch inBreakpoint
+		Case 320,375
+			Calculate lnHeightAdd as 628-$cinst.$objs.greyBackground.$height
+		Case 480
+			Calculate lnHeightAdd as 606-$cinst.$objs.greyBackground.$height
+		Case 667
+			Calculate lnHeightAdd as 618-$cinst.$objs.greyBackground.$height
+		Default
+			Calculate lnHeightAdd as 0
+	End Switch
+	
+	Calculate $cinst.$objs.ppRecordNavigation.$height as lnHeightAdd+$cinst.$objs.ppRecordNavigation.$height
+	Calculate $cinst.$objs.greyBackground.$height as lnHeightAdd+$cinst.$objs.greyBackground.$height
+	
+	If inBreakpoint<=375
+		Calculate $cinst.$objs.TabControl_RFG.$fontsize as 6
+	Else
+		Calculate $cinst.$objs.TabControl_RFG.$fontsize as 8
+	End If

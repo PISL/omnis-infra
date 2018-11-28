@@ -1,0 +1,8 @@
+;  If irCurrentRecord.PB_FIELDNAME='EPL_OPERATION'
+;  Calculate ilWhichValue as ilEPM_Operations
+;  Else If irCurrentRecord.PB_FIELDNAME='EPL_PRODUCT'
+;  Calculate ilWhichValue as ilEPM_Products
+;  Else If irCurrentRecord.PB_FIELDNAME='EPL_WHERE'
+;  Calculate ilWhichValue as ilEPM_Where
+;  End If
+;  Do ilWhichValue.$search($ref.REF_VALUE=irCurrentRecord.PB_FIELDVALUE,1,0,0,0)

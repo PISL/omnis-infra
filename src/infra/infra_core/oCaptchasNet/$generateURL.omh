@@ -1,0 +1,88 @@
+;  Breakpoint
+;  get the account and secret key values
+Do toValues.$initInherited('.CAPTCHA') Returns llKeys
+Do llKeys.$search($ref.RFO_VALUE='ACCOUNT',1,0,0,0)
+Calculate lcCaptchaAccount as llKeys.RFO_CHAR
+Do llKeys.$search($ref.RFO_VALUE='SECRET',1,0,0,0)
+Calculate lcCaptchaSecret as llKeys.RFO_CHAR
+
+;  check parameters
+If len(pcAlphabet)
+	;  clean it up by converting to lower case and removing all but letters and digits     ;; duplicates do not matter
+	Do loTM.$removechars(low(pcAlphabet),"abcdefghijklmnopqrstuvwxyz0123456789",kTrue,pcAlphabet)
+Else
+	Calculate pcAlphabet as ccDefaultAlphabet
+End If
+
+If pnWordLength<cnDefaultWordLength
+	Calculate pnWordLength as cnDefaultWordLength
+Else If pnWordLength>16
+	Calculate pnWordLength as 16     ;; maximum value that captchas.net will accept
+End If
+
+;  generate a random string (usiing UUID here but could be anything)
+Calculate lcRandom as OWEB.$makeuuid(kFalse)
+;  return it to the caller and put it in the URL
+Calculate prefGUID as lcRandom
+Calculate prefURL as con(ccBaseURL,lcCaptchaAccount,'&random=',lcRandom)
+
+If isclear(pcAlphabet)
+	Calculate pcAlphabet as ccDefaultAlphabet
+End If
+
+If pcAlphabet<>ccDefaultAlphabet
+	Calculate prefURL as con(prefURL,'&alphabet=',pcAlphabet)
+End If
+
+If pnWordLength<>cnDefaultWordLength
+	Calculate prefURL as con(prefURL,'&letters=',pnWordLength)
+End If
+
+;  sanitise pcColour     ;; must be a valid 6 character hex RGB value
+If len(pcColour)=6
+	Do loTM.$removechars(low(pcColour),'0123456789abcdef',kTrue,lcColour)
+	If low(pcColour)=lcColour
+		Calculate prefURL as con(prefURL,'&color=',lcColour)
+	End If
+End If
+
+If pnWidth>0
+	If pnWidth<200
+		Calculate pnWidth as 200
+	Else If pnWidth>500
+		Calculate pnWordLength as 500     ;; maximum value that captchas.net will accept
+	End If
+	Calculate prefURL as con(prefURL,'&width=',pnWidth)
+End If
+
+If pnHeight>0
+	If pnHeight<80
+		Calculate pnHeight as 80
+	Else If pnHeight>200
+		Calculate pnHeight as 200     ;; maximum value that captchas.net will accept
+	End If
+	Calculate prefURL as con(prefURL,'&height=',pnHeight)
+End If
+
+;  now build up the key to generate the CAPTCHA word
+Calculate lcRandom as con(lcCaptchaSecret,lcRandom)
+If pcAlphabet<>ccDefaultAlphabet|pnWordLength<>cnDefaultWordLength     ;; we need to include these in the randomizer
+	Calculate lcRandom as con(lcRandom,':',pcAlphabet,':',pnWordLength)
+End If
+;  generate the MD5 sum
+Calculate lcMD5 as OXML.$md5hexdigest(lcRandom)
+
+;  now generate the CAPTCHA word
+Calculate prefWord as ''
+For lnCount from 1 to pnWordLength step 1
+	;  take each byte from lcMD5, convert to 4 byte binary and back to an integer
+	Calculate lnCharNo as bintoint32(binfromhex(con('000000',left(lcMD5,2))))
+	;  remove it from the MD5
+	Calculate lcMD5 as mid(lcMD5,3)
+	;  Calculate the remainder of lnCharNo / (length of the alphabet) and add 1
+	Calculate lnCharNo as mod(lnCharNo,len(pcAlphabet))+1
+	;  retrieve the corresponding letter from the alphabet
+	Calculate prefWord as con(prefWord,mid(pcAlphabet,lnCharNo,1))
+End For
+
+Quit method kTrue

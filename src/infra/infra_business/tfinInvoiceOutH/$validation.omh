@@ -1,0 +1,37 @@
+Calculate icValidationMessage as ''
+Do ilValidation.$clear()
+
+If $cinst.FOH_GO_REF>0
+	;  good
+Else
+	Calculate lcMessage as con(lcMessage,pick(lcMessage<>'','',', '),'FOH_GO_REF missing')
+	Do ilValidation.$add('FOH_GO_REF_LBL','VAL_MISSING','FOH_GO_REF missing',0)
+End If
+
+If $cinst.FOH_EO_REF>0
+	;  good
+Else
+	Calculate lcMessage as con(lcMessage,pick(lcMessage<>'','',', '),'FOH_EO_REF missing')
+	Do ilValidation.$add('FOH_EO_REF_LBL','VAL_MISSING','FOH_EO_REF missing',0)
+End If
+
+If $cinst.FOH_CUST_NAME<>''
+	;  good
+Else
+	Calculate lcMessage as con(lcMessage,pick(lcMessage<>'','',', '),'FOH_CUST_NAME missing')
+	Do ilValidation.$add('FOH_CUST_NAME_LBL','VAL_MISSING','FOH_CUST_NAME missing',0)
+End If
+
+If $cinst.FOH_STATUS<>''
+	;  good
+Else
+	Calculate lcMessage as con(lcMessage,pick(lcMessage<>'','',', '),'FOH_STATUS missing')
+	Do ilValidation.$add('FOH_STATUS_LBL','VAL_MISSING','FOH_STATUS missing',0)
+End If
+
+If lcMessage<>''
+	Calculate icValidationMessage as lcMessage
+	Quit method kFalse
+End If
+
+Quit method kTrue

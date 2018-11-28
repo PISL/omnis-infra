@@ -1,0 +1,10 @@
+;  first try pcClass & pcCode
+Do $ctask.tlAuthorisedForms.$search($ref.class=pcClass&$ref.code=pcCode,1,0,0,0) Returns lbFound
+If lbFound
+	Calculate $ctask.tlAuthorisedForms.menuIdent as pnIdent
+Else
+	Do $ctask.tlAuthorisedForms.$search($ref.class=pcClass,1,0,0,0) Returns lbFound
+	If lbFound
+		Calculate $ctask.tlAuthorisedForms.menuIdent as pnIdent
+	End If
+End If

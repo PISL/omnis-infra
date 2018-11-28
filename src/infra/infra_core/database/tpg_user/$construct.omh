@@ -1,0 +1,2 @@
+Calculate icPrefix as ' '     ;; empty values raises breakpoint
+Do inherited

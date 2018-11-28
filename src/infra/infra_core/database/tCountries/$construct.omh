@@ -1,0 +1,6 @@
+Calculate icPrefix as 'CO_'
+Calculate icPrimarykey as 'CO_SEQ'
+;  Calculate icForeignKey as 'PC_GROUP'
+;  Calculate icDateColumn as 'MMP_CWHEN'
+Calculate ibHasSequence as kTrue
+Do inherited      ;; 2015-08-07 GRS moved here because inherited sets ibHasSequence to kTrue

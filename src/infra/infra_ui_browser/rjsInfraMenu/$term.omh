@@ -1,0 +1,2 @@
+;  Remove the shortcut key event listener
+JavaScript: document.removeEventListener('keypress', window.omnisShortcutKeys1);

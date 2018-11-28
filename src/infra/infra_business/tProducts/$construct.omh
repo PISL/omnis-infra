@@ -1,0 +1,12 @@
+Calculate icPrefix as 'PRD_'
+Calculate icPrimarykey as 'PRD_SEQ'
+
+Calculate icForeignKey as 'PRD_GO_REF'
+;  Calculate icForeignKey as 'PRD_EO_REF'
+
+If isnull(cbDefaultIsAllColumns)
+	;  this will become a configurable behaviour option in due course
+	Calculate cbDefaultIsAllColumns as kTrue
+End If
+
+Do inherited

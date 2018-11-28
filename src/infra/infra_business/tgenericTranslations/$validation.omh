@@ -1,0 +1,30 @@
+Calculate icValidationMessage as ''
+Do ilValidation.$clear()
+
+If $cinst.GT_FT_PREFIX<>''
+	;  good
+Else
+	Calculate lcMessage as con(lcMessage,pick(lcMessage<>'','',', '),'GT_FT_PREFIX missing')
+	Do ilValidation.$add('GT_FT_PREFIX_LBL','VAL_MISSING','GT_FT_PREFIX missing',0)
+End If
+
+If $cinst.GT_FT_REF>0
+	;  good
+Else
+	Calculate lcMessage as con(lcMessage,pick(lcMessage<>'','',', '),'GT_FT_REF missing')
+	Do ilValidation.$add('GT_FT_REF_LBL','VAL_MISSING','GT_FT_REF missing',0)
+End If
+
+If $cinst.GT_LANG_CODE<>''
+	;  good
+Else
+	Calculate lcMessage as con(lcMessage,pick(lcMessage<>'','',', '),'GT_LANG_CODE missing')
+	Do ilValidation.$add('GT_LANG_CODE_LBL','VAL_MISSING','GT_LANG_CODE missing',0)
+End If
+
+If lcMessage<>''
+	Calculate icValidationMessage as lcMessage
+	Quit method kFalse
+End If
+
+Quit method kTrue

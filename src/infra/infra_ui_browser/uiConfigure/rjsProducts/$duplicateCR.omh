@@ -1,0 +1,13 @@
+Calculate inCurrentTab as 1
+Calculate $cinst.$objs.TabControl_PRD.$currenttab as inCurrentTab
+
+Calculate icDisplayMessage as ''
+Calculate icMode as 'I'     ;; insert
+Calculate irCurrentRecord.PRD_SEQ as #NULL
+Calculate irCurrentRecord.PID_PRD_REF as #NULL
+Do irCurrentRecord.$defaults()
+
+Calculate ilDisplayRecords.$line as 0
+
+Do $cinst.$setcurfield('PRD_INT_PRODCODE',kTrue)
+Do $cinst.$behaviour()

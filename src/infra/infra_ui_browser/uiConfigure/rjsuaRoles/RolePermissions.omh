@@ -1,0 +1,12 @@
+;  GROUP ORGANISATIONS - first what they have
+Do ilRolePermissions.$clear()
+Do ilRolePermissions.$fetchRolePermissions(irCurrentRecord.ROL_SEQ)
+
+;  then what they haven't been assigned to
+Calculate ilChoiceOfPermissions as ilPermissions
+Calculate ilRolePermissions.$line as 0
+While $Loop(ilRolePermissions)
+	Do ilChoiceOfPermissions.$search($ref.PER_SEQ=ilRolePermissions.PER_SEQ,1,0,1,0)
+End While
+Do ilChoiceOfPermissions.$remove(kListDeleteSelected)
+Calculate ilChoiceOfPermissions.$line as 0

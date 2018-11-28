@@ -1,0 +1,76 @@
+;  valid formats     ;; nnnnn  or  nnnnn-nnnn
+If len(pPostcode)=5
+	If isnumber(pPostcode)
+		Calculate lbValidFormat as kTrue
+	Else
+		;  lbValidFormat is kFalse
+	End If
+	;  this won't be acceptable... see below... because we want zip plus 4 format.  However we will check the zip code provided.
+Else If len(pPostcode)=10
+	If isnumber(mid(pPostcode,1,5))&isnumber(mid(pPostcode,7,4))
+		Calculate lbValidFormat as kTrue
+	Else
+		;  lbValidFormat is kFalse
+	End If
+Else
+	Do toStrings.$StringTableMessage('VAL_POSTCODE_INCORRECT_LENGTH',icValidationText,icValidationCodes) Returns lbStringTableEntryFound
+	If not(lbStringTableEntryFound)
+		Calculate icValidationText as con(icValidationText,pick(icValidationText<>'','',', '),'zipcode incorrect length')
+	End If
+	Quit method
+End If
+
+If not(lbValidFormat)
+	Do toStrings.$StringTableMessage('VAL_POSTCODE_INVALID_FORMAT',icValidationText,icValidationCodes) Returns lbStringTableEntryFound
+	If not(lbStringTableEntryFound)
+		Calculate icValidationText as con(icValidationText,pick(icValidationText<>'','',', '),'invalid zipcode format')
+		Quit method
+	End If
+End If
+
+;  correct format - see if its in our db
+Calculate lbZipCodeVerified as kFalse
+Calculate lcZipCodeToCheck as mid(pPostcode,1,5)
+Do method LookupPostcode (lcZipCodeToCheck,'USA') Returns lbZipCodeVerified
+If lbZipCodeVerified
+	;  good
+Else
+	;  see if it exists calling this web service method
+	Do loInfoOnUSA.$getInfoByZIP(lcZipCodeToCheck) Returns lrData
+	If lrData.ZIP=lcZipCodeToCheck
+		Calculate lbZipCodeVerified as kTrue
+		
+		;  save this result into our database to keep it up-to-date
+		Do $DefineList(lrPostcodeVerify,con('PCODES.tUSA'))
+		Do $DynamicSession(loSessionPcodes,loStatementPcodes,'PCODES')
+		Do lrPostcodeVerify.$SetSession(loSessionPcodes,loStatementPcodes)
+		
+		Calculate lrPostcodeVerify.ZIP as lrData.ZIP
+		Calculate lrPostcodeVerify.STATE as lrData.STATE
+		Calculate lrPostcodeVerify.NAME as lrData.CITY
+		Calculate lrPostcodeVerify.AREA_CODE as lrData.AREA_CODE
+		;  Calculate lrPostcodeVerify.LATITUDE as
+		;  Calculate lrPostcodeVerify.LONGTITUDE as
+		;  Calculate  as lrData.TIME_ZONE
+		Do lrPostcodeVerify.$insert() Returns lbOK
+		If not(lbOK)
+			Do $AppError(con('Inserting new ZIP code record after web service lookup failed.  Zip code to check = ',lcZipCodeToCheck,' & Zip code = ',pPostcode),'Postcode validation')
+		End If
+	Else
+		;  the ZIP code was not verified
+	End If
+End If
+
+If not(lbZipCodeVerified)
+	Do toStrings.$StringTableMessage('VAL_POSTCODE_NOT_VERIFIED',icValidationText,icValidationCodes) Returns lbStringTableEntryFound
+	If not(lbStringTableEntryFound)
+		Calculate icValidationText as con(icValidationText,pick(icValidationText<>'','',', '),'invalid zip code')
+	End If
+End If
+If len(pPostcode)=5&lbZipCodeVerified
+	;  ok... it is a valid format and a valid zip code, but we want our American folk to use their zip + 4 format, not just the zip code
+	Do toStrings.$StringTableMessage('VAL_POSTCODE_ZIP+4_PLEASE',icValidationText,icValidationCodes) Returns lbStringTableEntryFound
+	If not(lbStringTableEntryFound)
+		Calculate icValidationText as con(icValidationText,pick(icValidationText<>'','',', '),'please use the ZIP + 4 code')
+	End If
+End If

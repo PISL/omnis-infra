@@ -1,0 +1,9 @@
+Do llPrivsUsedInThisForm.$cols.$add('permission',kCharacter,kSimplechar,100)
+Do llPrivsUsedInThisForm.$cols.$add('colName',kCharacter,kSimplechar,100)
+
+Do llPrivsUsedInThisForm.$add('eo_insert','canInsert')
+Do llPrivsUsedInThisForm.$add('eo_delete','canDelete')
+Do llPrivsUsedInThisForm.$add('eo_update','canEdit')
+Do llPrivsUsedInThisForm.$add('eo_allOrgs','allOrgs')
+
+Do $cinst.$setPermissions(llPrivsUsedInThisForm)     ;; irUserRights

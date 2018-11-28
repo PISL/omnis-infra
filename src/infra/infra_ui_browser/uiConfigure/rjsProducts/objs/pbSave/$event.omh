@@ -1,0 +1,10 @@
+On evClick
+	Do $cinst.$saveData() Returns lbOK     ;; icDisplayMessage and icMode explain the results of $saveData
+	If lbOK
+		Calculate lcPRD as irCurrentRecord.PRD_SEQ
+		Do method $search2ListClick
+		Do ilDisplayRecords.$search($ref.PRD_SEQ=lcPRD,1,0,0,0)
+		Do method $displayListClick
+	End If
+	
+	Do $cinst.$behaviour()

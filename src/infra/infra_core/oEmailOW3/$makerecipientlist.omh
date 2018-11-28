@@ -1,0 +1,16 @@
+Do pList.$define(lAddress,lDescription)
+For plRecipients.$line from 1 to plRecipients.$linecount step 1
+	Calculate lRecipient as plRecipients.C1
+	If lRecipient=""
+		Jump to start of loop
+	End If
+	Do method $splitaddressentry (lRecipient,lAddress,lDescription) Returns lbOK
+	If not(lbOK)
+		Calculate lcError as con(lcError,pick(lcError="","","Bad recipient(s): "),lRecipient)
+	Else
+		Do pList.$add(lAddress,lDescription)
+	End If
+End For
+If lcError<>""
+	Quit method lcError
+End If

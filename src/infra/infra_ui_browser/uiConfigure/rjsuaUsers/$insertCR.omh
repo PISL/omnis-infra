@@ -1,0 +1,3 @@
+Calculate icCheckPassword as ''
+Do ilUserRoles.$clear()
+Do inherited

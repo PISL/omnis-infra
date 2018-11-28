@@ -1,0 +1,11 @@
+On evClick
+	Do irCurrentRecord.$clear()
+	Calculate icDisplayMessage as ''
+	Calculate icMode as ''
+	
+	Calculate icOldPassword as ''
+	Calculate icNewPassword as ''
+	Calculate icCheckPassword as ''
+	
+	Do $cinst.$behaviour()
+	Do method returnHome

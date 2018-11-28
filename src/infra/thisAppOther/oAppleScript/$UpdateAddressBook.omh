@@ -1,0 +1,119 @@
+;  prPerson is a row of data from db in STANDARD column format
+
+Do lrReturn.$cols.$add('AppleScriptResult',kCharacter,kSimplechar,255)
+Do lrReturn.$cols.$add('AppleScriptError',kCharacter,kSimplechar,255)
+Calculate lrSaveApplescript as lrReturn
+
+If plValuesToUpdate.$linecount>0
+	Calculate plValuesToUpdate.$line as 0
+	While $Loop(plValuesToUpdate)
+		Do prPerson.$cols.$findname(plValuesToUpdate.std_column) Returns liColRef
+		If liColRef
+			Do lrSpecificCols.$cols.$add(liColRef.$name,liColRef.$coltype,liColRef.$colsubtype,liColRef.$colsublen)
+			Calculate lrSpecificCols.[liColRef.$name] as plValuesToUpdate.value
+			Switch liColRef.$name
+				Case 'FirstName','LastName','Organization','JobTitle','Department','Title','Suffix','Note','Website'
+					Calculate lbUpdateThePerson as kTrue
+				Default
+					Calculate lbUpdateOtherAtrributes as kTrue
+			End Switch
+		End If
+	End While
+End If
+;  tell application "Address Book"
+;  set thePerson to make new person with properties
+;  {first name:"Ben", last name:"Waldie", organization:"Automated Workflows,
+;  LLC", job title:"President"}
+;  end tell
+;  --> person id "778C4D8D-0A22-4918-A5B6-73361FFF8779:ABPerson" of application "Address Book"
+
+;  AddressBook scripting was derived from     ;; http://www.mactech.com/articles/mactech/Vol.21/21.10/ScriptingAddressBook/index.html
+
+;  person n, pl people [inh. entry] : A person in the address book database.
+;  elements
+;  contains urls, addresses, phones, groups, custom dates, instant messages, social profiles, related names, emails; contained by application, groups.
+;  properties
+;  job title (text or missing value) : The job title of this person.
+;  last name (text or missing value) : The Last name of this person.
+;  first name (text or missing value) : The First name of this person.
+;  title (text or missing value) : The title of this person.
+;  company (boolean) : Is the current record a company or a person.
+;  organization (text or missing value) : Organization that employs this person.
+;  department (text or missing value) : Department that this person works for.
+;  home page (text or missing value) : The home page of this person.
+;  note (text or missing value) : Notes for this person.
+
+;  nickname (text or missing value) : The Nickname of this person.
+;  maiden name (text or missing value) : The Maiden name of this person.
+;  suffix (text or missing value) : The Suffix of this person.
+;  vcard (text or missing value, r/o) : Person information in vCard format, this always returns a card in version 3.0 format.
+;  birth date (date or missing value) : The birth date of this person.
+;  phonetic last name (text or missing value) : The phonetic version of the Last name of this person.
+;  phonetic middle name (text or missing value) : The Phonetic version of the Middle name of this person.
+;  image (TIFF picture or missing value) : Image for person.
+;  name (text, r/o) : First/Last name of the person, uses the name display order preference setting in Address Book.
+;  middle name (text or missing value) : The Middle name of this person.
+;  phonetic first name (text or missing value) : The phonetic version of the First name of this person.
+
+If lbUpdateThePerson
+	Begin text block
+	Text: {tell application "Address Book"} (Platform newline)
+	Text: {set thePerson to (first person whose id = "[pcPersonID]")} (Platform newline)
+	Text: {tell thePerson} (Platform newline)
+	If lrSpecificCols.FirstName<>''
+		Text: { set first name to "[cap(lrSpecificCols.FirstName)]"} (Platform newline)
+	End If
+	If lrSpecificCols.LastName<>''
+		Text: { set last name to "[cap(lrSpecificCols.LastName)]"} (Platform newline)
+	End If
+	If lrSpecificCols.Organization<>''
+		Text: { set organization to "[cap(lrSpecificCols.Organization)]"} (Platform newline)
+	End If
+	If lrSpecificCols.Department<>''
+		Text: { set department to "[cap(lrSpecificCols.Department)]"} (Platform newline)
+	End If
+	If lrSpecificCols.JobTitle<>''
+		Text: { set job title to "[cap(lrSpecificCols.JobTitle)]"} (Platform newline)
+	End If
+	If lrSpecificCols.Title<>''
+		Text: { set title to "[cap(lrSpecificCols.Title)]"} (Platform newline)
+	End If
+	If lrSpecificCols.Suffix<>''
+		Text: { set suffix to "[cap(lrSpecificCols.Suffix)]"} (Platform newline)
+	End If
+	If lrSpecificCols.Note<>''
+		Text: { set note to "[replaceall(lrSpecificCols.Note,kDq,'')]"} (Platform newline)
+	End If
+	If lrSpecificCols.Website<>''
+		Text: { set home page to "[cap(lrSpecificCols.Website)]"} (Platform newline)
+	End If
+	Text: (Platform newline)
+	Text: {end tell} (Platform newline)
+	Text: {end tell} (Platform newline)
+	End text block
+	Get text block lcApplescript
+	
+	Do $root.$runapplescript(lcApplescript,lrReturn.AppleScriptResult,lrReturn.AppleScriptError)
+End If
+
+;  Adding an address to a person is slightly different than the process of adding an email address, a URL, or a phone number.
+;  While you can still specify a label property for an address, addresses also possess many other properties.
+;  For example, in an address entry, you may specify a street, city, state, zip code, and more. The following example
+;  code demonstrates how to add a work address to a specified person in Address Book.
+;  make new address at end of addresses of thePerson with properties
+;  label:"Work", street:"123 Anystreet", city:"Anytown", state:"PA", zip:"99999"
+
+If lbUpdateOtherAtrributes
+	Do method $NewElements (pcPersonID,lrSpecificCols,lrApplescriptOtherItems)
+End If
+
+Begin text block
+Text: {tell application "Address Book"} (Platform newline)
+Text: {save} (Platform newline)
+Text: {end tell} (Platform newline)
+End text block
+Get text block lcApplescript
+Do $root.$runapplescript(lcApplescript,lrSaveApplescript.AppleScriptResult,lrSaveApplescript.AppleScriptError)
+
+Calculate prAppleScript as lrReturn
+Quit method lrReturn

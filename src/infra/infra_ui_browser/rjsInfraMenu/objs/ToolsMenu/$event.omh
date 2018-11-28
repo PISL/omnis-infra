@@ -1,0 +1,2 @@
+On evMenuEntryClicked     ;; pLineIdent   pLineTag
+	;  overload in the subclass

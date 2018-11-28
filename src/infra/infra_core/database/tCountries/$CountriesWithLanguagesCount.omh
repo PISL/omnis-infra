@@ -1,0 +1,67 @@
+Do $cinst.$cols.$findname('COUNT') Returns liColRef
+If liColRef
+	;  count col already exists
+Else
+	Do $cinst.$cols.$add('COUNT',kInteger,k32bitint)
+End If
+
+If tlDatabases.DAM='WebService'
+	;  pass parameters to web service
+	;  $callService (pFieldReference, row(TableClassName, CurrentMethodName, p1,...,pn) )     ;; result will be returned in pFieldReference, row() contains the parameters for the call
+	Do ioWeb.$callFetch($cinst,irErrorSQL,row($cinst.$class().$name,$cmethod().$name,row(pMainLang,pOfficialLang,pActiveCountry),$cinst.$type,0,ilRESTextensions))
+	If ioWeb.irResponse.httpStatusCode=200
+		;  the result should be in this object     ;; however there may be a SQL error
+		If irErrorSQL.NativeErrorText<>''
+			Quit method kFalse
+		End If
+		Quit method kTrue
+	Else
+		Quit method kFalse
+	End If
+End If
+
+Do $cinst.$ImmediateSession(loSession,loStatement) Returns lbImmediateSession
+If lbImmediateSession
+	Do $cinst.$SetSession(loSession,loStatement)
+Else If not(ibGoodConnectionToDb)
+	Quit method kFalse
+End If
+
+Begin statement
+Sta: {select [$cinst.$selectnames()], count(*)}
+Sta: {from [$cinst.$servertablenames]}
+Sta: {join [lrLangCountry.$servertablenames()] on LC_CO_REF_ISO3 = CO_ISO3}
+
+Calculate lcPredicate as 'where '
+If pOfficialLang
+	;  official language(s) only
+	Sta: {[lcPredicate]     LC_OFFICIAL = 1}
+	Calculate lcPredicate as 'and '
+Else If not(pOfficialLang)
+	;  unofficial language(s) only
+	Sta: {[lcPredicate]     ( LC_OFFICIAL = 0 or LC_OFFICIAL is null )}
+	Calculate lcPredicate as 'and '
+End If
+If pMainLang
+	;  main language(s) only
+	Sta: {[lcPredicate]     LC_MAINLANG = 1}
+	Calculate lcPredicate as 'and '
+Else If not(pMainLang)
+	;  main language(s) only
+	Sta: {[lcPredicate]     ( LC_MAINLANG =  0 or LC_MAINLANG is null )}
+	Calculate lcPredicate as 'and '
+End If
+If pActiveCountry
+	Sta: {[lcPredicate]     CO_ACTIVE = 1}
+	Calculate lcPredicate as 'and '
+Else If not(pActiveCountry)
+	Sta: {[lcPredicate]     ( CO_ACTIVE =  0 or CO_ACTIVE is null )}
+	Calculate lcPredicate as 'and '
+End If
+Sta: {group by [$cinst.$selectnames()]}
+End statement
+Do $cinst.$executesqlandfetch()
+
+If lbImmediateSession
+	Do $cinst.$SetSession(#NULL,#NULL,kTrue)
+End If

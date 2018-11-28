@@ -1,0 +1,33 @@
+Calculate icEmailProtocolStatus as ''
+;  send internet e-mail message via a SMTP server.
+If pEnclosureList.$linecount>0
+	;  if the new e-mail contains enclosures, compose and send MIME content
+	Do pEnclosureList.$redefine(lFileName,lFilePath)
+	If pBody=''
+		Calculate lBinaryBody as ' '     ;; sending enclosures with no body causes the mail to be recieved without being decomposed
+	Else
+		Calculate lBinaryBody as pBody     ;; convert body to binary
+	End If
+	
+	If pEnclosureList.$linecount=1
+		;  single-part MIME
+		Do pEnclosureList.$line.$assign(1)
+		Do pEnclosureList.$loadcols()
+		ReadBinFile (lFilePath,lFileImage)
+		X952474892 (lFileImage,lMIMEContent,lFileName,"application/octet-stream","base64",lBinaryBody)
+	Else
+		;  multipart MIME
+		X952474886 (lCSP)
+		X952474888 (lCSP,lBinaryBody,"BODY","text/plain; charset=us-ascii","quoted-printable")
+		For lLineInList from 1 to pEnclosureList.$linecount step 1
+			Do pEnclosureList.$line.$assign(lLineInList)
+			Do pEnclosureList.$loadcols()
+			ReadBinFile (lFilePath,lFileImage)
+			X952474888 (lCSP,lFileImage,lFilePath,"application/octet-stream","base64",lFileName)
+		End For
+		X952474887 (lCSP,lMIMEContent)
+	End If
+	SMTPSend (ccOutServer,ccOutFrom,pToAddresslist,pSubject,lMIMEContent,pCCAddresslist,pBCCAddresslist,ccOutFromName,pStatusCall,pPriority)
+Else
+	SMTPSend (ccOutServer,ccOutFrom,pToAddresslist,pSubject,pBody,pCCAddresslist,pBCCAddresslist,ccOutFromName,pStatusCall,pPriority)
+End If

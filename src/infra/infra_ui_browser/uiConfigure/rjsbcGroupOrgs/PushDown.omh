@@ -1,0 +1,15 @@
+If ilPrevious.$linecount
+	;  ilPrevious $line has been cleared but we want it stored when it goes into cache
+	Do ilNavCache.$add(ilPrevious,ilPrevious.$line)
+End If
+Calculate ilPrevious as ilNow
+If ilPrevious.$line
+	;  we have a current line - clear any existing selected line
+	Do ilPrevious.$search(0)
+	Calculate ilPrevious.[ilPrevious.$line].$selected as kTrue     ;; make line selected because list current line will be cleared for presentation and behaviour reasons
+Else If ilPrevious.$linecount=1
+	Calculate ilPrevious.$line as 1
+End If
+Calculate irParent as ilPrevious
+Do method FetchCurrentNode
+Do method SetNavigationPath

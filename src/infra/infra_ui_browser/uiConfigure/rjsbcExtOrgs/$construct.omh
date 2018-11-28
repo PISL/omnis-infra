@@ -1,0 +1,95 @@
+Do $cinst.$getBrowser()     ;; populate icPlatform used in TranslateText to decide on tab shortcuts
+Set reference irefContainer to $cinst.$container
+Do inherited
+Do method setTabColours
+
+Calculate irParameters as trParameters
+Calculate icSUPPorCUST as irParameters.EOType
+
+;  Enter your initialization code here
+Do $DefineList($cinst.ilDisplayRecords,'infra.tentExtOrganisations')
+Do ilDisplayRecords.$cols.$add('MECID',kCharacter,kSimplechar,20)
+Calculate irCurrentRecord as ilDisplayRecords
+
+Do $DefineList(irOrgLink,'infra.tentOrgLinks')
+
+Do $cinst.$fetchOrgs()
+
+Do method TranslateText     ;; call this here to get the translations before setting superclass labels/values
+
+If icSUPPorCUST='SUPPLIER'
+	Calculate icFormHeading as $cell(clLabels,'objName','SUPP_Heading','label')
+	Calculate $cinst.$objs.icFormHeading.$tooltip as $cell(clLabels,'objName','SUPP_Intro','label')
+Else If icSUPPorCUST='CUSTOMER'
+	Calculate icFormHeading as $cell(clLabels,'objName','CUST_Heading','label')
+	Calculate $cinst.$objs.icFormHeading.$tooltip as $cell(clLabels,'objName','CUST_Intro','label')
+End If
+If irParameters.instruction='NEW_CUST'
+	Calculate $cinst.$objs.icFormHeading.$tooltip as $cell(clLabels,'objName','CUST_Intro','label')
+End If
+
+Do method UserPermissions
+
+;  no drop lists needed for this small group of records
+;  Do ilSearch1.$cols.$add('code',kCharacter,kSimplechar,15)
+;  Do ilSearch1.$cols.$add('display',kCharacter,kSimplechar,100)
+;  Do ilSearch1.$add('SUPPLIER','Suppliers')
+;  Do ilSearch1.$add('CUSTOMER','Customers')
+;  If irUserRights.allOrgs
+;  Do ilSearch1.$add('ALL','All organisations')
+;  End If
+
+Do $DefineList(ilCountries,'tCountries')
+Do ilCountries.$FetchActive()
+Do ilCountries.$cols.$findname('CO_NAME') Returns liColRef
+Calculate $cinst.$objs.EO_CO_ISO3_REF.$listcolumn as liColRef.$ident
+;  find correct column number to display in list
+Do ilDisplayRecords.$cols.$findname('EO_NAME') Returns liColRef
+Calculate lnDisplayListCol as liColRef.$ident
+
+;  Do $cinst.$superObjects('Organisations',lnDisplayListCol,'Which group','')
+;  Do $cinst.$superObjects($cell(clLabels,'objName','disp_orgs','label'),lnDisplayListCol,$cell(clLabels,'objName','sel_group','label'),'',,kTrue,$cell(clLabels,'objName','EO_icSearch','contenttip'))
+If icSUPPorCUST='SUPPLIER'
+	Do $cinst.$superObjects($cell(clLabels,'objName','disp_supp','label'),lnDisplayListCol,'','','',kTrue,'text search')
+Else If icSUPPorCUST='CUSTOMER'
+	Do $cinst.$superObjects($cell(clLabels,'objName','disp_cust','label'),lnDisplayListCol,'','','',kTrue,'text search')
+Else     ;; belt n braces code.  there seems to be a problem setting EOType
+	Do $cinst.$superObjects($cell(clLabels,'objName','disp_cust','label'),lnDisplayListCol,'','','',kTrue,'text search')     ;; customers is default
+End If
+If irParameters.instruction='NEW_CUST'     ;; new customer from Delegate form
+	Do $cinst.$superObjects($cell(clLabels,'objName','disp_cust','label'),lnDisplayListCol,'','','',kTrue,'text search')
+End If
+
+;  always start on first tab
+Calculate inCurrentTab as 1
+Calculate $cinst.$objs.TabControl_EO.$currenttab as inCurrentTab
+Calculate $cinst.$objs.PagedPane.$currentpage as inCurrentTab
+
+If irParameters.instruction='NEW_CUST'
+	;  use the parameter Delegate to create a new EO record, subject to saving from user
+	Calculate lrDelegate as trParameters.Delegate
+	
+	Do ioRelationshipLogic.$prepareNewEOfromDelegate(lrDelegate,irCurrentRecord,irOrgLink)
+	
+	If irCurrentRecord.EO_SEQ>0
+		;  customer already exists
+		;  Calculate icFormIntro as $cell(clLabels,'objName','CUST_Intro','label')     ;; ###
+		Do toStrings.$StringTableEntry('MSG_CUSTEXISTS',icFormIntro,'new Customer record already exists')
+		Do ilDisplayRecords.$search($ref.EO_SEQ=irCurrentRecord.EO_SEQ,1,0,0,0)
+	Else
+		Calculate icMode as 'I'
+		Calculate ilDisplayRecords.$line as 0
+	End If
+	
+	Calculate trParameters as #NULL     ;; we are finished with them
+End If
+
+Do $cinst.$container().$initToolsMenu('IE') Returns ilMenuCommands     ;; use defaults
+If icSUPPorCUST="SUPPLIER"
+	Do ilMenuCommands.$add('FACT_IMP_SUPP',1201)
+Else
+	Do ilMenuCommands.$add('FACT_IMP_CUST',1201)
+End If
+Do $cinst.$container().$setupToolsMenu(icSUPPorCUST,ilMenuCommands)
+
+Do $cinst.$behaviour()

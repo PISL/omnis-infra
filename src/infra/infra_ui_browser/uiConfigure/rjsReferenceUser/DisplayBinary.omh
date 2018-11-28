@@ -1,0 +1,16 @@
+Calculate ilBinAsList as #NULL
+Calculate ipictImage as #NULL
+Calculate $cinst.$objs.PagedPane.$objs.RFU_BIN.$visible as kFalse
+Calculate $cinst.$objs.PagedPane.$objs.ilBinAsList.$visible as kFalse
+Calculate $cinst.$objs.PagedPane.$objs.ipictImage.$visible as kFalse
+Calculate lcBinType as pictformat(irCurrentRecord.RFU_BIN)
+
+If ilBinaryDisplayOption.code='LIST'
+	Calculate ilBinAsList as irCurrentRecord.RFU_BIN
+	Calculate $cinst.$objs.PagedPane.$objs.ilBinAsList.$visible as kTrue
+Else If ilBinaryDisplayOption.code='GIF'
+	Calculate ipictImage as irCurrentRecord.RFU_BIN
+	Calculate $cinst.$objs.PagedPane.$objs.ipictImage.$visible as kTrue
+Else
+	Calculate $cinst.$objs.PagedPane.$objs.RFU_BIN.$visible as kTrue
+End If

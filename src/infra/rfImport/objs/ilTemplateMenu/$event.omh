@@ -1,0 +1,12 @@
+On evClick     ;; pCommandID    pLineNumber
+	;  Breakpoint
+	If pCommandID>2000
+		Calculate ibExistingTemplate as kTrue
+		Calculate $cinst.$objs.ilTemplateMenu.$text as ilMenuHier.[pLineNumber].colText
+		Do method applyTemplate (ilMenuHier.[pLineNumber].colText)
+	Else
+		Calculate ibExistingTemplate as kFalse
+		Do irChosenTemplate.$clear()
+		Calculate $cinst.$objs.ilTemplateMenu.$text as ilTemplateMenu.[pLineNumber].colText
+	End If
+	Do $cinst.$setUserPrompt()

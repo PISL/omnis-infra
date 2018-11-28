@@ -1,0 +1,23 @@
+
+Switch pDatePart
+	Case kMinute
+		Quit method con('EXTRACT(MINUTE FROM ',pDateField,')')
+	Case kHour
+		Quit method con('EXTRACT(HOUR FROM ',pDateField,')')
+	Case kDay
+		Quit method con('EXTRACT(DAY FROM ',pDateField,')')
+	Case kDayofWeek
+		Quit method con('EXTRACT(DOW FROM ',pDateField,')')
+	Case kDayofYear
+		Quit method con('EXTRACT(DOY FROM ',pDateField,')')
+	Case kWeek
+		Quit method con('EXTRACT(WEEK FROM ',pDateField,')')
+	Case kMonth
+		Quit method con('EXTRACT(MONTH FROM ',pDateField,')')
+	Case kQuarter
+		Quit method con('EXTRACT(QUARTER FROM ',pDateField,')')
+	Case kYear
+		Quit method con('EXTRACT(YEAR FROM ',pDateField,')')
+	Default
+		Breakpoint {Unsupported or Unkown date part type}
+End Switch

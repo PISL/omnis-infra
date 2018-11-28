@@ -1,0 +1,6 @@
+;  Enter your initialization code here
+;  prParams is expected to have 2 boolean columns representing initial values for pbAddLine$enabled and pbRemoveLine.$enabled
+Calculate $cinst.$objs.pbAddLine.$enabled as prParams.C1
+Calculate $cinst.$objs.pbRemoveLine.$enabled as prParams.C2
+;  Breakpoint
+Set reference irefParent to $cinst.$container

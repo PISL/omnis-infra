@@ -1,0 +1,27 @@
+On evClick
+	Do $cinst.$saveData() Returns lbOK     ;; icDisplayMessage and icMode explain the results of $saveData
+	If lbOK
+		;  Do ilDisplayRecords.$fetch_all()
+		;  Do ilDisplayRecords.$sendall($ref.MECID.$assign(con(mid(bintohex(binfromint64($sendallref.GO_MEC_ID)),1,4),'-',mid(bintohex(binfromint64($sendallref.GO_MEC_ID)),5,4),'-',mid(bintohex(binfromint64($sendallref.GO_MEC_ID)),9,4),'-',mid(bintohex(binfromint64($sendallref.GO_MEC_ID)),13,4))))
+		;  Do ilDisplayRecords.$sort($ref.GO_NAME_FULL,0)
+		
+		If inCurrentTab=cnTabCompany
+			Do method refreshDisplayList
+			Do ilDisplayRecords.$search($ref.GO_SEQ=irCurrentRecord.GO_SEQ,1,0,0,0)
+			Do method $displayListClick
+		Else If inCurrentTab=cnTabStructure
+			If ilPrevious.GS_SEQ>0
+				Do ilNow.$fetchBranch(ilPrevious.GS_SEQ,kTrue)
+			Else
+				Do ilNow.$fetchSuperiors(ilDisplayRecords.GO_SEQ,kTrue)
+			End If
+			Do ilNow.$search($ref.GS_SEQ=irCurrentStructure.GS_SEQ,1,0,0,0) Returns lbFound
+		End If
+	End If
+	
+	If isclear(irCurrentRecord.GO_MEC_ID)&ilCorpPersonCopy.$linecount>0     ;; we were editing because of a failure in registration
+		Calculate ilCorporatePerson as ilCorpPersonCopy
+	End If
+	
+	Do $cinst.$behaviour()
+	Do $cinst.$redraw()

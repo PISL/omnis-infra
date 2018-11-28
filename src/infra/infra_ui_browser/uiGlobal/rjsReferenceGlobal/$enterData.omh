@@ -1,0 +1,25 @@
+;  ##############  2018-04-19  ################
+;  overloaded because of the bug that stops "Do inherited" working when "$insertCR()" is called directly from "handleMenuCall"
+If irKeyPress.$colcount
+	Do inherited
+Else
+	Switch pKey
+		Case "I"
+			If irUserRights.canInsert&$cinst.icMode=''
+				Do $cinst.$insertCR()
+			End If
+			
+		Case "E"
+			If irUserRights.canEdit&$cinst.icMode=''&irCurrentRecord.[irCurrentRecord.icPrimaryKey]>0     ;; check permissions and validity
+				Do $cinst.$editCR()
+			End If
+			
+		Case "D"
+			If irUserRights.canDelete&$cinst.icMode=''&irCurrentRecord.[irCurrentRecord.icPrimaryKey]>0
+				Do $cinst.$deleteCR()
+			End If
+			
+		Default
+			;  ignore
+	End Switch
+End If

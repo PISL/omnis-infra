@@ -1,0 +1,16 @@
+;  callback method from clientmessage - Yes
+Do irCurrentRecord.$delete_pk() Returns lbOK
+If not(lbOK)
+	Calculate icDisplayMessage as irCurrentRecord.irErrorSQL.NativeErrorText
+Else
+	Do ilDisplayRecords.$remove(ilDisplayRecords.$line)
+	Do irCurrentRecord.$clear()
+	If ilDisplayRecords.$linecount=0     ;; just deleted the only remaining entry for the currently selected class
+		Do method fetchSearch1List
+		Do method fetchDisplayList (ilSearch1.RFO_CLASS)
+	Else
+		Calculate ilDisplayRecords.$line as 0
+	End If
+End If
+
+Do $cinst.$behaviour()

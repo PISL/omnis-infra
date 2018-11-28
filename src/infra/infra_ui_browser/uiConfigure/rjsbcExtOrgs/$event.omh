@@ -1,0 +1,21 @@
+On evLayoutChanged
+	Do inherited
+	Switch inBreakpoint
+		Case 320
+			Calculate lnHeightAdd as 826-$cinst.$objs.greyBackground.$height
+		Case 375,480
+			Calculate lnHeightAdd as 850-$cinst.$objs.greyBackground.$height
+		Case 667
+			Calculate lnHeightAdd as 690-$cinst.$objs.greyBackground.$height
+		Default
+			Calculate lnHeightAdd as 0
+	End Switch
+	
+	Calculate $cinst.$objs.ppRecordNavigation.$height as lnHeightAdd+$cinst.$objs.ppRecordNavigation.$height
+	Calculate $cinst.$objs.greyBackground.$height as lnHeightAdd+$cinst.$objs.greyBackground.$height
+	
+	If inBreakpoint<=375
+		Calculate $cinst.$objs.TabControl_EO.$fontsize as 6
+	Else
+		Calculate $cinst.$objs.TabControl_EO.$fontsize as 8
+	End If

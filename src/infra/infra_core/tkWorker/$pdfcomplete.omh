@@ -1,0 +1,22 @@
+
+If not(pbOK)     ;; non-zero is a failure
+	If ibSaveOnError     ;; this will be kFalse if we have no DB connection
+		Calculate lcMessage as con("Attempting to print PDF: ",kCr,icReportClass)
+		If len(pcFilePath)
+			Calculate lcMessage as con(lcMessage," to '",pcFilePath,"'")
+		End If
+		Do irefStartTask.$AppError(lcMessage,'PDF Device failure')
+	End If
+Else If len(icCompletionMethod)
+	Do $cinst.[icCompletionMethod]     ;; the completion method in the application's tkWorkerApp will pick up its parameters from irCompletionParams
+End If
+
+If irefCaller
+	If irCallerParams.$colcount
+		Do irefCaller.$pdfcomplete(icPDFid,pcFilePath,irCallerParams)
+	Else
+		Do irefCaller.$pdfcomplete(icPDFid,pcFilePath)
+	End If
+End If
+
+Do $cinst.$close()     ;; our job is done here

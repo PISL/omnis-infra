@@ -1,0 +1,24 @@
+{
+	"ident": 1037,
+	"order": 30,
+	"objtype": "kRoundrect",
+	"properties": {
+		"backcolor": "kColorDefault",
+		"backpattern": 1,
+		"bordercolor": "RGB(0,0,0)",
+		"desgroup": 0,
+		"deslock": false,
+		"fieldstyle": "",
+		"floating": true,
+		"forecolor": "kColorDefault",
+		"height": 1.199,
+		"left": 0.455,
+		"lineno": 18,
+		"lineoffset": 0.282,
+		"linestyle": 1,
+		"printontop": false,
+		"userinfo": "",
+		"vertextend": false,
+		"width": 18.359
+	}
+}

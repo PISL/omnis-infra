@@ -1,0 +1,6 @@
+;  now check users Group Organisations
+Do $DefineList(llUserGroups,'infra.tuaGroupOrgLinks')
+Do llUserGroups.$AddLinkedCols('GO_SEQ,GO_NAME_FULL,GON_NAME_FULL')
+Do llUserGroups.$fetchUserGroupOrgs($ctask.trCurrUser.USR_SEQ)
+
+Quit method llUserGroups

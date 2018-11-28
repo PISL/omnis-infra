@@ -1,0 +1,11 @@
+;  logon, setup object variables for sending and receiving e-mails
+Calculate ccOutServer as pOutServer
+Calculate ccOutFrom as pOutFrom
+Calculate ccOutFromName as pOutFromName
+
+Calculate ccInServer as pInServer
+Calculate ccInUsername as pInUsername
+Calculate ccInPassword as pInPassword
+
+Do clOutBuffer.$define(iOutToAddressList,iOutSubject,iOutBody,iOutCCAddressList,iOutBCCAddressList,iOutStatusCall,iOutPriority,iOutEnclosureList)
+Do cInBuffer.$define(iInReturnPath,iInDate,iInPriority,iInFrom,iInSubject,iInBody,iInEnclosureList)

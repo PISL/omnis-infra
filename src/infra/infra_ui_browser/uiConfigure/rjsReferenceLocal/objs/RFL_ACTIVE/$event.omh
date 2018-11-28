@@ -1,0 +1,3 @@
+On evClick
+	Calculate $cinst.$objs.label_RFL_INHERIT.$visible as irCurrentRecord.RFL_ACTIVE=0     ;; this column is releveant ONLY when active os OFF
+	Calculate $cinst.$objs.RFL_INHERIT.$visible as irCurrentRecord.RFL_ACTIVE=0     ;; this column is releveant ONLY when active os OFF

@@ -1,0 +1,83 @@
+;  split the header information and any enclosures from the body of the e-mail message
+Calculate pReturnPath as ''
+Calculate pDate as ''
+Calculate pPriority as ''
+Calculate pFrom as ''
+Calculate pSubject as ''
+Calculate pBody as ''
+
+Do lHeaderList.$define(lAttribute,lValue)
+MailSplit (pMessage,lHeaderList,pBody)
+
+Do lHeaderList.$search(upp(lAttribute)='RETURN-PATH'|upp(lAttribute)='DATE'|upp(lAttribute)='X-PRIORITY'|upp(lAttribute)='FROM'|upp(lAttribute)='SUBJECT')
+Set reference lLineRef to lHeaderList.$first(kTrue,kFalse)
+While lLineRef
+	Do lHeaderList.$loadcols()
+	Switch upp(lAttribute)
+		Case 'RETURN-PATH'
+			Calculate pReturnPath as lValue
+		Case 'DATE'
+			Calculate pDate as lValue
+		Case 'X-PRIORITY'
+			Calculate pPriority as lValue
+		Case 'FROM'
+			Calculate pFrom as lValue
+		Case 'SUBJECT'
+			Calculate pSubject as lValue
+	End Switch
+	Set reference lLineRef to lHeaderList.$next(lHeaderList.$line,kTrue,kFalse)
+End While
+
+;  if the e-mail contains enclosures, decompose the multipart MIME content
+Calculate lSeperator as sys(9)
+If mid(pEnclosurePath,len(pEnclosurePath),1)<>lSeperator
+	Calculate pEnclosurePath as con(pEnclosurePath,lSeperator)
+End If
+
+Do pEnclosureList.$define(lFileName,lFilePath)
+Calculate lBinaryBody as pBody
+X952474883 (lBinaryBody,lMimeType,lNumParts,lNumLevels)
+If lNumParts>0
+	X952474890 (lCSP,lBinaryBody)
+	For lLevel from 1 to lNumLevels step 1
+		For lPart from 1 to lNumParts step 1
+			X952474889 (lCSP,lFileImage,lPart,lLevel,lFileName)
+			If lFileName='NULL'
+				;  extract message
+				Calculate pBody as lFileImage
+			Else
+				;  extract enclosure
+				If pEnclosurePath<>''
+					Calculate lSaveEnclosure as kTrue
+					Calculate lFilePath as con(pEnclosurePath,lFileName)
+					Do FileOps.$doesfileexist(lFilePath) Returns lReturnFlag
+					If lReturnFlag
+						No/Yes message  (Icon) {[lFileName] already exists in the enclosures folder[chr(13)]Replace existing file ?}
+						If flag false
+							Calculate lSaveEnclosure as kFalse
+						End If
+					End If
+					If lSaveEnclosure
+						;  write the file to the enclosures folder
+						Calculate lFileError as kTrue
+						While lFileError
+							WriteBinFile (lFilePath,lFileImage) Returns lNumBytes
+							If lNumBytes<binlength(lFileImage)
+								Yes/No message  (Icon) {An error has occured saving the enclosure [lFileName], ensure that you have read/write[chr(13)]access to your enclosures folder and sufficient disk space available.[chr(13)][chr(13)]Do you wish to try again ?}
+								If flag false
+									Break to end of loop
+								End If
+							Else
+								Calculate lFileError as kFalse
+							End If
+						End While
+						If not(lFileError)
+							Do pEnclosureList.$add(lFileName,lFilePath)
+						End If
+					End If
+				End If
+			End If
+		End For
+	End For
+	X952474891 (lCSP)
+End If

@@ -1,0 +1,31 @@
+
+;  If an email has been requested from a runtime error for example, there may be no configCode
+;  and there may be no server options provided.  The code will call this method and we will have to
+;  attempt to resolve server issues internally.
+Do clServerCache.$search($ref.configCode=pcConfigCode&$ref.GO_SEQ=trGroupOrg.GO_SEQ,1,0,0,0) Returns lbFound
+If not(lbFound)
+	Do clServerCache.$search($ref.configCode=pcConfigCode,1,0,0,0) Returns lbFound
+End If
+
+If lbFound
+	;  great
+Else
+	Do tFormStatement.$execdirect(con("select * from infra.initinherited('EM_SRVR_FROM', '",pcConfigCode,"', ",trGroupOrg.GO_SEQ,")"))
+	Do tFormStatement.$fetch(lrReference)     ;; remember that the column names will be in lower case
+	If lrReference.rfo_seq>0
+		Do OJSON.$jsontolistorrow(lrReference.rfo_json,lcError) Returns lrAttributes
+		If lrAttributes.$colcount>0
+			Do clServerCache.$add(pcConfigCode,lrAttributes,trGroupOrg.GO_SEQ)
+			Calculate clServerCache.$line as clServerCache.$linecount
+		Else
+			Calculate icErrorText as con('issue with JSON in EM_SRVR_FROM/',pcConfigCode,': ',kCr,lcError)
+			Quit method kFalse
+		End If
+	Else
+		Calculate icErrorText as 'email server not configured'
+		Quit method kFalse
+	End If
+End If
+
+Calculate prAttributes as clServerCache.attributes
+Quit method kTrue

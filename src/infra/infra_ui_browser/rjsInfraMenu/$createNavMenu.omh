@@ -1,0 +1,15 @@
+;  tlNavMenu will have been initialised in rtBusinessApp
+Calculate lrAttributes as OJSON.$jsontolistorrow(trFormColours.ANAVLIST)
+Calculate lnBackAlpha as lrAttributes.backalpha
+Calculate lnBackColour as eval(lrAttributes.backcolor)
+
+Calculate ilNavMenu as tlNavMenu
+Do ilNavMenuCascade.$copydefinition(ilNavMenu)
+
+Calculate llCascade as ilNavMenu
+For llCascade.$line from 1 to llCascade.$linecount step 1
+	Calculate llCascade.flags as 0
+	Calculate llCascade.ident as llCascade.$line+1000
+End For
+Do toStrings.$StringTableEntry('NAVMENU_CASCADE',lcMenu,'Options')
+Do ilNavMenuCascade.$add(1,lcMenu,,0,1,,row(llCascade,kNavMenuCascadeFlagOpenOnParentEdge+kNavMenuCascadeFlagExpand,kNavMenuSideBottom,kNavMenuSideNone,#NULL,#NULL,lnBackColour,eval(lnBackAlpha)))

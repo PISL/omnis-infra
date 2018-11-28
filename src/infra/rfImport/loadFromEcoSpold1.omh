@@ -1,0 +1,42 @@
+;  Breakpoint
+
+Calculate llXML as plXML
+
+;  set up the EcoSpold columns to receive the data
+Calculate ilContent as #NULL
+Do ilContent.$cols.$add("inOrOut",kCharacter,kSimplechar,1000)
+Do ilContent.$cols.$add("groupNo",kCharacter,kSimplechar,1000)
+Do ilContent.$cols.$add("infrastructureProcess",kCharacter,kSimplechar,1000)
+Do ilContent.$cols.$add("category",kCharacter,kSimplechar,1000)
+Do ilContent.$cols.$add("subCategory",kCharacter,kSimplechar,1000)
+Do ilContent.$cols.$add("localCategory",kCharacter,kSimplechar,1000)
+Do ilContent.$cols.$add("localSubCategory",kCharacter,kSimplechar,1000)
+Do ilContent.$cols.$add("location",kCharacter,kSimplechar,1000)
+Do ilContent.$cols.$add("number",kCharacter,kSimplechar,1000)
+Do ilContent.$cols.$add("name",kCharacter,kSimplechar,1000)
+Do ilContent.$cols.$add("meanValue",kCharacter,kSimplechar,1000)
+Do ilContent.$cols.$add("unit",kCharacter,kSimplechar,1000)
+Do ilContent.$cols.$add("CASNumber",kCharacter,kSimplechar,1000)
+Do ilContent.$cols.$add("formula",kCharacter,kSimplechar,1000)
+Calculate inDataColCount as ilContent.$colcount
+Do ilContent.$add("inOrOut","groupNo","infrastructureProcess","category","subCategory","localCategory","localSubCategory","location","number","name","meanValue","unit","CASNumber","formula")
+
+Do llXML.$search($ref.path="/dataset/flowData",1,0,0,0) Returns lnLine
+;  Calculate lnLine as lnLine+1     ;; first row with "attributes"
+While $Loop(llXML)
+	;  Calculate llXML.$line as lnLine
+	If llXML.path="/dataset/flowData/exchange"     ;; get the attributes
+		Calculate llTemp as llXML.attributes
+		Do toStrings.$ListToRow(llTemp,"name","value") Returns lrTemp
+		
+		Do ilContent.$add() Returns lrefCol
+		Do lrefCol.$assignrow(lrTemp,kTrue)
+		Calculate ilContent.$line as ilContent.$linecount
+		
+	Else     ;; either inputGroup or outputGroup
+		Calculate ilContent.InOrOut as mid(llXML.path,28)
+		Calculate ilContent.groupNo as llXML.value
+	End If
+	
+	;  Calculate lnLine as lnLine+1
+End While

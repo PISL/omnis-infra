@@ -1,0 +1,34 @@
+If tlDatabases.DAM='WebService'
+	;  pass parameters to web service
+	Do ioWeb.$callFetch(lnInvNo,irErrorSQL,row($cinst.$class().$name,$cmethod().$name,row(pGOid,pCommit),lnInvNo.$type,0,ilRESTextensions))
+	If ioWeb.irResponse.httpStatusCode=200
+		;  the result should be in this object     ;; however there may be a SQL error
+		If irErrorSQL.NativeErrorText<>''
+			Quit method kFalse
+		End If
+		Calculate $cinst.FOH_INV_NO as lnInvNo
+		Quit method kTrue
+	Else
+		Quit method kFalse
+	End If
+End If
+
+Do $cinst.$ImmediateSession(loSession,loStatement) Returns lbImmediateSession
+If lbImmediateSession
+	Do $cinst.$SetSession(loSession,loStatement)
+Else If not(ibGoodConnectionToDb)
+	Quit method kFalse
+End If
+
+Calculate lcClass as con('FOH_INV_NO_',pGOid)
+
+Begin statement
+Sta: {select infra.nextseqno(@[lcClass],@[pCommit])}
+End statement
+
+Do $cinst.$executesqlandfetchinto($cinst.FOH_INV_NO) Returns lbOk
+If lbImmediateSession
+	Do $cinst.$SetSession(#NULL,#NULL,kTrue)
+End If
+
+Quit method lbOk

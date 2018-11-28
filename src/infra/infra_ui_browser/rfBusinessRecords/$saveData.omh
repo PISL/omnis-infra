@@ -1,0 +1,20 @@
+Calculate icDisplayMessage as ''
+
+Do irCurrentRecord.$validation() Returns lbProceed
+If not(lbProceed)
+	Calculate icDisplayMessage as irCurrentRecord.icValidationMessage
+Else
+	If icMode='I'     ;; insert
+		Do irCurrentRecord.$insert() Returns lbOK
+	Else
+		Do irCurrentRecord.$update() Returns lbOK
+	End If
+	If lbOK
+		Calculate icMode as ''
+	Else
+		;  Calculate icMode as ''     ;; stay in insert mode for user to make corrections
+		Calculate icDisplayMessage as irCurrentRecord.irErrorSQL.NativeErrorText
+	End If
+End If
+
+Quit method lbOK

@@ -1,0 +1,4 @@
+On evClick
+	Do method ProductSelected
+	Calculate $cobj.$visible as kFalse
+	Do $cinst.$behaviour()

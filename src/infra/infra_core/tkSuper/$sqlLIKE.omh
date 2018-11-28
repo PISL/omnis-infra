@@ -1,0 +1,33 @@
+;  This method creates a LIKE statement for PostgreSQL
+
+Do $ctask.tStringFields.$TMReplace(pValue,"'","''",pValue)     ;; Replace single ' with '' so they are found correctly
+
+If pos('_PHONE',pField)|pos('_POSTAL_CODE',pField)
+	;  phone fields are always the 'starts with'.   so make it    LIKE  (403) xx%
+	Calculate Query as con(pField," ILIKE '",pValue,"%'")
+Else
+	Do tStringFields.$TMReplace(pValue,' ','%',pValue)
+	Do tStringFields.$TMReplace(pValue,'*','%',pValue)
+	
+	Calculate Query as pField
+	
+	Switch pWildCardType
+		Case 0     ;; Before
+			If mid(Query,1,1)<>'%'
+				Calculate Query as con(Query,pick(pNot,'',' NOT')," ILIKE '%",pValue,"'")
+			End If
+		Case 1     ;; After
+			If mid(Query,len(Query)-1,1)<>'%'
+				Calculate Query as con(Query,pick(pNot,'',' NOT')," ILIKE '",pValue,"%'")
+			End If
+		Case 2     ;; Both
+			If mid(Query,1,1)<>'%'
+				Calculate Query as con(Query,pick(pNot,'',' NOT')," ILIKE '%",pValue,"'")
+			End If
+			If mid(Query,len(Query)-1,1)<>'%'
+				Calculate Query as con(mid(Query,1,len(Query)-1),"%'")
+			End If
+	End Switch
+End If
+
+Quit method Query

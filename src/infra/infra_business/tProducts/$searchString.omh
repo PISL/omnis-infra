@@ -1,0 +1,159 @@
+Calculate pcReturnWhat as upp(pcReturnWhat)
+If pcReturnWhat='COUNT'|pcReturnWhat='RESULT'
+	;  continue
+Else
+	Quit method
+End If
+
+If mid(pcSearchString,2,1)=':'
+	;  user has provided a column specific instruction
+	Calculate pcSearchColumn as upp(mid(pcSearchString,1,1))
+	Calculate pcSearchString as mid(pcSearchString,3,99)     ;; remove column specific instruction from criteria
+	
+	Calculate lbSearchAllCols as kFalse
+	If pcSearchColumn='S'
+		Calculate lcSpecificColumnName as 'upper(PRD_SUPP_PRODCODE)'
+	Else If pcSearchColumn='I'
+		Calculate lcSpecificColumnName as 'upper(PRD_INT_PRODCODE)'
+	Else If pcSearchColumn='B'
+		Calculate lcSpecificColumnName as 'upper(PRD_BRAND)'
+	Else If pcSearchColumn='N'
+		Calculate lcSpecificColumnName as 'upper(PRD_NAME)'
+	Else If pcSearchColumn='D'
+		Calculate lcSpecificColumnName as 'upper(PRD_DESC)'
+		
+		;  sProductInternalData columns
+	Else If pcSearchColumn='V'
+		Calculate lcSpecificColumnName as 'upper(PID_DIVISION)'
+	Else If pcSearchColumn='L'
+		Calculate lcSpecificColumnName as 'upper(PID_PLANT)'
+	Else If pcSearchColumn='U'
+		Calculate lcSpecificColumnName as 'upper(PID_BUSUNIT)'
+	Else If pcSearchColumn='C'
+		Calculate lcSpecificColumnName as 'upper(PID_CATEGORY)'
+	Else If pcSearchColumn='O'
+		Calculate lcSpecificColumnName as 'upper(PID_COSTCENTRE)'
+	Else If pcSearchColumn='P'
+		Calculate lcSpecificColumnName as 'upper(PID_PROJECT)'
+	Else If pcSearchColumn='*'     ;; wildcard - everywhere
+		Calculate lbSearchAllCols as kTrue
+	Else
+		Quit method kFalse
+	End If
+End If
+Calculate pcSearchString as con('%',upp(pcSearchString),'%')     ;; this will make isnumber() inneffective
+
+If isnumber(pcSearchString)
+	Calculate lbIsNumber as kTrue
+End If
+
+If tlDatabases.DAM='WebService'
+	If pcReturnWhat='COUNT'
+		Do ioWeb.$callFetch(lnCount,irErrorSQL,row($cinst.$class().$name,$cmethod().$name,row(pcReturnWhat,pcSearchString,pcSearchColumn,pnGroupOrgSEQ,pnExtOrgSEQ),lnCount.$type,0,ilRESTextensions))
+		If ioWeb.irResponse.httpStatusCode=200
+			;  the result should be in this object     ;; however there may be a SQL error
+			If irErrorSQL.NativeErrorText<>''
+				Quit method kFalse
+			End If
+			Quit method lnCount
+		Else
+			Quit method kFalse
+		End If
+	Else If pcReturnWhat='RESULT'
+		Do ioWeb.$callFetch($cinst,irErrorSQL,row($cinst.$class().$name,$cmethod().$name,row(pcReturnWhat,pcSearchString,pcSearchColumn,pnGroupOrgSEQ,pnExtOrgSEQ),$cinst.$type,0,ilRESTextensions))
+		If ioWeb.irResponse.httpStatusCode=200
+			;  the result should be in this object     ;; however there may be a SQL error
+			If irErrorSQL.NativeErrorText<>''
+				Quit method kFalse
+			End If
+			Quit method kTrue
+		Else
+			Quit method kFalse
+		End If
+	End If
+End If
+
+Calculate lbSearchAllCols as cbDefaultIsAllColumns
+
+Do $cinst.$ImmediateSession(loSession,loStatement) Returns lbImmediateSession
+If lbImmediateSession
+	Do $cinst.$SetSession(loSession,loStatement)
+Else If not(ibGoodConnectionToDb)
+	Quit method kFalse
+End If
+
+;  the "search all columns" version will produce a table scan coupled with outer join !!
+;  it will never be an efficient query ! !
+Begin statement
+If pcReturnWhat='RESULT'
+	;  its important to use the same columns as $fetchOurProducts
+	Sta: {select [$cinst.$selectnames()]}
+	Sta: {, [lrInternalData.$selectnames()]}
+	Sta: {, rfl_value, rfl_desc, rfl_number}
+Else If pcReturnWhat='COUNT'
+	Sta: {select count(*)}
+End If
+
+Sta: {from [$cinst.$servertablenames]}
+Sta: {left outer join [lrInternalData.$servertablenames] on  ( PRD_SEQ = PID_PRD_REF )}
+Sta: {left outer join [lrReferenceLocal.$servertablenames] on ( PID_TAX_BAND = RFL_VALUE and rfl_class='VAT_RATE' )}
+If lcSpecificColumnName<>''
+	;  lcSpecificColumnName
+	Sta: {where [lcSpecificColumnName] like @[pcSearchString]}
+	
+Else
+	;  cast the search net as widely as possible
+	Sta: {where ( upper(PRD_SUPP_PRODCODE) like @[pcSearchString]}
+	Sta: {or       upper(PRD_INT_PRODCODE) like @[pcSearchString]}
+	Sta: {or       upper(PRD_BRAND) like @[pcSearchString]}
+	Sta: {or       upper(PRD_NAME) like @[pcSearchString]}
+	Sta: {or       upper(PRD_DESC) like @[pcSearchString]}
+	Sta: {or      upper(PID_DIVISION) like @[pcSearchString]}
+	Sta: {or      upper(PID_PLANT) like @[pcSearchString]}
+	Sta: {or      upper(PID_BUSUNIT) like @[pcSearchString]}
+	Sta: {or      upper(PID_CATEGORY) like @[pcSearchString]}
+	Sta: {or      upper(PID_COSTCENTRE) like @[pcSearchString]}
+	Sta: {or      upper(PID_PROJECT) like @[pcSearchString]}
+	If lbIsNumber
+		Sta: {or       cast(PRD_SIZE as text) like @[pcSearchString]}
+		Sta: {or       cast(PID_UNIT_PRICE as text) like @[pcSearchString]}
+	End If
+	Sta: {)}
+End If
+
+If tcCurrentLibrary<>'CONFERENCE'
+	Sta: {and PRD_META = @[inMeta]}
+End If
+
+If pnExtOrgSEQ>0
+	Sta: {and      PRD_EO_REF = @[pnExtOrgSEQ]}
+	;  this may be a supplier's product which we sell on
+	Sta: {and      (PID_PRD_REF is null  or PRD_MICRO_PRD_REF = PRD_SEQ)}
+Else If pnGroupOrgSEQ>0
+	Sta: {and      PRD_GO_REF = @[pnGroupOrgSEQ]}
+	Sta: {and      PID_PRD_REF is not null}
+Else
+	Sta: {and      PRD_GO_REF = @[$ctask.trGroupOrg.GO_SEQ]}
+	If ibIncludeAll
+		;  no filter on OID
+	Else
+		Sta: {and      PID_PRD_REF is not null}
+	End If
+End If
+
+End statement
+
+If pcReturnWhat='RESULT'
+	Do $cinst.$executesqlandfetch() Returns lbOK
+Else If pcReturnWhat='COUNT'
+	Do $cinst.$executesqlandfetchinto(lnCount) Returns lbOK
+End If
+If lbImmediateSession
+	Do $cinst.$SetSession(#NULL,#NULL,kTrue)
+End If
+
+If pcReturnWhat='RESULT'
+	Quit method lbOK
+Else If pcReturnWhat='COUNT'
+	Quit method lnCount
+End If

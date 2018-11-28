@@ -1,0 +1,85 @@
+If tlDatabases.DAM='WebService'
+	;  pass parameters to web service
+	;  $callService (pFieldReference, row(TableClassName, CurrentMethodName, p1,...,pn) )     ;; result will be returned in pFieldReference, row() contains the parameters for the call
+	Do ioWeb.$callFetch(llPermissions,irErrorSQL,row($cinst.$class().$name,$cmethod().$name,row(pnUserNo),llPermissions.$type,1,ilRESTextensions))
+	If ioWeb.irResponse.httpStatusCode=200
+		;  the result should be in this object     ;; however there may be a SQL error
+		If irErrorSQL.NativeErrorText<>''
+			Quit method kFalse
+		End If
+		Quit method llPermissions
+	Else
+		Quit method kFalse
+	End If
+End If
+
+Do llPermissions.$cols.$add($cinst.PER_LABEL)
+Do llPermissions.$cols.$add($cinst.PER_DESC_EN)
+
+Do $cinst.$ImmediateSession(loSession,loStatement) Returns lbImmediateSession
+If lbImmediateSession
+	Do $cinst.$SetSession(loSession,loStatement)
+Else If not(ibGoodConnectionToDb)
+	Quit method kFalse
+End If
+
+Begin statement
+Sta: {with}
+Sta: {recursive allroles(roleid) as}
+Sta: {(select ur_rol_ref from infra.uausers}
+Sta: {join infra.uauserroles on ur_usr_ref = usr_seq}
+Sta: {where USR_SEQ = @[pnUserNo]}
+;  Sta: {and     UR_ACTIVE = 1}
+Sta: {union}
+Sta: {select rol_seq}
+Sta: {from infra.uaroles}
+Sta: {join allroles on rol_rol_ref = roleid}
+Sta: {)}
+Sta: {select per_label, per_desc_en}
+Sta: {from infra.uapermissions𯿿}
+Sta: {join infra.uarolepermissions on rp_per_ref = per_seq𯿿}
+Sta: {join infra.uaroles on rol_seq = rp_rol_ref𯿿}
+Sta: {join allroles on roleid = rp_rol_ref}
+Sta: {where ( ROL_REVOKE = 0 or ROL_REVOKE is null )}
+Sta:
+Sta: {except}
+Sta:
+Sta: {select per_label, per_desc_en}
+Sta: {from infra.uapermissions𯿿}
+Sta: {join infra.uarolepermissions on rp_per_ref = per_seq𯿿}
+Sta: {join infra.uaroles on rol_seq = rp_rol_ref𯿿}
+Sta: {join allroles on roleid = rp_rol_ref}
+Sta: {where  ROL_REVOKE = 1}
+End statement
+Do $cinst.$executesqlandfetch(llPermissions) Returns lbOK
+
+;  Begin statement
+;  Sta: select distinct PER_LABEL, PER_DESC_EN
+;  Sta: from [$cinst.$servertablenames()]
+;  Sta: join [lrRolePermissions.$servertablenames()] on RP_PER_REF = PER_SEQ
+;  Sta: join  [lrRoles.$servertablenames()] on RP_ROL_REF = ROL_SEQ
+;  Sta: join  [lrUserRoles.$servertablenames()] on ROL_SEQ = UR_ROL_REF
+;
+;  Sta: where UR_USR_REF = @[pnUserNo]
+;  Sta: and     UR_ACTIVE = 1
+;  Sta: and    ( ROL_REVOKE = 0 or ROL_REVOKE is null )
+;
+;  Sta: except
+;
+;  Sta: select distinct PER_LABEL, PER_DESC_EN
+;  Sta: from [$cinst.$servertablenames()]
+;  Sta: join [lrRolePermissions.$servertablenames()] on RP_PER_REF = PER_SEQ
+;  Sta: join  [lrRoles.$servertablenames()] on RP_ROL_REF = ROL_SEQ
+;  Sta: join  [lrUserRoles.$servertablenames()] on ROL_SEQ = UR_ROL_REF
+;
+;  Sta: where UR_USR_REF = @[pnUserNo]
+;  Sta: and     UR_ACTIVE = 1
+;  Sta: and     ROL_REVOKE = 1
+;  End statement
+
+Do $cinst.$executesqlandfetch(llPermissions) Returns lbOK
+If lbImmediateSession
+	Do $cinst.$SetSession(#NULL,#NULL,kTrue)
+End If
+
+Quit method llPermissions

@@ -1,0 +1,31 @@
+Do ilMenuHier.$clear()
+
+Do ilTemplates.$unfilter(0)
+Do ilTemplates.$filter($ref.IMT_COL_COUNT=inDataColCount,1,0,1,1)
+
+If ilTemplates.$linecount
+	For ilTemplates.$line from 1 to ilTemplates.$linecount step 1
+		Do ilMenuHier.$add(ilTemplates.IMT_NAME,kTrue,2000+ilTemplates.$line)
+	End For
+	Calculate ilTemplateMenu.2.colEnabled as kTrue
+Else
+	Calculate ilTemplateMenu.2.colEnabled as kFalse
+End If
+Calculate ilTemplateMenu.2.colMenu as ilMenuHier
+
+If ilTemplates.$linecount>0
+	;  let's apply the last used template
+	If ilTemplates.$linecount=1
+		Calculate ilTemplates.$line as 1
+	Else
+		Calculate llTemplates as ilTemplates
+		Do llTemplates.$sort($ref.IMT_LAST_USED,kTrue)
+		Calculate llTemplates.$line as 1
+		Do ilTemplates.$search($ref.IMT_NAME=llTemplates.IMT_NAME,1,0,0,0)
+	End If
+	
+	Calculate ibExistingTemplate as kTrue
+	Calculate $cinst.$objs.ilTemplateMenu.$text as ilTemplates.IMT_NAME
+	Do method applyTemplate (ilTemplates.IMT_NAME)
+	
+End If

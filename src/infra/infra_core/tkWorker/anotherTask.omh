@@ -1,0 +1,28 @@
+;  are there any other methods to spawn off in this sequence?
+
+;  Firstly save any results in the irReturnResults that will have a column for each task in the job with its result.
+Calculate lcTaskName as con(irThisInstruction.instruction,'_',irThisInstruction.completionMethod,'_',irCallerParams.[irCallerParams.icPrimaryKey])
+Do irReturnResults.$cols.$add(lcTaskName,kRow)
+Calculate irReturnResults.[lcTaskName] as pResults
+
+If ilInstructions.$linecount
+	;  there is so spawn the task
+	Calculate lcTaskName as con(ilInstructions.1.instruction,'_',ilInstructions.1.completionMethod,'_',irCallerParams.[irCallerParams.icPrimaryKey])
+	
+	;  Do $tasks.tkWorkerApp.$open('*',tcCurrentLibrary,$cinst.$task(),ilInstructions.1.instruction) Returns lrefSpawnedWorkerTask
+	Do $tasks.tkWorkerApp.$open(lcTaskName,tcCurrentLibrary,$cinst.$task(),ilInstructions.1.instruction) Returns lrefSpawnedWorkerTask
+	;  pass on reference to original task initiating this sequence
+	;  Do lrefSpawnedWorkerTask.$setCaller(irefCaller,pResults)
+	If lrefReport
+		Do lrefSpawnedWorkerTask.$jobStart(irCallerParams,ilInstructions,irefCaller,irReturnResults)
+	End If
+Else
+	;  We are finishing the last job in the list.
+	;  Call the default callback method if its there.
+	If irefCaller
+		Do irefCaller.$jobCompleted.$cando() Returns lbCanDo
+		If lbCanDo
+			Do irefCaller.$jobCompleted(irCallerParams,irReturnResults)
+		End If
+	End If
+End If

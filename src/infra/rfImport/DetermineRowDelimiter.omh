@@ -1,0 +1,14 @@
+;  determine what the end of row delimiter is
+If pos(con(kLf,kCr),pcContent)
+	Calculate lcDelimiterRow as con(kLf,kCr)
+Else If pos(con(kCr,kLf),pcContent)
+	Calculate lcDelimiterRow as con(kCr,kLf)
+Else If pos(con(kCr),pcContent)
+	Calculate lcDelimiterRow as kCr
+Else If pos(con(kLf),pcContent)
+	Calculate lcDelimiterRow as kLf
+Else
+	;  not recognised     ;; leave empty
+End If
+
+Quit method lcDelimiterRow

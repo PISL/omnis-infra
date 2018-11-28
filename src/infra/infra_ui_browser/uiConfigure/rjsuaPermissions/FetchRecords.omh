@@ -1,0 +1,17 @@
+If len(icSearch)>0
+	Do ilDisplayRecords.$fetchOnString($cinst.icSearch)
+Else
+	Do ilRolePermissions.$clear()
+	If ilSearch1.PER_LABEL<>''
+		Do ilDisplayRecords.$fetch_(con("where PER_LABEL like '",ilSearch1.PER_LABEL,"%'"))
+	Else
+		Do ilDisplayRecords.$fetch_all()
+	End If
+End If
+If ilDisplayRecords.irErrorSQL.NativeErrorText<>''
+	Calculate icDisplayMessage as ilDisplayRecords.irErrorSQL.NativeErrorText
+End If
+
+Do ilDisplayRecords.$sort($ref.PER_LABEL,0)
+
+Calculate inSearchCount as ilDisplayRecords.$linecount

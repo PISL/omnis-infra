@@ -1,0 +1,6 @@
+Do llPrivsUsedInThisForm.$cols.$add('permission',kCharacter,kSimplechar,100)
+Do llPrivsUsedInThisForm.$cols.$add('colName',kCharacter,kSimplechar,100)
+
+Do llPrivsUsedInThisForm.$add('report_select','canSelect')
+
+Do $cinst.$setPermissions(llPrivsUsedInThisForm)     ;; irUserRights

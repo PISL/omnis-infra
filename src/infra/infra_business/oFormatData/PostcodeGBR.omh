@@ -1,0 +1,34 @@
+Calculate pPostcode as upp(pPostcode)
+Calculate lcTemp as pPostcode
+Calculate lcTemp as replaceall(lcTemp,' ','')
+Calculate lcTokenBefore as upp(mid(lcTemp,1,len(lcTemp)-3))
+Calculate lcTokenAfter as upp(mid(lcTemp,len(lcTemp)-2,3))
+
+If chk(lcTokenBefore,'AA0','ZZ9')     ;; WD4
+	;  valid
+Else If chk(lcTokenBefore,'AA0A','ZZ9Z')     ;; WC2B
+	;  valid
+Else If chk(lcTokenBefore,'A0','Z9')     ;; B1
+	;  valid
+Else If chk(lcTokenBefore,'A00','Z99')     ;; B23
+	;  valid
+Else If chk(lcTokenBefore,'AA00','ZZ99')     ;; BN23
+	;  valid
+Else
+	Do toStrings.$StringTableMessage('VAL_POSTCODE_INVALID_FORMAT',icValidationText,icValidationCodes) Returns lbStringTableEntryFound
+	If not(lbStringTableEntryFound)
+		Calculate icValidationText as con(icValidationText,pick(icValidationText<>'','',', '),'invalid postcode format')
+	End If
+	Calculate lbErrorDetected as kTrue
+End If
+
+If not(lbErrorDetected)     ;; so as not to repeat same message
+	If chk(lcTokenAfter,'0AA','9ZZ')     ;; 9HR
+		;  valid
+	Else
+		Do toStrings.$StringTableMessage('VAL_POSTCODE_INVALID_FORMAT',icValidationText,icValidationCodes) Returns lbStringTableEntryFound
+		If not(lbStringTableEntryFound)
+			Calculate icValidationText as con(icValidationText,pick(icValidationText<>'','',', '),'invalid postcode format')
+		End If
+	End If
+End If

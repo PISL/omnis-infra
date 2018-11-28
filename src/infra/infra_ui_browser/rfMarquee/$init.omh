@@ -1,0 +1,4 @@
+Calculate lcForm as $cinst.$name
+JavaScript: sessionStorage.setItem('currentForm', lcForm);
+JavaScript: $cform=__form
+Do $cinst.$objs.chart.$init()

@@ -1,0 +1,154 @@
+
+Do ilExtraHeaders.$merge(plExtraHeaders,kFalse,kFalse,kTrue)
+;  Prepare extra headers
+If ilExtraHeaders.$linecount
+	;  Remove empty lines
+	For lnLineNumber from ilExtraHeaders.$linecount to 1 step -1
+		Calculate ilExtraHeaders.$line as lnLineNumber
+		If len(trim(ilExtraHeaders.icExtraHeaderName))=0&len(trim(ilExtraHeaders.icExtraHeaderValue))=0
+			Do ilExtraHeaders.$remove(lnLineNumber)
+		End If
+	End For
+End If
+
+;  append a carriage return at end of message, if not already there, for better presentation
+If right(prBody.text,1)<>kCr
+	Calculate prBody.text as con(prBody.text,kCr)
+End If
+If len(prBody.html)|prBody.attachments.$linecount
+	Calculate ibNoMIME as kFalse
+End If
+;  Now build the content
+If ibNoMIME
+	Calculate lbinContent as chartoutf8(prBody.text)
+Else
+	Do $cinst.$getMIMElist() Returns llMIME
+	Do llMIME.$add(0,"multipart","mixed")
+	Calculate lnLevel as 1
+	If not(len(prBody.html))
+		Do llMIME.$add(lnLevel,"text","plain","",prBody.text)
+	Else
+		Do llMIME.$add(lnLevel,"multipart","alternative",,,,,,"inline")
+		Do llMIME.$add(lnLevel+1,"text","plain","",prBody.text)
+		Do llMIME.$add(lnLevel+1,"text","html","",prBody.html)
+	End If
+	;  Get the attachments if any are required
+	Calculate llAttachments as prBody.attachments
+	For llAttachments.$line from 1 to llAttachments.$linecount step 1
+		If len(llAttachments.lcContentType)     ;; assume the sender has done the work
+			Calculate llAttachments.lnLevel as lnLevel
+			Do llMIME.$add(llAttachments)
+		Else If len(llAttachments.lcFilename)
+			Calculate lrAttachment as llAttachments
+			Do $cinst.$prepareAttachment(lrAttachment) Returns lbOK
+			If lbOK
+				Calculate lrAttachment.lnLevel as lnLevel
+				Calculate lrAttachment.lcFilename as ""
+				Do llMIME.$add() Returns lrefLine
+				Do lrefLine.$assignrow(lrAttachment)
+			Else
+				Calculate lnErrorCount as lnErrorCount+1
+			End If
+		End If
+		If lnErrorCount>0
+			Calculate icErrorText as con("Failed to add attachment ",llAttachments.lcFilename)
+			Quit method kFalse
+		End If
+	End For
+End If
+
+;  this functionality comes from the smtp_ow3 sample library in 8.1.6
+;  to use it we will need to create (or copy from that lib) the wMailshotProgress window
+;  If ibCallMailshotProgress
+;  Set reference lMailshotProgressItem to $clib.$windows.wMailshotProgress.$openmodal("*",kWindowCenterRelative,$cinst,lToList.$linecount,$cinst)
+;  End If
+;  Do $cinst.$setMailshotProgressInst(lMailshotProgressItem)
+
+
+Do $cinst.$setServer(prServer) Returns lbOK
+If not(lbOK)
+	Calculate icErrorText as con("email worker failed to set server details.")
+	Quit method kFalse
+End If
+
+;  assign "To:" addresses
+If prAttributes.to.$linecount
+	Do $cinst.$makerecipientlist(llTo,prAttributes.to) Returns icErrorText
+Else
+	Do $cinst.$makerecipientlist(llTo,ilTo) Returns icErrorText
+End If
+
+If len(icErrorText)
+	Quit method kFalse
+End If
+
+;  assign "CC:" addresses
+If prAttributes.cc.$linecount
+	Do $cinst.$makerecipientlist(llCc,prAttributes.cc) Returns icErrorText
+Else
+	Do $cinst.$makerecipientlist(llCc,ilCC) Returns icErrorText
+End If
+If len(icErrorText)
+	Quit method kFalse
+End If
+
+;  assign "BCC:" addresses
+If prAttributes.bcc.$linecount
+	Do $cinst.$makerecipientlist(llBcc,prAttributes.bcc) Returns icErrorText
+Else
+	Do $cinst.$makerecipientlist(llBcc,ilBcc) Returns icErrorText
+End If
+If len(icErrorText)
+	Quit method kFalse
+End If
+
+;  leaving the following lines here for any future debugging
+;  Do $cinst.$makerecipientlist(llTo,list(row("stevens@myecocost.org"))) Returns icErrorText
+;  Do $cinst.$makerecipientlist(llCc,list(row())) Returns icErrorText
+;  Do $cinst.$makerecipientlist(llBcc,list(row())) Returns icErrorText
+
+;  Prepare the worker
+Calculate $cinst.$protocollog as inLogType
+Calculate $cinst.$timeout as inTimeout
+Calculate $cinst.$callprogress as ibCallProgress
+Calculate $cinst.$keepconnectionopen as ibKeepConnectionOpen
+Calculate $cinst.$callmailshotprogress as ibCallMailshotProgress
+If $columnexists(irCurlOptions,"requireSecure")
+	Calculate $cinst.$requiresecureconnection as irCurlOptions
+End If
+
+;  and now any extra curl options
+Do method setCurlOptions
+If ilCurlOptions.$linecount
+	Calculate $cinst.$curloptions as ilCurlOptions
+End If
+
+If ibNoMIME
+	If len(icFromName)
+		Do $cinst.$init(icServerURI,icUser,icPassword,row(icFromAddress,icFromName),llTo,llCc,llBcc,prAttributes.subject,ilPriorities.inPriorityValue,ilExtraHeaders,lbinContent,ibMailshot) Returns lbOK
+	Else
+		Do $cinst.$init(icServerURI,icUser,icPassword,icFromAddress,llTo,llCc,llBcc,prAttributes.subject,ilPriorities.inPriorityValue,ilExtraHeaders,lbinContent,ibMailshot) Returns lbOK
+	End If
+Else
+	If len(icFromName)
+		Do $cinst.$init(icServerURI,icUser,icPassword,row(icFromAddress,icFromName),llTo,llCc,llBcc,prAttributes.subject,ilPriorities.inPriorityValue,ilExtraHeaders,llMIME,ibMailshot) Returns lbOK
+	Else
+		Do $cinst.$init(icServerURI,icUser,icPassword,icFromAddress,llTo,llCc,llBcc,prAttributes.subject,ilPriorities.inPriorityValue,ilExtraHeaders,llMIME,ibMailshot) Returns lbOK
+	End If
+End If
+If not(lbOK)
+	Calculate icErrorText as $cinst.$errortext
+	Quit method kFalse
+End If
+
+If pRun
+	Do $cinst.$run() Returns lbOK
+Else
+	Do $cinst.$start() Returns lbOK
+End If
+If not(lbOK)
+	Calculate icErrorText as $cinst.$errortext
+	Quit method kFalse
+End If
+
+Quit method kTrue

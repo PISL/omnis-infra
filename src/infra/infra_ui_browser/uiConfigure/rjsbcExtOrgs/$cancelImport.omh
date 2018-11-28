@@ -1,0 +1,6 @@
+;  Breakpoint
+Calculate ibIgnorePreviousErrors as pbIgnorePrevErr
+Calculate $cinst.$objs.PagedPane.$currentpage as inCurrentTab
+
+Calculate icMode as ''
+Do $cinst.$behaviour()

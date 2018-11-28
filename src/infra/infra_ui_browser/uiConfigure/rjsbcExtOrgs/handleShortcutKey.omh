@@ -1,0 +1,31 @@
+;  Return true if this form has handled the shortcut key
+
+;  see if the key received is in our translation list
+JavaScript: transObj = JSON.parse(__form.get("icKeyTranslations"))
+JavaScript: for (x in transObj) {
+;  indexOf Returnｓ -1 if not found
+JavaScript: if (transObj[x].indexOf(pKey) > -1) {
+JavaScript: pKey = x;
+JavaScript: break;
+JavaScript: }
+JavaScript: }
+
+Switch pKey
+	Case irKeyPress.insert,irKeyPress.edit,irKeyPress.delete
+		Do $cinst.$enterData(pKey)
+		Quit method kTrue     ;; tell the parent that we've dealt with it
+		
+	Case "1","2","3","4","5","6","7","8","9","0"
+		Do ilTabShortcuts.$search($ref.key=pKey,1,0,0,0) Returns lnLine
+		If lnLine
+			Calculate inCurrentTab as lnLine
+			Calculate $cinst.$objs.TabControl_EO.$currenttab as lnLine
+			Quit method kTrue     ;; tell the parent that we've dealt with it
+		Else
+			Quit method kFalse
+		End If
+		
+	Default
+		Quit method kFalse     ;; pass it back to the parent
+		
+End Switch

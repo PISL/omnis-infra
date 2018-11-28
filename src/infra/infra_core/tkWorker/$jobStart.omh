@@ -1,0 +1,108 @@
+;  plInstructions is a list with the following structure:
+;       ;; method  (character)  e.g. printpdf, emailworker
+;       ;; params (row) with the relevant columns for the call
+;       ;; completionMethod  (character)  e.g.
+;       ;; callbackMethod  (character)
+
+Calculate irCallerParams as prRecord
+Set reference irefCaller to prefOriginalInstance
+Calculate irReturnResults as prHistoricalResults
+
+;  There may be a list of instructions but this task will only deal with one instruction and then spawn another task to deal with the next.
+;  Extract the information for this task within the job.
+;  Remove this task from the list of tasks.     ;; so it shrinks to zero
+Calculate ilInstructions as plInstructions
+Calculate ilInstructions.$line as 1
+Calculate irThisInstruction as ilInstructions
+Do ilInstructions.$remove(1)
+
+;  Not sure if these "params" will be of any use.     ;; Maybe fo things like the Author etc for a PDF item.
+;  These are not the "job params" which is really the row variable upon which these tasks are being performed.
+Do irThisInstruction.$cols.$findname('params') Returns liColRef
+If liColRef
+	Calculate lrParams as irThisInstruction.params
+Else
+	Breakpoint
+End If
+
+;  Now execute the Instruction.
+If irThisInstruction.instruction='PDF'
+	;  $printpdf will be called
+	;  When this runs as a worker it will call $pdfcomplete in this task.
+	;  $pdfcomplete will deal with any subsequent instructions.
+	
+	If pos('.',irThisInstruction.omnisClass)
+		Calculate lcReportClass as irThisInstruction.omnisClass
+		Calculate lcLibrary as strtok(nam(lcReportClass),'.')
+		Set reference liReportRef to $libs.[lcLibrary].$reports.[lcReportClass]
+	Else
+		Set reference liReportRef to $reports.[irThisInstruction.omnisClass]
+	End If
+	
+	Do lrParams.$cols.$findname('author') Returns liColRef
+	If liColRef
+		Calculate lcAuthor as lrParams.author
+	Else
+		Calculate lcAuthor as trCurrUser.USR_NAME
+	End If
+	Do lrParams.$cols.$findname('title') Returns liColRef
+	If liColRef
+		Calculate lcTitle as lrParams.title
+	Else
+		Calculate lcTitle as lrParams.reportClass
+	End If
+	Do lrParams.$cols.$findname('subject') Returns liColRef
+	If liColRef
+		Calculate lcSubject as lrParams.subject
+	Else
+		Calculate lcSubject as 'unspecified'
+	End If
+	Do lrParams.$cols.$findname('tempDir') Returns liColRef
+	If liColRef
+		Calculate lbTempDir as lrParams.tempDir
+	Else
+		Calculate lbTempDir as kTrue
+	End If
+	Do lrParams.$cols.$findname('timeout') Returns liColRef
+	If liColRef
+		Calculate lnTimeout as lrParams.timeout
+	Else
+		Calculate lnTimeout as 2
+	End If
+	
+	Do $cinst.$printPDF(lcAuthor,lcTitle,lcSubject,lbTempDir,lnTimeout,liReportRef)
+	
+Else If irThisInstruction.instruction='SMTP'
+	;  $sendEmail will be called
+	;  When this runs as a worker it will call $emailCompleted in this task.
+	;  $emailCompleted will deal with any subsequent instructions.
+	Do lrParams.$cols.$findname('serverRow') Returns liColRef
+	If liColRef
+		Calculate lrEmailServer as lrParams.serverRow
+	Else
+		;  app error
+	End If
+	Do lrParams.$cols.$findname('attributesRow') Returns liColRef
+	If liColRef
+		Calculate lrAttributes as lrParams.attributesRow
+	Else
+		;  app error
+	End If
+	Do lrParams.$cols.$findname('bodyRow') Returns liColRef
+	If liColRef
+		Calculate lrBody as lrParams.bodyRow
+	Else
+		;  app error
+	End If
+	Do lrParams.$cols.$findname('headers') Returns liColRef
+	If liColRef
+		Calculate llExtraHeaders as lrParams.headers
+	Else
+		;  ignore
+	End If
+	
+	Do $cinst.$sendEmail(lrEmailServer,lrAttributes,lrBody,llExtraHeaders)
+	
+Else     ;; HTTP, FTP, IMAP, HASH, CRYPTO
+	Breakpoint {This code has not been prepared yet.}
+End If

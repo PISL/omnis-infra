@@ -1,0 +1,62 @@
+
+;  Calculate icValidationMessage as ''
+Do ilValidation.$clear()
+Calculate llValidation as ilValidation
+
+Calculate $cinst.$line as 0
+While $Loop($cinst)
+	Calculate lcLine as ''
+	Do ilValidation.$clear()
+	
+	If $cinst.CPN_SURNAME<>''<>''
+		;  good
+	Else
+		;  Calculate lcLine as con(lcLine,pick(lcLine<>'','',', '),'CPN_SURNAME missing')
+		Do ilValidation.$add('CPN_SURNAME_LBL','VAL_MISSING','CPN_SURNAME missing',0)
+	End If
+	
+	If $cinst.CPN_FIRST_NAME<>''
+		;  good
+	Else
+		;  Calculate lcLine as con(lcLine,pick(lcLine<>'','',', '),'CPN_FIRST_NAME missing')
+		Do ilValidation.$add('CPN_FIRST_NAME_LBL','VAL_MISSING','CPN_FIRST_NAME missing',0)
+	End If
+	
+	If $cinst.CPN_EMAIL<>''
+		;  good
+		Do $objects.oFormatData.$newref() Returns loFormatData
+		Do loFormatData.$FormatEmail($cinst.CPN_EMAIL) Returns lcMessage
+		If isclear(lcMessage)
+			;  good
+		Else
+			Do ilValidation.$add('CPN_EMAIL_LBL','VAL_INVALID','CPN_EMAIL invalid',0)
+		End If
+		Do loFormatData.$deleteref()
+	Else
+		;  Calculate lcLine as con(lcLine,pick(lcLine<>'','',', '),'CPN_EMAIL missing')
+		Do ilValidation.$add('CPN_EMAIL_LBL','VAL_MISSING','CPN_EMAIL missing',0)
+	End If
+	
+	If $cinst.CPN_PHONE<>''
+		;  good
+	Else
+		;  Calculate lcLine as con(lcLine,pick(lcLine<>'','',', '),'CPN_PHONE missing')
+		Do ilValidation.$add('CPN_PHONE_LBL','VAL_MISSING','CPN_PHONE missing',0)
+	End If
+	
+	If ilValidation.$linecount
+		;  If lcLine<>''
+		;  Calculate lcMessage as con(lcMessage,pick(lcMessage<>'','',', '),$cinst.$line,': ',lcLine)
+		Do $cinst.$translateValidationErrors() Returns lcLine
+		Do llValidation.$add(,,con($cinst.$line,': ',lcLine))
+	End If
+End While
+Calculate ilValidation as llValidation
+
+If ilValidation.$linecount>0
+	;  If lcMessage<>''
+	;  Calculate icValidationMessage as lcMessage
+	Quit method kFalse
+End If
+
+Quit method kTrue

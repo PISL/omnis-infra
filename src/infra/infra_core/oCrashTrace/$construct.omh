@@ -1,0 +1,12 @@
+;  if pcFilePath is not null, $construct will open a new file at pcFilePath, appending date+time+#ct to the name.
+;  prContent will be converted to JSON, written to the file and the file will be closed
+If isclear(pcFilePath)
+	Calculate ibCrashTraceOpen as kFalse
+	Calculate ibFirstContentProvided as kFalse
+Else
+	Do $cinst.$initialise(con(pcFilePath,dtcy(#D),dtm(#D)+0,dtd(#D)+0,"_",#CT))
+	If ibCrashTraceOpen
+		Do $cinst.$writeJSON(prContent)
+	End If
+	Do $cinst.$close()
+End If

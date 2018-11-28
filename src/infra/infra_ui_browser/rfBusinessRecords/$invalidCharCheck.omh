@@ -1,0 +1,25 @@
+Switch upp(pcCheckType)
+	Case 'REF'
+		Do ioFormatData.$FormatRef(pcValue) Returns icValidationText
+	Case 'EM','EMAIL'
+		Do ioFormatData.$FormatEmail(pcValue) Returns icValidationText
+	Case 'ADD','ADDR','ADDRESS'
+		Do ioFormatData.$FormatAddress(pcValue) Returns icValidationText
+	Case 'NAME'
+		Do ioFormatData.$FormatName(pcValue) Returns icValidationText
+	Case 'PW','PASSWORD'
+		Do ioFormatData.$FormatPassword(pcValue) Returns icValidationText
+	Case 'PH','PHONE'
+		Do ioFormatData.$FormatPhone(pcValue) Returns icValidationText
+	Case 'PC','PCODE','POSTCODE'
+		Do ioFormatData.$FormatPostcode(pcValue) Returns icValidationText
+	Default
+		Quit method kTrue
+End Switch
+
+If icValidationText<>''
+	Calculate icDisplayMessage as con('INVALID ENTRY',kCr,kCr,icValidationText,kCr,kCr,ioFormatData.icInvalidChars,kCr,' are not allowed.')     ;; ### stb
+	;  OK message Invalid entry ! {[icValidationText][kCr][kCr][ioFormatData.icInvalidChars][kCr]are not allowed.}
+	Quit method kFalse
+End If
+Quit method kTrue     ;; proceed

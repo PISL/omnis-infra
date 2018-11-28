@@ -1,0 +1,15 @@
+Calculate icValidationText as ''
+Calculate icValidationCodes as ''
+Calculate icInvalidChars as ''
+
+Calculate lcTest as strpbrk(pName,ccIllegalName)
+If lcTest<>''
+	;  not testing for full stop as first or last char     ;; yet
+	Do toStrings.$StringTableMessage('VAL_NAME_ILLEGAL_CHAR',icValidationText,icValidationCodes) Returns lbStringTableEntryFound
+	If not(lbStringTableEntryFound)
+		Calculate icValidationText as con(icValidationText,pick(icValidationText<>'','',', '),'illegal character in email')
+	End If
+	Calculate icInvalidChars as ccIllegalName
+End If
+
+Quit method icValidationText

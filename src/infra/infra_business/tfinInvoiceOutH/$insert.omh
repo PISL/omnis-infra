@@ -1,0 +1,12 @@
+;  GRS 14/2/14
+;       ;; modified to use the DB sequence to return the PK
+
+;  assign the FOH_INV_NO and then "Do inherited"
+Do $cinst.$NextInvNo(pGOid,kTrue) Returns lbOk
+
+If lbOk
+	Do inherited Returns lbOk
+Else
+	Calculate icValidationMessage as 'failed to obtain next invoice number'
+End If
+Quit method lbOk

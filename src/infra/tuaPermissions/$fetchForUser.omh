@@ -1,0 +1,85 @@
+If tlDatabases.DAM='WebService'
+	;  pass parameters to web service
+	Do ioWeb.$callFetch(llPermissions,irErrorSQL,row($cinst.$class().$name,$cmethod().$name,row(pnUserNo),llPermissions.$type,1,ilRESTextensions))
+	If ioWeb.irResponse.httpStatusCode=200
+		;  the result should be in this object     ;; however there may be a SQL error
+		If irErrorSQL.NativeErrorText<>''
+			Quit method kFalse
+		End If
+		Quit method llPermissions
+	Else
+		Quit method kFalse
+	End If
+End If
+
+Do llPermissions.$cols.$add(lrUserRoles.UR_SEQ)
+Do llPermissions.$cols.$add(lrUserRoles.UR_USR_REF)
+Do llPermissions.$cols.$add(lrUserRoles.UR_ROL_REF)
+Do llPermissions.$cols.$add(lrUserRoles.UR_DEFAULT)
+
+Do llPermissions.$cols.$add(lrRoles.ROL_SEQ)
+Do llPermissions.$cols.$add(lrRoles.ROL_NAME)
+
+Do llPermissions.$cols.$add(lrRolePermissions.RP_SEQ)
+Do llPermissions.$cols.$add(lrRolePermissions.RP_ROL_REF)
+Do llPermissions.$cols.$add(lrRolePermissions.RP_PER_REF)
+
+Do llPermissions.$cols.$add($cinst.PER_SEQ)
+Do llPermissions.$cols.$add($cinst.PER_LABEL)
+
+Do $cinst.$ImmediateSession(loSession,loStatement) Returns lbImmediateSession
+If lbImmediateSession
+	Do $cinst.$SetSession(loSession,loStatement)
+Else If not(ibGoodConnectionToDb)
+	Quit method kFalse
+End If
+
+Begin statement
+Sta: {select UR_SEQ, UR_USR_REF, UR_ROL_REF, UR_DEFAULT}
+Sta: {, ROL_SEQ, ROL_NAME}
+Sta: {, RP_SEQ, RP_ROL_REF, RP_PER_REF}
+Sta: {, PER_SEQ, PER_LABEL}
+Sta: {from  [$cinst.$servertablenames()]}
+Sta: {,    [lrRolePermissions.$servertablenames()]}
+Sta: {,    [lrRoles.$servertablenames()]}
+Sta: {,    [lrUserRoles.$servertablenames()]}
+
+;  join
+Sta: {where RP_PER_REF = PER_SEQ}
+;  join
+Sta: {and     RP_ROL_REF = ROL_SEQ}
+;  join
+Sta: {and     ROL_SEQ = UR_ROL_REF}
+Sta: {and     ROL_ACTIVE = 1}
+Sta: {and     ( ROL_REVOKE = 0 or ROL_REVOKE is null )}
+Sta: {and     UR_USR_REF = @[pnUserNo]}
+If pcRole<>''
+	Sta: {and     ROL_NAME = @[pcRole]}
+End If
+If pcPermission<>''
+	If pos('_',pcPermission)>0     ;; a whole label provided
+		Sta: {and     PER_LABEL = @[pcPermission]}
+	Else     ;; a partial label
+		Sta: {and     PER_LABEL like '[pcPermission]%'}
+	End If
+End If
+
+End statement
+
+Do $cinst.$executesqlandfetch(llPermissions) Returns lbOK
+If lbImmediateSession
+	Do $cinst.$SetSession(#NULL,#NULL,kTrue)
+End If
+;  23-NOV-18  RSM     ;; include the revoke logic here
+;  Because Permissions can be assigned to multiple roles and a user can have multiple roles, there may be duplicate PER_LABEL values.
+
+;  What we have so far are the granted permissions.     ;; ( ROL_REVOKE = 0 or ROL_REVOKE is null )
+;  now remove any revoked permissions
+Do $cinst.$fetchRevokedForUser(pnUserNo,pcRole,pcPermission) Returns llRevoke
+;  There shouldn't be many of these     ;; so loop should not be too expensive.
+While $Loop(llRevoke)
+	Do llPermissions.$search($ref.PER_LABEL=llRevoke.PER_LABEL,1,0,1,0)
+End While
+Do llPermissions.$remove(kListDeleteSelected)
+
+Quit method llPermissions

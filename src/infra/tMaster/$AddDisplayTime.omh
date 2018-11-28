@@ -1,0 +1,11 @@
+;  check for existence to avoid the JSON duplicate name errors if converting list/row
+Do $cinst.$cols.$findname('DisplayTime') Returns lrefCol
+If lrefCol
+	Quit method
+End If
+
+If tlDatabases.DAM='WebService'
+	Do ilRESTextensions.$add('am',$cmethod().$name)
+End If
+
+Do $cinst.$cols.$add('DisplayTime',kCharacter,kSimplechar,100)

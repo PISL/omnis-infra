@@ -1,0 +1,21 @@
+;  on evOK repeated in $event     ;; this is here to deal with double click on iList
+On evOK
+	If iList.$line=0
+		OK message  {please select a line before clicking ok}
+		Quit event handler (Discard event)
+	End If
+	
+	If icDoMethodOnOK<>''
+		;  make local copies of key variables because we are going to close window before executing the callback methods
+		Set reference lrefCallingWindow to irefCallingWindow
+		Calculate lcCallbackMethod as icDoMethodOnOK
+		
+		Close window instance $cinst
+		If lrefCallingWindow
+			Do lrefCallingWindow.[lcCallbackMethod](iList)
+		Else
+			Do [lcCallbackMethod](iList)
+		End If
+	Else
+		Close window instance $cinst
+	End If

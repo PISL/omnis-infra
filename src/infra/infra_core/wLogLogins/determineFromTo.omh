@@ -1,0 +1,30 @@
+If pnDirection>0     ;; next
+	If inIncrementMode=cnIntervalMonth
+		Calculate idFrom as dadd(kDay,1,idTo)
+		Calculate idTo as lday(kMonth,idFrom)
+	Else If inIncrementMode=cnIntervalWeek
+		Calculate idFrom as dadd(kDay,1,idTo)
+		Calculate idTo as dadd(kDay,6,idFrom)     ;; Sun-Sat, not Sun-Sun
+	Else If inIncrementMode=cnIntervalDays
+		Calculate lnDeltaDays as ddiff(kDay,idFrom,idTo)
+		Calculate idFrom as dadd(kDay,1,idTo)
+		Calculate idTo as dadd(kDay,idFrom,lnDeltaDays)
+	Else
+		
+	End If
+Else If pnDirection<0     ;; previous
+	If inIncrementMode=cnIntervalMonth
+		Calculate idTo as dadd(kDay,-1,idFrom)
+		Calculate idFrom as fday(kMonth,idTo)
+	Else If inIncrementMode=cnIntervalWeek
+		Calculate idTo as dadd(kDay,-1,idFrom)
+		Calculate idFrom as dadd(kDay,-6,idTo)
+	Else If inIncrementMode=cnIntervalDays
+		Calculate lnDeltaDays as ddiff(kDay,idFrom,idTo)
+		Calculate idTo as dadd(kDay,-lnDeltaDays,idTo)
+		Calculate idFrom as dadd(kDay,-lnDeltaDays,idFrom)
+	Else
+		
+	End If
+	
+End If

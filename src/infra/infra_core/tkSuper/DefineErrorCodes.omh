@@ -1,0 +1,5 @@
+Do trErrCodes.$cols.$add('BadParameter',kInteger,k32bitint)
+Calculate trErrCodes.BadParameter as -5
+
+Do trErrCodes.$cols.$add('MissingClass',kInteger,k32bitint)
+Calculate trErrCodes.MissingClass as -10

@@ -1,0 +1,43 @@
+;  Do $DynamicSession(tSession,tStatement) Returns lbProceed
+;  If not(lbProceed)
+;  OK message  {No session available from session pool !}
+;  Close window instance $cinst
+;  Quit method
+;  End If
+
+;  Do oDAO_CoLang.$SetSession(tSession,tStatement)
+Do oDAO_CoLang.$FetchAllCountries() Returns ilCountries
+Do oDAO_CoLang.$FetchAllLanguages() Returns ilLanguages
+;  Do ilCountries.$SetSession(tSession,tStatement)
+;  Do ilLanguages.$SetSession(tSession,tStatement)
+;  Do ilLanguagesAndCountries.$SetSession(tSession,tStatement)
+Calculate $cinst.$title as con('default data connection - ',tSession.$hostname)
+
+Calculate ilLangCountryCount as ilLanguages
+Do ilLangCountryCount.$clear()
+Do ilLangCountryCount.$FetchLanguageFrequency()
+Calculate ibLangCountrySort as 0
+Do ilLangCountryCount.$sort($ref.COUNT,1,$ref.LG_DESC,0)
+
+Calculate inSpeakersCounted as ilLanguages.$cols.LG_NO_OF_SPEAKERS.$total()
+Calculate inPercentGlobalPopulation as inSpeakersCounted/6.4e9*100
+
+Do ilSpecialSelections.$cols.$add('code',kCharacter,kSimplechar,15)
+Do ilSpecialSelections.$cols.$add('description',kCharacter,kSimplechar,100)
+Do ilSpecialSelections.$add('ALL','all countries')
+Do ilSpecialSelections.$add('FILTERED','filtered')
+;  Do ilSpecialSelections.$add('MULT_LANG','countries with multiple languages')
+;  Do ilSpecialSelections.$add('SING_LANG','countries with single language')
+;  Do ilSpecialSelections.$add('UNOFF_LANG','countries with unofficial language')
+Do ilSpecialSelections.$add('NO_ENDONYM','missing endonym')
+Do ilSpecialSelections.$add('NO_EXONYM','missing exonym')
+
+;  Do ilCountries.$fetch_all()
+Do ilCountries.$sort($ref.CO_NAME,0)
+;  Do ilLanguages.$fetch_all()     ;; NOT updateable
+Do ilLanguages.$sort($ref.LG_DESC,0)
+Calculate ilLanguages.$smartlist as kTrue     ;; updateable
+
+Do $cinst.$Refresh()
+Calculate $cinst.$enterable as kTrue
+Do $cinst.$behaviour()

@@ -1,0 +1,52 @@
+{
+	"classtype": "kObjectclass",
+	"internalversion": 6,
+	"designtaskname": "Startup_Task",
+	"cvardefs": [
+		{
+			"name": "ccBaseURL",
+			"order": 6,
+			"type": "kCharacter",
+			"subtype": "kSimplechar",
+			"sublen": 100000000,
+			"initval": "'https://image.captchas.net?client='"
+		},
+		{
+			"name": "ccDefaultAlphabet",
+			"order": 3,
+			"type": "kCharacter",
+			"subtype": "kSimplechar",
+			"sublen": 100000000,
+			"initval": "'abcdefghijklmnopqrstuvwxyz'",
+			"desc": "default alphabet used by captchas.net to generate the captcha word"
+		},
+		{
+			"name": "cnDefaultWordLength",
+			"order": 4,
+			"type": "kInteger",
+			"subtype": "kShortint",
+			"sublen": 0,
+			"initval": "6",
+			"desc": "default length for generated word"
+		}
+	],
+	"ivardefs": [
+
+	],
+	"properties": {
+		"collectperformancedata": false,
+		"componenticon": 0,
+		"componenttype": "kCompStoreHidden",
+		"createdate": "2018-08-23 14:57:19",
+		"desc": "",
+		"editor": "",
+		"editordata": "",
+		"external": true,
+		"issupercomponent": false,
+		"moddate": "2018-08-30 11:24:59",
+		"selfcontained": false,
+		"showascheckedout": false,
+		"userinfo": "",
+		"version": ""
+	}
+}

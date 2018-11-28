@@ -1,0 +1,8 @@
+;  populate the chains list
+Do ilChains.$fetchForInvoice(irCurrentRecord.FOH_SEQ)
+If ilChains.irErrorSQL.NativeErrorText<>''
+	Calculate icDisplayMessage as ilChains.irErrorSQL.NativeErrorText
+Else
+	Do ilChains.$sendall($ref.display.$assign(pick(ilChains.FOC_FOH_REF_PREV=irCurrentRecord.FOH_SEQ,con(ilChains.invPrev,' <<'),con('>> ',ilChains.invNext))))
+	Calculate ilChains.$line as 0
+End If

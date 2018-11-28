@@ -1,0 +1,30 @@
+Do llLibraryVersions.$cols.$add('application',kCharacter,kSimplechar,255)
+Do llLibraryVersions.$cols.$add('object_type',kCharacter,kSimplechar,255)
+Do llLibraryVersions.$cols.$add('name',kCharacter,kSimplechar,255)
+Do llLibraryVersions.$cols.$add('version',kNumber,k2dp)
+Do llLibraryVersions.$cols.$add('start',kBoolean)
+Do llLibraryVersions.$cols.$add('app_title',kCharacter,kSimplechar,100)
+
+;  parse the xml contents to extract the data
+Calculate lXML.$parservalidates as kFalse
+Calculate lRawXML as chartoutf8(pVersionFileContents)
+Do lXML.$loadbinary(lRawXML,lErrorText) Returns lOK
+;  Do lXML.$savelist(llContents,lErrorText,kTrue)
+Do lXML.$savetree(llContents,lErrorText,kTrue,kTrue,kTrue)
+Do llContents.$search($ref.path='/updater_pis/object',1,0,0,0) Returns lbFound
+While lbFound
+	Do llLibraryVersions.$add()
+	Calculate llLibraryVersions.$line as llLibraryVersions.$linecount
+	
+	Calculate llLibraryVersions.application as icApplicationName
+	Calculate llLibraryVersions.object_type as llContents.[llContents.$line+1].value
+	Calculate llLibraryVersions.name as llContents.[llContents.$line+2].value
+	Calculate llLibraryVersions.version as llContents.[llContents.$line+3].value
+	Calculate llLibraryVersions.start as llContents.[llContents.$line+4].value
+	Calculate llLibraryVersions.app_title as llContents.[llContents.$line+5].value
+	
+	;  search from were we are in list, NOT beginning of list
+	Do llContents.$search($ref.path='/updater_pis/object',0,0,0,0) Returns lbFound
+End While
+
+Quit method llLibraryVersions

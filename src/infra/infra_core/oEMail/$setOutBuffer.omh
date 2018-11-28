@@ -1,0 +1,2 @@
+;  add e-mail message to the out-buffer
+Do clOutBuffer.$add(pToAddressList,pSubject,pBody,pCCAddressList,pBCCAddressList,pStatusCall,pPriority,pEnclosureList)

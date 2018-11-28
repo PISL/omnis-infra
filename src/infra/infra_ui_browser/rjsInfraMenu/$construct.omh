@@ -1,0 +1,72 @@
+;  Enter your initialization code here
+Do inherited      ;; handles setFormColours
+;  Calculate $cinst.$objs.ilAuthorisedForms.$::listheight as min(20,ilAuthorisedForms.$linecount)
+If $ctask.$showSupportTools.$cando()
+	Calculate $cinst.$objs.pbSupportTools.$visible as $ctask.$showSupportTools()
+End If
+If tConstants.$colcount=0
+	Breakpoint     ;; having trouble 31 OCT 2016
+End If
+
+Calculate icCurrentGroupOrg as trGroupOrg.GO_NAME_SHORT
+Calculate icCurrentUser as trCurrUser.USR_REAL_NAME     ;; USR_NAME or USR_REAL_NAME
+
+Calculate lcPath as mid($clib().$pathname,1,rpos(sys(9),$clib().$pathname))
+
+If binlength(tConstants.companyLogo)=0
+	Do toValues.$initInherited('IMAGES','LOGO_TOP_LEFT') Returns lrReference
+	If lrReference.RFO_SEQ>0
+		Calculate tConstants.companyLogo as lrReference.RFO_BIN
+		
+		Do toValues.$initInherited('IMAGES','TOP_BANNER') Returns lrReference
+		If lrReference.RFO_SEQ>0
+			Calculate tConstants.topBanner as lrReference.RFO_BIN
+		Else
+			Calculate tConstants.topBanner as #NULL
+		End If
+	Else
+		Do loFileOps.$openfile(con(lcPath,'myEcoCost_logo_white_text.gif'))
+		Do loFileOps.$readfile(tConstants.companyLogo) Returns lbOK
+		Do loFileOps.$closefile()
+		
+		Do loFileOps.$openfile(con(lcPath,'myEcoCost_canvas_horizontal.jpg'))
+		Do loFileOps.$readfile(tConstants.topBanner) Returns lbOK
+		Do loFileOps.$closefile()
+	End If
+End If
+
+Calculate ipictBanner as tConstants.topBanner
+Calculate ipictLogo as tConstants.companyLogo
+
+Calculate ipictTopLeft as tConstants.topLeft
+Calculate ipictTopRight as tConstants.topRight
+Calculate $cinst.$objs.ipictTopLeft.$visible as binlength(ipictTopLeft)>0
+Calculate $cinst.$objs.ipictTopRight.$visible as binlength(ipictTopRight)>0
+
+Calculate $cinst.$objs.app_navigation_img.$visible as binlength(tConstants.topBanner)>0
+
+;  get the URLs for the navigation bar buttons
+Calculate lcClass as 'URL'
+Calculate lcValue as 'SUPPORT_TOOLS'
+Do toValues.$initGlobal(lcClass,lcValue) Returns llRef
+If llRef.1.RFG_CHAR<>''
+	Calculate icURLsupportTools as llRef.1.RFG_CHAR
+End If
+
+Calculate lcValue as 'EXIT'
+Do toValues.$initInherited(lcClass,lcValue) Returns llRef
+If llRef.1.RFO_CHAR<>''
+	Calculate icURLexit as llRef.1.RFO_CHAR
+End If
+
+Do $cinst.$createNavMenu()
+;
+;  get the available key press values
+Do toValues.$initInherited('FORM_BEHAVIOUR','KEYPRESS') Returns lrReference
+Calculate irKeyPress as OJSON.$jsontolistorrow(lrReference.RFO_JSON)
+Do $ctask.$setVar(nam(irKeyPress),irKeyPress)
+
+;  get the available key press translations
+Do toValues.$initInherited('FORM_BEHAVIOUR','KEYPRESS_TABS') Returns lrReference
+Calculate irKeyTranslations as OJSON.$jsontolistorrow(lrReference.RFO_JSON)
+Do $ctask.$setVar(nam(irKeyTranslations),irKeyTranslations)

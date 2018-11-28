@@ -1,0 +1,11 @@
+;  log off, clear object variables
+Calculate ccOutServer as ''
+Calculate ccOutFrom as ''
+Calculate ccOutFromName as ''
+
+Calculate ccInServer as ''
+Calculate ccInUsername as ''
+Calculate ccInPassword as ''
+
+Do method $clearOutbuffer
+Do method $clearInBuffer

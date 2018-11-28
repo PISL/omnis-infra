@@ -1,0 +1,11 @@
+On evLayoutChanged
+	Do inherited
+	;  extend the background objects to compensate for the missing navigation bar
+	If inBreakpoint<=480
+		Calculate lnHeightAdd as 64
+	Else
+		Calculate lnHeightAdd as 72     ;; height of the missing menu bar
+	End If
+	
+	Calculate $cinst.$objs.greyBackground.$height as $cinst.$objs.greyBackground.$height+lnHeightAdd
+	Calculate $cinst.$objs.icDisplayMessage.$top as $cinst.$objs.icDisplayMessage.$top+lnHeightAdd

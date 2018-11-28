@@ -1,0 +1,30 @@
+Calculate icValidationMessage as ''
+Do ilValidation.$clear()
+
+If $cinst.AS_TABLE_PREFIX<>''
+	;  good
+Else
+	Calculate lcMessage as con(lcMessage,pick(lcMessage<>'','',', '),'table prefix missing')
+	Do ilValidation.$add('AS_TABLE_PREFIX_LBL','VAL_MISSING','table prefix missing',0)
+End If
+
+If $cinst.AS_PK>0
+	;  good
+Else
+	Calculate lcMessage as con(lcMessage,pick(lcMessage<>'','',', '),'primary key of linked record missing')
+	Do ilValidation.$add('AS_PK_LBL','VAL_MISSING','primary key of linked record missing',0)
+End If
+
+If binlength($cinst.AS_BINARY)>0
+	;  good
+Else
+	Calculate lcMessage as con(lcMessage,pick(lcMessage<>'','',', '),'record data missing')
+	Do ilValidation.$add('AS_BINARY_LBL','VAL_MISSING','record data missing',0)
+End If
+
+If lcMessage<>''
+	Calculate icValidationMessage as lcMessage
+	Quit method kFalse
+End If
+
+Quit method kTrue

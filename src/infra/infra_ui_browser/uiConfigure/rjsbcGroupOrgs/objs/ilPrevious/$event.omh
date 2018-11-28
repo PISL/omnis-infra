@@ -1,0 +1,42 @@
+On evClick
+	If ilPrevious.[pVertCell].$selected     ;; user has clicked again on the selected line
+		Quit event handler (Discard event)
+	End If
+	Calculate irParent as ilPrevious
+	;  ilPrevious.$line is going to be cleared but this makes it difficult to see which parent is being viewed when working on the children
+	;  so multipleselect has been set to kTrue and the current line will be selected before $line is cleared
+	Do ilPrevious.$search(0)
+	Calculate ilPrevious.[ilPrevious.$line].$selected as kTrue
+	
+	Do method NewRecord (kTrue)     ;; preserve any irCopyNode
+	Do method FetchCurrentNode (kTrue)
+	Do method SetNavigationPath
+	
+	Do $cinst.$behaviour()
+	
+On evDoubleClick
+	If ilPrevious.GS_TYPE='ORG'     ;; we are at the top of the tree - discard the event
+		Quit event handler (Discard event)
+	End If
+	Do method PopUp
+	Do $cinst.$behaviour()
+	
+On evCellChanged
+	
+On evHeaderClick
+	
+On evHeadedListDisplayOrderChanged
+	
+On evDrop
+	If pDragField.$name=nam(ilNow)
+		Calculate lnLineNo as mouseover(kMLine)
+		If lnLineNo=0     ;; user did not drop over line in list, but vacant space below existing list lines
+			Calculate lnLineNo as 1
+		End If
+		Calculate lrParentOfParent as irCurrentStructure
+		Do lrParentOfParent.$clear()
+		Do lrParentOfParent.$fetch_pk(ilPrevious.[lnLineNo].GS_SUPERIOR_GS_REF)     ;; PB_LINK_PBSEQ
+		
+		Calculate irDragValue as pDragValue
+		Do $cinst.$clientNoYesMsg(con("Do you want to change the parent of item ",pDragValue.GS_DESC_FULL," to ",lrParentOfParent.GS_DESC_FULL ?),'WARNING','$DropOnPrevious')
+	End If

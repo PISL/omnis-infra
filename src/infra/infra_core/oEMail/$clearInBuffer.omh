@@ -1,0 +1,9 @@
+;  clear the in-buffer
+Do cInBuffer.$clear()
+
+Calculate iInReturnPath as ''
+Calculate iInDate as ''
+Calculate iInPriority as ''
+Calculate iInFrom as ''
+Calculate iInSubject as ''
+Calculate iInBody as ''

@@ -1,0 +1,53 @@
+;  overloaded to create the entOrgLinks record for the current GO when inserted during ecoInvoice fetch
+If isclear($cinst.EO_MEC_ID)
+	Calculate $cinst.EO_MEC_ID as #NULL     ;; JS will send this through as an empty string which will violate the PG unique key
+End If
+
+Calculate lrExtOrg as $cinst
+;  first check for existence on MEC_ID
+If len($cinst.EO_MEC_ID)>0
+	Do lrExtOrg.$fetch_fk($cinst.EO_MEC_ID,'EO_MEC_ID')
+Else
+	Do lrExtOrg.$fetch_fk($cinst.EO_NAME,'EO_NAME')
+End If
+
+If lrExtOrg.EO_SEQ>0
+	Calculate $cinst.EO_SEQ as lrExtOrg.EO_SEQ
+	Calculate lbOK as kTrue
+Else
+	Do inherited Returns lbOK
+End If
+
+If lbOK&len(pcSuppOrCust)>0     ;; we don't want to break existing code which may be inserting the EOL record manually
+	;  now check that we have a valid GO_SEQ
+	If trGroupOrg.GO_SEQ>0
+		Do $DefineList(lrOrgLink,'infra.tentOrgLinks')
+		If pbRunningAsTransaction
+			Do lrOrgLink.$SetSession($cinst.$sessionobject,$cinst.$statementobject)
+		End If
+		Do lrOrgLink.$fetchCompound($cinst.EO_SEQ)     ;; see if we already have a link to this ExtOrg
+		If lrOrgLink.EOL_SEQ>0
+			If pcSuppOrCust='SUPPLIER'&isclear(lrOrgLink.EOL_FINACCT_SUID)
+				Calculate lrOrgLink.EOL_FINACCT_SUID as $cinst.EO_MEC_ID
+				Calculate lbUpdate as kTrue
+			Else If isclear(lrOrgLink.EOL_FINACCT_CUID)
+				Calculate lrOrgLink.EOL_FINACCT_CUID as $cinst.EO_MEC_ID
+				Calculate lbUpdate as kTrue
+			End If
+			If lbUpdate     ;; we have added a supplier/customer finacct id
+				Do lrOrgLink.$update() Returns lbOK
+			End If
+		Else
+			Calculate lrOrgLink.EOL_GO_REF as trGroupOrg.GO_SEQ
+			Calculate lrOrgLink.EOL_EO_REF as $cinst.EO_SEQ
+			If pcSuppOrCust='SUPPLIER'
+				Calculate lrOrgLink.EOL_FINACCT_SUID as $cinst.EO_MEC_ID
+			Else
+				Calculate lrOrgLink.EOL_FINACCT_CUID as $cinst.EO_MEC_ID
+			End If
+			Do lrOrgLink.$insert() Returns lbOK
+		End If
+	End If
+End If
+
+Quit method lbOK

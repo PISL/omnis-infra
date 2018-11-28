@@ -1,0 +1,5 @@
+;  initialise the Navigation Menu before opening the form
+;  moved this call here to ensure we have first populated trFormColours
+Do $cinst.$buildNavMenu()
+
+Do $cinst.$openform('rjsMenuApp')

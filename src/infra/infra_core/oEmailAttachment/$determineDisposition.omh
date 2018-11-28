@@ -1,0 +1,2 @@
+Do iDispositionList.$search($ref.iDisposition='attachment',1,0,0,0) Returns lbFound
+Quit method iDispositionList.iDisposition

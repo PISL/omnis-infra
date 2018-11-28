@@ -1,0 +1,7 @@
+Do $DefineList(irChild,pcTableClassChild) Returns lbOK
+If lbOK
+	Do $DefineList(irHeader,pcTableClassParent) Returns lbOK
+	If lbOK
+		Calculate ibInitialised as kTrue
+	End If
+End If

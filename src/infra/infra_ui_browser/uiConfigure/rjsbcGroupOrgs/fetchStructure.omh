@@ -1,0 +1,18 @@
+Do irCurrentStructure.$clear()
+Calculate irOriginalStructure as irCurrentStructure
+Calculate ilStructureType.$line as 0
+Calculate $cinst.$objs.PagedPane.$objs.ilNow.$errortext as ''     ;; used to display names of children
+
+Do ilPrevious.$clear()
+Do ilNow.$fetchSuperiors(ilDisplayRecords.GO_SEQ,kTrue)     ;; this SHOULD return the top level ORG record
+If ilNow.1.GS_TYPE='ORG'
+	;  we are at the top of the tree
+	Calculate ilPrevious as ilNow
+	Calculate ilPrevious.$line as 1
+	;  simulate a list click
+	Calculate irParent as ilPrevious
+	Calculate ilPrevious.[ilPrevious.$line].$selected as kTrue
+	Do method NewRecord (kTrue)     ;; preserve any irCopyNode
+	Do method FetchCurrentNode (kTrue)
+	Do method SetNavigationPath
+End If

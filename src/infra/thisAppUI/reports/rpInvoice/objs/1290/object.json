@@ -1,0 +1,25 @@
+{
+	"ident": 1020,
+	"order": 15,
+	"objtype": "kLabel",
+	"properties": {
+		"align": "kLeftJst",
+		"desgroup": 0,
+		"deslock": false,
+		"fieldstyle": "reportMedium",
+		"floating": false,
+		"font": 6,
+		"fontextra": 0,
+		"fontsize": 14,
+		"fontstyle": "kBold",
+		"height": -1,
+		"left": 0.371,
+		"lineno": 8,
+		"lineoffset": 0.0,
+		"printontop": false,
+		"text": "Invoice no:",
+		"textcolor": "RGB(0,0,0)",
+		"userinfo": "",
+		"width": 2.619
+	}
+}

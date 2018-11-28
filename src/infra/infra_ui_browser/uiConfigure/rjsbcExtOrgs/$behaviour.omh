@@ -1,0 +1,67 @@
+If irefContainer
+	Do irefContainer.$behaviour(icMode)     ;; set the TabControl $enabled
+End If
+
+Calculate $cinst.$objs.ilSearch1.$enabled as icMode=''
+Calculate $cinst.$objs.ilSearch2.$enabled as icMode=''
+Calculate $cinst.$objs.ilDisplayRecords.$enabled as icMode=''
+
+
+Calculate $cinst.$objs.pbAdd.$enabled as irUserRights.canInsert&icMode=''
+If irUserRights.allOrgs
+	Calculate $cinst.$objs.pbEdit.$enabled as irUserRights.canEdit&irCurrentRecord.EO_SEQ>0&icMode=''     ;; sometimes the irOrgL`inks row is empty (at least during initial debugging)
+Else
+	Calculate $cinst.$objs.pbEdit.$enabled as irUserRights.canEdit&irCurrentRecord.EO_SEQ>0&icMode=''&irOrgLink.EOL_SEQ>0
+End If
+
+Calculate $cinst.$objs.pbCancel.$visible as icMode="E"|icMode="I"
+Calculate $cinst.$objs.pbSave.$visible as icMode="E"|icMode="I"
+
+Calculate $cinst.$objs.pbAddLink.$enabled as irUserRights.canInsert&isclear(irOrgLink.EOL_SEQ)&icMode=''
+Calculate $cinst.$objs.pbDropLink.$enabled as irUserRights.canEdit&irOrgLink.EOL_SEQ>0&icMode=''
+
+;  Set reference lirefPagedPaneObjs to $cinst.$objs.PagedPane.$objs
+Calculate $cinst.$objs.EOL_FINACCT_CUID.$visible as icSUPPorCUST='CUSTOMER'
+Calculate $cinst.$objs.label_EOL_FINACCT_CUID.$visible as icSUPPorCUST='CUSTOMER'
+Calculate $cinst.$objs.EOL_FINACCT_SUID.$visible as icSUPPorCUST='SUPPLIER'
+Calculate $cinst.$objs.label_EOL_FINACCT_SUID.$visible as icSUPPorCUST='SUPPLIER'
+
+Calculate $cinst.$objs.EO_NAME.$enabled as icMode="E"|icMode="I"
+Calculate $cinst.$objs.EO_MEC_ID.$enabled as icMode="E"|icMode="I"
+Calculate $cinst.$objs.EO_CONTACT.$enabled as icMode="E"|icMode="I"
+Calculate $cinst.$objs.EO_PHONE.$enabled as icMode="E"|icMode="I"
+Calculate $cinst.$objs.EO_FAX.$enabled as icMode="E"|icMode="I"
+Calculate $cinst.$objs.EO_MOBILE.$enabled as icMode="E"|icMode="I"
+Calculate $cinst.$objs.EO_CO_ISO3_REF.$enabled as icMode="E"|icMode="I"
+Calculate $cinst.$objs.EO_EMAIL.$enabled as icMode="E"|icMode="I"
+Calculate $cinst.$objs.EO_ADDR_BILL.$enabled as icMode="E"|icMode="I"
+Calculate $cinst.$objs.EO_ADDR_SHIP.$enabled as icMode="E"|icMode="I"
+Calculate $cinst.$objs.EO_INSTRUCTIONS.$enabled as icMode="E"|icMode="I"
+Calculate $cinst.$objs.EO_COMMENT.$enabled as icMode="E"|icMode="I"
+Calculate $cinst.$objs.EOL_FINACCT_CUID.$enabled as icMode="E"|icMode="I"
+Calculate $cinst.$objs.EOL_FINACCT_SUID.$enabled as icMode="E"|icMode="I"
+
+;  if user has access to all orgs then change colour of text to denote logged in org and record being edited do not belong together
+If isclear(irCurrentRecord.EO_SEQ)
+	Calculate lnColour as kColorDefault
+Else If irOrgLink.EOL_GO_REF=trGroupOrg.GO_SEQ
+	Calculate lnColour as kColorDefault
+Else
+	Calculate lnColour as rgb(180,180,180)
+End If
+
+Calculate $cinst.$objs.EO_NAME.$textcolor as lnColour
+Calculate $cinst.$objs.EO_MEC_ID.$textcolor as lnColour
+Calculate $cinst.$objs.lEO_CONTACT.$textcolor as lnColour
+Calculate $cinst.$objs.EO_PHONE.$textcolor as lnColour
+Calculate $cinst.$objs.EO_FAX.$textcolor as lnColour
+Calculate $cinst.$objs.EO_MOBILE.$textcolor as lnColour
+Calculate $cinst.$objs.EO_CO_ISO3_REF.$textcolor as lnColour
+Calculate $cinst.$objs.EO_EMAIL.$textcolor as lnColour
+Calculate $cinst.$objs.EO_ADDR_BILL.$textcolor as lnColour
+Calculate $cinst.$objs.EO_ADDR_SHIP.$textcolor as lnColour
+Calculate $cinst.$objs.EO_INSTRUCTIONS.$textcolor as lnColour
+
+Do method assignEntryFieldProperties
+
+Do inherited      ;; handle objects in the navigation and results panes

@@ -1,0 +1,22 @@
+Calculate icValidationText as ''
+Calculate icValidationCodes as ''
+Calculate icInvalidChars as ''
+
+If pbInvisible
+	;  allow a leading full stop
+	If left(pName,1)="."
+		Calculate pName as mid(pName,2)
+	End If
+End If
+
+Calculate lcTest as strpbrk(pName,ccIllegalRef)
+If lcTest<>''
+	;  not testing for full stop as first or last char     ;; yet
+	Do $ctask.toStrings.$StringTableMessage('VAL_REF_ILLEGAL_CHAR',icValidationText,icValidationCodes) Returns lbStringTableEntryFound
+	If not(lbStringTableEntryFound)
+		Calculate icValidationText as con(icValidationText,pick(icValidationText<>'','',', '),'illegal character in reference table')
+	End If
+	Calculate icInvalidChars as ccIllegalRef
+End If
+
+Quit method icValidationText

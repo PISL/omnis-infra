@@ -1,0 +1,18 @@
+Do irHeader.$clear()
+Do irDIL.$clear()
+
+Calculate irHeader.FOH_GO_REF as $ctask.trGroupOrg.GO_SEQ
+Calculate irHeader.FOH_EO_REF as irCustomer.EO_SEQ
+;  Calculate irCurrentRecord.FOH_INV_NO as
+Do irHeader.$NextInvNo($ctask.trGroupOrg.GO_NAME_SHORT,kFalse)     ;; fetches the next sequence into FOH_INV_NO without updating the db; done later during the $save in case the user cancels or another user creates an invoice in the meantime
+Calculate irHeader.FOH_ADDR_SHIP as irCustomer.EO_ADDR_SHIP
+Calculate irHeader.FOH_ADDR_BILL as irCustomer.EO_ADDR_BILL
+Calculate irHeader.FOH_CUST_NAME as irCustomer.EO_NAME
+Calculate irHeader.FOH_DATE as #D
+Calculate irHeader.FOH_INSTRUCTIONS as con('registered ',prDelegate.DG_REG_DATE)
+Calculate irHeader.FOH_STATUS as 'INITIAL'
+
+Calculate irDIL.DIL_DG_REF as prDelegate.DG_SEQ
+
+Calculate pretFOH as irHeader
+Calculate pretDG_FOHlink as irDIL

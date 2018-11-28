@@ -1,0 +1,32 @@
+Do lrReturn.$cols.$add('AppleScriptResult',kCharacter,kSimplechar,255)
+Do lrReturn.$cols.$add('AppleScriptError',kCharacter,kSimplechar,255)
+;  person n, pl people [inh. entry] : A person in the address book database.
+;  elements
+;  contains urls, addresses, phones, groups, custom dates, instant messages, social profiles, related names, emails; contained by application, groups.
+
+;  In Address Book, email addresses, URL's, phone numbers, and addresses are not properties of a person. Rather, they are classes themselves, and are contained as elements of a person. The following example code demonstrates how to add an email address to a specified person.
+;  make new email at end of emails of thePerson with properties
+;  label:"Work", value:"applescriptguru@mac.com"
+
+;  make new url at end of urls of thePerson with properties
+;  label:"Work", value:"http://www.automatedworkflows.com"
+
+;  make new phone at end of phones of thePerson with properties
+;  label:"Work", value:"610.935.0652"
+
+
+Begin text block
+Text: {tell application "Address Book"} (Platform newline)
+Text: {set thePerson to (first person whose uid = "[pcPersonID]")} (Platform newline)
+Text: {make new [pcElementName] at end of [pcElementName]s of thePerson with properties} (Platform newline)
+Text: {{label:"[pcElementLabel]", value:"[pcElementContent]"}} (Platform newline)
+End text block
+Get text block lcApplescript
+
+;  Breakpoint
+Do $root.$runapplescript(lcApplescript,lcApplescriptResult,lcApplescriptError)
+If lcApplescriptResult<>''
+	
+	
+	
+End If

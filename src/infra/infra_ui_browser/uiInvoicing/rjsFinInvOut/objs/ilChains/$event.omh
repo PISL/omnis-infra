@@ -1,0 +1,32 @@
+On evClick
+	;  Breakpoint {ilChains}
+	
+	If ilChains.FOC_FOH_REF_PREV=irCurrentRecord.FOH_SEQ
+		Calculate lnGetFOH as ilChains.FOC_FOH_REF_NEXT
+	Else
+		Calculate lnGetFOH as ilChains.FOC_FOH_REF_PREV
+	End If
+	
+	Calculate icDisplayMessage as ''
+	Do irCurrentRecord.$clear()
+	Do ilDetails.$clear()
+	Calculate ilOriginalDetails as ilDetails
+	Do ilStatusChoice.$clear()
+	
+	Do ilDisplayRecords.$search($ref.FOH_SEQ=lnGetFOH,1,0,0,0)
+	
+	If ilDisplayRecords.FOH_SEQ
+		Calculate irCurrentRecord as ilDisplayRecords
+	Else
+		Do irCurrentRecord.$fetch_pk(lnGetFOH)
+	End If
+	
+	Do ilCustomers.$search($ref.EO_SEQ=irCurrentRecord.FOH_EO_REF,1,0,0,0)
+	
+	Do method setStatusChoices (irCurrentRecord.FOH_STATUS='ORIGINAL'|irCurrentRecord.FOH_STATUS='INVOICE'|irCurrentRecord.FOH_STATUS='QUOTE')     ;; pbIsNew=kTrue
+	
+	Do method fetchChainedInvoices
+	
+	Do method fetchDetails
+	
+	Do $cinst.$behaviour()

@@ -1,0 +1,8 @@
+
+Calculate $cinst.$objs.ilDisplayRecords.$enabled as inCurrentTab=1
+Calculate $cinst.$objs.pbPrint.$visible as inCurrentTab=1&ilDisplayRecords.$line>0&ilDisplayRecords.reportCode<>''
+Calculate $cinst.$objs.pbBack.$visible as inCurrentTab>1     ;; its a back button
+
+If inCurrentTab<>4
+	Calculate $cinst.$objs.MarqueeChart.$classname as ""
+End If

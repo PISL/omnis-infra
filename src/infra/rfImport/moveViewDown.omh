@@ -1,0 +1,4 @@
+Calculate lnNewVscollPos as ((inVscrollPos)*inListDisplayQuantum)+1
+Calculate $cinst.$objs.PagedPane.$objs.Grid_ilDataCols.$vscroll as lnNewVscollPos
+Calculate $cinst.$objs.PagedPane.$objs.ilSchemaCols.$vscroll as lnNewVscollPos
+Calculate inVscrollPos as inVscrollPos+1

@@ -1,0 +1,4 @@
+On evClick
+	Do $cinst.$destruct()
+	Do $cinst.$objs.PagedPane.$objs.Grid_ilDataCols.$clearexceptions()     ;; this throws an error if placed in the $destruct method
+	Do irefParent.[icMethodCancel](ibIgnorePreviousErrors)

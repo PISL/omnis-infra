@@ -1,0 +1,38 @@
+;  has anything changed with details to registration server?
+Do irBusinessDetailSubset.$assignrow(irCurrentRecord,kTrue)
+Do toStrings.$HasRowBeenModified(irBusinessDetailSubset,irBusinessDetailSubsetOrig) Returns lbRegDetailsModified
+If not(lbRegDetailsModified)
+	Calculate lbRegDetailsModified as ilDeleteCorpPerson.$linecount>0
+	If not(lbRegDetailsModified)
+		Calculate llTemp as ilCorporatePerson
+		Do llTemp.$search(isclear($ref.CPN_MWHEN),1,0,0,0) Returns lbRegDetailsModified     ;; someone new added
+		If not(lbRegDetailsModified)
+			Calculate llTemp.$line as 0
+			For llTemp.$line from 1 to llTemp.$linecount step 1
+				Do ilOriginalCorpPersons.$search($ref.CPN_EMAIL=llTemp.CPN_EMAIL,1,0,0,0) Returns lbFound
+				If lbFound
+					Do toStrings.$HasRowBeenModified(llTemp,ilOriginalCorpPersons) Returns lbRegDetailsModified
+					If lbRegDetailsModified
+						Break to end of loop
+					End If
+				End If
+			End For
+		End If
+	End If
+End If
+
+Calculate $cinst.$objs.inRegisterType.$enabled as (icMode='')&isclear(irCurrentRecord.GO_MEC_ID)&irCurrentRecord.GO_SEQ>0
+
+Calculate $cinst.$objs.pbAddCorpPerson.$enabled as ibRESTserviceRunning&(icMode='')&inRegisterType>0
+Calculate $cinst.$objs.pbDeleteCorpPerson.$enabled as ibRESTserviceRunning&ilCorporatePerson.$line>0
+Calculate $cinst.$objs.pbRegisterMEC.$enabled as ibRESTserviceRunning&isclear(irCurrentRecord.GO_MEC_ID)&inRegisterType>0
+Calculate $cinst.$objs.pbUpdateMEC.$enabled as ibRESTserviceRunning&irCurrentRecord.GO_MEC_ID<>''&icMode=''&(lbRegDetailsModified|ibRegistrationDoesNotMatchWithServer)
+Calculate $cinst.$objs.pbValidateMEC.$enabled as ibRESTserviceRunning&irCurrentRecord.GO_MEC_ID<>''&icMode=''
+
+If ilCorporatePerson.$linecount
+	Calculate llTemp as ilCorporatePerson
+	Calculate llTemp.$line as 0
+	For llTemp.$line from 1 to llTemp.$linecount step 1
+		Do $cinst.$objs.cg_ilCorpPersons.$setEnabled(llTemp.$line,isclear(llTemp.CPN_MWHEN))
+	End For
+End If

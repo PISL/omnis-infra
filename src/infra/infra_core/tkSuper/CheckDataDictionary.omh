@@ -1,0 +1,49 @@
+Begin reversible block
+	Disable cancel test at loops
+End reversible block
+;  update data dictionary
+Open data file {[tConstants.HostDB]}
+If flag true
+	Set current data file {MDM_PAGES}
+	Begin reversible block
+		Set main file {ADDRESSES}
+	End reversible block
+	
+	Do $clib.$files.$makelist($ref().$name) Returns llFileFormats
+	Do llFileFormats.$redefine(lcName)
+	While $Loop(llFileFormats)
+		Working message  (Cancel button,Repeat count) {checking db...  table [llFileFormats.$line] of [llFileFormats.$linecount][kCr]file [llFileFormats.lcName]}
+		Redraw working message
+		If canceled
+			;  Breakpoint
+			Break to end of loop
+		End If
+		
+		Update data dictionary (Test only) {[llFileFormats.lcName]}
+		If flag true
+			Update data dictionary {[llFileFormats.lcName]}
+		End If
+		
+		Reorganize data (Test only) {[llFileFormats.lcName]}
+		If flag true
+			Reorganize data (Optimize) {[llFileFormats.lcName]}
+		End If
+		
+		;  this takes too long when starting up
+		;  Check data (Check data file structure) {[llFileFormats.lcName]}
+		
+		Set main file {[llFileFormats.lcName]}
+		If sys(83)=0
+			;  Breakpoint
+			Set read/write files {[llFileFormats.lcFile]}
+			Prepare for insert
+			Update files
+			If flag true
+				Delete
+			End If
+			Set read-only files {[llFileFormats.lcFile]}
+		End If
+	End While
+	Close data file {MDM_PAGES}
+	Close working message
+End If

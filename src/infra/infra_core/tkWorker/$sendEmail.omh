@@ -1,0 +1,17 @@
+;  save the parameters so in case of failure we can create an asyncEmail record
+Calculate irServer as prServer
+Calculate irEmailAttributes as prAttributes
+Calculate irEmailBody as prBody
+Calculate ilEmailHeaders as plExtraHeaders
+Calculate ibSaveOnError as pbSaveOnError
+
+;  pass the parameters to the email object
+Do iorEmail.$sendMail(prServer,prAttributes,prBody,plExtraHeaders,kFalse) Returns lbOK
+If not(lbOK)
+	If ibSaveOnError
+		Do iorEmail.$getVar("icErrorText") Returns icErrorMessage
+		Calculate lcMessage as con('Attempting to send: ',kCr,kCr,irEmailBody.text,kCr,kCr,'returns: ',kCr,icErrorMessage)
+		Do irefStartTask.$AppError(lcMessage,'email worker failure')
+		Do $cinst.$close()
+	End If
+End If

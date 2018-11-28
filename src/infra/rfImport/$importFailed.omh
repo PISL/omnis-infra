@@ -1,0 +1,2 @@
+Do $cinst.$destruct()
+Do irefParent.$cancelImport()

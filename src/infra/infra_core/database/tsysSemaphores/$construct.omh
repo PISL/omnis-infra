@@ -1,0 +1,8 @@
+Calculate icPrefix as 'SMH_'
+;  this is a link table with multiple foreign keys
+;  Calculate icForeignKey as ''     ;; most dominant
+Calculate ibHasSequence as kFalse
+
+Do inherited
+
+Calculate inRecursionCount as 0

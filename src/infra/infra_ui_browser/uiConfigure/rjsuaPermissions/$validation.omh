@@ -1,0 +1,28 @@
+Calculate llSuperUserCheck as ilRolePermissions
+Do llSuperUserCheck.$clear()
+Do llSuperUserCheck.$fetchPermissionRoles(irCurrentRecord.PER_SEQ)
+
+If irCurrentRecord.PER_SU
+	;  If this is restricted to super users make sure any existing roles it is connected to are super user roles.
+	Do llSuperUserCheck.$search($ref.ROL_SU=1,1,0,1,0)
+	Do llSuperUserCheck.$remove(kListDeleteSelected)
+Else     ;; not a super role permission
+	Do llSuperUserCheck.$search($ref.ROL_SU=1,1,0,1,0)
+	Do llSuperUserCheck.$remove(kListKeepSelected)
+End If
+
+If llSuperUserCheck.$linecount>0
+	Calculate llSuperUserCheck.$line as 0
+	While $Loop(llSuperUserCheck)
+		Calculate lcRoles as con(lcRoles,pick(lcRoles<>'','',', '),llSuperUserCheck.ROL_NAME)
+	End While
+	
+	If llSuperUserCheck.$linecount=1
+		Calculate icDisplayMessage as con('The role ( ',lcRoles,' ) does not match the super user restriction.')
+	Else
+		Calculate icDisplayMessage as con('The ',llSuperUserCheck.$linecount,' roles ( ',lcRoles,' ) do not match the super user restriction.')
+	End If
+	Quit method kFalse
+End If
+
+Quit method kTrue

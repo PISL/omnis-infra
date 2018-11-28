@@ -1,0 +1,33 @@
+;  continue the login process after setting trGroupOrg values
+Do trGroupOrg.$cols.$findname('GON_NAME_FULL') Returns lrefCol
+If lrefCol
+	;  ok
+Else
+	Do trGroupOrg.$addLinkedCols('GON_NAME_FULL')
+End If
+Do trGroupOrg.$fetch_pk(pnGOseq)
+
+Do trGroupOrg.$cols.$findname('ExceptionSuffixSTB') Returns lrefCol
+If lrefCol
+	;  ok
+Else
+	Do trGroupOrg.$cols.$add('ExceptionSuffixSTB',kCharacter,kSimplechar,10)
+End If
+
+Do toValues.$initOrg('STB','SUFFIX') Returns lrException
+If lrException.RFO_DESC<>''
+	Calculate trGroupOrg.ExceptionSuffixSTB as lrException.RFO_DESC
+End If
+
+;  gather user's permissions which will determine what options they can see in the next remote form
+Do $DefineList(llPermissions,'infra.tuaPermissions')
+Do llPermissions.$fetchForUser($ctask.trCurrUser.USR_SEQ) Returns $ctask.tlPermissions
+
+;  because a user can have multiple roles and permissions can be assigned to multiple roles
+;  tlPermissions may have duplicate entries
+;  the only column of use now is PER_LABEL so remove duplicates
+Do $ctask.tlPermissions.$cols.PER_LABEL.$removeduplicates(kTrue)
+;  now we use the PER_LABEL column to determine which forms the user has access to
+Do $ctask.tlPermissions.$cols.$add('FormPrefix',kCharacter,kSimplechar,15)
+Do $ctask.tlPermissions.$sendall($ref.FormPrefix.$assign(mid($ctask.tlPermissions.PER_LABEL,1,pos('_',$ctask.tlPermissions.PER_LABEL)-1)))
+;  tlPermissions is now global (task var) and should remain untouched

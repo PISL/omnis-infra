@@ -1,0 +1,9 @@
+Do irCurrentStructure.$clear()
+Calculate irOriginalStructure as irCurrentStructure
+Calculate ibModifiedRecord as kFalse
+Calculate icMode as ''
+If not(pbPreserveCopyNode)
+	Calculate irCopyNode as ''
+End If
+;
+;  Calculate ilEPMfieldNames.$line as 0

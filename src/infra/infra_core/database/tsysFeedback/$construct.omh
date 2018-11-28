@@ -1,0 +1,7 @@
+Calculate icPrefix as 'SF_'
+;  this is a link table with multiple foreign keys
+Calculate icPrimarykey as 'SF_SEQ'     ;; most dominant
+Calculate icForeignKey as ''     ;; most dominant
+;  Calculate icForeignKey as 'UR_ROL_REF'
+
+Do inherited

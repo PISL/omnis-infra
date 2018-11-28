@@ -1,0 +1,37 @@
+;  2015-02-05 GRS added tlUnits to CORETASK & rtBusinessHMI to avoid constant repeated calls to the API
+;  Set reference irefCurrentTask to $ctask()
+;
+;  If irefCurrentTask.tlUnits.$linecount>0
+;  Calculate $cinst as irefCurrentTask.tlUnits
+;  Calculate lbOK as kTrue
+;  Else
+Do $cinst.$cols.$findname('UOS_FACTOR') Returns lrefCol
+If lrefCol
+	;  ok
+Else
+	Do $cinst.$cols.$add('UOS_FACTOR',kNumber,kFloatdp)
+End If
+
+Do $cinst.$fetch_all()
+
+If $cinst.$linecount>0
+	;  Set reference llUnitsRef to $cinst
+	Calculate lnFakePrimaryKey as $cinst.$cols.UOM_SEQ.$minimum
+	Do $DefineList(llSynonyms,'infra.tsysUnitSynonyms')
+	Do llSynonyms.$fetchAllSynonyms() Returns lbOK
+	Calculate llSynonyms.$line as 0
+	While $Loop(llSynonyms)
+		Calculate lnFakePrimaryKey as lnFakePrimaryKey-1
+		Do $cinst.$add(lnFakePrimaryKey,llSynonyms.UOS_CODE)
+		Calculate $cinst.UOS_FACTOR as llSynonyms.UOS_FACTOR
+		;  Set reference llUnitsRef to $cinst
+	End While
+	
+	Do $cinst.$sort($ref.UOM_CODE,kFalse,$ref.UOM_SEQ,kTrue)
+	Do $cinst.$cols.UOM_CODE.$removeduplicates()
+	Do $cinst.$sort(low($ref.UOM_CODE))
+	Calculate irefCurrentTask.tlUnits as $cinst
+End If
+;  End If
+
+Quit method lbOK

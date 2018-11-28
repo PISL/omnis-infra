@@ -1,0 +1,59 @@
+Calculate lnNotEnterable as lnEnterable
+If icMode='EU'|icMode='IU'     ;; We are creating or editing a User record so override the defaults
+	Calculate lnlinestyle as 2
+	Calculate lrFieldAttributes as OJSON.$jsontolistorrow(trFormColours.FIELDCOLOURS)
+	Calculate lnbordercolour as eval(lrFieldAttributes.mandatory)
+	Calculate lneffect as kJSborderPlain
+	Calculate lnEnterable as eval(lrFieldAttributes.enterable)
+	Calculate lnUnique as eval(lrFieldAttributes.unique)
+End If
+
+;  USR_NAME: mandatory = border + linestyle + effect, unique = backcolor
+Calculate $cinst.$objs.USR_NAME.$linestyle as lnlinestyle
+Calculate $cinst.$objs.USR_NAME.$bordercolor as lnbordercolour
+Calculate $cinst.$objs.USR_NAME.$effect as lneffect
+Calculate $cinst.$objs.USR_NAME.$backcolor as lnUnique
+Calculate $cinst.$objs.USR_NAME.$backalpha as pick(icMode='',255,0)
+
+;  USR_REAL_NAME
+Calculate $cinst.$objs.USR_REAL_NAME.$linestyle as lnlinestyle
+Calculate $cinst.$objs.USR_REAL_NAME.$bordercolor as lnbordercolour
+Calculate $cinst.$objs.USR_REAL_NAME.$effect as lneffect
+Calculate $cinst.$objs.USR_REAL_NAME.$backcolor as lnUnique
+Calculate $cinst.$objs.USR_REAL_NAME.$backalpha as pick(icMode='',255,0)
+
+Calculate $cinst.$objs.USR_AC_EXPIRES.$backcolor as lnEnterable
+Calculate $cinst.$objs.USR_AC_EXPIRES.$backalpha as pick(icMode='',255,0)
+Calculate $cinst.$objs.USR_INITIALS.$backcolor as lnEnterable
+Calculate $cinst.$objs.USR_INITIALS.$backalpha as pick(icMode='',255,0)
+Calculate $cinst.$objs.USR_MOBILE.$backcolor as lnEnterable
+Calculate $cinst.$objs.USR_MOBILE.$backalpha as pick(icMode='',255,0)
+Calculate $cinst.$objs.cb_USR_ACTIVE.$backcolor as lnEnterable
+Calculate $cinst.$objs.cb_USR_ACTIVE.$backalpha as pick(icMode='',255,0)
+
+If ilUserRoles.$linecount>0
+	Calculate $cinst.$objs.cb_USR_SU.$backcolor as lnNotEnterable
+	Calculate $cinst.$objs.cb_USR_SU.$backalpha as 0
+Else
+	Calculate $cinst.$objs.cb_USR_SU.$backcolor as lnEnterable
+	Calculate $cinst.$objs.cb_USR_SU.$backalpha as pick(icMode='',255,0)
+End If
+;  USR_SALT
+;  Calculate $cinst.$objs.USR_SALT.$linestyle as lnlinestyle
+;  Calculate $cinst.$objs.USR_SALT.$bordercolor as lnbordercolour
+;  Calculate $cinst.$objs.USR_SALT.$effect as lneffect
+;  Calculate $cinst.$objs.USR_SALT.$backcolor as lnEnterable
+
+If icMode='IU'     ;; not mandatory if updating
+	Calculate $cinst.$objs.NewPassword.$linestyle as lnlinestyle
+	Calculate $cinst.$objs.NewPassword.$bordercolor as lnbordercolour
+	Calculate $cinst.$objs.NewPassword.$effect as lneffect
+End If
+Calculate $cinst.$objs.NewPassword.$backcolor as lnEnterable
+
+If icMode='IU'     ;; not mandatory if updating
+	Calculate $cinst.$objs.CheckPassword.$linestyle as lnlinestyle
+	Calculate $cinst.$objs.CheckPassword.$bordercolor as lnbordercolour
+	Calculate $cinst.$objs.CheckPassword.$effect as lneffect
+End If
+Calculate $cinst.$objs.CheckPassword.$backcolor as lnEnterable

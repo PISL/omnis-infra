@@ -1,0 +1,60 @@
+If tlDatabases.DAM='WebService'
+	;  pass parameters to web service
+	;  $callService (pFieldReference, row(TableClassName, CurrentMethodName, p1,...,pn) )     ;; result will be returned in pFieldReference, row() contains the parameters for the call
+	Do ioWeb.$callFetch($cinst,irErrorSQL,row($cinst.$class().$name,$cmethod().$name,row(pbIncludeInactive),$cinst.$type,0,ilRESTextensions))
+	If ioWeb.irResponse.httpStatusCode=200
+		;  the result should be in this object     ;; however there may be a SQL error
+		If irErrorSQL.NativeErrorText<>''
+			Quit method kFalse
+		End If
+		Quit method kTrue
+	Else
+		Quit method kFalse
+	End If
+End If
+
+Do $cinst.$cols.$findname('ChildNodeCount') Returns liColRefCount
+Do $cinst.$cols.$findname('ChildNodeNames') Returns liColRefNames
+
+If pnGO_SEQ>0
+	;  fine
+Else
+	Calculate pnGO_SEQ as trGroupOrg.GO_SEQ
+End If
+
+Do $cinst.$ImmediateSession(loSession,loStatement) Returns lbImmediateSession
+If lbImmediateSession
+	Do $cinst.$SetSession(loSession,loStatement)
+Else If not(ibGoodConnectionToDb)
+	Quit method kFalse
+End If
+
+Calculate lcSimpleSelectnames as $cinst.$selectnames()
+;  Remove the infra.tablename from each column becuase this is screwing up the syntax with the sub query.
+Calculate lcSimpleSelectnames as replaceall(lcSimpleSelectnames,con($cinst.$servertablenames,'.'),'')
+;  Do $cinst.$Sql(,,kFalse,kTrue) Returns lcSQL
+
+Begin statement
+Sta: {SELECT [lcSimpleSelectnames]}
+If liColRefCount
+	Sta: {, ( select count(*) from [$cinst.$servertablenames] b where b.GS_SUPERIOR_GS_REF = a.GS_SEQ )}
+End If
+If liColRefNames
+	Sta: {, ( select string_agg(GS_DESC_FULL,', ') from [$cinst.$servertablenames] c where c.GS_SUPERIOR_GS_REF = a.GS_SEQ )}
+End If
+Sta: {FROM [$cinst.$servertablenames] a}
+Sta: {WHERE [icForeignKey] = @[pnGO_SEQ]}
+Sta: {and       GS_SUPERIOR_GS_REF is null}
+If not(pbIncludeInactive)
+	Sta: {and   GS_ACTIVE = 1}
+End If
+End statement
+
+Do $cinst.$executesqlandfetch() Returns lbOK
+If lbImmediateSession
+	Do $cinst.$SetSession(#NULL,#NULL,kTrue)
+End If
+
+Do $cinst.$sort($ref.GS_ORDER,0,$ref.GS_DESC_FULL,0)
+
+Quit method lbOK

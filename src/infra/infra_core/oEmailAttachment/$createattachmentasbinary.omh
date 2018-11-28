@@ -1,0 +1,21 @@
+;  Depending on the presence of fields, pass only as many parameters as are necessary
+ReadBinFile (iPath,lBinary)
+If len(iFilename)>0
+	Do pMessage.$createbodypartfrombin(lBinary,iMIMEtypeList.type,iCharsetList.iCharsetId,iEncodingList.iEncoding,iDispositionList.iDisposition,iFilename) Returns pBodyPartID
+Else If iDispositionList.$line
+	Do pMessage.$createbodypartfrombin(lBinary,iMIMEtypeList.type,iCharsetList.iCharsetId,iEncodingList.iEncoding,iDispositionList.iDisposition) Returns pBodyPartID
+Else If iEncodingList.$line
+	Do pMessage.$createbodypartfrombin(lBinary,iMIMEtypeList.type,iCharsetList.iCharsetId,iEncodingList.iEncoding) Returns pBodyPartID
+Else If iCharsetList.iCharsetId
+	Do pMessage.$createbodypartfrombin(lBinary,iMIMEtypeList.type,iCharsetList.iCharsetId) Returns pBodyPartID
+Else If len(iMIMEtypeList.type)>0
+	Do pMessage.$createbodypartfrombin(lBinary,iMIMEtypeList.type) Returns pBodyPartID
+Else
+	Do pMessage.$createbodypartfrombin(lBinary) Returns pBodyPartID
+End If
+If pBodyPartID=0
+	;  OK message  {Error [pMessage.$errorcode] creating binary body part for path [iPath]}
+	Calculate icErrorMessage as con('Error ',pMessage.$errorcode,' creating binary body part for path ',iPath)
+	Quit method kFalse
+End If
+Quit method kTrue

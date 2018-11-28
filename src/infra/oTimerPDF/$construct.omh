@@ -1,0 +1,8 @@
+;  Enter your initialization code here
+;  this timer is designed to close the calling instance after a predetermined time
+
+Set reference irefCaller to prefCaller
+Calculate icMethod as pcMethodName
+Calculate $cinst.$useseconds as kFalse
+Calculate $cinst.$timervalue as pnTimeout
+Calculate $cinst.$repeat as kFalse

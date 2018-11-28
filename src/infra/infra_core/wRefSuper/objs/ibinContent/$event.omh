@@ -1,0 +1,8 @@
+On evDrop
+	Calculate ibinContent as pDragValue.filedata
+	Calculate irReference.[irReference.icPrefix]BIN as ibinContent
+	Calculate inSize as binlength(ibinContent)
+	;  OK message  {Binary data received with [lnSize] bytes.}
+	Do method TypeOfPicture
+	
+	Do $cinst.$redraw()

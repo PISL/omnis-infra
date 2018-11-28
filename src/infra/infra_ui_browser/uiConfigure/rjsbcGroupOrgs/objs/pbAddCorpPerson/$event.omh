@@ -1,0 +1,9 @@
+On evClick
+	Calculate icDisplayMessage as ''
+	
+	Do ilCorporatePerson.$add()
+	Calculate ilCorporatePerson.$line as ilCorporatePerson.$linecount
+	Do $cinst.$objs.cg_ilCorpPersons.$setEnabled(ilCorporatePerson.$line,kTrue)
+	
+	Do $cinst.$behaviour()
+	Do $cinst.$redraw()

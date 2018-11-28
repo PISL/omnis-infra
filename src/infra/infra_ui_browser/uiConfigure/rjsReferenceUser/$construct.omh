@@ -1,0 +1,40 @@
+Set reference irefContainer to $cinst.$container
+Do inherited
+Do method setTabColours
+
+;  Enter your initialization code here
+Calculate $cinst.$objs.icFormIntro.$visible as kFalse
+
+Do $DefineList(ilDisplayRecords,'infra.tsysReferenceUser')
+Do method fetchSearch1List
+
+Calculate irCurrentRecord as ilDisplayRecords
+Do method fetchDisplayList (ilSearch1.RFU_CLASS)
+Calculate ilDisplayRecords.$line as 1
+Calculate irCurrentRecord as ilDisplayRecords
+
+Do method TranslateText     ;; call this here to get the translations before setting superclass labels/values
+
+Calculate icFormHeading as con($cell(clLabels,'objName','RFU_Heading','label'),' ',$ctask.trCurrUser.USR_REAL_NAME)
+Calculate icFormIntro as $cell(clLabels,'objName','RFU_Intro','label')
+
+Do method UserPermissions
+
+;  Breakpoint
+Calculate inMinSearchString as 0
+Do $cinst.$superObjects($cell(clLabels,'objName','disp_values','label'),3,$cell(clLabels,'objName','sel_class','label'),'',,kTrue)
+
+Calculate $cinst.$objs.TabControl_RFU.$currenttab as 1
+Calculate $cinst.$objs.PagedPane.$currentpage as 1
+
+If tlDatabases.$linecount>1
+	Calculate $cinst.icDisplayMessage as ilDisplayRecords.$WhichDatabase()
+End If
+
+;  Calculate $cinst.$objs.UniqueBox.$top as $cinst.$objs.RFU_CLASS.$top
+;  Calculate $cinst.$objs.UniqueBox.$left as $cinst.$objs.RFU_CLASS.$left
+Do $cinst.$container().$initToolsMenu() Returns ilMenuCommands
+Do $cinst.$container().$setupToolsMenu('refUser',ilMenuCommands)
+
+Do method DisplayBinary
+Do $cinst.$behaviour()

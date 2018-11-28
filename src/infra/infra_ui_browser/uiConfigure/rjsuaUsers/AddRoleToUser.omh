@@ -1,0 +1,38 @@
+Calculate icDisplayMessage as ''
+If irUserRights.canAddRole|irUserRights.canAddRoleR
+	;  firstly... is the selected Role consistent with any SU restriction ?
+	If pDragValue.ROL_SU
+		If irCurrentRecord.USR_SU=pDragValue.ROL_SU
+			;  consistent     ;; proceed
+		Else
+			Calculate icDisplayMessage as $cell(clLabels,'objName','inconsistent_su','label')
+			Quit method kFalse
+		End If
+	Else     ;; null or zero are assessed the same
+		If irCurrentRecord.USR_SU
+			;  in consistent
+			Calculate icDisplayMessage as $cell(clLabels,'objName','inconsistent_su','label')
+			Quit method kFalse
+		Else
+			;  proceed
+		End If
+	End If
+	
+	Do $DefineList(lrTemp,'tuaUserRoles')
+	Do lrTemp.$defaults()
+	Calculate lrTemp.UR_ROL_REF as pDragValue.ROL_SEQ
+	Calculate lrTemp.UR_USR_REF as irCurrentRecord.USR_SEQ
+	
+	Do lrTemp.$insert() Returns lbOK
+	If lbOK
+		Do method UserRoles
+	Else If lrTemp.icValidationMessage<>''
+		Calculate icDisplayMessage as lrTemp.icValidationMessage
+	Else
+		Calculate icDisplayMessage as lrTemp.irErrorSQL.NativeErrorText
+	End If
+Else
+	Calculate icDisplayMessage as $cell(clLabels,'objName','not_authorised','label')
+End If
+
+Quit method lbOK

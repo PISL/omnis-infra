@@ -1,0 +1,34 @@
+;  pass in the attachments list and this will populate the other columns from lcFilename
+
+;  set content type and subtype
+Do toValues.$mimeTypes() Returns llMimeTypes
+Do llMimeTypes.$search($ref.suffix=mid(pfAttachment.lcFilename,rpos(".",pfAttachment.lcFilename)),1,0,0,0) Returns lnLine
+If not(lnLine)
+	Calculate icErrorText as con("cannot translate ",mid(pfAttachment.lcFilename,rpos(".",pfAttachment.lcFilename))," to a valid MIME type")
+	Quit method kFalse
+End If
+Calculate pfAttachment.lcContentType as left(llMimeTypes.type,pos("/",llMimeTypes.type)-1)
+Calculate pfAttachment.lcContentSubtype as mid(llMimeTypes.type,pos("/",llMimeTypes.type)+1)
+
+Do loFileOps.$openfile(pfAttachment.lcFilename,kTrue) Returns lbOK
+If not(lbOK)
+	Calculate icErrorText as con("failed to open ",pfAttachment.lcFileName)
+	Quit method kFalse
+End If
+
+;  read the file into the binary column unless lcDisposition has been set to "inline" and lcContentType is "text"
+Do loFileOps.$readfile(lbinContents) Returns lbOK
+Do loFileOps.$closefile()
+If not(lbOK)
+	Calculate icErrorText as con("failed to read ",pfAttachment.lcFileName)
+	Quit method kFalse
+End If
+
+If pfAttachment.lcDisposition="inline"&pfAttachment.lcContentType="text"
+	Calculate pfAttachment.lcCharData as utf8tochar(lbinContents)
+Else
+	Calculate pfAttachment.lBinData as lbinContents
+	Calculate pfAttachment.lcDisposition as "attachment"
+End If
+
+Quit method kTrue

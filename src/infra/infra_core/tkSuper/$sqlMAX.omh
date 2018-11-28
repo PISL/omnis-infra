@@ -1,0 +1,9 @@
+;  This method is used to create a MAX statement for PostgreSQL
+;  ASSUMPTION:  Date fields have been formatted already before being passed into this method.
+
+Calculate statement as 'GREATEST('
+Do $ctask.tStringFields.$appendString(pValue1,statement,'')
+Do $ctask.tStringFields.$appendString(pValue2,statement,',')
+Calculate statement as con(statement,')')
+
+Quit method statement

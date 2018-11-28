@@ -1,0 +1,34 @@
+Calculate llAllowed as tlPermissions
+
+Do llAllowed.$search(low($ref.FormPrefix)='slv',1,0,0,0) Returns lbEventsTab
+Do llAllowed.$search(low($ref.FormPrefix)='sle',1,0,0,0) Returns lbErrorsTab
+Do llAllowed.$search(low($ref.FormPrefix)='ae',1,0,0,0) Returns lbAsyncEmailsTab
+
+Calculate $cinst.$objs.TabControl_Logs.$selectedtab as 1
+;  Calculate $cinst.$objs.TabControl_Logs.$enabled as lbUserTab
+Calculate $cinst.$objs.TabControl_Logs.$tabvisible as lbEventsTab
+
+Calculate $cinst.$objs.TabControl_Logs.$selectedtab as 2
+;  Calculate $cinst.$objs.TabControl_Logs.$enabled as lbRolesTab
+Calculate $cinst.$objs.TabControl_Logs.$tabvisible as lbErrorsTab
+
+Calculate $cinst.$objs.TabControl_Logs.$selectedtab as 3
+;  Calculate $cinst.$objs.TabControl_Logs.$enabled as lbPermissionsTab
+Calculate $cinst.$objs.TabControl_Logs.$tabvisible as lbAsyncEmailsTab
+
+If lbEventsTab
+	Calculate inCurrentTab as 1
+	Do $ctask.$setCurrentForm('code','FORM_SLV')
+Else If lbErrorsTab
+	Calculate inCurrentTab as 2
+	Do $ctask.$setCurrentForm('code','FORM_SLE')
+Else If lbAsyncEmailsTab
+	Calculate inCurrentTab as 3
+	Do $ctask.$setCurrentForm('code','FORM_AE')
+End If
+Calculate $cinst.$objs.TabControl_Logs.$currenttab as inCurrentTab
+
+Set reference irefContainer to $cinst.$container
+
+Do method TranslateText
+Do method setTabColours

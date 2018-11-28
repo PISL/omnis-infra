@@ -1,0 +1,33 @@
+;  ### this is english only - how do we make it international?
+If pos(':',mid(icSearch,1,4))
+	Calculate lcColumn as mid(icSearch,1,pos(':',icSearch)-1)
+	Calculate lcString as mid(icSearch,pos(':',icSearch)+1,99)
+Else
+	Calculate lcString as icSearch
+End If
+
+Switch lcColumn
+	Case 'N'     ;; name
+		Calculate lbIsValidColumn as kTrue
+	Case 'A'     ;; address - ship or billing
+		Calculate lbIsValidColumn as kTrue
+	Case 'C'     ;; contact
+		Calculate lbIsValidColumn as kTrue
+	Case 'M'     ;; comment
+		Calculate lbIsValidColumn as kTrue
+	Case ''
+		;  also valid     ;; all columns
+		Calculate lbIsValidColumn as kTrue
+	Default
+		Breakpoint
+End Switch
+
+If lbIsValidColumn
+	Do toValues.$setPeriodDates(ilSearch2,idFrom,idTo)
+	Do ilDisplayRecords.$stringSearchCustomer('count',lcString,lcColumn,ilSearch1.EO_SEQ,idFrom,idTo) Returns inSearchCount
+	If $cinst.inSearchCount>0&$cinst.inSearchCount<=100     ;; ### this needs to be made configurable
+		Do ilDisplayRecords.$stringSearchCustomer('result',lcString,lcColumn,ilSearch1.EO_SEQ,idFrom,idTo)
+		
+		Do $cinst.$behaviour()
+	End If
+End If

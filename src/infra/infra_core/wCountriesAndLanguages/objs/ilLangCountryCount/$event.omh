@@ -1,0 +1,8 @@
+On evClick     ;; Event Parameters - pRow ( Itemreference )
+	Calculate ibLangCountrySort as not(ibLangCountrySort)
+	If ibLangCountrySort
+		Do ilLangCountryCount.$sort($ref.LG_NO_OF_SPEAKERS,1,$ref.LG_DESC,0)
+	Else
+		Do ilLangCountryCount.$sort($ref.COUNT,1,$ref.LG_DESC,0)
+	End If
+	Do $cobj.$redraw()

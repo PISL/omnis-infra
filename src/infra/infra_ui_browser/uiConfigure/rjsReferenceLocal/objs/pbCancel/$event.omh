@@ -1,0 +1,5 @@
+On evClick
+	Calculate icMode as ''
+	Do $cinst.$displayListClick
+	Calculate icDisplayMessage as $cell(clLabels,'objName','REC_CANC','label')
+	Do $cinst.$behaviour()

@@ -1,0 +1,37 @@
+Calculate icValidationMessage as ''
+Do ilValidation.$clear()
+
+If $cinst.SF_CLASS<>''
+	;  good
+Else
+	Calculate lcMessage as con(lcMessage,pick(lcMessage<>'','',', '),'SF_CLASS missing')
+	Do ilValidation.$add('SF_CLASS_LBL','VAL_MISSING','SF_CLASS missing',0)
+End If
+
+If $cinst.SF_TYPE<>''
+	;  good
+Else
+	Calculate lcMessage as con(lcMessage,pick(lcMessage<>'','',', '),'SF_TYPE missing')
+	Do ilValidation.$add('SF_TYPE_LBL','VAL_MISSING','SF_TYPE missing',0)
+End If
+
+If $cinst.SF_FROM<>''
+	;  good
+Else
+	Calculate lcMessage as con(lcMessage,pick(lcMessage<>'','',', '),'SF_FROM missing')
+	Do ilValidation.$add('SF_FROM_LBL','VAL_MISSING','SF_FROM missing',0)
+End If
+
+If $cinst.SF_COMMENT<>''
+	;  good
+Else
+	Calculate lcMessage as con(lcMessage,pick(lcMessage<>'','',', '),'SF_COMMENT missing')
+	Do ilValidation.$add('SF_COMMENT_LBL','VAL_MISSING','SF_COMMENT missing',0)
+End If
+
+If lcMessage<>''
+	Calculate icValidationMessage as lcMessage
+	Quit method kFalse
+End If
+
+Quit method kTrue

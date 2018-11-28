@@ -1,0 +1,16 @@
+Calculate irCurrentRecord.PW as icNewPassword
+Do irCurrentRecord.$changePassword(icOldPassword) Returns lbOK
+If lbOK
+	Calculate icMode as ''
+	Do toStrings.$StringTableEntry('MSG_PWORDCHANGED',icDisplayMessage,'password changed')
+	Calculate icOldPassword as ''
+	Calculate icNewPassword as ''
+	Calculate icCheckPassword as ''
+Else
+	Calculate icDisplayMessage as irCurrentRecord.irErrorSQL.NativeErrorText
+	
+End If
+
+If lbOK
+	Do method returnHome
+End If

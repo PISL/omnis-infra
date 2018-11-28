@@ -1,0 +1,30 @@
+Calculate icValidationMessage as ''
+Do ilValidation.$clear()
+
+If $cinst.UOS_UOM_REF>0
+	;  good
+Else
+	Calculate lcMessage as con(lcMessage,pick(lcMessage<>'','',', '),'UOS_UOM_REF missing')
+	Do ilValidation.$add('UOS_UOM_REF_LBL','VAL_MISSING','UOS_UOM_REF missing',0)
+End If
+
+If $cinst.UOS_CODE<>''
+	;  good
+Else
+	Calculate lcMessage as con(lcMessage,pick(lcMessage<>'','',', '),'UOS_CODE missing')
+	Do ilValidation.$add('UOS_CODE_LBL','VAL_MISSING','UOS_CODE missing',0)
+End If
+
+If $cinst.UOS_FACTOR<>0
+	;  good
+Else
+	Calculate lcMessage as con(lcMessage,pick(lcMessage<>'','',', '),'UOS_FACTOR missing')
+	Do ilValidation.$add('UOS_FACTOR_LBL','VAL_MISSING','UOS_FACTOR missing',0)
+End If
+
+If lcMessage<>''
+	Calculate icValidationMessage as lcMessage
+	Quit method kFalse
+End If
+
+Quit method kTrue

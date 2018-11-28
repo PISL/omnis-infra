@@ -1,0 +1,4 @@
+If icRecordSectionBackgroundName<>''
+	Calculate lnBackColour as pick(mod(ilData.$line,2),rgb(213,213,213),kWhite)     ;; ### configurable colour
+	Calculate $cinst.$objs.[icRecordSectionBackgroundName].$backcolor as lnBackColour
+End If

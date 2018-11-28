@@ -1,0 +1,323 @@
+{
+	"classtype": "kReport",
+	"internalversion": 18,
+	"designtaskname": "Startup_Task",
+	"nextident": 1003,
+	"lastgroupident": 0,
+	"usecms": true,
+	"cvardefs": [
+
+	],
+	"ivardefs": [
+		{
+			"name": "icClassSignature",
+			"order": 5,
+			"type": "kCharacter",
+			"subtype": "kSimplechar",
+			"sublen": 30
+		},
+		{
+			"name": "icColourBarSubtotals1",
+			"order": 15,
+			"type": "kCharacter",
+			"subtype": "kSimplechar",
+			"sublen": 20
+		},
+		{
+			"name": "icColourBarSubtotals2",
+			"order": 16,
+			"type": "kCharacter",
+			"subtype": "kSimplechar",
+			"sublen": 20
+		},
+		{
+			"name": "icColourBarTotals",
+			"order": 14,
+			"type": "kCharacter",
+			"subtype": "kSimplechar",
+			"sublen": 20
+		},
+		{
+			"name": "icColourLinesAcrossTotal",
+			"order": 17,
+			"type": "kCharacter",
+			"subtype": "kSimplechar",
+			"sublen": 20
+		},
+		{
+			"name": "icEndOfReport",
+			"order": 11,
+			"type": "kCharacter",
+			"subtype": "kSimplechar",
+			"sublen": 100
+		},
+		{
+			"name": "icHeadingsBackgroundBar",
+			"order": 13,
+			"type": "kCharacter",
+			"subtype": "kSimplechar",
+			"sublen": 100
+		},
+		{
+			"name": "icNameOfCompany",
+			"order": 6,
+			"type": "kCharacter",
+			"subtype": "kSimplechar",
+			"sublen": 100
+		},
+		{
+			"name": "icPrintedTimestamp",
+			"order": 8,
+			"type": "kCharacter",
+			"subtype": "kSimplechar",
+			"sublen": 40
+		},
+		{
+			"name": "icRecordSectionBackgroundName",
+			"order": 12,
+			"type": "kCharacter",
+			"subtype": "kSimplechar",
+			"sublen": 100
+		},
+		{
+			"name": "icReportSubTitle",
+			"order": 2,
+			"type": "kCharacter",
+			"subtype": "kSimplechar",
+			"sublen": 100
+		},
+		{
+			"name": "icReportTitle",
+			"order": 1,
+			"type": "kCharacter",
+			"subtype": "kSimplechar",
+			"sublen": 255
+		},
+		{
+			"name": "icSortTitle",
+			"order": 9,
+			"type": "kCharacter",
+			"subtype": "kSimplechar",
+			"sublen": 100
+		},
+		{
+			"name": "idFrom",
+			"order": 3,
+			"type": "kDate",
+			"subtype": "kDate2000",
+			"sublen": 0
+		},
+		{
+			"name": "idTo",
+			"order": 4,
+			"type": "kDate",
+			"subtype": "kDate2000",
+			"sublen": 0
+		},
+		{
+			"name": "ilData",
+			"order": 7,
+			"type": "kList",
+			"subtype": "",
+			"sublen": 0
+		},
+		{
+			"name": "irefTask",
+			"order": 10,
+			"type": "kItemref",
+			"subtype": "",
+			"sublen": 0
+		}
+	],
+	"properties": {
+		"aligntogrid": false,
+		"backcolor": "RGB(0,0,0)",
+		"backiconid": 0,
+		"backpattern": 15,
+		"backpicture": {
+			"$base64": ""
+		},
+		"bordercolor": "RGB(0,0,0)",
+		"borderpos": "kBordPosMargins",
+		"bottommargin": 1.001,
+		"callprintonexport": false,
+		"collectperformancedata": false,
+		"componenticon": 0,
+		"componenttype": "kCompStoreHidden",
+		"copies": 0,
+		"createdate": "2018-03-28 14:06:39",
+		"desc": "",
+		"editor": "",
+		"editordata": "",
+		"effect": "kBorderNone",
+		"exportformat": "kEXnone",
+		"external": true,
+		"forecolor": "RGB(0,0,0)",
+		"horzdpi": 0,
+		"horzgrid": 0.201,
+		"horzoffset": 0.0,
+		"horzpages": false,
+		"islabel": false,
+		"islist": true,
+		"issupercomponent": false,
+		"labelcount": 0,
+		"labelwidth": 0.0,
+		"leftmargin": 1.001,
+		"linestyle": 1,
+		"loadpagesetup": true,
+		"macosdestname": "",
+		"macosdesttype": "kPrinter",
+		"mainfile": "",
+		"mainlist": "ilData",
+		"moddate": "2018-06-20 11:43:26",
+		"orientation": "kOrientDefault",
+		"pagesetupdata": {
+			"$base64": ""
+		},
+		"paper": "kPaDefault",
+		"paperlength": 0.0,
+		"paperwidth": 0.0,
+		"picturealign": "kPALtopLeft",
+		"recordspacing": 0.0,
+		"repeatfactor": 1,
+		"rightmargin": 1.001,
+		"scale": 0,
+		"showascheckedout": false,
+		"showgrid": true,
+		"shownames": false,
+		"sizetogrid": false,
+		"topmargin": 1.001,
+		"userinfo": "",
+		"version": "2",
+		"vertdpi": 0,
+		"vertoffset": 0.0
+	},
+	"sortfields": [
+		{
+			"order": 1,
+			"properties": {
+				"dataname": "",
+				"descending": false,
+				"newpage": false,
+				"newpageinterval": 0.0,
+				"newpageintervalstart": 0.0,
+				"subtotalinterval": 0.0,
+				"subtotalintervalstart": 0.0,
+				"subtotals": false,
+				"upper": false
+			}
+		},
+		{
+			"order": 2,
+			"properties": {
+				"dataname": "",
+				"descending": false,
+				"newpage": false,
+				"newpageinterval": 0.0,
+				"newpageintervalstart": 0.0,
+				"subtotalinterval": 0.0,
+				"subtotalintervalstart": 0.0,
+				"subtotals": false,
+				"upper": false
+			}
+		},
+		{
+			"order": 3,
+			"properties": {
+				"dataname": "",
+				"descending": false,
+				"newpage": false,
+				"newpageinterval": 0.0,
+				"newpageintervalstart": 0.0,
+				"subtotalinterval": 0.0,
+				"subtotalintervalstart": 0.0,
+				"subtotals": false,
+				"upper": false
+			}
+		},
+		{
+			"order": 4,
+			"properties": {
+				"dataname": "",
+				"descending": false,
+				"newpage": false,
+				"newpageinterval": 0.0,
+				"newpageintervalstart": 0.0,
+				"subtotalinterval": 0.0,
+				"subtotalintervalstart": 0.0,
+				"subtotals": false,
+				"upper": false
+			}
+		},
+		{
+			"order": 5,
+			"properties": {
+				"dataname": "",
+				"descending": false,
+				"newpage": false,
+				"newpageinterval": 0.0,
+				"newpageintervalstart": 0.0,
+				"subtotalinterval": 0.0,
+				"subtotalintervalstart": 0.0,
+				"subtotals": false,
+				"upper": false
+			}
+		},
+		{
+			"order": 6,
+			"properties": {
+				"dataname": "",
+				"descending": false,
+				"newpage": false,
+				"newpageinterval": 0.0,
+				"newpageintervalstart": 0.0,
+				"subtotalinterval": 0.0,
+				"subtotalintervalstart": 0.0,
+				"subtotals": false,
+				"upper": false
+			}
+		},
+		{
+			"order": 7,
+			"properties": {
+				"dataname": "",
+				"descending": false,
+				"newpage": false,
+				"newpageinterval": 0.0,
+				"newpageintervalstart": 0.0,
+				"subtotalinterval": 0.0,
+				"subtotalintervalstart": 0.0,
+				"subtotals": false,
+				"upper": false
+			}
+		},
+		{
+			"order": 8,
+			"properties": {
+				"dataname": "",
+				"descending": false,
+				"newpage": false,
+				"newpageinterval": 0.0,
+				"newpageintervalstart": 0.0,
+				"subtotalinterval": 0.0,
+				"subtotalintervalstart": 0.0,
+				"subtotals": false,
+				"upper": false
+			}
+		},
+		{
+			"order": 9,
+			"properties": {
+				"dataname": "",
+				"descending": false,
+				"newpage": false,
+				"newpageinterval": 0.0,
+				"newpageintervalstart": 0.0,
+				"subtotalinterval": 0.0,
+				"subtotalintervalstart": 0.0,
+				"subtotals": false,
+				"upper": false
+			}
+		}
+	]
+}

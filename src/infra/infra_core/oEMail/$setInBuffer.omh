@@ -1,0 +1,2 @@
+;  add e-mail message to the in-buffer
+Do cInBuffer.$add(pReturnPath,pDate,pPriority,pFrom,pSubject,pBody,pEnclosureList)

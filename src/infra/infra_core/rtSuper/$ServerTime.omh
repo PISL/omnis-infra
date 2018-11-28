@@ -1,0 +1,6 @@
+If pbFetchFromDB
+	Do trTaskStats.$ServerTime() Returns ldtNow
+Else
+	Calculate ldtNow as #D
+End If
+Quit method ldtNow

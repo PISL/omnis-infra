@@ -1,0 +1,9 @@
+On evClick     ;; Event Parameters - pRow( Itemreference )
+	Do ilData.$add()
+	Calculate ilData.$line as ilData.$linecount
+	
+	Calculate ilData.REF_CLASS as ''
+	Calculate ilData.REF_VALUE as ''
+	Calculate ilData.REF_ACTIVE as 1
+	Calculate ilData.REF_DATE as #NULL
+	Do $cinst.$redraw()

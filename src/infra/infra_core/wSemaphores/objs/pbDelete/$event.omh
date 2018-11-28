@@ -1,0 +1,13 @@
+On evClick     ;; Event Parameters - pRow( Itemreference )
+	No/Yes message Verify break of record lock {Are you sure you want to clear the record lock on record [ilData.SMH_TABLE_PRFX] / [ilData.SMH_PKEY_I][ilData.SMH_PKEY_C]  ?}
+	If flag true
+		Calculate lrSemaphore as ilData
+		Do lrSemaphore.$delete() Returns lbOK
+		If lbOK
+			Do $cinst.$Refresh()
+		Else
+			OK message Cannot drop record lock {[lrSemaphore.irErrorSQL.NativeErrorText]}
+		End If
+	End If
+	Do $cinst.$behaviour()
+	Do $cinst.$redraw()

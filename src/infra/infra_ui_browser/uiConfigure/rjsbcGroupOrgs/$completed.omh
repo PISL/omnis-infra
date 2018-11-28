@@ -1,0 +1,13 @@
+;  Breakpoint
+Do oService.$pingComplete Returns lrResult
+If lrResult.$colcount>0
+	;  OK message  {Server is present}
+	Calculate ibRESTserviceRunning as kTrue
+	Calculate tConstants.ExternalIP as lrResult.ip
+	Do toStrings.$StringTableEntry('MSG_REGSERVAVAILABLE',lcMessage,'Registration server is available.')
+	Calculate icDisplayMessage as lcMessage
+Else
+	Do toStrings.$StringTableEntry('MSG_REGSERVUNAVAILABLE',lcMessage,'Registration server is not available.')
+	Calculate icDisplayMessage as lcMessage
+End If
+;  Do $cinst.$behaviour()

@@ -1,0 +1,11 @@
+Calculate icFormIntro as $cell(clLabels,'objName','FOH_Intro','label')
+Do toValues.$setPeriodDates(ilSearch2,idFrom,idTo)
+
+;  set the search list display value
+If ilSearch2.$line=ilSearch2.$linecount
+	Calculate ilSearch2.desc as con(idFrom,pick(pos('-',icUserInput)>0,'',' - '),idTo)
+Else
+	Calculate ilSearch2.[ilSearch2.$linecount].desc as $cell(clLabels,'objName','OTHER','label')
+End If
+
+Do method fetchDisplayList

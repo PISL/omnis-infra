@@ -1,0 +1,29 @@
+{
+	"ident": 1007,
+	"order": 4,
+	"objtype": "kComponent",
+	"componentlib": "Gif Library",
+	"componentctrl": "Gif Control",
+	"properties": {
+		"::backcolor": "RGB(255,255,255)",
+		"::keepaspectratio": true,
+		"::picturealign": "kPALtopLeft",
+		"::scale": true,
+		"animate": true,
+		"dataname": "irLogo.RFO_BIN",
+		"defaultcolor": "kColor3DFace",
+		"desgroup": 0,
+		"deslock": false,
+		"height": 1.905,
+		"left": 0.191,
+		"lineno": 1,
+		"lineoffset": 0.069,
+		"nolineifempty": false,
+		"noreload": false,
+		"path": "",
+		"totalsifnoline": false,
+		"userinfo": "",
+		"visible": false,
+		"width": 5.436
+	}
+}

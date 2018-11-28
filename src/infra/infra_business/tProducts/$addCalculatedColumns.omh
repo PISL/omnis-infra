@@ -1,0 +1,7 @@
+Do $cinst.$cols.$findname('Total') Returns liColRef
+If liColRef
+	;  extra cols already added
+Else
+	Do $cinst.$cols.$add('Tax',kNumber,k2dp)
+	Do $cinst.$cols.$add('Total',kNumber,k2dp)
+End If

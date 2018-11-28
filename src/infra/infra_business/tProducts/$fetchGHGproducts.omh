@@ -1,0 +1,23 @@
+;  specific to MEC
+
+Do $cinst.$ImmediateSession(loSession,loStatement) Returns lbImmediateSession
+If lbImmediateSession
+	Do $cinst.$SetSession(loSession,loStatement)
+Else If not(ibGoodConnectionToDb)
+	Quit method kFalse
+End If
+
+Begin statement (Carriage return,Linefeed)
+Sta: {select [$cinst.$selectnames()]}
+Sta: {from [$cinst.$servertablenames]}
+Sta: {where PRD_GO_REF = -1}
+;  exclude anything purchased
+Sta: {order by upper(prd_name)}
+
+Do $cinst.$executesqlandfetch() Returns lbOK
+
+If lbImmediateSession
+	Do $cinst.$SetSession(#NULL,#NULL,kTrue)
+End If
+
+Quit method lbOK

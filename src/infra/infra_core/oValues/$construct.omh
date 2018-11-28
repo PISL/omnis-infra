@@ -1,0 +1,34 @@
+;  2017-11-30 GRS swapped back to $DefineList() for the VCS - JSON conversion
+If 1=1     ;; Studio 8.0.1 bug - losing scope with task
+	Do $DefineList(ilBaseGlobal,'infra.tsysReferenceGlobal')     ;; tConstants
+	Do $DefineList(ilBaseLocal,'infra.tsysReferenceLocal')
+	Do $DefineList(ilBaseOrg,'infra.tsysReferenceOrg')
+	Do $DefineList(ilBaseUser,'infra.tsysReferenceUser')
+	
+	If tcCurrentLibrary='HTMLp'     ;; 2017-12-04 GRS do not like this but...
+		Do $DefineList(ilIPs,'tIpAddresses')
+	End If
+Else
+	Do ilBaseGlobal.$definefromsqlclass('infra.tsysReferenceGlobal')
+	Do ilBaseLocal.$definefromsqlclass('infra.tsysReferenceLocal')
+	Do ilBaseOrg.$definefromsqlclass('infra.tsysReferenceOrg')
+	Do ilBaseUser.$definefromsqlclass('infra.tsysReferenceUser')
+	
+	Do ilIPs.$definefromsqlclass('tIpAddresses')
+End If
+
+Calculate irErrorSQL as ilBaseGlobal.irErrorSQL
+
+If clGlobal.$colcount=0
+	;  to build up a cache of REFERENCE values when running through WebService
+	Calculate clGlobal as ilBaseGlobal
+	Calculate clLocal as ilBaseLocal
+	Calculate clOrganisation as ilBaseOrg
+	Calculate clUser as ilBaseUser
+	
+	;  initialise a class case with a comma.  Each requested class is surrounded by a comma.
+	Calculate ccClassesG as ','
+	Calculate ccClassesL as ccClassesG
+	Calculate ccClassesO as ccClassesG
+	Calculate ccClassesU as ccClassesG
+End If

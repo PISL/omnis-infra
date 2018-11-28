@@ -1,0 +1,52 @@
+Calculate icDisplayMessage as ''
+Calculate irCurrentRecord as ilDisplayRecords
+Calculate irOriginalRecord as irCurrentRecord
+
+Do method RolePermissions
+Do method RoleUsers
+
+;  If this is a super user role, highlight any non super user permissions.
+;  If this is a non super user role, highlights any super user permissions.
+Calculate llHighlight as ilRolePermissions
+Do llHighlight.$search($ref.PER_SU=1,1,0,1,0)
+If irCurrentRecord.ROL_SU
+	Do llHighlight.$remove(kListDeleteSelected)
+Else
+	Do llHighlight.$remove(kListKeepSelected)
+End If
+If llHighlight.$linecount>0
+	Calculate llHighlight.$line as 0
+	While $Loop(llHighlight)
+		Calculate lcNames as con(lcNames,pick(lcNames<>'','',', '),llHighlight.PER_DESC_EN)
+	End While
+	
+	If llHighlight.$linecount=1
+		Calculate icDisplayMessage as con('WARNING:  The permission ( ',lcNames,' ) is inconsistent with the super user restriction of this role.')
+	Else
+		Calculate icDisplayMessage as con('WARNING:  The permissions ( ',lcNames,' ) are inconsistent with the super user restriction of this role.')
+	End If
+End If
+
+Calculate llHighlight as ilRoleUsers
+Do llHighlight.$search($ref.USR_SU=1,1,0,1,0)
+If irCurrentRecord.ROL_SU
+	Do llHighlight.$remove(kListDeleteSelected)
+Else
+	Do llHighlight.$remove(kListKeepSelected)
+End If
+If llHighlight.$linecount>0
+	Calculate lcNames as ''
+	Calculate llHighlight.$line as 0
+	While $Loop(llHighlight)
+		Calculate lcNames as con(lcNames,pick(lcNames<>'','',', '),llHighlight.USR_NAME)
+	End While
+	
+	If llHighlight.$linecount=1
+		Calculate icDisplayMessage as con(icDisplayMessage,pick(icDisplayMessage<>'','',kCr),'WARNING:  The user ( ',lcNames,' ) is inconsistent with the super user restriction of this role.')
+	Else
+		Calculate icDisplayMessage as con(icDisplayMessage,pick(icDisplayMessage<>'','',kCr),'WARNING:  The users ( ',lcNames,' ) are inconsistent with the super user restriction of this role.')
+	End If
+End If
+
+Do $cinst.$behaviour()
+Do $cinst.$redraw()

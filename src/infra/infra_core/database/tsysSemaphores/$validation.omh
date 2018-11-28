@@ -1,0 +1,39 @@
+Calculate icValidationMessage as ''
+Do ilValidation.$clear()
+
+If $cinst.SMH_TABLE_PRFX<>''
+	;  good
+Else
+	Calculate lcMessage as con(lcMessage,pick(lcMessage<>'','',', '),'SMH_TABLE_PRFX missing')
+	Do ilValidation.$add('SMH_TABLE_PRFX_LBL','VAL_MISSING','SMH_TABLE_PRFX missing',0)
+End If
+
+If $cinst.SMH_PKEY_I<>0&$cinst.SMH_PKEY_C<>''
+	Calculate lcMessage as con(lcMessage,pick(lcMessage<>'','',', '),'SMH_PKEY_I and SMH_PKEY_C are mutually exclusive')
+	Do ilValidation.$add('SMH_REFS','VAL_EXCLUSIVE','SMH_PKEY_I and SMH_PKEY_C are mutually exclusive',0)
+Else
+	If $cinst.SMH_PKEY_I<>0
+		;  good
+	Else
+		If $cinst.SMH_PKEY_C<>''
+			;  good
+		Else
+			Calculate lcMessage as con(lcMessage,pick(lcMessage<>'','',', '),'SMH_PKEY_I or SMH_PKEY_C missing')
+			Do ilValidation.$add('SMH_PKEY_I_LBL','VAL_MISSING','SMH_PKEY_I or SMH_PKEY_C missing',0)
+		End If
+	End If
+End If
+
+If $cinst.SMH_OWNER<>''
+	;  good
+Else
+	Calculate lcMessage as con(lcMessage,pick(lcMessage<>'','',', '),'SMH_OWNER missing')
+	Do ilValidation.$add('SMH_OWNER_LBL','VAL_MISSING','SMH_OWNER missing',0)
+End If
+
+If lcMessage<>''
+	Calculate icValidationMessage as lcMessage
+	Quit method kFalse
+End If
+
+Quit method kTrue

@@ -1,0 +1,59 @@
+Do $cinst.$getBrowser()     ;; populate icPlatform
+Calculate inTabCount as 1
+Calculate llAllowed as tlPermissions
+Do inherited
+
+Do llAllowed.$search(low($ref.FormPrefix)='usr',1,0,0,0) Returns lbUserTab     ;; ASinGB has uppercase permission values
+Do llAllowed.$search(low($ref.FormPrefix)='rol',1,0,0,0) Returns lbRolesTab
+Do llAllowed.$search(low($ref.FormPrefix)='per',1,0,0,0) Returns lbPermissionsTab
+
+Calculate $cinst.$objs.TabControl_Access.$selectedtab as 1
+Calculate $cinst.$objs.TabControl_Access.$tabvisible as lbUserTab
+Do ilTabShortcuts.$add()
+If lbUserTab
+	Calculate ilTabShortcuts.[ilTabShortcuts.$linecount].key as inTabCount
+	Calculate inTabCount as inTabCount+1
+End If
+
+Calculate $cinst.$objs.TabControl_Access.$selectedtab as 2
+Calculate $cinst.$objs.TabControl_Access.$tabvisible as lbRolesTab
+Do ilTabShortcuts.$add()
+If lbRolesTab
+	Calculate ilTabShortcuts.[ilTabShortcuts.$linecount].key as inTabCount
+	Calculate inTabCount as inTabCount+1
+End If
+
+Calculate $cinst.$objs.TabControl_Access.$selectedtab as 3
+Calculate $cinst.$objs.TabControl_Access.$tabvisible as lbPermissionsTab
+Do ilTabShortcuts.$add()
+If lbPermissionsTab
+	Calculate ilTabShortcuts.[ilTabShortcuts.$linecount].key as inTabCount
+	Calculate inTabCount as inTabCount+1
+End If
+
+Calculate ilNoActions as tlNavMenu
+Do ilNoActions.$clear()
+
+If lbUserTab
+	Calculate inCurrentTab as 1
+	Do $ctask.$setCurrentForm('code','FORM_USR')
+Else If lbRolesTab
+	Calculate inCurrentTab as 2
+	Do $ctask.$setCurrentForm('code','FORM_ROL')
+Else If lbPermissionsTab
+	Calculate inCurrentTab as 3
+	Do $ctask.$setCurrentForm('code','FORM_PER')
+End If
+Calculate $cinst.$objs.TabControl_Access.$currenttab as inCurrentTab
+;  If lbUserTab
+;  Set reference irefSubFormUser to $cinst.$objs.PagedPane_Ref.$objs.subFormUsers.$subinst.$ref
+;  Else If lbRolesTab
+;  Set reference irefSubFormRole to $cinst.$objs.PagedPane_Ref.$objs.subFormRoles.$subinst.$ref
+;  Else If lbPermissionsTab
+;  Set reference irefSubFormPerm to $cinst.$objs.PagedPane_Ref.$objs.subFormPermissions.$subinst.$ref
+;  End If
+
+Set reference irefContainer to $cinst.$container
+
+Do method TranslateText
+Do method setTabColours

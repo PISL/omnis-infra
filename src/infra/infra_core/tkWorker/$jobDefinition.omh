@@ -1,0 +1,9 @@
+Do lList.$cols.$add('instruction',kCharacter,kSimplechar,100)     ;; SMTP, PDF, HTTP, FTP, IMAP, HASH, CRYPTO
+Do lList.$cols.$add('params',kRow)
+Do lList.$cols.$add('omnisClass',kCharacter,kSimplechar,100)     ;; e.g. report class for PDF
+Do lList.$cols.$add('completionMethod',kCharacter,kSimplechar,100)     ;; a method name in tkWorkerApp which is subclassed from this class
+Do lList.$cols.$add('callbackMethod',kCharacter,kSimplechar,100)     ;; e.g. $pdfcomplete, $emailcomplete
+Do lList.$cols.$add('json',kCharacter,kSimplechar,255)     ;; for other attributes
+Do lList.$cols.$add('timeout',kInteger,kShortint)     ;; minutes for timeout - default 5 minutes
+
+Quit method lList

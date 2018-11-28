@@ -1,0 +1,5 @@
+Do inherited
+
+If isnull($cinst.GS_ACTIVE)
+	Calculate $cinst.GS_ACTIVE as 1
+End If

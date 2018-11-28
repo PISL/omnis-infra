@@ -1,0 +1,20 @@
+{
+	"classtype": "kSchema",
+	"internalversion": 3,
+	"nextident": 32029,
+	"properties": {
+		"componenticon": 0,
+		"componenttype": "kCompStoreHidden",
+		"createdate": "2017-10-27 11:20:27",
+		"createinstancewhensubtype": true,
+		"desc": "",
+		"editor": "",
+		"editordata": "",
+		"external": false,
+		"moddate": "2016-01-20 17:01:59",
+		"servertablename": "infra.countries",
+		"showascheckedout": false,
+		"userinfo": "",
+		"version": "2"
+	}
+}

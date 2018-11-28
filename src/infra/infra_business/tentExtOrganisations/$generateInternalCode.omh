@@ -1,0 +1,80 @@
+If $ctask.trGroupOrg.GO_SEQ>0
+	;  proceed
+Else
+	Quit method kFalse
+End If
+
+If tlDatabases.DAM='WebService'
+	;  pass parameters to web service
+	;  $callService (pFieldReference, row(TableClassName, CurrentMethodName, p1,...,pn) )     ;; result will be returned in pFieldReference, row() contains the parameters for the call
+	Do ioWeb.$callFetch(lcReturnVal,irErrorSQL,row($cinst.$class().$name,$cmethod().$name,row(pcCustCode,pcSuppCode),lcReturnVal.$type,0,ilRESTextensions))
+	If ioWeb.irResponse.httpStatusCode=200
+		;  the result should be in this object     ;; however there may be a SQL error
+		If irErrorSQL.NativeErrorText<>''
+			Quit method kFalse
+		End If
+		Quit method lcReturnVal
+	Else
+		Quit method kFalse
+	End If
+End If
+
+If pcCustCode<>''
+	;  proceed
+	;  Calculate pcCustCode as replaceall(pcCustCode,' ','')
+	Calculate pcCustCode as upp(pcCustCode)
+	Calculate pcCustCode as replaceall(pcCustCode,'.','')     ;; remove dots
+	Calculate pcCustCode as replaceall(pcCustCode,' ','')     ;; remove spaces
+	Calculate pcCustCode as mid(pcCustCode,1,3)     ;; first 3 chars
+	Calculate pcCustCode as con(pcCustCode,'%')     ;; for use in like clause
+Else If pcSuppCode<>''
+	;  proceed
+	;  Calculate pcSuppCode as replaceall(pcSuppCode,' ','')
+	Calculate pcSuppCode as upp(pcSuppCode)
+	Calculate pcSuppCode as replaceall(pcSuppCode,'.','')     ;; remove dots
+	Calculate pcSuppCode as replaceall(pcSuppCode,' ','')     ;; remove spaces
+	Calculate pcSuppCode as mid(pcSuppCode,1,3)     ;; first 3 chars
+	Calculate pcSuppCode as con(pcSuppCode,'%')     ;; for use in like clause
+Else
+	Quit method kFalse
+End If
+
+Do $cinst.$ImmediateSession(loSession,loStatement) Returns lbImmediateSession
+If lbImmediateSession
+	Do $cinst.$SetSession(loSession,loStatement)
+Else If not(ibGoodConnectionToDb)
+	Quit method kFalse
+End If
+
+Begin statement
+Sta: {select count(*)}
+Sta: {from [$cinst.$servertablenames],  [lrLinkToGroupOrg.$servertablenames()], [lrGroupOrg.$servertablenames()]}
+;  join ExtOrganisations to link table
+Sta: {where EOL_EO_REF = EO_SEQ}
+;  join link table to groupOrganisation
+Sta: {and    EOL_GO_REF = GO_SEQ}
+Sta: {and    GO_SEQ = @[$ctask.trGroupOrg.GO_SEQ]}
+If pcCustCode<>''
+	;  customer code
+	Sta: {and    EOL_FINACCT_CUID like @[pcCustCode]}
+Else If pcSuppCode<>''
+	;  supplier code
+	Sta: {and    EOL_FINACCT_SUID like @[pcSuppCode]}
+End If
+End statement
+
+Do $cinst.$executesqlandfetchinto(lnCount) Returns lbOK
+
+Calculate lnCount as lnCount+1
+;  remove the trailing %
+If pcCustCode<>''
+	Calculate lcReturnVal as con(mid(pcCustCode,1,len(pcCustCode)-1),jst(lnCount,'-3P0'))
+Else If pcSuppCode<>''
+	Calculate lcReturnVal as con(mid(pcSuppCode,1,len(pcSuppCode)-1),jst(lnCount,'-3P0'))
+End If
+
+If lbImmediateSession
+	Do $cinst.$SetSession(#NULL,#NULL,kTrue)
+End If
+
+Quit method lcReturnVal

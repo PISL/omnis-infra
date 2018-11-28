@@ -1,0 +1,34 @@
+On evClick
+	If inCurrentTab=cnTabStructure
+		;  stay on this tab
+		Calculate ilNow.$line as 0
+		Do irCurrentStructure.$clear()
+		Do irCurrentStructure.$defaults()
+		Calculate irCurrentStructure.GS_GO_REF as ilDisplayRecords.GO_SEQ
+		;  If 1=1     ;; default is GS_TYPE is same as before
+		;  Calculate irCurrentStructure.GS_TYPE as ilStructureType.RFO_VALUE
+		;  Else     ;; or it is cleared each time
+		;  Calculate ilStructureType.$line as 0
+		;  End If
+		If ilPrevious.1.GS_TYPE='ORG'
+			Calculate ilStructureType.$line as 1
+		Else
+			Do ilStructureType.$search($ref.RFO_VALUE=ilPrevious.GS_TYPE,1,0,0,0)     ;; find the parent level
+			Calculate ilStructureType.$line as ilStructureType.$line+1     ;; set to the immediate child
+		End If
+		Calculate irCurrentStructure.GS_TYPE as ilStructureType.RFO_VALUE
+	Else
+		Calculate $cinst.$objs.TabControl_GO.$currenttab as 1
+		Calculate $cinst.$objs.PagedPane.$currentpage as 1
+		
+		Do irCurrentRecord.$clear()
+		Do irCurrentOrgName.$clear()
+		Do irCurrentRecord.$defaults()
+		Calculate ilDisplayRecords.$line as 0
+	End If
+	
+	Calculate icDisplayMessage as ''
+	Calculate icMode as 'I'     ;; insert
+	
+	Do $cinst.$behaviour()
+	Do $cinst.$setcurfield('GO_NAME_FULL')

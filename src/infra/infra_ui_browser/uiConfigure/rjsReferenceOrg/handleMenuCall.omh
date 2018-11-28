@@ -1,0 +1,35 @@
+Do ilMenuCommands.$search($ref.ident=pIdent,1,0,0,0) Returns lbFound
+If lbFound
+	Switch pIdent
+		Case 1101     ;; insert
+			If irUserRights.canInsert&icMode=''
+				Do $cinst.$enterData("I")
+				;  Do method $insertCR
+			End If
+			Quit method kTrue     ;; tell the parent that we've dealt with it
+			
+		Case 1102     ;; update
+			If irUserRights.canEdit&irCurrentRecord.RFO_SEQ>0&icMode=''
+				Do $cinst.$enterData("E")
+				;  Do method $editCR
+			End If
+			Quit method kTrue
+			
+		Case 1103     ;; delete
+			If kFalse     ;; we no longer allow deletes
+				;  If irUserRights.canDelete&irCurrentRecord.RFO_SEQ>0&icMode=''
+				Do method $deleteCR
+			End If
+			Quit method kTrue
+			
+		Case 1111
+			Calculate icDisplayMessage as con('Extra command "',ilMenuCommands.code,'" has been called.')
+			Quit method kTrue
+			
+		Default
+			Quit method kFalse     ;; pass it back to the parent
+			
+	End Switch
+Else
+	Quit method kFalse     ;; pass it back to the parent
+End If

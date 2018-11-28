@@ -1,0 +1,23 @@
+Calculate icValidationMessage as ''
+Do ilValidation.$clear()
+
+If $cinst.RP_ROL_REF>0
+	;  good
+Else
+	Calculate lcMessage as con(lcMessage,pick(lcMessage<>'','',', '),'RP_ROL_REF missing')
+	Do ilValidation.$add('RP_ROL_REF_LBL','VAL_MISSING','RP_ROL_REF missing',0)
+End If
+
+If $cinst.RP_PER_REF>0
+	;  good
+Else
+	Calculate lcMessage as con(lcMessage,pick(lcMessage<>'','',', '),'RP_PER_REF missing')
+	Do ilValidation.$add('RP_PER_REF_LBL','VAL_MISSING','RP_PER_REF missing',0)
+End If
+
+If lcMessage<>''
+	Calculate icValidationMessage as lcMessage
+	Quit method kFalse
+End If
+
+Quit method kTrue

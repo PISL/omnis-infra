@@ -1,0 +1,122 @@
+Begin reversible block
+	Set report name rSummaryLog
+	Send to screen (Do not wait for user) Analysis/1/[lnMarginForIDEtoolbar]/560/[sys(105)-lnMarginForIDEtoolbar]
+End reversible block
+Load page setup
+
+Do method GroupByClause Returns lcGroupByClause
+If lcGroupByClause=''
+	OK message  {no grouping selected}
+	Quit method
+End If
+
+Calculate lbWholeMonths as kTrue
+If dpart(kDay,idFrom)<>1     ;; check 1st day of month
+	Calculate lbWholeMonths as kFalse
+End If
+If lday(kMonth,idTo)<>idTo     ;; check last day of month
+	Calculate lbWholeMonths as kFalse
+End If
+
+Do method SelectionCriteria (lcWhereClause,lcSelectDescription)
+If inCountGE>0
+	Calculate lcSelectDescription as con(lcSelectDescription,'  having count >= ',inCountGE)
+End If
+
+Calculate lbFromDetailTable as kTrue
+;  Do lrSummary.$definefromsqlclass('tLogSummary')
+If (pos('FLD_IP_ADDR_SRC',lcGroupByClause)|pos('FLD_IP_ADDR_SRC_SUFFIX',lcGroupByClause)|pos('FLD_PORT_NO_SRC',lcGroupByClause)|pos('FLD_IP_ADDR_DEST',lcGroupByClause)|pos('FLD_PORT_NO_DEST',lcGroupByClause))&not(pos('FLD_IP_ADDR_SRC_PREFIX',lcGroupByClause))
+	;  these columns are NOT supported in the summary table
+	Do lrLogDetails.$definefromsqlclass('tLogDetail')
+	Do lrLogDetails.$summary(idFrom,idTo,lcGroupByClause,lcWhereClause,inCountGE) Returns llSummary
+Else If not(lbWholeMonths)
+	;  must use detail lines     ;; could be slow !
+	Do lrLogDetails.$definefromsqlclass('tLogDetail')
+	Do lrLogDetails.$summary(idFrom,idTo,lcGroupByClause,lcWhereClause,inCountGE) Returns llSummary
+Else     ;; whole months and high level grouping only
+	;  much faster !
+	Yes/No message  {fetch from summary table?  (this is much faster)}
+	If flag true
+		Do lrLogDetails.$definefromsqlclass('tLogSummary')
+		Do lrLogDetails.$summary2(idFrom,idTo,lcGroupByClause,lcWhereClause,inCountGE) Returns llSummary
+		Calculate lbFromDetailTable as kFalse
+	Else
+		Do lrLogDetails.$definefromsqlclass('tLogDetail')
+		Do lrLogDetails.$summary(idFrom,idTo,lcGroupByClause,lcWhereClause,inCountGE) Returns llSummary
+	End If
+End If
+
+If lcGroupByClause<>''
+	;  N.B.  ilSortCols1 etc may refer to FLD_ columns but fetching from the summary table will return FLS_ columns
+	
+	;  fetching on a group by does not sort on the group by columns in some databases (e.g. Postgres)
+	For lnColNo from 1 to llSummary.$colcount step 1
+		Calculate lcColName as llSummary.$cols.[lnColNo].$name
+		If pos('MONTH',upp(lcColName))
+			Calculate lcActualMonthColumn as lcColName
+		End If
+		If lcColName<>'COUNT'     ;; last column in list
+			Calculate lcSortMethodString as con(lcSortMethodString,pick(lcSortMethodString<>'','',','),'$ref.',lcColName,',0')
+		End If
+	End For
+	;  Do llSummary.$sort([lcSortMethodString])     ;; this doesn't work, but putting the whole syntax in a single string or a Do... command does
+	Calculate lcSortMethodString as con(nam(llSummary),'.$sort(',lcSortMethodString,')')
+	Do [lcSortMethodString]
+	
+	;  now insert row for empty months so graph appears more consistent
+	;  this only applies when MONTH is a group by column
+	If pos('FLD_MONTH',lcGroupByClause)
+		Do method InsertEmptyMonthRows (llSummary,lcActualMonthColumn)
+	End If
+End If
+
+Print report {*/5/5/200/400 (llSummary,idFrom,idTo,lcSelectDescription,ibSecondLevelGraphs,inSortByCount,lbFromDetailTable)}
+
+If ibExportToClipboard
+	Calculate lcTemp as lcGroupByClause
+	Calculate lcGroupByClause as ''
+	While lcTemp<>''
+		Calculate lcColName as strtok(nam(lcTemp),',')
+		If pos('_',lcColName)
+			Calculate lcColName as mid(lcColName,pos('_',lcColName)+1,99)
+		End If
+		Calculate lcGroupByClause as con(lcGroupByClause,pick(lcGroupByClause<>'','',', '),cap(lcColName))
+	End While
+	
+	Begin text block
+	Text: {[lcSelectDescription]} (Carriage return)
+	Text: {between [idFrom] and [idTo]} (Carriage return)
+	Text: {grouped by [lcGroupByClause]} (Carriage return)
+	
+	;  column headings
+	For lnColCount from 1 to llSummary.$colcount step 1
+		Calculate lcColName as llSummary.$cols.[lnColCount].$name
+		If pos('_',lcColName)
+			Calculate lcColName as mid(lcColName,pos('_',lcColName)+1,99)
+		End If
+		
+		If lnColCount>1
+			Text: {[kTab]}
+		End If
+		Text: {[lcColName]}
+	End For
+	Text: (Carriage return)
+	
+	Calculate llSummary.$line as 0
+	While $Loop(llSummary)
+		Working message  (Repeat count) {sending to clipboard [llSummary.$linecount] rows of data ...}
+		For lnColCount from 1 to llSummary.$colcount step 1
+			If lnColCount>1
+				Text: {[kTab]}
+			End If
+			Calculate lcValue as llSummary.C[lnColCount]
+			Text: {[lcValue]}
+		End For
+		Text: (Carriage return)
+	End While
+	Close working message
+	
+	End text block
+	Get text block icToClipboard
+	Copy to clipboard icToClipboard
+End If

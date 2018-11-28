@@ -1,0 +1,44 @@
+Calculate icValidationMessage as ''
+Do ilValidation.$clear()
+
+If $cinst.PRD_GO_REF>0
+	;  good
+Else
+	Calculate lcMessage as con(lcMessage,pick(lcMessage<>'','',', '),'PRD_GO_REF missing')
+	Do ilValidation.$add('PRD_GO_REF_LBL','VAL_MISSING','PRD_GO_REF missing',0)
+End If
+
+If len($cinst.PRD_INT_PRODCODE)>0     ;; PRD_META=2 actually SUPPLIER code = GENERIC_LCI_0
+	;  good
+Else
+	If 1=0
+		;  Generic LCI products don't need an internal product as they are only ever accessed via a Proxy product.
+	Else
+		Calculate lcMessage as con(lcMessage,pick(lcMessage<>'','',', '),'PRD_INT_PRODCODE missing')
+		Do ilValidation.$add('PRD_INT_PRODCODE_LBL','VAL_MISSING','PRD_INT_PRODCODE missing',0)
+	End If
+End If
+
+If $cinst.PRD_EO_REF>0
+	If len($cinst.PRD_SUPP_PRODCODE)>0
+		;  good
+	Else
+		Calculate lcMessage as con(lcMessage,pick(lcMessage<>'','',', '),'PRD_SUPP_PRODCODE missing')
+		Do ilValidation.$add('PRD_SUPP_PRODCODE_LBL','VAL_MISSING','PRD_SUPP_PRODCODE missing',0)
+	End If
+End If
+
+If len($cinst.PRD_NAME)>0
+	;  good
+Else
+	Calculate lcMessage as con(lcMessage,pick(lcMessage<>'','',', '),'PRD_NAME missing')
+	Do ilValidation.$add('PRD_NAME_LBL','VAL_MISSING','PRD_NAME missing',0)
+End If
+
+;  If ilValidation.$linecount
+If lcMessage<>''
+	Calculate icValidationMessage as lcMessage
+	Quit method kFalse
+End If
+
+Quit method kTrue

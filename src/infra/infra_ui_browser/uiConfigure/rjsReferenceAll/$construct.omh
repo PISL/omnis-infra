@@ -1,0 +1,75 @@
+Do $cinst.$getBrowser()     ;; populate icPlatform
+Set reference irefContainer to $cinst.$container
+Calculate inTabCount as 1
+Calculate llAllowed as tlPermissions
+Do inherited
+
+;  sysReferenceUser exists and a UI is waiting for it but it doesn't have any values.
+;  The tlAuthorisedForms will ALWAYS authorise the RefUser form, os it will always be present.
+;  The place that is determining whether sysRefUser form is actually displayed is finally determined here.
+;  Because everyone has access to sysRefUser, there are no Permissions with a rfu_ prefix.
+Do llAllowed.$search(low($ref.FormPrefix)='rfu',1,0,0,0) Returns lbUserTab     ;; until rfu_ permissions are granted, or an alternative method is applied, this will always be false.
+Do llAllowed.$search(low($ref.FormPrefix)='rfo',1,0,0,0) Returns lbOrgTab
+Do llAllowed.$search(low($ref.FormPrefix)='rfl',1,0,0,0) Returns lbLocalTab
+Do llAllowed.$search(low($ref.FormPrefix)='rfg',1,0,0,0) Returns lbGlobalTab
+
+Calculate $cinst.$objs.TabControl_Ref.$selectedtab as 1
+Calculate $cinst.$objs.TabControl_Ref.$tabvisible as lbUserTab
+Do ilTabShortcuts.$add()
+If lbUserTab
+	Calculate ilTabShortcuts.[ilTabShortcuts.$linecount].key as inTabCount
+	Calculate inTabCount as inTabCount+1
+End If
+
+Calculate $cinst.$objs.TabControl_Ref.$selectedtab as 2
+Calculate $cinst.$objs.TabControl_Ref.$tabvisible as lbOrgTab
+Do ilTabShortcuts.$add()
+If lbOrgTab
+	Calculate ilTabShortcuts.[ilTabShortcuts.$linecount].key as inTabCount
+	Calculate inTabCount as inTabCount+1
+End If
+
+Calculate $cinst.$objs.TabControl_Ref.$selectedtab as 3
+Calculate $cinst.$objs.TabControl_Ref.$tabvisible as lbLocalTab
+Do ilTabShortcuts.$add()
+If lbLocalTab
+	Calculate ilTabShortcuts.[ilTabShortcuts.$linecount].key as inTabCount
+	Calculate inTabCount as inTabCount+1
+End If
+
+Calculate $cinst.$objs.TabControl_Ref.$selectedtab as 4
+Calculate $cinst.$objs.TabControl_Ref.$tabvisible as lbGlobalTab
+Do ilTabShortcuts.$add()
+If lbGlobalTab
+	Calculate ilTabShortcuts.[ilTabShortcuts.$linecount].key as inTabCount
+	Calculate inTabCount as inTabCount+1
+End If
+
+If lbUserTab
+	Calculate inCurrentTab as 1
+	Do $ctask.$setCurrentForm('code','FORM_RFU')
+Else If lbOrgTab
+	Calculate inCurrentTab as 2
+	Do $ctask.$setCurrentForm('code','FORM_RFO')
+Else If lbLocalTab
+	Calculate inCurrentTab as 3
+	Do $ctask.$setCurrentForm('code','FORM_RFL')
+Else If lbGlobalTab
+	Calculate inCurrentTab as 4
+	Do $ctask.$setCurrentForm('code','FORM_RFG')
+End If
+Calculate ilNoActions as tlNavMenu
+Do ilNoActions.$clear()
+Calculate $cinst.$objs.TabControl_Ref.$currenttab as inCurrentTab
+;  If lbUserTab
+;  Set reference irefSubFormUser to $cinst.$objs.PagedPane_Ref.$objs.subFormUser.$subinst.$ref
+;  Else If lbOrgTab
+;  Set reference irefSubFormOrg to $cinst.$objs.PagedPane_Ref.$objs.subFormOrg.$subinst.$ref
+;  Else If lbLocalTab
+;  Set reference irefSubFormLocal to $cinst.$objs.PagedPane_Ref.$objs.subFormLocal.$subinst.$ref
+;  Else If lbGlobalTab
+;  Set reference irefSubFormGlobal to $cinst.$objs.PagedPane_Ref.$objs.subFormGlobal.$subinst.$ref
+;  End If
+
+Do method TranslateText
+Do method setTabColours

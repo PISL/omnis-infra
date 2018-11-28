@@ -1,0 +1,11 @@
+;  clear the out-buffer
+Do clOutBuffer.$clear()
+
+Do iOutToAddressList.$clear()
+Do iOutCCAddressList.$clear()
+Do iOutBCCAddressList.$clear()
+
+Calculate iOutSubject as ''
+Calculate iOutBody as ''
+Calculate iOutStatusCall as ''
+Calculate iOutPriority as 0

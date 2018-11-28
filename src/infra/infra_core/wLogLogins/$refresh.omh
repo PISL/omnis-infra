@@ -1,0 +1,43 @@
+Do ilLogOfLogins.$clear()
+If ilUsers.USR_SEQ>0
+	If inFetchLogOption=0     ;; within period
+		Do ilLogOfLogins.$fetchLogPeriod(ilUsers.USR_SEQ,idFrom,idTo)
+	Else If inFetchLogOption=1     ;; all
+		Do ilLogOfLogins.$fetch_fk(ilUsers.USR_SEQ)
+	End If
+Else
+	Do ilLogOfLogins.$fetchNotLoggedIn(idFrom,idTo)
+End If
+Do ilLogOfLogins.$sort($ref.ULA_LOGIN,1)     ;; most recent at top of list
+
+Begin reversible block
+	Set current list ilLogOfLogins
+End reversible block
+For each line in list from 1 to #LN step 1
+	Calculate ilLogOfLogins.ULA_COMMENT as con(mid(ilLogOfLogins.ULA_GO_NAME,2),pick(len(ilLogOfLogins.ULA_GO_NAME)>0,'','/'),ilLogOfLogins.ULA_FORMS_VISITED,pick(len(ilLogOfLogins.ULA_FORMS_VISITED)>0,'','/'),ilLogOfLogins.ULA_COMMENT)
+	If not(isnull(ilLogOfLogins.ULA_LOGOUT))
+		Calculate lnSeconds as ddiff(kSecond,ilLogOfLogins.ULA_LOGIN,ilLogOfLogins.ULA_LOGOUT)
+		Calculate ilLogOfLogins.duration_s as lnSeconds
+		Calculate ilLogOfLogins.duration as toStrings.$TimeLapse(kSecond,lnSeconds,kFalse,lnSecondsAboveThisTruncate,3)
+	End If
+	If ilLogOfLogins.$line<ilLogOfLogins.$linecount
+		If not(isnull(ilLogOfLogins.[ilLogOfLogins.$line+1].ULA_LOGOUT))
+			Calculate lnSeconds as ddiff(kSecond,ilLogOfLogins.[ilLogOfLogins.$line+1].ULA_LOGOUT,ilLogOfLogins.ULA_LOGIN)
+		Else
+			Calculate lnSeconds as ddiff(kSecond,ilLogOfLogins.[ilLogOfLogins.$line+1].ULA_LOGIN,ilLogOfLogins.ULA_LOGIN)
+		End If
+		Calculate ilLogOfLogins.interval_s as lnSeconds
+		Calculate ilLogOfLogins.interval as toStrings.$TimeLapse(kSecond,lnSeconds,kFalse,lnSecondsAboveThisTruncate,3)
+	End If
+End For
+Calculate ilLogOfLogins.$line as 1
+
+Calculate icTimeLapse as ''
+Calculate ldtLastRefresh as idtRefresh
+Calculate idtRefresh as #D
+Calculate lnSeconds as ddiff(kSecond,ldtLastRefresh,idtRefresh)
+If lnSeconds>0
+	Calculate icTimeLapse as toStrings.$TimeLapse(kSecond,lnSeconds)
+End If
+
+Do method $filterLog

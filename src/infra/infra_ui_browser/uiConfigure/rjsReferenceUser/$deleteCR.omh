@@ -1,0 +1,1 @@
+Do $cinst.$warnDelete(irCurrentRecord.RFU_CLASS,'$deleteProceed')

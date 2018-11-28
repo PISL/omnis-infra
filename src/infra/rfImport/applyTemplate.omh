@@ -1,0 +1,55 @@
+Do ilTemplates.$search($ref.IMT_NAME=pcTemplate,1,0,0,0)
+If ilTemplates.$line
+	Calculate irChosenTemplate as ilTemplates
+	Calculate llCols as $ctask.toStrings.$StringToList(irChosenTemplate.IMT_COL_ORDER,',')
+	Do llCols.$cols.$add('desc',kCharacter,kSimplechar,255) Returns lcCol
+	For llCols.$line from 1 to llCols.$linecount step 1
+		If len(llCols.C1)
+			Do ilSchemaCols.$search($ref.C1=llCols.C1,1,0,0,0)
+			Calculate llCols.C2 as ilSchemaCols.C2
+		End If
+	End For
+	Do ilSchemaCols.$merge(llCols,kFalse,kFalse,kTrue)
+	
+	For lnCount from 1 to len(ilTemplates.IMT_IMP_FLAGS) step 1
+		Calculate ilDataCols.[lnCount].include as mid(ilTemplates.IMT_IMP_FLAGS,lnCount,1)
+		Calculate $cinst.$objs.Grid_ilDataCols.$objs.pbInclude.[lnCount].$iconid as pick(ilDataCols.[lnCount].include,1758,1750)
+		
+	End For
+	
+	;  While $Loop(llCols)
+	;  Do ilSchemaCols.$search($ref.C1=llCols.C1,1,0,0,0)
+	;  Calculate llCols.desc as ilSchemaCols.C2
+	;  Do ilSchemaCols.$remove(ilSchemaCols.$line)
+	;  End While
+	;  now add any rows remaining in ilSchemaCols
+	;  Calculate ilSchemaCols.$line as 0
+	;  While $Loop(ilSchemaCols)
+	;  Do llCols.$add(ilSchemaCols.C1,ilSchemaCols.C2)
+	;  End While
+	;  rebuild ilSchemaCols
+	;  Do ilSchemaCols.$merge(llCols,kFalse,kFalse,kTrue)
+	;  now set include to kFalse for data cols with no field name
+	;  Calculate ilSchemaCols.$line as 0
+	;  While $Loop(ilSchemaCols)
+	;  If ilSchemaCols.C1=''
+	;  Calculate ilDataCols.$line as ilSchemaCols.$line
+	;  Calculate ilDataCols.include as kFalse
+	;  Calculate $cinst.$objs.Grid_ilDataCols.$objs.pbInclude.[ilDataCols.$line].$iconid as pick(ilDataCols.[ilDataCols.$line].include,1758,1750)
+	;  Calculate $cinst.$objs.Grid_ilDataCols.$objs.pbInclude.[ilDataCols.$line].$enabled as kFalse
+	;  End If
+	;  End While
+	
+	Calculate icSepDec as ilTemplates.IMT_SEP_DEC
+	Do ilSepDec.$search()
+	Calculate icSepThou as ilTemplates.IMT_SEP_THOU
+	Do ilSepThou.$search()
+	Calculate inFmtDate as pos(left(ilTemplates.IMT_FMT_DATE,1),'DMY')-1
+	Calculate icFmtDate as pick(inFmtDate,'DMY','MDY','YMD')
+	
+	Calculate ibDoNotImportFirstLine as ilTemplates.IMT_HEADER
+	Calculate inRowsToIgnore as ilTemplates.IMT_IGNORE_ROWS
+End If
+
+Do $cinst.$behaviour()
+Do $cinst.$redraw()

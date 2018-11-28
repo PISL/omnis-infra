@@ -1,0 +1,21 @@
+Do llSuperLabels.$cols.$add('objName',kCharacter,kSimplechar,50)
+Do llSuperLabels.$cols.$add('objRef',kItemref)     ;; empty in llSuperLabels
+
+Do llSuperLabels.$add('disp_del_canc')
+Do llSuperLabels.$add('disp_child_nodelete')
+Do llSuperLabels.$add('disp_respond')
+Do llSuperLabels.$add('disp_delete')
+Do llSuperLabels.$add('disp_confirm')
+Do llSuperLabels.$add('text_search_LBL')
+Do llSuperLabels.$add('text_search_TT')
+Do llSuperLabels.$add('not_authorised')
+
+Do llSuperLabels.$add('REC_INSERT')
+Do llSuperLabels.$add('REC_UPDATE')
+Do llSuperLabels.$add('REC_INSERTED')
+Do llSuperLabels.$add('REC_UPDATED')
+Do llSuperLabels.$add('REC_DELETED')
+Do llSuperLabels.$add('REC_NOCHANGE')
+Do llSuperLabels.$add('REC_CANC')
+
+Quit method llSuperLabels

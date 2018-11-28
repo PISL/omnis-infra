@@ -1,0 +1,2 @@
+On evClick
+	Calculate irCurrentRecord.FOH_STATUS as ilStatusChoice.RFG_VALUE

@@ -1,0 +1,89 @@
+[
+	{
+		"name": "$construct",
+		"ident": 1,
+		"order": 1,
+		"pvardefs": [
+
+		],
+		"lvardefs": [
+
+		]
+	},
+	{
+		"name": "$destruct",
+		"ident": 2,
+		"order": 2,
+		"pvardefs": [
+
+		],
+		"lvardefs": [
+
+		]
+	},
+	{
+		"name": "$AddEntry",
+		"ident": 0,
+		"order": 3,
+		"pvardefs": [
+			{
+				"name": "pText",
+				"order": 1,
+				"type": "kCharacter",
+				"subtype": "kSimplechar",
+				"sublen": 1000,
+				"param": 1
+			},
+			{
+				"name": "pPushOrPop",
+				"order": 4,
+				"type": "kCharacter",
+				"subtype": "kSimplechar",
+				"sublen": 4,
+				"param": 2,
+				"initval": "''",
+				"desc": "push begins a new start point, pop finishes the start point (like a pEnd)"
+			}
+		],
+		"lvardefs": [
+			{
+				"name": "lcIndentation",
+				"order": 5,
+				"type": "kCharacter",
+				"subtype": "kSimplechar",
+				"sublen": 100
+			},
+			{
+				"name": "lcWholeDuration",
+				"order": 6,
+				"type": "kCharacter",
+				"subtype": "kSimplechar",
+				"sublen": 20
+			},
+			{
+				"name": "lnSeconds",
+				"order": 3,
+				"type": "kNumber",
+				"subtype": "k2dp",
+				"sublen": 0
+			}
+		]
+	},
+	{
+		"name": "DetermindWindowPos",
+		"ident": 3,
+		"order": 4,
+		"pvardefs": [
+
+		],
+		"lvardefs": [
+			{
+				"name": "llWindows",
+				"order": 1,
+				"type": "kList",
+				"subtype": "",
+				"sublen": 0
+			}
+		]
+	}
+]

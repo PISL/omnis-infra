@@ -1,0 +1,22 @@
+On evClick
+	Calculate icDisplayMessage as ''
+	Calculate lcTempMode as icMode
+	
+	Do $cinst.$saveData() Returns lbOK
+	If lbOK
+		;  maintain visual order
+		;  Do irCurrentRecord.$DisplayName()
+		
+		Calculate irOriginalRecord as irCurrentRecord
+		If pos('I',lcTempMode)
+			Do ilDisplayRecords.$add()
+			Calculate ilDisplayRecords.$line as ilDisplayRecords.$linecount
+			Calculate ilDisplayRecords.[ilDisplayRecords.$line] as irCurrentRecord
+		Else If pos('E',lcTempMode)
+			Calculate ilDisplayRecords.[ilDisplayRecords.$line] as irCurrentRecord
+		End If
+		
+		Calculate icMode as ''
+	End If
+	
+	Do $cinst.$behaviour()

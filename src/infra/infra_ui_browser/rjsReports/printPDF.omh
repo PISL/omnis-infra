@@ -1,0 +1,41 @@
+Calculate orefReporting.iAuthor as trGroupOrg.GON_NAME_FULL
+Do orefReporting.$checkTask() Returns lbTaskRecognised
+If lbTaskRecognised
+	Do orefReporting.$printReport(ilDisplayRecords,inPrintDestination,idFrom,idTo,ibCheckbox1,ibCheckbox2,ibCheckbox3,ilSortOptions,ilFilterOptions,ilSelectList,ilGroupBy,inInteger1,inInteger2,inReal1,inReal2,ilSearch1,ilSearch2) Returns lID
+	If orefReporting.icDisplayMessage<>''
+		OK message Report error ! (Icon) {[orefReporting.icDisplayMessage]}
+	Else
+		Do method $saveParams (ilDisplayRecords,inPrintDestination,idFrom,idTo,ibCheckbox1,ibCheckbox2,ibCheckbox3,ilSortOptions,ilFilterOptions,ilSelectList,ilGroupBy,inInteger1,inInteger2,inReal1,inReal2,ilSearch1,ilSearch2)
+	End If
+	Calculate lbFileTechnique as orefReporting.ibFileTechnique
+	Calculate lcFilePath as orefReporting.icFilePath
+	
+	If inPrintDestination=1
+		If lbFileTechnique
+			Do $cinst.$clientcommand("showpdf",row(lID))
+		Else
+			Do $cinst.$clientcommand("showpdf",row(lcFilePath))
+		End If
+	Else If inPrintDestination=2     ;; to text
+		Calculate icDataAsText as lID
+		Calculate lID as ''
+		Calculate inCurrentTab as 3
+		Do $cinst.$objs.PagedPane_REPORTS.$currentpage.$assign(inCurrentTab)
+		
+	Else     ;; on form in different tab
+		Calculate inCurrentTab as 2
+		Do $cinst.$objs.PagedPane_REPORTS.$currentpage.$assign(inCurrentTab)
+		If lbFileTechnique
+			Do $cinst.$clientcommand("assignpdf",row("HTML","toolbar=1&zoom=100",lID,20))
+		Else
+			Do $cinst.$clientcommand("assignpdf",row("HTML","toolbar=1&zoom=100",con(lcFilePath),20))
+		End If
+	End If
+	;  End If
+	
+	Do FileOps.$readentirefile(con(lcFilePath),lbinPDF) Returns lnFileStatus
+Else
+	Calculate icDisplayMessage as con("$checkTask on object ",orefReporting.$class.$name," returned ",lbTaskRecognised)
+End If
+
+Do $cinst.$behaviour()

@@ -1,0 +1,29 @@
+[
+	{
+		"name": "$setEnabled",
+		"ident": 1,
+		"order": 2,
+		"clientexec": false,
+		"pvardefs": [
+			{
+				"name": "pnLine",
+				"order": 1,
+				"type": "kInteger",
+				"subtype": "kShortint",
+				"sublen": 0,
+				"param": 1
+			},
+			{
+				"name": "pbEnabled",
+				"order": 2,
+				"type": "kCharacter",
+				"subtype": "kSimplechar",
+				"sublen": 100000000,
+				"param": 2
+			}
+		],
+		"lvardefs": [
+
+		]
+	}
+]

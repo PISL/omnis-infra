@@ -1,0 +1,7 @@
+Set reference MyRef to $cobj
+JavaScript: MyRef.callMethod('$html')
+JavaScript: MyDefaultConfig = JSON.parse(__form.get("icGraphConfig"));
+JavaScript: __form.set("icChartCFG",JSON.stringify(MyDefaultConfig, undefined, 4))
+
+JavaScript: MyRef.callMethod('$redraw')
+Quit method

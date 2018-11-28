@@ -1,0 +1,6 @@
+;  method can be called from subclasses or individual forms
+;  eg. login form sets timeout to 2 minutes on opening and then resets it after login to a more practical value
+
+If pnTimeout>0
+	Calculate $cinst.$timeout as pnTimeout
+End If

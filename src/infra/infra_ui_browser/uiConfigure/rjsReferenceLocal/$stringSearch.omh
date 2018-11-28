@@ -1,0 +1,31 @@
+;  ### this is english only - how do we make it international?
+If pos(':',mid(icSearch,1,4))
+	Calculate lcColumn as mid(icSearch,1,pos(':',icSearch)-1)
+	Calculate lcString as mid(icSearch,pos(':',icSearch)+1,99)
+Else
+	Calculate lcString as icSearch
+End If
+
+Switch lcColumn
+	Case 'C','V','D','H'     ;; ### string table
+		;  valid entries
+		Calculate lbIsValidColumn as kTrue
+	Case ''
+		;  also valid
+		Calculate lbIsValidColumn as kTrue
+	Default
+		Breakpoint
+End Switch
+
+If lbIsValidColumn
+	Do ilDisplayRecords.$searchString('count',lcString,lcColumn) Returns lnCount
+	If lnCount<=100     ;; ### this needs to be made configurable
+		Do ilDisplayRecords.$searchString('result',lcString,lcColumn)
+		Calculate ilSearch1.$line as 0
+		Calculate ilSearch2.$line as 0
+		Calculate ilSearch3.$line as 0
+		
+		Do $cinst.$behaviour()
+		Do $cinst.$redraw()
+	End If
+End If

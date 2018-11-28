@@ -1,0 +1,476 @@
+[
+	{
+		"name": "$construct",
+		"ident": 0,
+		"order": 1,
+		"pvardefs": [
+
+		],
+		"lvardefs": [
+
+		]
+	},
+	{
+		"name": "$validation",
+		"ident": 1,
+		"order": 2,
+		"pvardefs": [
+			{
+				"name": "pbOmitForeignKeyCheck",
+				"order": 2,
+				"type": "kBoolean",
+				"subtype": 0,
+				"sublen": 0,
+				"param": 1,
+				"initval": "kFalse",
+				"desc": "required when creating a new invoice and header record has not been saved yet"
+			}
+		],
+		"lvardefs": [
+			{
+				"name": "lcMessage",
+				"order": 1,
+				"type": "kCharacter",
+				"subtype": "kSimplechar",
+				"sublen": 255
+			}
+		]
+	},
+	{
+		"name": "$ForeignKeys",
+		"ident": 2,
+		"order": 3,
+		"pvardefs": [
+
+		],
+		"lvardefs": [
+			{
+				"name": "llForeignKeyList",
+				"order": 1,
+				"type": "kList",
+				"subtype": "",
+				"sublen": 0
+			},
+			{
+				"name": "lrHeader",
+				"order": 2,
+				"type": "kRow",
+				"subtype": "sfinInvoiceOutH",
+				"sublen": 0
+			},
+			{
+				"name": "lrProducts",
+				"order": 3,
+				"type": "kRow",
+				"subtype": "sProducts",
+				"sublen": 0
+			}
+		]
+	},
+	{
+		"name": "$Links",
+		"ident": 3,
+		"order": 4,
+		"pvardefs": [
+
+		],
+		"lvardefs": [
+			{
+				"name": "llLinks",
+				"order": 1,
+				"type": "kList",
+				"subtype": "",
+				"sublen": 0
+			},
+			{
+				"name": "lrConference",
+				"order": 11,
+				"type": "kRow",
+				"subtype": "CONFERENCE.sConference",
+				"sublen": 0
+			},
+			{
+				"name": "lrDelegate",
+				"order": 10,
+				"type": "kRow",
+				"subtype": "CONFERENCE.sDelegates",
+				"sublen": 0
+			},
+			{
+				"name": "lrDelegateInvoiceLink",
+				"order": 9,
+				"type": "kRow",
+				"subtype": "CONFERENCE.sDelegateInvoiceLinks",
+				"sublen": 0
+			},
+			{
+				"name": "lrExtOrg",
+				"order": 4,
+				"type": "kRow",
+				"subtype": "sentExtOrganisations",
+				"sublen": 0
+			},
+			{
+				"name": "lrExtOrgLink",
+				"order": 8,
+				"type": "kRow",
+				"subtype": "sentOrgLinks",
+				"sublen": 0
+			},
+			{
+				"name": "lrGroupOrg",
+				"order": 3,
+				"type": "kRow",
+				"subtype": "sentGroupOrganisations",
+				"sublen": 0
+			},
+			{
+				"name": "lrHeader",
+				"order": 5,
+				"type": "kRow",
+				"subtype": "sfinInvoiceOutH",
+				"sublen": 0
+			},
+			{
+				"name": "lrPerson",
+				"order": 12,
+				"type": "kRow",
+				"subtype": "CONFERENCE.sPerson",
+				"sublen": 0
+			},
+			{
+				"name": "lrProductInternalData",
+				"order": 6,
+				"type": "kRow",
+				"subtype": "sProductInternalData",
+				"sublen": 0
+			},
+			{
+				"name": "lrProducts",
+				"order": 2,
+				"type": "kRow",
+				"subtype": "sProducts",
+				"sublen": 0
+			},
+			{
+				"name": "lrPublication",
+				"order": 7,
+				"type": "kRow",
+				"subtype": "secPublication",
+				"sublen": 0
+			},
+			{
+				"name": "lrReferenceLocal",
+				"order": 13,
+				"type": "kRow",
+				"subtype": "ssysReferenceLocal",
+				"sublen": 0
+			}
+		]
+	},
+	{
+		"name": "$fetchInvDetails",
+		"ident": 4,
+		"order": 5,
+		"pvardefs": [
+			{
+				"name": "pnFOHref",
+				"order": 1,
+				"type": "kInteger",
+				"subtype": "k64bitint",
+				"sublen": 0,
+				"param": 1
+			},
+			{
+				"name": "pcFromClause",
+				"order": 7,
+				"type": "kCharacter",
+				"subtype": "kSimplechar",
+				"sublen": 255,
+				"param": 2
+			}
+		],
+		"lvardefs": [
+			{
+				"name": "lbImmediateSession",
+				"order": 4,
+				"type": "kBoolean",
+				"subtype": 0,
+				"sublen": 0,
+				"initval": "kFalse"
+			},
+			{
+				"name": "lbOK",
+				"order": 5,
+				"type": "kBoolean",
+				"subtype": 0,
+				"sublen": 0
+			},
+			{
+				"name": "loSession",
+				"order": 2,
+				"type": "kObject",
+				"subtype": "",
+				"sublen": 0
+			},
+			{
+				"name": "loStatement",
+				"order": 3,
+				"type": "kObject",
+				"subtype": "",
+				"sublen": 0
+			}
+		]
+	},
+	{
+		"name": "$calculatedValues",
+		"ident": 5,
+		"order": 6,
+		"pvardefs": [
+
+		],
+		"lvardefs": [
+			{
+				"name": "liColRef",
+				"order": 1,
+				"type": "kItemref",
+				"subtype": "",
+				"sublen": 0
+			}
+		]
+	},
+	{
+		"name": "$addCalculatedColumns",
+		"ident": 6,
+		"order": 7,
+		"pvardefs": [
+
+		],
+		"lvardefs": [
+			{
+				"name": "liColRef",
+				"order": 1,
+				"type": "kItemref",
+				"subtype": "",
+				"sublen": 0
+			}
+		]
+	},
+	{
+		"name": "$displayName",
+		"ident": 7,
+		"order": 8,
+		"pvardefs": [
+
+		],
+		"lvardefs": [
+
+		]
+	},
+	{
+		"name": "$reportRegistrantsForConference",
+		"ident": 8,
+		"order": 9,
+		"pvardefs": [
+			{
+				"name": "pnCF_SEQ",
+				"order": 1,
+				"type": "kInteger",
+				"subtype": "k32bitint",
+				"sublen": 0,
+				"param": 1
+			},
+			{
+				"name": "pcExtraCriteria",
+				"order": 9,
+				"type": "kCharacter",
+				"subtype": "kSimplechar",
+				"sublen": 10000,
+				"param": 2
+			}
+		],
+		"lvardefs": [
+			{
+				"name": "lbImmediateSession",
+				"order": 4,
+				"type": "kBoolean",
+				"subtype": 0,
+				"sublen": 0,
+				"initval": "kFalse"
+			},
+			{
+				"name": "lbOK",
+				"order": 5,
+				"type": "kBoolean",
+				"subtype": 0,
+				"sublen": 0
+			},
+			{
+				"name": "llData",
+				"order": 14,
+				"type": "kList",
+				"subtype": "",
+				"sublen": 0
+			},
+			{
+				"name": "loSession",
+				"order": 2,
+				"type": "kObject",
+				"subtype": "",
+				"sublen": 0
+			},
+			{
+				"name": "loStatement",
+				"order": 3,
+				"type": "kObject",
+				"subtype": "",
+				"sublen": 0
+			},
+			{
+				"name": "lrDelegate",
+				"order": 12,
+				"type": "kRow",
+				"subtype": "CONFERENCE.sDelegates",
+				"sublen": 0
+			},
+			{
+				"name": "lrInvDelegateLink",
+				"order": 11,
+				"type": "kRow",
+				"subtype": "CONFERENCE.sDelegateInvoiceLinks",
+				"sublen": 0
+			},
+			{
+				"name": "lrInvoiceHeader",
+				"order": 7,
+				"type": "kRow",
+				"subtype": "sfinInvoiceOutH",
+				"sublen": 0
+			},
+			{
+				"name": "lrPerson",
+				"order": 13,
+				"type": "kRow",
+				"subtype": "CONFERENCE.sPerson",
+				"sublen": 0
+			},
+			{
+				"name": "lrProduct",
+				"order": 6,
+				"type": "kRow",
+				"subtype": "sProducts",
+				"sublen": 0
+			},
+			{
+				"name": "lrProductInternal",
+				"order": 8,
+				"type": "kRow",
+				"subtype": "sProductInternalData",
+				"sublen": 0
+			}
+		]
+	},
+	{
+		"name": "$fetchInvoiceDateRange",
+		"ident": 9,
+		"order": 10,
+		"pvardefs": [
+			{
+				"name": "pdFrom",
+				"order": 16,
+				"type": "kDate",
+				"subtype": "kDate2000",
+				"sublen": 0,
+				"param": 1
+			},
+			{
+				"name": "pdTo",
+				"order": 17,
+				"type": "kDate",
+				"subtype": "kDate2000",
+				"sublen": 0,
+				"param": 2
+			}
+		],
+		"lvardefs": [
+			{
+				"name": "lbImmediateSession",
+				"order": 3,
+				"type": "kBoolean",
+				"subtype": 0,
+				"sublen": 0,
+				"initval": "kFalse"
+			},
+			{
+				"name": "lbOK",
+				"order": 4,
+				"type": "kBoolean",
+				"subtype": 0,
+				"sublen": 0
+			},
+			{
+				"name": "llData",
+				"order": 11,
+				"type": "kList",
+				"subtype": "",
+				"sublen": 0
+			},
+			{
+				"name": "loSession",
+				"order": 1,
+				"type": "kObject",
+				"subtype": "",
+				"sublen": 0
+			},
+			{
+				"name": "loStatement",
+				"order": 2,
+				"type": "kObject",
+				"subtype": "",
+				"sublen": 0
+			},
+			{
+				"name": "lrDelegate",
+				"order": 9,
+				"type": "kRow",
+				"subtype": "CONFERENCE.sDelegates",
+				"sublen": 0
+			},
+			{
+				"name": "lrInvDelegateLink",
+				"order": 8,
+				"type": "kRow",
+				"subtype": "CONFERENCE.sDelegateInvoiceLinks",
+				"sublen": 0
+			},
+			{
+				"name": "lrInvoiceHeader",
+				"order": 6,
+				"type": "kRow",
+				"subtype": "sfinInvoiceOutH",
+				"sublen": 0
+			},
+			{
+				"name": "lrPerson",
+				"order": 10,
+				"type": "kRow",
+				"subtype": "CONFERENCE.sPerson",
+				"sublen": 0
+			},
+			{
+				"name": "lrProduct",
+				"order": 5,
+				"type": "kRow",
+				"subtype": "sProducts",
+				"sublen": 0
+			},
+			{
+				"name": "lrProductInternal",
+				"order": 7,
+				"type": "kRow",
+				"subtype": "sProductInternalData",
+				"sublen": 0
+			}
+		]
+	}
+]

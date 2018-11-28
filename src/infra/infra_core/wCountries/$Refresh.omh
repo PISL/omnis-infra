@@ -1,0 +1,13 @@
+Do method $Save
+
+Do ilData.$clear()     ;; ilData
+If ilRegions.CO_REGION<>''
+	Do ilData.$FetchRegion(con("'",ilRegions.CO_REGION,"'"))
+Else
+	Do ilData.$fetch_all()
+End If
+Do ilData.$sort($ref.CO_NAME,0)
+Calculate ilData.$smartlist as kTrue
+
+Do $cinst.$behaviour()
+Do $cinst.$redraw()

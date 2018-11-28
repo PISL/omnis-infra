@@ -1,0 +1,68 @@
+{
+	"classtype": "kTable",
+	"internalversion": 37,
+	"superclass": "tMaster",
+	"designtaskname": "Startup_Task",
+	"cvardefs": [
+
+	],
+	"ivardefs": [
+		{
+			"name": "ibInvisible",
+			"order": 5,
+			"type": "kBoolean",
+			"subtype": 0,
+			"sublen": 0,
+			"initval": "kFalse",
+			"desc": "passed to oFormat.$FormatRef so that a leading full stop is ignored; set by calling $setInvisible"
+		},
+		{
+			"name": "idTestDate",
+			"order": 3,
+			"type": "kDate",
+			"subtype": "kDate2000",
+			"sublen": 0,
+			"initval": "dat('1 JAN 2010')"
+		},
+		{
+			"name": "ioFormatData",
+			"order": 4,
+			"type": "kObject",
+			"subtype": "oFormatData",
+			"sublen": 0
+		},
+		{
+			"name": "___ROW1",
+			"order": 1,
+			"type": "kRow",
+			"subtype": "",
+			"sublen": 0
+		},
+		{
+			"name": "___ROW2",
+			"order": 2,
+			"type": "kRow",
+			"subtype": "",
+			"sublen": 0
+		}
+	],
+	"properties": {
+		"collectperformancedata": false,
+		"componenttype": "kCompStoreHidden",
+		"createdate": "2017-10-27 11:20:35",
+		"desc": "",
+		"editor": "",
+		"editordata": "",
+		"external": true,
+		"issupercomponent": false,
+		"moddate": "2018-11-22 16:00:47",
+		"showascheckedout": false,
+		"sqlclassname": "",
+		"userinfo": "",
+		"version": "2"
+	},
+	"inheritedproperties": [
+		"designtaskname",
+		"componenticon"
+	]
+}

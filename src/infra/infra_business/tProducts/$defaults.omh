@@ -1,0 +1,2 @@
+Calculate $cinst.PRD_GO_REF as $ctask.trGroupOrg.GO_SEQ
+Calculate $cinst.PRD_UNIT_DIVISOR as 1

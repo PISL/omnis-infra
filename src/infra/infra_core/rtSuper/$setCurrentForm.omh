@@ -1,0 +1,4 @@
+;  used by responsive web forms to identify the user's currently open form
+Do $ctask.tlAuthorisedForms.$search($ref.[pcColumn]=pcValue,1,0,0,0)
+Calculate $ctask.trCurrentForm as $ctask.tlAuthorisedForms     ;; trCurrentForm.code
+Quit method $ctask.trCurrentForm.code

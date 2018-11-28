@@ -1,0 +1,6 @@
+Calculate icPrefix as 'UOM_'
+;  this is a link table with multiple foreign keys
+;  Calculate icForeignKey as ''     ;; most dominant
+Calculate ibHasSequence as kTrue
+
+Do inherited

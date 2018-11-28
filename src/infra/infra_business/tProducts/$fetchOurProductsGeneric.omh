@@ -1,0 +1,127 @@
+Calculate pcReturnWhat as upp(pcReturnWhat)
+If pcReturnWhat='COUNT'|pcReturnWhat='RESULT'
+	;  continue
+Else
+	Quit method
+End If
+If isclear(pcSearchString)
+	Quit method
+End If
+If isnumber(pcSearchString)
+	Calculate lbIsNumber as kTrue
+End If
+
+If mid(pcSearchString,2,1)=':'     ;; user specifies a specific column to search on
+	Calculate lcColCode as upp(mid(pcSearchString,1,1))
+	If pbSearchAnywhere
+		Calculate lcSearchText as con('%',mid(pcSearchString,3,99),'%')
+	Else
+		Calculate lcSearchText as con(mid(pcSearchString,3,99),'%')
+	End If
+	
+	If lcColCode='N'
+		Calculate lcSearchColumn as 'PRD_NAME'
+	Else If lcColCode='D'
+		Calculate lcSearchColumn as 'PRD_DESC'
+	Else If lcColCode='S'
+		Calculate lcSearchColumn as 'PRD_SIZE'
+	Else If lcColCode='B'
+		Calculate lcSearchColumn as 'PRD_BRAND'
+	Else If lcColCode='P'
+		Calculate lcSearchColumn as 'PID_UNIT_PRICE'
+	End If
+Else     ;; product code search
+	Calculate lcSearchColumn as 'PRD_INT_PRODCODE'
+	If pbSearchAnywhere
+		Calculate lcSearchText as con('%',pcSearchString,'%')
+	Else
+		Calculate lcSearchText as con(pcSearchString,'%')
+	End If
+End If
+
+If pnGroupOrgSEQ>0
+	;  we'll be using PRD_GO_REF column as a predicate
+Else
+	Calculate pnGroupOrgSEQ as trGroupOrg.GO_SEQ     ;; default value
+	;  and using PRD_GO_REF column as a predicate
+End If
+
+If tlDatabases.DAM='WebService'
+	If pcReturnWhat='COUNT'
+		Do ioWeb.$callFetch(lnCount,irErrorSQL,row($cinst.$class().$name,$cmethod().$name,row(pcReturnWhat,pcSearchString,pnGroupOrgSEQ,pbSearchAllCols,pbSearchAnywhere),lnCount.$type,0,ilRESTextensions))
+		If ioWeb.irResponse.httpStatusCode=200
+			;  the result should be in this object     ;; however there may be a SQL error
+			If irErrorSQL.NativeErrorText<>''
+				Quit method kFalse
+			End If
+			Quit method lnCount
+		Else
+			Quit method kFalse
+		End If
+	Else If pcReturnWhat='RESULT'
+		Do ioWeb.$callFetch($cinst,irErrorSQL,row($cinst.$class().$name,$cmethod().$name,row(pcReturnWhat,pcSearchString,pnGroupOrgSEQ,pbSearchAllCols,pbSearchAnywhere),$cinst.$type,0,ilRESTextensions))
+		If ioWeb.irResponse.httpStatusCode=200
+			;  the result should be in this object     ;; however there may be a SQL error
+			If irErrorSQL.NativeErrorText<>''
+				Quit method kFalse
+			End If
+			Quit method kTrue
+		Else
+			Quit method kFalse
+		End If
+	End If
+End If
+
+Do $cinst.$ImmediateSession(loSession,loStatement) Returns lbImmediateSession
+If lbImmediateSession
+	Do $cinst.$SetSession(loSession,loStatement)
+Else If not(ibGoodConnectionToDb)
+	Quit method kFalse
+End If
+
+;  the "search all columns" version will produce a table scan coupled with outer join !!
+;  it will never be an efficient query ! !
+Begin statement
+If pcReturnWhat='RESULT'
+	Sta: {select [$cinst.$selectnames()]}
+	Sta: {, [lrInternalData.$selectnames()]}
+Else If pcReturnWhat='COUNT'
+	Sta: {select count(*)}
+End If
+
+Sta: {from [$cinst.$servertablenames]}
+Sta: {join [lrInternalData.$servertablenames] on  ( PRD_SEQ = PID_PRD_REF )}
+If lcSearchColumn<>''&lcSearchText<>''&not(pbSearchAllCols)
+	Sta: {where [lcSearchColumn] ilike @[lcSearchText]}
+Else If pbSearchAllCols
+	
+	;  cast the search net as widely as possible
+	Sta: {where ( upper(PRD_INT_PRODCODE) like @[pcSearchString]}
+	Sta: {or       upper(PRD_BRAND) like @[pcSearchString]}
+	Sta: {or       upper(PRD_NAME) like @[pcSearchString]}
+	Sta: {or       upper(PRD_DESC) like @[pcSearchString]}
+	If lbIsNumber
+		Sta: {or       cast(PRD_SIZE as text) like @[pcSearchString]}
+		Sta: {or       cast(PID_UNIT_PRICE as text) like @[pcSearchString]}
+	End If
+	Sta: {)}
+End If
+
+Sta: {and      PRD_GO_REF = @[pnGroupOrgSEQ]}
+
+End statement
+
+If pcReturnWhat='RESULT'
+	Do $cinst.$executesqlandfetch() Returns lbOK
+Else If pcReturnWhat='COUNT'
+	Do $cinst.$executesqlandfetchinto(lnCount) Returns lbOK
+End If
+If lbImmediateSession
+	Do $cinst.$SetSession(#NULL,#NULL,kTrue)
+End If
+
+If pcReturnWhat='RESULT'
+	Quit method lbOK
+Else If pcReturnWhat='COUNT'
+	Quit method lnCount
+End If

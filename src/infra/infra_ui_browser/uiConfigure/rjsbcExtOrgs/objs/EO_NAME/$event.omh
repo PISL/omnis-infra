@@ -1,0 +1,14 @@
+On evAfter
+	Calculate icDisplayMessage as ''
+	;  If icMode='I'
+	Do irCurrentRecord.$CheckUnique($cobj().$name) Returns lnCountMatches
+	If lnCountMatches
+		Do clLabels.$search($ref.objName=con('label_',$cobj().$name),1,0,0,0)
+		Do toStrings.$StringTableEntry('VAL_NOT_UNIQUE',icDisplayMessage,' must be unique')
+		Calculate icDisplayMessage as con(clLabels.label,' ',icDisplayMessage)
+		Do $cinst.$behaviour()
+		Do $cinst.$redraw()
+		
+		Quit event handler (Discard event)
+	End If
+	;  End If

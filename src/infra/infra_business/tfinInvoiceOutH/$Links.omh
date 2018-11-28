@@ -1,0 +1,23 @@
+;  Builds a list of all possible ways of linking to foreign tables
+Do llLinks.$cols.$add('TABLE',kCharacter,kSimplechar,100)     ;; Table that is being linked from
+Do llLinks.$cols.$add('FTABLE',kCharacter,kSimplechar,100)     ;; Foreign Table that is being linked to
+Do llLinks.$cols.$add('CHAIN',kCharacter,kSimplechar,1000)     ;; Link Path NOTE:  there must be no spaces either side of any '=' signs
+Do llLinks.$cols.$add('LINKS',kInteger,kShortint)     ;; Number of links
+Do llLinks.$cols.$add('DEFAULT',kInteger,kShortint)     ;; If a table can link to the foreign table in more than one way, this signifies the default link.
+Do llLinks.$cols.$add('TALIAS',kCharacter,kSimplechar,100)     ;; table alias for FTABLE if it can be linked to in more than a single way
+;  Example:
+;       ;; Do llLinks.$add('ThisTable','OtherTable','TT_OT_REF=OT_SEQ and OT_TYPE='TYPE1',1,0,'AliasOne')
+;       ;; Do llLinks.$add('ThisTable','OtherTable','TT_OT_REF=OT_SEQ and OT_TYPE='TYPE2',1,0,'AliasTwo')
+
+Do llLinks.$add($cinst.$servertablenames(),lrExtOrg.$servertablenames(),'foh_eo_ref=eo_seq',1,1)
+Do llLinks.$add($cinst.$servertablenames(),lrGroupOrg.$servertablenames(),'foh_go_ref=go_seq',1,1)
+Do llLinks.$add($cinst.$servertablenames(),lrExtOrgLink.$servertablenames(),'foh_eo_ref=eol_eo_ref and foh_go_ref=eol_go_ref',1,1)
+
+If tcCurrentLibrary='CONFERENCE'
+	Do llLinks.$add($cinst.$servertablenames(),lrDelegateInvoiceLink.$servertablenames(),'foh_seq=dil_foh_ref',1,1)
+	Do llLinks.$add($cinst.$servertablenames(),lrDelegate.$servertablenames(),'foh_seq=dil_foh_ref,dil_dg_ref=dg_seq',2,1)
+	Do llLinks.$add($cinst.$servertablenames(),lrPerson.$servertablenames(),'foh_seq=dil_foh_ref,dil_dg_ref=dg_seq,dg_psn_ref=psn_seq',3,1)
+	Do llLinks.$add($cinst.$servertablenames(),lrConference.$servertablenames(),'foh_seq=dil_foh_ref,dil_dg_ref=dg_seq,dg_cf_ref=cf_seq',3,1)
+End If
+
+Quit method llLinks

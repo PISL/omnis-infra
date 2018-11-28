@@ -1,0 +1,3 @@
+;  Enter your termination code here
+Calculate cnTop as $cinst.$top
+Calculate cnLeft as $cinst.$left

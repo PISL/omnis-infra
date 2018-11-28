@@ -1,0 +1,17 @@
+If icMode='I'     ;; insert permission
+	Do irCurrentRecord.$validation() Returns lbProceed
+	If not(lbProceed)
+		Calculate icDisplayMessage as irCurrentRecord.icValidationMessage
+	Else
+		Do irCurrentRecord.$insert() Returns lbOK
+		If lbOK
+			Calculate icMode as ''
+			Do $cinst.$returnToPreviousForm()
+			Do irCurrentRecord.$clear()
+		Else
+			Calculate icDisplayMessage as irCurrentRecord.irErrorSQL.NativeErrorText
+		End If
+	End If
+	
+End If
+Do $cinst.$behaviour()

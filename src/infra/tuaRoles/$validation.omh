@@ -1,0 +1,16 @@
+Calculate icValidationMessage as ''
+Do ilValidation.$clear()
+
+If $cinst.ROL_NAME<>''
+	;  good
+Else
+	Calculate lcMessage as con(lcMessage,pick(lcMessage<>'','',', '),'ROL_NAME missing')
+	Do ilValidation.$add('ROL_NAME_LBL','VAL_MISSING','ROL_NAME missing',0)
+End If
+
+If lcMessage<>''
+	Calculate icValidationMessage as lcMessage
+	Quit method kFalse
+End If
+
+Quit method kTrue

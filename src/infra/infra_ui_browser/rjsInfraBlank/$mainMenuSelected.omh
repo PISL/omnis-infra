@@ -1,0 +1,16 @@
+;  Breakpoint
+If isclear(ilAuthorisedForms.code)     ;; blank menu line selected
+	Calculate ilAuthorisedForms.$line as tlAuthorisedForms.$line
+	Quit event handler (Discard event)
+End If
+
+Calculate tlAuthorisedForms.$line as ilAuthorisedForms.$line
+
+If tlAuthorisedForms.class=trCurrentForm.class&tlAuthorisedForms.code=trCurrentForm.code
+	;  no change     ;; ignore
+Else
+	;  change of class or form
+	Do $changeOfForm()
+End If
+
+Calculate trCurrentForm as tlAuthorisedForms

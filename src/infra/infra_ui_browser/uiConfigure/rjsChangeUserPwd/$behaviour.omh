@@ -1,0 +1,12 @@
+If irefContainer
+	Do irefContainer.$behaviour(icMode)
+End If
+
+Calculate $cinst.$objs.pbCancel.$visible as icMode<>''
+Calculate $cinst.$objs.pbSave.$visible as icMode<>''
+
+Calculate $cinst.$objs.OldPassword.$enabled as icMode<>''
+Calculate $cinst.$objs.NewPassword.$enabled as icMode<>''
+Calculate $cinst.$objs.CheckPassword.$enabled as icMode<>''
+
+Do method assignEntryFieldProperties

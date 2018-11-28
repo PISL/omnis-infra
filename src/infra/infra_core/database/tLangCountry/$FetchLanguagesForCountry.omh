@@ -1,0 +1,53 @@
+Do $cinst.$cols.$findname('LG_ISO2') Returns liColRef
+If liColRef
+	;  languages cols already exists
+Else
+	;  For lnColCount from 1 to lrLanguage.$colcount step 1
+	;  Do $cinst.$cols.$add(lrLanguage.[lnColCount].$ref)
+	;  End For
+	Do $cinst.$cols.$add(lrLanguage.LG_SEQ)
+	Do $cinst.$cols.$add(lrLanguage.LG_ISO2)
+	Do $cinst.$cols.$add(lrLanguage.LG_ISO3)
+	Do $cinst.$cols.$add(lrLanguage.LG_DESC)
+	Do $cinst.$cols.$add(lrLanguage.LG_ACTIVE)
+	Do $cinst.$cols.$add(lrLanguage.LG_ISO3_ALT)
+End If
+
+If tlDatabases.DAM='WebService'
+	;  pass parameters to web service
+	;  $callService (pFieldReference, row(TableClassName, CurrentMethodName, p1,...,pn) )     ;; result will be returned in pFieldReference, row() contains the parameters for the call
+	Do ioWeb.$callFetch($cinst,irErrorSQL,row($cinst.$class().$name,$cmethod().$name,row(pCountryCode,pMainLanguageOnly),$cinst.$type,0,ilRESTextensions))
+	If ioWeb.irResponse.httpStatusCode=200
+		;  the result should be in this object     ;; however there may be a SQL error
+		If irErrorSQL.NativeErrorText<>''
+			Quit method kFalse
+		End If
+		Quit method kTrue
+	Else
+		Quit method kFalse
+	End If
+End If
+
+Do $cinst.$ImmediateSession(loSession,loStatement) Returns lbImmediateSession
+If lbImmediateSession
+	Do $cinst.$SetSession(loSession,loStatement)
+Else If not(ibGoodConnectionToDb)
+	Quit method kFalse
+End If
+
+Begin statement
+Sta: {select [$cinst.$selectnames()], [lrLanguage.$selectnames()]}
+Sta: {from [$cinst.$servertablenames], [lrLanguage.$servertablenames]}
+;  join
+Sta: {where LC_LG_REF = LG_SEQ}
+Sta: {and     LC_CO_REF_ISO3 = @[pCountryCode]}
+If pMainLanguageOnly
+	Sta: {and     LC_MAINLANG = 1}
+End If
+End statement
+Do $cinst.$executesqlandfetch() Returns lbOK
+If lbImmediateSession
+	Do $cinst.$SetSession(#NULL,#NULL,kTrue)
+End If
+
+Quit method lbOK

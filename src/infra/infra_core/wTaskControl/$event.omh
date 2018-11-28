@@ -1,0 +1,2 @@
+On evMoved,evResized
+	Do method updateWindowSettings

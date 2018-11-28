@@ -1,0 +1,39 @@
+;  this form resides in CORE library at the moment and therefore is limited to user access only
+;  as CORE library is res;onsible for database access and security in general
+
+;  Enter your initialization code here
+Do $DefineList(lrGroupOrg,'infra.tentGroupOrganisations')
+Calculate $cinst.$objs.PagedPane.$currentpage as cnPageLogin     ;; login
+
+Do tlAuthorisedForms.$cols.$add('code',kCharacter,kSimplechar,100)     ;; string table code
+Do tlAuthorisedForms.$cols.$add('desc',kCharacter,kSimplechar,100)     ;; language description
+Do tlAuthorisedForms.$cols.$add('class',kCharacter,kSimplechar,100)     ;; class / form name
+Do tlAuthorisedForms.$cols.$add('active',kInteger,kShortint)     ;; pane currently being viewed in browser
+Do tlAuthorisedForms.$cols.$add('order',kInteger,k32bitint)     ;; for consistent display order; sorted after "group" column
+Do tlAuthorisedForms.$cols.$add('visible',kInteger,k32bitint)     ;; row is visible in ilAuthorisedForms drop list, ie. user selectable
+Do tlAuthorisedForms.$cols.$add('group',kCharacter,kSimplechar,15)     ;; blank lines will be inserted between groups
+Do tlAuthorisedForms.$cols.$add('menuIdent',kInteger,k32bitint)     ;; copied back from tlNavMenu when it is built
+
+Do tlNavMenu.$cols.$add('type',kInteger,k32bitint)
+Do tlNavMenu.$cols.$add('text',kCharacter,kSimplechar,255)
+Do tlNavMenu.$cols.$add('desc',kCharacter,kSimplechar,255)
+Do tlNavMenu.$cols.$add('flags',kInteger,k32bitint)
+Do tlNavMenu.$cols.$add('ident',kInteger,k32bitint)
+Do tlNavMenu.$cols.$add('tag',kCharacter,kSimplechar,255)
+Do tlNavMenu.$cols.$add('info',kList)
+
+Do tlNavParams.$cols.$add('ident',kInteger,k32bitint)
+Do tlNavParams.$cols.$add('params',kRow)     ;; JSON representation of parameters to be passed to the form via trParameters, eg. Calculate trParameters as OJSON.$jsontolistororw()
+
+Calculate irCurrentForm as tlAuthorisedForms
+Do irCurrentForm.$clear()
+Do $ctask.$ServerTime(kTrue) Returns ldtNow
+If ldtNow>dat('1 JAN 2010')
+	;  everything is ok
+Else
+	Do toStrings.$StringTableEntry('MSG_DBCONNECTBROKEN',icDisplayMessage,'Connection to database is broken.  Please try again later.')
+End If
+
+;  do not call $behaviour here because objects on js page to not yet exist
+Calculate incPageLogin as cnPageLogin     ;; because $behaviour cannot refer to class variables
+;  Do $cinst.$behaviour()

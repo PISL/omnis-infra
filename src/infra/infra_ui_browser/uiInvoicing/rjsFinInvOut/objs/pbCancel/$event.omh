@@ -1,0 +1,20 @@
+On evClick
+	If icMode='I'|icMode='E'
+		Do irCurrentRecord.$clear()
+		Do ilStatusChoice.$clear()
+		Calculate ilCustomers.$line as 0
+	Else If icDetailMode='ID'|icDetailMode='ED'
+		;  Calculate $cinst.$objs.PagedPane.$currentpage as cnTabHeader
+		;  Calculate inCurrentTab as cnTabHeader
+		Do irCurrentDetail.$clear()
+		
+	End If
+	Calculate icDisplayMessage as ''
+	If icDetailMode<>''
+		;  Calculate $cinst.$objs.PagedPane.$currentpage as cnTabHeader
+		;  Calculate inCurrentTab as cnTabHeader
+		Calculate icDetailMode as ''
+	End If
+	Calculate icMode as ''
+	
+	Do $cinst.$displayListClick()

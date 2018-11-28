@@ -1,0 +1,225 @@
+[
+	{
+		"name": "$construct",
+		"ident": 0,
+		"order": 1,
+		"pvardefs": [
+			{
+				"name": "prParams",
+				"order": 5,
+				"type": "kRow",
+				"subtype": "",
+				"sublen": 0,
+				"param": 1
+			}
+		],
+		"lvardefs": [
+			{
+				"name": "lbOK",
+				"order": 1,
+				"type": "kBoolean",
+				"subtype": 0,
+				"sublen": 0,
+				"initval": "kFalse"
+			},
+			{
+				"name": "lcSearchCompany",
+				"order": 4,
+				"type": "kCharacter",
+				"subtype": "kSimplechar",
+				"sublen": 100
+			},
+			{
+				"name": "liColRef",
+				"order": 3,
+				"type": "kItemref",
+				"subtype": "",
+				"sublen": 0
+			},
+			{
+				"name": "lrReference",
+				"order": 2,
+				"type": "kRow",
+				"subtype": "",
+				"sublen": 0
+			}
+		],
+		"empty": true
+	},
+	{
+		"name": "$destruct",
+		"ident": 3,
+		"order": 2,
+		"pvardefs": [
+
+		],
+		"lvardefs": [
+			{
+				"name": "lbOK",
+				"order": 1,
+				"type": "kBoolean",
+				"subtype": 0,
+				"sublen": 0
+			}
+		],
+		"empty": true
+	},
+	{
+		"name": "$changeOfForm",
+		"ident": 1,
+		"order": 3,
+		"pvardefs": [
+			{
+				"name": "pbKeepOpen",
+				"order": 1,
+				"type": "kBoolean",
+				"subtype": 0,
+				"sublen": 0,
+				"param": 1,
+				"initval": "kFalse",
+				"desc": "should the form we are navigating from remain instantiated?"
+			},
+			{
+				"name": "pcFormToClose",
+				"order": 4,
+				"type": "kCharacter",
+				"subtype": "kSimplechar",
+				"sublen": 100,
+				"param": 2,
+				"desc": "this is the instantiated subform so it will be reinitialised on opening, eg. rfDevFeedback"
+			}
+		],
+		"lvardefs": [
+			{
+				"name": "lbFound",
+				"order": 3,
+				"type": "kBoolean",
+				"subtype": 0,
+				"sublen": 0
+			},
+			{
+				"name": "liFormRef",
+				"order": 2,
+				"type": "kItemref",
+				"subtype": "",
+				"sublen": 0
+			}
+		],
+		"empty": true
+	},
+	{
+		"name": "$OpenStringTable",
+		"ident": 2,
+		"order": 4,
+		"pvardefs": [
+			{
+				"name": "pcFile",
+				"order": 2,
+				"type": "kCharacter",
+				"subtype": "kSimplechar",
+				"sublen": 100,
+				"param": 1
+			},
+			{
+				"name": "pHostDirectory",
+				"order": 1,
+				"type": "kCharacter",
+				"subtype": "kSimplechar",
+				"sublen": 1000,
+				"param": 2,
+				"initval": "tConstants.HostDirectory"
+			}
+		],
+		"lvardefs": [
+			{
+				"name": "lnColNoCheck",
+				"order": 3,
+				"type": "kInteger",
+				"subtype": "kShortint",
+				"sublen": 0
+			}
+		],
+		"empty": true
+	},
+	{
+		"name": "$ArrangeAccessList",
+		"ident": 6,
+		"order": 7,
+		"pvardefs": [
+
+		],
+		"lvardefs": [
+			{
+				"name": "lbValid",
+				"order": 2,
+				"type": "kBoolean",
+				"subtype": 0,
+				"sublen": 0
+			},
+			{
+				"name": "lcExceptionSuffix",
+				"order": 9,
+				"type": "kCharacter",
+				"subtype": "kSimplechar",
+				"sublen": 10
+			},
+			{
+				"name": "lcGroupAdmin",
+				"order": 3,
+				"type": "kCharacter",
+				"subtype": "kSimplechar",
+				"sublen": 15,
+				"initval": "'c_admin'",
+				"desc": "tends to 3rd party related"
+			},
+			{
+				"name": "lcGroupFrequent",
+				"order": 8,
+				"type": "kCharacter",
+				"subtype": "kSimplechar",
+				"sublen": 15,
+				"initval": "'a_frequent'"
+			},
+			{
+				"name": "lcGroupGlobal",
+				"order": 6,
+				"type": "kCharacter",
+				"subtype": "kSimplechar",
+				"sublen": 15,
+				"initval": "'q_global_fixed'"
+			},
+			{
+				"name": "lcGroupInfrequent",
+				"order": 5,
+				"type": "kCharacter",
+				"subtype": "kSimplechar",
+				"sublen": 15,
+				"initval": "'m_technical'"
+			},
+			{
+				"name": "lcGroupLowLevel",
+				"order": 4,
+				"type": "kCharacter",
+				"subtype": "kSimplechar",
+				"sublen": 15,
+				"initval": "'u_low_level'"
+			},
+			{
+				"name": "lcGroupVeryLast",
+				"order": 7,
+				"type": "kCharacter",
+				"subtype": "kSimplechar",
+				"sublen": 15,
+				"initval": "'zzz_last'"
+			},
+			{
+				"name": "llPermissions",
+				"order": 1,
+				"type": "kList",
+				"subtype": "",
+				"sublen": 0
+			}
+		],
+		"empty": true
+	}
+]

@@ -1,0 +1,24 @@
+On evClick
+	Calculate lcMode as icMode     ;; save the current mode because $savedata clears it if successful
+	Do $cinst.$saveData() Returns lbOK     ;; icDisplayMessage and icMode explain the results of $saveData
+	If lbOK
+		If lcMode='I'
+			Do ilDisplayRecords.$add()
+			Calculate ilDisplayRecords.$line as ilDisplayRecords.$linecount
+		End If
+		If lcMode='I'|lcMode='E'|lcMode='C'
+			Do ilDisplayRecords.$assignrow(irCurrentRecord)
+			;  Calculate ilDisplayRecords.display as con(ilDisplayRecords.FOH_CUST_NAME,': ',ilDisplayRecords.FOH_INV_NO)
+			Do ilDisplayRecords.$DisplayName()
+			Do $cinst.$displayListClick
+		End If
+		If lcMode='ID'|lcMode='ED'
+			;  Calculate $cinst.$objs.PagedPane.$currentpage as cnTabHeader
+			;  Calculate inCurrentTab as cnTabHeader
+			Do method fetchDetails
+		End If
+	Else
+		
+	End If
+	
+	Do $cinst.$behaviour()

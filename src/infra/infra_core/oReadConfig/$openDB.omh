@@ -1,0 +1,36 @@
+;  now we are running all apps with a copy of infra we need to call the main library's task to get its path
+Do $ctask.$getLibPath() Returns lcSQLitePath
+;  Calculate lcSQLitePath as sys(10)
+If sys(6)='N'
+	;  Calculate lcSQLitePath as replace(lcSQLitePath,upp(con($clib().$name,'.lbs')),upp(con($clib().$name,'.libini')))
+	Calculate lcSQLitePath as replace(lcSQLitePath,upp(con($ctask().$name,'.lbs')),upp(con($ctask().$name,'.libini')))
+Else
+	;  Calculate lcSQLitePath as replace(lcSQLitePath,con($clib().$name,'.lbs'),con($clib().$name,'.libini'))
+	Calculate lcSQLitePath as replace(lcSQLitePath,con($ctask().$name,'.lbs'),con($ctask().$name,'.libini'))
+End If
+
+;  Do FileOps.$converthfspathtoposixpath(lcSQLitePath,lcPosixPath)
+Do FileOps.$doesfileexist(lcSQLitePath) Returns lbExists
+;  Do FileOps.$doesfileexist(lcPosixPath) Returns lbExists
+If not(lbExists)
+	Calculate ioSessionIni.$opencreate as kTrue
+End If
+
+;  Do ioSessionIni.$logon(lcSQLitePath,,,con($clib().$name,'_libini'))
+Do ioSessionIni.$logon(lcSQLitePath,,,con($ctask().$name,'_libini'))
+If ioSessionIni.$state=kSessionStateLoggedOn
+	Do ioSessionIni.$newstatement('INI') Returns ioStatementIni
+	Do ioStatementIni.$execdirect('pragma journal_mode=DELETE')
+Else
+	Breakpoint
+End If
+
+If not(lbExists)
+	Do method initConfig (lcSQLitePath) Returns lbOK
+	
+Else
+	
+	Do method $FetchConfigIni
+	Do method $FetchDBIni
+	Do method $fetchLibIni
+End If

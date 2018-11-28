@@ -1,0 +1,12 @@
+Begin reversible block
+	Calculate #FD as 'D m Y'
+End reversible block
+
+Calculate idFrom as #D
+Calculate idTo as #D
+
+Do ilLog.$definefromsqlclass('tsysLogEvents')
+
+Calculate $cinst.$title as "System Events Viewer"
+
+Do $cinst.$behaviour()

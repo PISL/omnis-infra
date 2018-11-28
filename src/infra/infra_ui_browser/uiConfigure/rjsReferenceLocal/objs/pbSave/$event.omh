@@ -1,0 +1,21 @@
+On evClick
+	If not(left(irCurrentRecord.RFL_CLASS,1)>='A'&left(irCurrentRecord.RFL_CLASS,1)<='Z')
+		Do toStrings.$StringTableEntry('MSG_CLASSFIRSTCHAR',lcMessage,'First character of Classification must be a letter of the alphabet.')
+		Calculate icDisplayMessage as 'First character of Classification must be a letter of the alphabet.'
+	Else
+		Do $cinst.$saveData() Returns lbOK     ;; icDisplayMessage and icMode explain the results of $saveData
+		If lbOK
+			If ilSearch1.$search($ref.RFL_CLASS=irCurrentRecord.RFL_CLASS,1,0,0,0)
+				;  Class value entered is already in the list so no need to reload the list
+			Else
+				Do method fetchSearch1List (irCurrentRecord.RFL_CLASS)
+			End If
+			Do method fetchDisplayList (ilSearch1.RFL_CLASS)
+			Do ilDisplayRecords.$search($ref.RFL_SEQ=irCurrentRecord.RFL_SEQ,1,0,0,0)
+			
+			Calculate icMode as ''
+		End If
+	End If
+	
+	Do $cinst.$behaviour()
+	Do $cinst.$redraw()

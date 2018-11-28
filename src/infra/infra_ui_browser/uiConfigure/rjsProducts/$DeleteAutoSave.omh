@@ -1,0 +1,2 @@
+Do $cinst.$checkAutoSavedData(kFalse)
+Calculate trParameters.Recover as kFalse

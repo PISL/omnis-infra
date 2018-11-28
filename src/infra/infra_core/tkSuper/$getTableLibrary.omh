@@ -1,0 +1,2 @@
+Do tlTableClasses.$search(pos(con(',',pcTable,','),$ref.classes),1,0,0,0)
+Quit method tlTableClasses.lib

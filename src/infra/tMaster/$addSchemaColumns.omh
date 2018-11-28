@@ -1,0 +1,42 @@
+Do ilAssociatedSchemas.$clear()
+
+If pcSchemaClass<>''
+	
+	If pos('.',pcSchemaClass)
+		;  ok     ;; this is probalby an infra class
+	Else
+		;  we must assume this is coming from an external library
+		Calculate pcSchemaClass as con(tcCurrentLibrary,'.',pcSchemaClass)
+	End If
+	
+	Do lrRow.$definefromsqlclass(pcSchemaClass)
+	For lnColNo from 1 to lrRow.$colcount step 1
+		Set reference liColRef to lrRow.$cols.[lnColNo].$ref
+		Do $cinst.$cols.$add(liColRef.$name,liColRef.$coltype,liColRef.$colsubtype,liColRef.$colsublen)
+	End For
+	
+	Do ilAssociatedSchemas.$add(pcSchemaClass)
+	
+Else If plListOfSchemas.$linecount>0
+	
+	Calculate plListOfSchemas.$line as 0
+	While $Loop(plListOfSchemas)
+		
+		If pos(',',plListOfSchemas.C1)
+			;  ok     ;; this is probalby an infra class
+		Else
+			;  we must assume this is coming from an external library
+			Calculate plListOfSchemas.C1 as con(tcCurrentLibrary,'.',plListOfSchemas.C1)
+		End If
+		
+		Do lrRow.$definefromsqlclass(plListOfSchemas.C1)
+		For lnColNo from 1 to lrRow.$colcount step 1
+			Set reference liColRef to lrRow.$cols.[lnColNo].$ref
+			Do $cinst.$cols.$add(liColRef.$name,liColRef.$coltype,liColRef.$colsubtype,liColRef.$colsublen)
+		End For
+		
+		Do ilAssociatedSchemas.$add(plListOfSchemas.C1)
+		
+	End While
+	
+End If

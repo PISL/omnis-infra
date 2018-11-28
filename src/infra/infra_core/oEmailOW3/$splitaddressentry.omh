@@ -1,0 +1,19 @@
+;  Separate an address entry (either "address" or "address (description)") into address and description
+Calculate pEntry as trim(pEntry)
+Calculate lOpenPos as pos('(',pEntry)
+If not(lOpenPos)
+	Calculate pAddress as pEntry
+	Calculate pDescription as ""
+Else
+	Calculate lClosePos as rpos(')',pEntry)
+	If not(lClosePos)|lClosePos<lOpenPos
+		Quit method kFalse
+	End If
+	Calculate lEndText as trim(mid(pEntry,lClosePos+1))
+	If len(lEndText)
+		Quit method kFalse
+	End If
+	Calculate pAddress as trim(left(pEntry,lOpenPos-1))
+	Calculate pDescription as trim(mid(pEntry,lOpenPos+1,lClosePos-lOpenPos-1))
+End If
+Quit method kTrue

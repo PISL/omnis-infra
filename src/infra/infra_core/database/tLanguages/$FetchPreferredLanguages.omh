@@ -1,0 +1,37 @@
+If tlDatabases.DAM='WebService'
+	;  pass parameters to web service
+	;  $callService (pFieldReference, row(TableClassName, CurrentMethodName, p1,...,pn) )     ;; result will be returned in pFieldReference, row() contains the parameters for the call
+	Do ioWeb.$callFetch($cinst,irErrorSQL,row($cinst.$class().$name,$cmethod().$name,row(),$cinst.$type,0,ilRESTextensions))
+	If ioWeb.irResponse.httpStatusCode=200
+		;  the result should be in this object     ;; however there may be a SQL error
+		If irErrorSQL.NativeErrorText<>''
+			Quit method kFalse
+		End If
+		Quit method kTrue
+	Else
+		Quit method kFalse
+	End If
+End If
+
+Do $cinst.$ImmediateSession(loSession,loStatement) Returns lbImmediateSession
+If lbImmediateSession
+	Do $cinst.$SetSession(loSession,loStatement)
+Else If not(ibGoodConnectionToDb)
+	Quit method kFalse
+End If
+
+Begin statement
+Sta: {select distinct [$cinst.$selectnames()]}
+Sta: {from [$cinst.$servertablenames]}
+Sta: {join [lrLangCountry.$servertablenames] on LC_LG_REF = LG_SEQ}
+Sta: {join [lrCountries.$servertablenames] on LC_CO_REF_ISO3 = CO_ISO3}
+
+;  main languages only - those with an older iso2 code
+Sta: {where     LG_ISO2 is not null  and  LG_ISO2 <> ''}
+;  not all languages in table have an iso language code
+;  Sta: where     LG_ISO3 is not null  and  LG_ISO3 <> ''
+End statement
+Do $cinst.$executesqlandfetch()
+If lbImmediateSession
+	Do $cinst.$SetSession(#NULL,#NULL,kTrue)
+End If

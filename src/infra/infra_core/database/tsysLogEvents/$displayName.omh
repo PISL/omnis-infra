@@ -1,0 +1,1 @@
+Calculate $cinst.DisplayName as con($cinst.SLV_CODE,' / ',$cinst.SLV_SUBCODE)

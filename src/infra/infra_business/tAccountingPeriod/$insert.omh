@@ -1,0 +1,29 @@
+;  GRS 14/2/14
+;       ;; modified to use the DB sequence to return the PK
+;  RSM  30/5/14     ;; added use of pcIgnoreTheseErrors when cloning/copying permissions from one role to another
+
+;  overridden to check for existence of period before insert
+
+;  Breakpoint
+;  check if this is a new period or just a new link
+Calculate lrRow as $cinst
+
+Begin statement (Carriage return)
+Sta: {where acp_span = @[$cinst.ACP_SPAN]}
+Sta: {and acp_from = @[$cinst.ACP_FROM]}
+Sta: {and acp_to = @[$cinst.ACP_TO]}
+End statement
+Get statement lcWhere
+
+Do lrRow.$fetch_(lcWhere) Returns lbOK
+If lrRow.ACP_SEQ>0
+	;  row already exists just update the SEQ
+	Calculate $cinst.ACP_SEQ as lrRow.ACP_SEQ
+	Calculate lbOK as kTrue
+	
+Else
+	Do inherited Returns lbOK
+	
+End If
+
+Quit method lbOK

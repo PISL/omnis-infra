@@ -1,0 +1,5 @@
+On evAfter
+	Do $cinst.$invalidCharCheck('REF',irCurrentRecord.RFL_VALUE) Returns lbProceed     ;; displays a message if invalid
+	If not(lbProceed)
+		Quit event handler (Discard event)
+	End If

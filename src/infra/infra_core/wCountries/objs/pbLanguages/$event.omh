@@ -1,0 +1,7 @@
+On evClick     ;; Event Parameters - pRow( Itemreference )
+	Test for window open {wLanguages}
+	If flag true
+		Bring window instance to front wLanguages
+	Else
+		Open window instance wLanguages/CEN (tSession,$ctask.tStatement)
+	End If

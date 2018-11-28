@@ -1,0 +1,19 @@
+Do $DefineList(lrPermissionCheck,'infra.tuaPermissions')
+Calculate plPermissionsUsed.$line as 0
+While $Loop(plPermissionsUsed)
+	If sys(2)=17
+		;  make sure permission exists in database somewhere - this is a cross check for developer
+		Do lrPermissionCheck.$clear()
+		Do lrPermissionCheck.$fetchOnName(plPermissionsUsed.permission)
+		If lrPermissionCheck.PER_SEQ>0
+			;  covered
+		Else
+			Breakpoint
+		End If
+	End If
+	
+	Do irUserRights.$cols.$add(plPermissionsUsed.colName,kBoolean)
+	Do tlPermissions.$search(upp($ref.PER_LABEL)=upp(plPermissionsUsed.permission),1,0,0,0) Returns irUserRights.[plPermissionsUsed.colName]
+End While
+
+Calculate tlPermissions.$line as 0

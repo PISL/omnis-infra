@@ -1,0 +1,10 @@
+Do lRow.$cols.$add('Msg',kCharacter,kSimplechar,500)
+Do lRow.$cols.$add('title',kCharacter,kSimplechar,50)
+Do lRow.$cols.$add('okmethod',kCharacter,kSimplechar,50)
+Do lRow.$cols.$add('cancelmethod',kCharacter,kSimplechar,50)
+
+Calculate lRow.Msg as pcMsg
+Calculate lRow.title as pcTitle
+Calculate lRow.okmethod as pcOkMethod
+Calculate lRow.cancelmethod as pcCancelMethod
+Do $cinst.$clientcommand('okcancelmessage',lRow)

@@ -1,0 +1,6 @@
+On evOK
+	Do irefCallingObject.[icCallbackMethod](ibinContent)
+	Close window instance $cinst
+	
+On evCancel
+	Close window instance $cinst

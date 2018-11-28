@@ -1,0 +1,96 @@
+;  tell application "iCal"
+;  tell calendar "My Calendar"
+;  set theCurrentDate to current date
+;  make new event at end with properties {description:"Event Description",
+;  summary:"Event Name", location:"Event Location", start date:theCurrentDate,
+;  end date:theCurrentDate + 120 * minutes}
+;  end tell
+;  end tell
+
+;  iCal scripting was derived from     ;; http://www.mactech.com/articles/mactech/Vol.21/21.11/ScriptingiCal/index.html
+
+;  in applescript time does not exist outside a date object
+;  one can extract a time value but it will be returned as seconds since midnight
+
+;  applescript date format is no of days since 1/1/0001
+;  applescript time formatting is number of seconds since 00:00:00
+;  according to     ;; http://macscripter.net/viewtopic.php?id=24737
+;  Calculate lcJstDateFormat as 'D:D/M/CY H:N'
+
+If pdDateTimeEnd>dat('1 JAN 2010')
+	;  a set value
+Else
+	Calculate pdDateTimeEnd as dadd(kMinute,60,pdDateTimeStart)
+End If
+
+Do lrReturn.$cols.$add('AppleScriptResult',kCharacter,kSimplechar,255)
+Do lrReturn.$cols.$add('AppleScriptError',kCharacter,kSimplechar,255)
+
+Begin text block
+Text: {tell application "iCal"} (Platform newline)
+
+Text: {tell calendar "[pcCalendar]"} (Platform newline)
+
+Text: {set theStartDate to date "[pdDateTimeStart]"} (Platform newline)
+Text: {set theEndDate to date "[pdDateTimeEnd]"} (Platform newline)
+
+Text: {make }
+Text: {new event at end}
+Text: { with properties {}
+Text: {summary:"[pcSummary]", }
+If pcLocation<>''
+	Text: {location:"[pcLocation]", }
+End If
+If pcNote<>''
+	;  note
+	Text: {description:"[pcNote]", }
+End If
+
+;  date formatting must conform to date formatting in system preferences
+;  only we don't know what that is in Omnis !
+
+Text: {start date: theStartDate, }
+Text: {end date: theEndDate, }
+
+Text: {allday event:[pick(pbAllDay,'false','true')]}
+Text: {}} (Platform newline)
+
+Text: {end tell} (Platform newline)
+
+Text: {end tell} (Platform newline)
+End text block
+Get text block lcApplescript
+
+;  Breakpoint
+Do $root.$runapplescript(lcApplescript,lcApplescriptResult,lcApplescriptError)
+
+If lcApplescriptResult<>''
+	;  event id "36572BAC-2886-48CD-B14C-142B57D43E16" of calendar id "046C23BE-2BD9-455D-A288-18E8D1AE5309" of application "iCal"
+	If pbAddAlarm
+		;  extract the Event ID from lcAppleScriptResult
+		Calculate lcEventId as mid(lcApplescriptResult,11,99)
+		Calculate lcEventId as mid(lcEventId,1,pos('"',lcEventId)-1)
+		
+		Begin text block
+		Text: {tell application "iCal"} (Platform newline)
+		Text: {tell calendar "[pcCalendar]"} (Platform newline)
+		
+		Text: {     set theEvent to first event whose uid = "[lcEventId]"𯿿} (Platform newline)
+		Text: {     tell theEvent𯿿         } (Platform newline)
+		;  Text:           make new display alarm at end with properties {trigger interval:-30}𯿿       (Platform newline)
+		Text: {          make new sound alarm  at end with properties {trigger interval:-30, sound name:"Basso"}𯿿      } (Platform newline)
+		Text: {     end tell} (Platform newline)
+		
+		Text: {end tell} (Platform newline)
+		Text: {end tell} (Platform newline)
+		End text block
+		Get text block lcApplescript
+		
+		Do $root.$runapplescript(lcApplescript,lcAlarmResult,lcAlarmError)
+	End If
+	
+End If
+
+Calculate lrReturn.AppleScriptResult as lcApplescriptResult
+Calculate lrReturn.AppleScriptError as lcApplescriptError
+Quit method lrReturn

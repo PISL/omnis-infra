@@ -1,0 +1,36 @@
+If len(prServer.server)
+	Calculate irCurlOptions as prServer.OW3options
+	Calculate icServerURI as prServer.server
+	Calculate icUser as prServer.account
+	Calculate icPassword as prServer.pw
+	Calculate ibRequireSecureConnection as pick(isclear(prServer.secure),prServer.secure,kFalse)
+	Calculate inTimeout as pick(prServer.timeout>0,inTimeout,prServer.timeout)
+	Calculate inLogType as pick(prServer.debuglog>0,0,prServer.debuglog)
+	Calculate icFromAddress as prServer.senderAddress
+	Calculate icFromName as prServer.senderName
+Else
+	;  use the configCode
+	If len(prServer.configCode)
+		;  good to go
+	Else
+		Calculate prServer.configCode as 'DEFAULT'
+	End If
+	Do method getServer (prServer.configCode,lrAttributes) Returns lbOK
+	If not(lbOK)
+		Quit method kFalse
+	Else
+		Calculate irCurlOptions as lrAttributes.OW3options
+		Calculate icServerURI as lrAttributes.server
+		Calculate icUser as lrAttributes.loginName
+		Calculate icPassword as lrAttributes.loginPassword
+		Calculate inTimeout as pick(lrAttributes.timeout>0,inTimeout,lrAttributes.timeout)
+		Calculate inLogType as lrAttributes.debuglog
+		Calculate icFromAddress as lrAttributes.senderAddress
+		Calculate icFromName as lrAttributes.senderName
+		Calculate ilTo as lrAttributes.emailTO
+		Calculate ilCC as lrAttributes.emailCC
+		Calculate ilBcc as lrAttributes.emailBCC
+	End If
+End If
+
+Quit method kTrue

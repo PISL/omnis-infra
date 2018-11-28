@@ -1,0 +1,216 @@
+{
+	"classtype": "kWindow",
+	"internalversion": 8,
+	"designtaskname": "Startup_Task",
+	"nextident": 1133,
+	"lastgroupident": 0,
+	"cvardefs": [
+
+	],
+	"ivardefs": [
+		{
+			"name": "ibFetchSpecial",
+			"order": 12,
+			"type": "kBoolean",
+			"subtype": 0,
+			"sublen": 0,
+			"initval": "kFalse"
+		},
+		{
+			"name": "ibLangCountrySort",
+			"order": 16,
+			"type": "kBoolean",
+			"subtype": 0,
+			"sublen": 0
+		},
+		{
+			"name": "icMode",
+			"order": 11,
+			"type": "kCharacter",
+			"subtype": "kSimplechar",
+			"sublen": 3
+		},
+		{
+			"name": "icPreviousValue",
+			"order": 5,
+			"type": "kCharacter",
+			"subtype": "kSimplechar",
+			"sublen": 255
+		},
+		{
+			"name": "ilCountries",
+			"order": 2,
+			"type": "kList",
+			"subtype": "tCountries",
+			"sublen": 0
+		},
+		{
+			"name": "ilLangCountryCount",
+			"order": 13,
+			"type": "kList",
+			"subtype": "",
+			"sublen": 0
+		},
+		{
+			"name": "ilLanguages",
+			"order": 8,
+			"type": "kList",
+			"subtype": "tLanguages",
+			"sublen": 0
+		},
+		{
+			"name": "ilLanguagesAndCountries",
+			"order": 9,
+			"type": "kList",
+			"subtype": "tLangCountry",
+			"sublen": 0
+		},
+		{
+			"name": "ilSpecialSelections",
+			"order": 1,
+			"type": "kList",
+			"subtype": "",
+			"sublen": 0
+		},
+		{
+			"name": "inLangMainUnofficial",
+			"order": 17,
+			"type": "kInteger",
+			"subtype": "kShortint",
+			"sublen": 0,
+			"initval": "0"
+		},
+		{
+			"name": "inPercentGlobalPopulation",
+			"order": 15,
+			"type": "kInteger",
+			"subtype": "kShortint",
+			"sublen": 0
+		},
+		{
+			"name": "inSingleMulti",
+			"order": 18,
+			"type": "kInteger",
+			"subtype": "kShortint",
+			"sublen": 0,
+			"initval": "0"
+		},
+		{
+			"name": "inSpeakersCounted",
+			"order": 14,
+			"type": "kNumber",
+			"subtype": "kFloatdp",
+			"sublen": 0
+		},
+		{
+			"name": "ioODBCSESS",
+			"order": 7,
+			"type": "kObject",
+			"subtype": ".ODBCDAM.ODBCSESS",
+			"sublen": 0
+		},
+		{
+			"name": "ioOMSQLSESS",
+			"order": 6,
+			"type": "kObject",
+			"subtype": ".OMSQLDAM.OMSQLSESS",
+			"sublen": 0
+		},
+		{
+			"name": "ioSession",
+			"order": 3,
+			"type": "kObject",
+			"subtype": "",
+			"sublen": 0
+		},
+		{
+			"name": "ioStatement",
+			"order": 4,
+			"type": "kObject",
+			"subtype": "",
+			"sublen": 0
+		},
+		{
+			"name": "oDAO_CoLang",
+			"order": 10,
+			"type": "kObject",
+			"subtype": "oDAO_CoLangs",
+			"sublen": 0
+		}
+	],
+	"properties": {
+		"aligntogrid": false,
+		"alpha": 255,
+		"backcolor": "kColor3DFace",
+		"backgroundskin": 0,
+		"backgroundskinalign": "kPALtopLeft",
+		"backgroundtheme": "kBGThemeWindow",
+		"backpattern": 0,
+		"bringinfront": false,
+		"clickbehind": true,
+		"closebox": true,
+		"collectperformancedata": false,
+		"componenticon": 0,
+		"componenttype": "kCompStoreHidden",
+		"contextmenu": "",
+		"createdate": "2017-10-27 11:20:36",
+		"desc": "",
+		"dockingedge": "kBorderChisel",
+		"dropmode": "kAcceptNone",
+		"edgefloat": "kEFnone",
+		"editor": "",
+		"editordata": "",
+		"effect": "kBorderNone",
+		"enablemenuandtoolbars": true,
+		"external": false,
+		"forecolor": "kColor3DFace",
+		"growbox": true,
+		"hasmenus": false,
+		"hasstatusbar": false,
+		"height": 448,
+		"helpbutton": false,
+		"helpfile": 0,
+		"horzgrid": 8,
+		"horzscroll": false,
+		"inheritedorder": 1,
+		"issubwindow": false,
+		"issupercomponent": false,
+		"keepclicks": true,
+		"left": 43,
+		"menuedge": "kBorderChisel",
+		"menunames": "",
+		"minimizebox": false,
+		"minimizeiconid": 2006,
+		"moddate": "2017-10-27 11:24:25",
+		"modelessdata": true,
+		"showascheckedout": false,
+		"showcommands": false,
+		"showgrid": false,
+		"showtitle": false,
+		"sizetogrid": false,
+		"startfield": 0,
+		"statusbarpos": "kSBPosBottom",
+		"statusedge": "kBorderChisel",
+		"style": "kTitle",
+		"title": "",
+		"toolbarnames": "",
+		"toolbaroptions": "kTBOptionNone",
+		"toolbarpos": "kDockingAreaNone",
+		"top": 18,
+		"userinfo": "Copyright © 1999-2012 Platform Independent Systems Limited, registered company number 3155091, UK",
+		"usesheets": false,
+		"version": "2",
+		"vertgrid": 8,
+		"vertscroll": false,
+		"width": 1175,
+		"zoombox": false
+	},
+	"statusbar": {
+		"properties": {
+			"fieldstyle": "",
+			"font": 1,
+			"fontsize": 0,
+			"helppane": 0
+		}
+	}
+}

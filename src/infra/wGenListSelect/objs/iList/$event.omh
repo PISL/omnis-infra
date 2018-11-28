@@ -1,0 +1,2 @@
+On evDoubleClick     ;; Event Parameters - pRow ( Itemreference )
+	Do method OnOk

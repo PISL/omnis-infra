@@ -1,0 +1,230 @@
+;  tbinFileUpload     ;; ilUploadMime  irFileUpload
+Calculate icDisplayMessage as ''
+Calculate $cinst.$objs.FileControl.$action as kJSFileActionCloseUpload
+
+;  set file name and type
+Do method FileNameAndType (icFileName,icFileType)
+
+If ibSaveUpload
+	;  parent form will deal with reading the file, so just save it and call back to the parent
+	Do method saveUpload Returns lbSuccess
+Else
+	
+	;  is the file of correct type     ;; is it text?  is it csv or tab or xls?
+	If icFileType='text/csv'
+		;  good     ;; csv
+		Calculate lbFormatCSV as kTrue
+		
+	Else If icFileType='text/tab-separated-values'
+		;  good     ;; tab
+		Calculate lbFormatTab as kTrue
+		
+	Else If icFileType='text/plain'
+		;  good     ;; tab ?
+		Calculate lbFormatTab as kTrue
+		
+	Else If icFileType='text/xml'
+		Calculate lbFormatXML as kTrue
+		
+	Else If mid(icFileType,1,5)='text/'
+		;  off to a good start
+		
+	Else If low(icFileType)='application/vnd.openxmlformats'
+		;  Breakpoint
+		;  xml - probably an excel .xlsx
+		Do ioTMexcelBook.$initialize(kXLxlsx)
+		Do ioTMexcelBook.$loadraw(tbinFileUpload) Returns lbFormatExcel
+		If not(lbFormatExcel)
+			Do ioTMexcelBook.$error() Returns icDisplayMessage     ;; processed through Omnis error handler
+			If icDisplayMessage=''
+				Do toStrings.$StringTableEntry('word_file',lcMessage,'file')
+				Do toStrings.$StringTableEntry('str_oftype',lcMessage2,'is of type')
+				Do toStrings.$StringTableEntry('MSG_NOTXLSX',lcMessage3,'not recognised as a .xlsx file')
+				Calculate icDisplayMessage as con(lcMessage,' "',icFileName,'" ',lcMessage2,' "',icFileType,'": ',lcMessage3)
+			End If
+			Quit method kFalse
+		End If
+		
+	Else If low(icFileType)='application/vnd.ms-excel'
+		Do ioTMexcelBook.$initialize(kXLxls)
+		Do ioTMexcelBook.$loadraw(tbinFileUpload) Returns lbFormatExcel
+		If not(lbFormatExcel)
+			Do ioTMexcelBook.$error() Returns icDisplayMessage     ;; processed through Omnis error handler
+			If icDisplayMessage=''
+				Do toStrings.$StringTableEntry('word_file',lcMessage,'file')
+				Do toStrings.$StringTableEntry('str_oftype',lcMessage2,'is of type')
+				Do toStrings.$StringTableEntry('MSG_NOTXLSX',lcMessage3,'not recognised as a .xlsx file')
+				Calculate icDisplayMessage as con(lcMessage,' "',icFileName,'" ',lcMessage2,' "',icFileType,'": ',lcMessage3)
+			End If
+			Quit method kFalse
+		End If
+		
+	Else
+		Do toStrings.$StringTableEntry('word_file',lcMessage,'file')
+		Do toStrings.$StringTableEntry('str_oftype',lcMessage2,'is of type')
+		Do toStrings.$StringTableEntry('MSG_UNSUPPORTEDIMPORT',lcMessage3,'not supported for import')
+		Calculate icDisplayMessage as con(lcMessage,' "',icFileName,'" ',lcMessage2,' "',icFileType,'": ',lcMessage3)
+		Quit method kFalse
+	End If
+End If
+
+Do $cinst.$clientcommand("showloadingoverlay",row(kTrue,'','Loading text file...'))
+;  Breakpoint
+
+;  if we have saved the file, none of the following flags will have been set
+;  binary to character conversion
+If lbFormatXML
+	Calculate ioDOM.$parservalidates as kFalse
+	Calculate ioDOM.$ignoreparserwarnings as kTrue
+	;  Do ioDOM.$loadbinary(lcCSV,lcConversionError) Returns #F
+	Do ioDOM.$loadbinary(tbinFileUpload,lcConversionError) Returns #F
+	If lcConversionError<>''
+		Calculate icDisplayMessage as con("binary to text conversion error:  ",lcConversionError)
+		Quit method kFalse
+	End If
+	
+	Do ioDOM.$savetree(llXML,lcConversionError,kTrue,kTrue,kTrue)
+	
+	Do llXML.$search($ref.path='/Worksheet/Table',1,0,0,0) Returns lbExcelXML     ;; /ExcelWorkbook
+	If not(lbExcelXML)
+		Do llXML.$search($ref.path='/dataset/flowData',1,0,0,0) Returns lbEcoSpold1     ;; LCI exported as Ecospold1 format
+	End If
+	If not(lbExcelXML|lbEcoSpold1)
+		Do llXML.$search($ref.path='/activityDataset/flowData',1,0,0,0) Returns lbEcoSpold2     ;; LCI exported as Ecospold1 format
+	End If
+	
+	If lbExcelXML
+		Do method loadFromExcelXML (llXML)     ;; untested
+		
+	Else If lbEcoSpold1
+		Do method loadFromEcoSpold1 (llXML)
+		
+	Else If lbEcoSpold2
+		Do method loadFromEcoSpold2 (llXML)
+		
+	Else
+		Calculate icDisplayMessage as con("xml files must be in Excel or EcoSpold1 format")
+		Quit method kFalse
+	End If
+	
+Else If lbFormatExcel
+	;  Breakpoint
+	Do method loadfromExcel
+	Calculate inDataColCount as ilContent.$colcount
+	
+Else If lbFormatCSV|lbFormatTab
+	;  text - csv or tab
+	Do uniconv(kUniTypeAuto,tbinFileUpload,kUniTypeCharacter,lcCSV,lnByteOrderMark,lcConversionError)
+	If lcConversionError<>''
+		Calculate icDisplayMessage as con("binary to text conversion error:  ",lcConversionError)
+		Quit method kFalse
+	End If
+	
+	;  determine whether separator is comma or tab
+	Do method DetermineRowDelimiter (lcCSV) Returns lcDelimiterRow
+	If lcDelimiterRow=''
+		Do toStrings.$StringTableEntry('word_file',lcMessage,'file')
+		Do toStrings.$StringTableEntry('str_oftype',lcMessage2,'is of type')
+		Do toStrings.$StringTableEntry('MSG_UNRECOGNISEDEOL',lcMessage3,'does not have a recognised end-of-line character sequence')
+		Calculate icDisplayMessage as con(lcMessage,' "',icFileName,'" ',lcMessage2,' "',icFileType,'": ',lcMessage3)
+		Quit method kFalse
+	End If
+	
+	Calculate lcFilePath as con('/tmp/',$ctask().$name,'.txt')
+	Do oFileOps.$createfile(lcFilePath,'XXXX','OM$8')
+	Do oFileOps.$openfile(lcFilePath)
+	Do oFileOps.$writefile(tbinFileUpload) Returns lbSuccess
+	Do oFileOps.$closefile()
+	
+	Calculate lbinDelimiter as #NULL
+	Calculate lbSuccess as byteset(lbinDelimiter,0,kTab)     ;; ktab
+	Do binsearch(lbinDelimiter,tbinFileUpload) Returns lnPos
+	If lnPos=-1     ;; not found
+		Calculate lbSuccess as byteset(lbinDelimiter,0,asc(',',1))     ;; comma
+		Do binsearch(lbinDelimiter,tbinFileUpload) Returns lnPos
+		If lnPos=-1
+			;  delimiter not found
+			Calculate icDisplayMessage as "unrecognised file type"
+			Breakpoint
+			Quit method kFalse
+		Else
+			Calculate lcDelimiterColumn as ','
+		End If
+	Else
+		Calculate lcDelimiterColumn as kTab
+	End If
+	
+	;  get the first row to determine the number of columns the file contains to initialise ilContent
+	Calculate lcRow as strtok('lcCSV',lcDelimiterRow)
+	Calculate lcCSV as ''     ;; memory management, no longer needed
+	Calculate lnLength as len(lcRow)
+	Calculate lcRow as replaceall(lcRow,lcDelimiterColumn,'')
+	Calculate inDataColCount as lnLength-len(lcRow)+1
+	
+	;  initialise the content list
+	For inDataColNo from 1 to inDataColCount step 1
+		Do ilContent.$cols.$add(con('C',inDataColNo),kCharacter,kSimplechar,255)
+	End For
+	
+	Set import file name {[lcFilePath]}
+	
+	If lcDelimiterColumn=kTab
+		Prepare for import from file {Delimited (tabs)}
+	Else If lcDelimiterColumn=','
+		Prepare for import from file {Delimited (commas)}
+	Else
+		Breakpoint {we shouldn't get here}
+		Quit method kFalse
+	End If
+	
+	Import data ilContent
+	End import
+	Close import file
+	Do FileOps.$deletefile(lcFilePath)     ;; if we don't get here, for whatever reason, it's not a problem as we are using the /tmp directory which will be cleared by the OS
+End If
+
+Calculate tbinFileUpload as #NULL     ;; memory management, these data no longer needed
+
+If ilContent.$linecount     ;; will be zero if we have just saved the file instead of processing it
+	Calculate ilContent.$line as 1
+	For inDataColNo from 1 to inDataColCount step 1
+		Do ilDataCols.$add(ilContent.C[inDataColNo],kTrue)
+		Calculate $cinst.$objs.Grid_ilDataCols.$objs.pbInclude.[inDataColNo].$iconid as pick(ilDataCols.[inDataColNo].include,1758,1750)
+		;  Calculate $cinst.$objs.Grid_ilDataCols.$objs.pbInclude.[inDataColNo].$backcolor as pick(mod(inDataColNo,2),rgb(240,240,240),rgb(255,255,255))
+		Calculate $cinst.$objs.Grid_ilDataCols.$objs.background.[inDataColNo].$forecolor as pick(mod(inDataColNo,2),rgb(240,240,240),rgb(255,255,255))
+	End For
+	;  add extra lines to ilSchemaCols, if necessary
+	Calculate lnRowCount as inDataColCount-ilSchemaCols.$linecount
+	If lnRowCount
+		For inDataColNo from 1 to lnRowCount step 1
+			Do ilSchemaCols.$add('','')
+		End For
+	End If
+	
+	Do method assignTemplateMenu
+	Do method setSchemaColumnText
+	
+	If mod(ilSchemaCols.$linecount,inListDisplayQuantum)=0
+		Calculate inVscrollMax as (ilSchemaCols.$linecount/inListDisplayQuantum)
+	Else
+		Calculate inVscrollMax as (ilSchemaCols.$linecount/inListDisplayQuantum)+1
+	End If
+	Calculate inVscrollPos as 1
+	
+	;  the parent form may need to process the data before diplaying it
+	;  eg. openLCA export has 2 redundant lines at the top of the file
+	If irefParent.$postDataLoad.$cando
+		Do irefParent.$postDataLoad(ilContent)
+		Do method populateDataCols
+	End If
+	
+End If     ;; ilContent.$linecount
+
+Do $cinst.$clientcommand("showloadingoverlay",row(kFalse,''))
+
+If ibSaveUpload
+	Do $cinst.$saveData()
+Else
+	Do $cinst.$behaviour()
+End If
+Quit method kTrue

@@ -1,0 +1,16 @@
+Calculate lcVersionFile as con(icOmnisFolder,icSoftwarePublisher,sys(9),icApplicationName,sys(9),icLocalVersionFile)
+Do FileOps.$doesfileexist(lcVersionFile) Returns lbFound
+If lbFound
+	Do loFileOps.$openfile(lcVersionFile) Returns lbFileIsOpen
+	If lbFileIsOpen
+		Do loFileOps.$readcharacter(kUniTypeUTF8,lcContents) Returns lbReadOk
+		Do loFileOps.$closefile() Returns loFileOps.$closefile()     ;; Returnｓ nothing
+		Do method ParseVersionsFile (lcContents) Returns llLibraryVersions
+	Else
+		OK message  {[con('could not open version file (',lcVersionFile,') on local computer')]}
+	End If
+Else
+	;  OK message  {[con('version file ',icApplicationName,' not found on local computer')]}
+End If
+
+Quit method llLibraryVersions

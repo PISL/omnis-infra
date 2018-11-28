@@ -1,0 +1,33 @@
+Do ilSysValues.$cols.$add('Code',kInteger,k32bitint)
+Do ilSysValues.$cols.$add('Value',kCharacter,kSimplechar,10000)
+Do ilSysValues.$cols.$add('Comment',kCharacter,kSimplechar,100)
+Do method Meanings
+
+For lnSys from 1 to 255 step 1
+	Calculate lcValue as sys(lnSys)
+	If isnull(lcValue)
+		;  ignore
+	Else If lcValue=''
+		;  ignore
+	Else
+		Do ilSysMeanings.$search($ref.number=lnSys,0,0,0,0) Returns lbFound     ;; from where we are now
+		If not(lbFound)
+			Do ilSysMeanings.$search($ref.number=lnSys,1,0,0,0) Returns lbFound     ;; from beginning
+		End If
+		
+		Do ilSysValues.$add(lnSys,lcValue,ilSysMeanings.meaning)
+	End If
+End For
+
+;  now for system environment variables
+;  Calculate trEnvironment.UserHomeDirectory as getenv('LOCALAPPDATA')
+Calculate llTemp as listenv()
+While $Loop(llTemp)
+	If llTemp.$line=1
+		Do ilSysValues.$add(#NULL,#NULL,#NULL)     ;; blank line
+		Do ilSysValues.$add(#NULL,'SYSTEM ENVIRONMENT VARIABLES')     ;; heading
+		Do ilSysValues.$add(#NULL,'name','value')
+		Do ilSysValues.$add(#NULL,#NULL,#NULL)     ;; blank line
+	End If
+	Do ilSysValues.$add(lnSys,llTemp.name,llTemp.value)
+End While

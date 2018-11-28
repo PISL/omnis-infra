@@ -1,0 +1,10 @@
+Do irExtOrg.$clear()
+Do irExtOrg.$fetch_pk(pnEO_SEQ)
+Calculate irOrigExtOrg as irExtOrg
+
+Do irOrglink.$clear()
+Do irOrglink.$fetchCompound(pnEO_SEQ)
+Calculate irOrigOrgLink as irOrglink
+
+Do prOrg.$assignrow(irExtOrg)     ;; return result to calling object
+Do prSuppCustCodes.$assignrow(irOrglink)     ;; return result to calling object

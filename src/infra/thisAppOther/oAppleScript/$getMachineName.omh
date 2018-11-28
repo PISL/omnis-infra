@@ -1,0 +1,7 @@
+;  OSX only method to return the machine name from the preferences file
+Calculate lcGrep as "grep '<key>ComputerName</key>' /Library/Preferences/SystemConfiguration/preferences.plist -A 1 | grep '<string>'"
+Calculate lcScript as con('do shell script "',lcGrep,'"')
+Do $runapplescript(lcScript,lcResult) Returns #F
+Calculate lcResult as mid(lcResult,pos('>',lcResult)+1)     ;; remove tags...
+Calculate lcResult as mid(lcResult,1,pos('<',lcResult)-1)
+Quit method lcResult

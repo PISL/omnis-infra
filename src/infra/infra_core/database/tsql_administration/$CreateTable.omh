@@ -1,0 +1,64 @@
+Do lRow.$definefromsqlclass(pSchemaClass)
+
+Do $cinst.$ImmediateSession(loSession,loStatement) Returns lbImmediateSession
+If lbImmediateSession
+	Do $cinst.$SetSession(loSession,loStatement)
+Else If not(ibGoodConnectionToDb)
+	Quit method kFalse
+End If
+
+
+Breakpoint {not tested yet}
+Begin statement
+Sta: {create table [lRow.$servertablenames()]}
+Sta: {[lRow.$createnames()]}
+End statement
+Do $cinst.$executesqldirect() Returns lbOK
+
+;  find the primary key column(s)
+For lnColNo from 1 to lRow.$colcount step 1
+	Calculate lcColName as lRow.$cols.[lnColNo].$name
+	If $schemas.[pSchemaClass].$objs.[lcColName].$primarykey
+		Calculate lcPrimaryKeyCols as con(lcPrimaryKeyCols,pick(lcPrimaryKeyCols<>'','',', '),lcColName)
+	End If
+End For
+Calculate lcPrefix as mid(lcColName,1,pos('_',lcColName))
+
+If lbOK
+	If lcPrimaryKeyCols<>''
+		Begin statement
+		If pos(',',lcPrimaryKeyCols)>0
+			;  multiple columns in the primary key
+			Sta: {ALTER TABLE [lRow.$servertablenames()] ADD CONSTRAINT [low(con(lcPrefix,'unique'))] PRIMARY KEY ([low(lcPrimaryKeyCols)]);}
+			;  ALTER TABLE reference ADD CONSTRAINT ref_unique UNIQUE (ref_class, ref_value);     ;; this is syntax for a UNIQUE constraint, not a primary key
+		Else     ;; single column primary key
+			Sta: {ALTER TABLE [lRow.$servertablenames()] ADD CONSTRAINT [low(lcPrimaryKeyCols)] PRIMARY KEY ([low(lcPrimaryKeyCols)]);}
+		End If
+		End statement
+		Do $cinst.$executesqldirect() Returns lbOK
+	End If
+	
+	Begin statement
+	Sta: {ALTER TABLE [lRow.$servertablenames()] OWNER TO mostynrs;}
+	End statement
+	Do $cinst.$executesqldirect() Returns lbOK
+	;
+	Begin statement
+	Sta: {GRANT ALL ON TABLE [lRow.$servertablenames()] TO mostynrs;}
+	End statement
+	Do $cinst.$executesqldirect() Returns lbOK
+	;
+	Begin statement
+	Sta: {GRANT SELECT, UPDATE, INSERT ON TABLE [lRow.$servertablenames()] TO public;}
+	End statement
+	Do $cinst.$executesqldirect() Returns lbOK
+	;
+	Begin statement
+	Sta: {GRANT ALL ON TABLE [lRow.$servertablenames()] TO developer;}
+	End statement
+	Do $cinst.$executesqldirect() Returns lbOK
+End If
+
+If lbImmediateSession
+	Do $cinst.$SetSession(#NULL,#NULL,kTrue)
+End If

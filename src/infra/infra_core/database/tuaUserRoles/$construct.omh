@@ -1,0 +1,7 @@
+Calculate icPrefix as 'UR_'
+Calculate icPrimarykey as 'UR_SEQ'
+Calculate ibHasSequence as kTrue
+;  this is a link table with multiple foreign keys
+Calculate icForeignKey as 'UR_USR_REF'     ;; most dominant
+
+Do inherited

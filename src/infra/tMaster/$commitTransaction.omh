@@ -1,0 +1,16 @@
+If isclear(pobjSession)|isclear(pobjStatement)
+	Breakpoint {Oi!  Developer! You have not passed in the session and statement objects!}
+	Quit method kFalse
+End If
+
+Do $cinst.$sessionobject.$assign(pobjSession)
+Do $cinst.$statementobject.$assign(pobjStatement)
+
+Do $cinst.$executesqldirect(con('commit',pick(pcName<>'','',' '),pcName))
+
+Do pobjSession.$transactionmode.$assign(kSessionTranAutomatic)
+
+Do $cinst.$SetSession(#NULL,#NULL,kTrue)
+
+Calculate pobjSession as #NULL
+Calculate pobjStatement as #NULL

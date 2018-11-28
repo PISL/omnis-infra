@@ -1,0 +1,10 @@
+On evBefore     ;; Event Parameters - pRow ( Itemreference )
+	
+On evAfter     ;; Event Parameters - pClickedField, pClickedWindow, pMenuLine, pCommandNumber, pRow
+	If #MODIFIED
+		If ibInstantFetch
+			Do method FetchLog
+			Do $cinst.$behaviour()
+			Do $cinst.$redraw()
+		End If
+	End If

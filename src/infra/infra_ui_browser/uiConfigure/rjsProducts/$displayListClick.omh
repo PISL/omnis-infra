@@ -1,0 +1,15 @@
+Calculate icDisplayMessage as ''
+Calculate irCurrentRecord as ilDisplayRecords
+Do irInternalData.$assignrow(irCurrentRecord,kTrue)
+Do irReference.$clear()
+
+If icSearch<>''
+	;  when icSearch has been used ilDisplayList contains record independent from the drop lists
+	;  leave these untouched     ;; they are part of the SEARCH criteria, not record display information
+	;  Do ilSearch1.$search($ref.GO_SEQ=irCurrentRecord.PRD_GO_REF,1,0,0,0)
+	;  Do ilSearch2.$search($ref.EO_SEQ=irCurrentRecord.PRD_EO_REF,1,0,0,0)
+End If
+
+;  Calculate icJSPrompt as con('Please enter the number of standard units (',pick(irCurrentRecord.PRD_SIZE>0,1,irCurrentRecord.PRD_SIZE),' ',irCurrentRecord.PRD_UOS_CODE,') for the batch.')
+
+Do $cinst.$behaviour()

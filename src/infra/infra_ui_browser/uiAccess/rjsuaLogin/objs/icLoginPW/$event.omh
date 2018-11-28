@@ -1,0 +1,6 @@
+On evAfter
+	Do $cinst.$behaviour()
+	Do $cinst.$setcurfield('pbOK')
+	
+On evKeyPress
+	Do $cinst.$behaviour()

@@ -1,0 +1,6 @@
+On evClick
+	Calculate ilDataCols.include as not(ilDataCols.include)
+	Calculate $cinst.$objs.Grid_ilDataCols.$objs.pbInclude.[ilDataCols.$line].$iconid as pick(ilDataCols.[ilDataCols.$line].include,1758,1750)
+	
+	;  Calculate ibExistingTemplate as kFalse
+	;  Calculate $cinst.$objs.ilTemplateMenu.$text as ilTemplateMenu.1.colText

@@ -1,0 +1,50 @@
+If ilProducts.$line
+	Calculate ilTaxRates.$line as 0
+	If ilProducts.PID_TAX_BAND<>''
+		Do ilTaxRates.$search($ref.RFO_VALUE=ilProducts.PID_TAX_BAND,1,0,0,0) Returns lbFound
+	End If
+	
+	Calculate irCurrentDetail.PRD_INT_PRODCODE as ilProducts.PRD_INT_PRODCODE
+	Calculate irCurrentDetail.PRD_BRAND as ilProducts.PRD_BRAND
+	Calculate irCurrentDetail.PRD_NAME as ilProducts.PRD_NAME
+	Calculate irCurrentDetail.PRD_DESC as ilProducts.PRD_DESC
+	Calculate irCurrentDetail.PRD_SIZE as ilProducts.PRD_SIZE
+	Calculate irCurrentDetail.PRD_UOS_CODE as ilProducts.PRD_UOS_CODE
+	Calculate irCurrentDetail.PRD_UNIT_DIVISOR as ilProducts.PRD_UNIT_DIVISOR
+	Calculate irCurrentDetail.PRD_ECOCOST_UOS_CODE as ilProducts.PRD_ECOCOST_UOS_CODE
+	Calculate irCurrentDetail.PRD_DISCONTINUED as ilProducts.PRD_DISCONTINUED
+	Calculate irCurrentDetail.PID_UNIT_PRICE as ilProducts.PID_UNIT_PRICE
+	Calculate irCurrentDetail.PID_TAX_BAND as ilProducts.PID_TAX_BAND
+	
+	Calculate irCurrentDetail.FOD_PRD_REF as ilProducts.PRD_SEQ
+	If ilProducts.PRD_SIZE>0
+		Calculate irCurrentDetail.FOD_DESC as con(ilProducts.PRD_NAME,' ',ilProducts.PRD_SIZE,ilProducts.PRD_UOS_CODE)
+	Else
+		Calculate irCurrentDetail.FOD_DESC as con(ilProducts.PRD_NAME,' ',ilProducts.PRD_DESC)
+	End If
+	Calculate irCurrentDetail.FOD_DESC as trim(irCurrentDetail.FOD_DESC)
+	;  Calculate irCurrentDetail.FOD_DESC as ilProducts.PRD_DESC
+	Calculate irCurrentDetail.FOD_UNIT_PRICE as ilProducts.PID_UNIT_PRICE
+	If isnull(irCurrentDetail.FOD_UNIT_PRICE)
+		Calculate irCurrentDetail.FOD_UNIT_PRICE as 0
+	End If
+	Calculate irCurrentDetail.FOD_UNIT_TAX as 0
+	If ilProducts.PID_TAX_BAND<>''
+		Calculate irCurrentDetail.FOD_UNIT_TAX as irCurrentDetail.FOD_UNIT_PRICE*ilTaxRates.RFO_NUMBER/100
+	End If
+	
+	Do irCurrentDetail.$calculatedValues()
+	
+Else
+	Calculate irCurrentDetail.FOD_PRD_REF as #NULL
+	Calculate irCurrentDetail.PRD_INT_PRODCODE as #NULL
+	Calculate irCurrentDetail.FOD_DESC as #NULL
+	Calculate irCurrentDetail.FOD_UNIT_PRICE as 0
+	Calculate irCurrentDetail.FOD_UNIT_TAX as 0
+	
+	Calculate irCurrentDetail.Price as 0
+	Calculate irCurrentDetail.Tax as 0
+	Calculate irCurrentDetail.Total as 0
+End If
+
+Calculate $cinst.$objs.PagedPane.$objs.PRD_INT_PRODCODE.$errortext as ''

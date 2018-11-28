@@ -1,0 +1,53 @@
+;  Return true if this form has handled the shortcut key
+
+;  see if the key received is in our translation list
+;  JavaScript: transObj = JSON.parse(__form.get("icKeyTranslations"))
+;  JavaScript: for (x in transObj) {
+;  JavaScript: if (transObj[x].indexOf(pKey) > -1) {     ;; indexOf Returnｓ -1 if not found
+;  JavaScript: pKey = x;
+;  JavaScript: break;
+;  JavaScript: }
+;  JavaScript: }
+
+Do ilMenuCommands.$search($ref.ident=pIdent,1,0,0,0) Returns lbFound
+If lbFound
+	Switch pIdent
+		Case 1101
+			If irUserRights.canInsert&icMode=''     ;; from $behaviour
+				Do $cinst.$insertCR()     ;; because of the complexity of the various tabs, handle validity of call in this method
+			End If
+			Quit method kTrue     ;; tell the parent that we've dealt with it
+			
+		Case 1102
+			Do $cinst.$editCR()     ;; because of the complexity of the various tabs, handle validity of call in this method
+			Quit method kTrue     ;; tell the parent that we've dealt with it
+			
+		Case 1103
+			Do $cinst.$deleteCR()     ;; because of the complexity of the various tabs, handle validity of call in this method
+			Quit method kTrue     ;; tell the parent that we've dealt with it
+			
+		Case 1201     ;; Clone
+			Do method cloneInvoice
+			Quit method kTrue     ;; tell the parent that we've dealt with it
+			
+		Case 1202     ;; Print
+			Do method PrintInvoice
+			Quit method kTrue
+			
+		Case 1203     ;; Membership (conference only)
+			Do method recordMembership
+			Quit method kTrue
+			
+		Case 1204     ;; Submit  (MEC only)
+			;  Calculate icDisplayMessage as ''
+			;  Do $cinst.$clientNoYesMsg($cell(clLabels,'objName','msg_submit_fininv','label'),'','$submitEcoInvoice','$cancelSubmit')     ;; pMessage, pTitle, pYescallback, pNoCallback
+			Do method submitEcoInvoice
+			Quit method kTrue
+			
+		Default
+			Quit method kFalse     ;; pass it back to the parent
+			
+	End Switch
+Else
+	Quit method kFalse     ;; pass it back to the parent
+End If

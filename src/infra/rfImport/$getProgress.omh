@@ -1,0 +1,2 @@
+Do redirect irefParent Returns lnValue
+Quit method lnValue     ;; this get passed to $getProgress_return

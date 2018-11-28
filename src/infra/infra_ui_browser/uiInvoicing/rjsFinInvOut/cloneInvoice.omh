@@ -1,0 +1,14 @@
+Calculate inCurrentTab as cnTabHeader
+Calculate $cinst.$objs.TabControl_FOH.$currenttab as 1
+Calculate $cinst.$objs.PagedPane.$currentpage as cnTabHeader
+
+Calculate icDisplayMessage as ''
+
+Do method setStatusChoices (kTrue)     ;; pbIsNew=kTrue
+
+Calculate icMode as 'I'     ;; clone new
+Do method prepareClone (kFalse)     ;; kFalse= do not create chain record
+
+Do irCurrentRecord.$NextInvNo(trGroupOrg.GO_NAME_SHORT,kFalse)     ;; fetches the next sequence into FOH_INV_NO without updating the db; done later during the $save in case the user cancels or another user creates an invoice in the meantime
+
+Calculate ilDisplayRecords.$line as 0

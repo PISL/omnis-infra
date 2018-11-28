@@ -1,0 +1,12 @@
+On evClick     ;; Event Parameters - pRow( Itemreference )
+	Do ilLanguagesAndCountries.$add()
+	Calculate ilLanguagesAndCountries.$line as ilLanguagesAndCountries.$linecount
+	
+	Calculate ilLanguagesAndCountries.LC_LGREF as ilLanguages.LG_SEQ
+	Calculate ilLanguagesAndCountries.LC_CO_REF_ISO3 as ilCountries.CO_ISO3
+	Calculate ilLanguagesAndCountries.LC_LGREF_ISO2 as ilLanguages.LG_ISO6
+	Calculate ilLanguagesAndCountries.LC_OFFICIAL as 1
+	Calculate ilLanguagesAndCountries.LC_MAINLANG as 1
+	
+	Do $cinst.$behaviour()
+	Do $cinst.$redraw()

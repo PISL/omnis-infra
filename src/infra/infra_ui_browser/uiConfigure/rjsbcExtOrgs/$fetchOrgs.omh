@@ -1,0 +1,23 @@
+If icSUPPorCUST='SUPPLIER'
+	Do ilDisplayRecords.$FetchOurSuppliers()
+Else
+	Do ilDisplayRecords.$FetchOurCustomers()
+End If
+
+
+If ilDisplayRecords.$linecount=0
+	If irUserRights.allOrgs
+		Do ilDisplayRecords.$fetch_all()
+		Calculate icDisplayMessage as 'with privileges to select all Organisations, all records have been fetched'
+	End If
+End If
+
+Do ilDisplayRecords.$sort(upp($ref.EO_NAME),0)
+
+If irCurrentRecord.EO_SEQ>0
+	Do ilDisplayRecords.$search($ref.EO_SEQ=irCurrentRecord.EO_SEQ,1,0,0,0)
+Else
+	Calculate ilDisplayRecords.$line as 1
+End If
+
+Do $cinst.$displayListClick()

@@ -1,0 +1,3 @@
+Do $DefineList(lrTemp,pcTableClass)
+Do lrTemp.$countActivity(#D-7,#D,pcExtraString,pcJoinTable) Returns lrCount
+Do ilActivity.$add(pcDesc,lrCount.countInsertTotal,lrCount.countUpdateTotal,lrCount.countInsert1,lrCount.countUpdate1,lrCount.countInsert2,lrCount.countUpdate2,lrCount.countInsert3,lrCount.countUpdate3,lrCount.countInsert4,lrCount.countUpdate4,lrCount.countInsert5,lrCount.countUpdate5,lrCount.countInsert6,lrCount.countUpdate6,lrCount.countInsert7,lrCount.countUpdate7,lrCount.countInsert8,lrCount.countUpdate8)

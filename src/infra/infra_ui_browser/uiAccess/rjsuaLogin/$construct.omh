@@ -1,0 +1,19 @@
+;  Enter your initialization code here
+Do inherited      ;; populates logo
+
+Do method TranslateText
+
+Do $cwind.$GetVar(nam(ilAuthorisedForms)) Returns ilAuthorisedForms
+
+Do $cinst.$hideObjsForLogin()     ;; logo and Exit button visible
+
+Calculate inLoginFailed as 0
+Do $cinst.$setTimeout()
+
+Calculate $cinst.$objs.app_navigation_area.$objs.app_navigation_bar.$visible as binlength(tConstants.topBanner)>0
+
+Calculate $cinst.$objs.PagedPane.$objs.ipictTopLeft.$visible as binlength(tConstants.topLeft)>0
+Calculate $cinst.$objs.PagedPane.$objs.ipictTopRight.$visible as binlength(tConstants.topRight)>0
+Calculate $cinst.$objs.PagedPane.$objs.Logo.$visible as binlength(tConstants.companyLogo)>0
+
+Do $cinst.$behaviour()

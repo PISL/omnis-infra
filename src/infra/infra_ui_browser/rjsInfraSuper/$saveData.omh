@@ -1,0 +1,40 @@
+Do irCurrentRecord.$validation() Returns lbProceed
+If not(lbProceed)
+	Calculate $cinst.icDisplayMessage as irCurrentRecord.icValidationMessage
+Else
+	If pos('I',icMode)
+		Do irCurrentRecord.$insert() Returns lbOK
+	Else If pos('E',icMode)
+		If irOriginalRecord.icPrimaryKey=irCurrentRecord.icPrimaryKey
+			;  the original record and current record are referring to same table
+			If irOriginalRecord.[irOriginalRecord.icPrimaryKey]=irCurrentRecord.[irCurrentRecord.icPrimaryKey]
+				;  the original record and current record are referring to same record
+				Do toStrings.$HasRowBeenModified(irOriginalRecord,irCurrentRecord,kFalse,,,kFalse,pcOnlyCheckThisPrefix) Returns lbUpdate
+			End If
+		End If
+		If lbUpdate
+			Do irCurrentRecord.$update() Returns lbOK
+		End If
+	End If
+	If lbOK
+		Do irCurrentRecord.$cols.$findname('DisplayName') Returns liColRef
+		If liColRef
+			Do irCurrentRecord.$DisplayName()
+		End If
+		
+		If pos('I',icMode)
+			Calculate icDisplayMessage as $cell($cinst.clLabels,'objName','REC_INSERTED','label')     ;; record inserted
+		Else
+			Calculate icDisplayMessage as $cell($cinst.clLabels,'objName','REC_UPDATED','label')     ;; record updated
+		End If
+		Calculate irOriginalRecord as irCurrentRecord
+		Calculate icMode as ''
+	Else If not(lbUpdate)
+		Calculate icDisplayMessage as $cell($cinst.clLabels,'objName','REC_NOCHANGE','label')
+		Quit method kTrue
+	Else
+		Calculate $cinst.icDisplayMessage as irCurrentRecord.irErrorSQL.NativeErrorText
+	End If
+End If
+
+Quit method lbOK

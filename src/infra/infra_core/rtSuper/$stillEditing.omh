@@ -1,0 +1,2 @@
+;  this method will tell rjsMenuApp.$behaviour if there is still an "enter data" on the stack
+Quit method ilEditStack.$linecount>0

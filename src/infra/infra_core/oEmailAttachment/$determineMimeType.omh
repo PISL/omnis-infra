@@ -1,0 +1,5 @@
+Do iMIMEtypeList.$search($ref.suffix=low(pcExtn),1,0,0,0) Returns lbFound
+If not(lbFound)
+	Do iMIMEtypeList.$search($ref.suffix='application/octet-stream',1,0,0,0) Returns lbFound
+End If
+Quit method iMIMEtypeList.type

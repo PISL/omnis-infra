@@ -1,0 +1,13 @@
+Calculate $cinst.$objs.ilLanguages.$enterable as (icMode='EL')
+Calculate $cinst.$objs.ilLanguagesAndCountries.$enterable as (icMode='ECL')
+
+
+Calculate $cinst.$objs.pbSaveLanguages.$enabled as (icMode='EL')
+Calculate $cinst.$objs.pbSaveLangAndCountry.$enabled as (icMode='ECL')
+Calculate $cinst.$objs.pbEditCL.$enabled as (icMode='')
+Calculate $cinst.$objs.pbEditLang.$enabled as (icMode='')
+Calculate $cinst.$objs.pbNoLineCountry.$enabled as (icMode='')
+Calculate $cinst.$objs.pbNoLineLang.$enabled as (icMode='')
+
+;  Calculate $cinst.$objs.inLangMainUnofficial.$visible as ilSpecialSelections.code='FILTERED'
+Calculate $cinst.$objs.inSingleMulti.$visible as ilSpecialSelections.code='FILTERED'

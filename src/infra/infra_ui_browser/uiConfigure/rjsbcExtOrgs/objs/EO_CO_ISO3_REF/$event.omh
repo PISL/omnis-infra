@@ -1,0 +1,2 @@
+On evClick
+	Calculate irCurrentRecord.EO_CO_ISO3_REF as ilCountries.CO_ISO3

@@ -1,0 +1,24 @@
+On evBefore
+	
+On evAfter
+	If irCurrentDetail.FOD_DESC<>''
+		;  irCurrentRecord.FOH_CURRENCY
+		Do ilProducts.$searchstring('COUNT',irCurrentDetail.FOD_DESC) Returns lnCount
+		If lnCount<100
+			Do ilProducts.$searchstring('RESULT',irCurrentDetail.FOD_DESC) Returns lnCount
+			While $Loop(ilProducts)
+				;  filter out currency mismatch
+				If pos(irCurrentRecord.FOH_CURRENCY,ilProducts.PRD_BRAND)=0
+					Calculate ilProducts.[ilProducts.$line].$selected as kTrue
+				Else
+					Do ilProducts.$displayName()
+				End If
+			End While
+			Do ilProducts.$remove(kListDeleteSelected)
+		Else
+			Do toStrings.$StringTableEntry('MSG_TOOMANYPROD',lcMessage,'Too many products using')
+			Calculate icDisplayMessage as con(lcMessage,' "',irCurrentDetail.FOD_DESC,'".  ')
+			Do toStrings.$StringTableEntry('MSG_PROVIDEMORE',lcMessage,'Provide more characters to reduce result set.')
+			Calculate icDisplayMessage as con(icDisplayMessage,lcMessage)
+		End If
+	End If

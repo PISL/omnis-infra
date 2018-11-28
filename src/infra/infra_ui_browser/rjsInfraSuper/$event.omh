@@ -1,0 +1,4 @@
+;  overload this method for form specific changes based on breakpoints
+;  evLayoutChanged MUST be set in the subclass $events
+On evLayoutChanged
+	Calculate inBreakpoint as pBreakpoint

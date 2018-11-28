@@ -1,0 +1,29 @@
+On evBefore
+	
+On evAfter
+	
+On evKeyPress
+	;  shift-tab
+	;  If pKeyList.[pKeyList.$linecount].systemKey=27&pKeyList.[pKeyList.$linecount].modifiers=kJSModShift
+	;  Calculate $cinst.$objs.TabControl_PRD.$currenttab as 1
+	;  Calculate $cinst.$objs.PagedPane.$currentpage as 1
+	;  End If
+	;  If pKeyList.$linecount>=3
+	
+	;  this control is reacting to keypress even if its disabled
+	If icMode=''
+		Calculate lnPosSearchDelimiter as pos(':',icSearch)
+		If lnPosSearchDelimiter=2
+			Calculate lcPrefix as mid(icSearch,1,pos(':',icSearch)-1)
+			Calculate lcSearch as mid(icSearch,pos(':',icSearch)-1,99)
+			If len(lcSearch)>inMinSearchString
+				Do $cinst.$stringSearch()
+			End If
+		Else
+			If len(icSearch)>inMinSearchString
+				Do $cinst.$stringSearch()
+			Else If len(icSearch)=0
+				Do ilDisplayRecords.$clear()
+			End If
+		End If
+	End If

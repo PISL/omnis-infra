@@ -1,0 +1,57 @@
+;  Enter your initialization code here
+Do $cinst.$getBrowser()     ;; populate icPlatform used in TranslateText to decide on tab shortcuts
+Set reference irefContainer to $cinst.$container
+Do inherited
+
+;  Enter your initialization code here
+;  TRACKER is a library that supports different application contexts     ;; TRACKER internally, ASinGB and TiK (although TiK is no longer operational)
+If upp(trGroupOrg.GO_NAME_SHORT)='ASINGB'
+	Do [tcCurrentLibrary].$objects.oReportingASinGB.$newref() Returns orefReporting
+Else If upp(trGroupOrg.GO_NAME_SHORT)='TIK'
+	Do [tcCurrentLibrary].$objects.oReportingTiK.$newref() Returns orefReporting
+Else
+	Do [tcCurrentLibrary].$objects.oReporting.$newref() Returns orefReporting
+End If
+Do orefReporting.$setTask($ctask.$ref)
+Do orefReporting.$printAsPDF()
+
+Do orefReporting.$searchLists(ilSearch1,ilSearch2)
+
+Do method fetchDisplayList
+Calculate ilDisplayRecords.$line as 1
+Do method $displayListClick
+Calculate irCurrentRecord as ilDisplayRecords
+
+Do toValues.$initOrg('BEHAVIOUR','RFORM_PDF') Returns irPrintToPDFok
+;  Do $DefineList(ilDelegates,'tDelegates')
+;  Do ilDelegates.$fetchForConference(ilSearch1.CF_SEQ)
+
+Do method TranslateText     ;; call this here to get the translations before setting superclass labels/values
+
+Do $cinst.$superSearchList1($cell(clLabels,'objName','sel_conference','label'),'DisplayName')
+Do ilSortOptions.$cols.$add('sortCode',kCharacter,kSimplechar,20)
+Do ilSortOptions.$cols.$add('sortName',kCharacter,kSimplechar,100)
+
+Calculate icFormHeading as con($cell(clLabels,'objName','DG_Heading','label'),' ',trGroupOrg.GO_NAME_SHORT)
+Calculate icFormIntro as $cell(clLabels,'objName','DG_Intro','label')
+
+Do method UserPermissions
+
+Do ilFilterOptions.$cols.$add('code',kCharacter,kSimplechar,15)
+Do ilFilterOptions.$cols.$add('desc',kCharacter,kSimplechar,100)
+
+Calculate inCurrentTab as 1
+Calculate $cinst.$objs.TabControl_REPORTS.$currenttab as inCurrentTab
+Calculate $cinst.$objs.PagedPane_REPORTS.$currentpage as inCurrentTab
+
+Do $cinst.$superText(kFalse)
+Do $cinst.$superFoundList($cell(clLabels,'objName','disp_values','label'),'reportName')
+
+;  Calculate iNewPDFWindow as kTrue
+Calculate inPrintDestination as 1     ;; default is to new window
+
+Do $cinst.$container().$initToolsMenu('') Returns ilMenuCommands     ;; no defaults
+Do ilMenuCommands.$add('FACT_PRINT',1201)
+Do $cinst.$container().$setupToolsMenu('Reports',ilMenuCommands)
+
+Do $cinst.$behaviour()

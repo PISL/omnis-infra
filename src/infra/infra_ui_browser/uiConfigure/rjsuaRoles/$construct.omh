@@ -1,0 +1,63 @@
+Do $cinst.$getBrowser()     ;; populate icPlatform used in TranslateText to decide on tab shortcuts
+Set reference $cinst.irefContainer to $cinst.$container
+Do inherited
+Do method setTabColours
+
+Do $DefineList(ilDisplayRecords,'infra.tuaRoles')
+Calculate irCurrentRecord as ilDisplayRecords
+;  Do ilDisplayRecords.$fetch_all()
+;  If ilDisplayRecords.irErrorSQL.NativeErrorText<>''
+;  Calculate icDisplayMessage as ilDisplayRecords.irErrorSQL.NativeErrorText
+;  End If
+;  Do ilDisplayRecords.$sort($ref.ROL_NAME,0)
+
+Do ilDisplayRecords.$cols.$findname('ROL_NAME') Returns liColRef
+Calculate $cinst.$objs.ilDisplayRecords.$listcolumn as liColRef.$ident
+Calculate lnDisplayListCol as liColRef.$ident
+
+Do $DefineList(ilRolePermissions,'infra.tuaRolePermissions')
+Do ilRolePermissions.$addSchemaColumns('infra.suaPermissions')
+Do ilRolePermissions.$cols.$findname('PER_DESC_EN') Returns liColRef
+Calculate $cinst.$objs.ilRolePermissions.$listcolumn as liColRef.$ident
+
+Do $DefineList(ilRoleUsers,'infra.tuaUserRoles')
+Do ilRoleUsers.$addSchemaColumns('infra.suaUsers')
+Do ilRoleUsers.$cols.$findname('USR_NAME') Returns liColRef
+Calculate $cinst.$objs.ilRoleUsers.$listcolumn as liColRef.$ident
+
+;  Do ilDisplayRecords.$cols.$findname('DisplayName') Returns liColRef
+;  Calculate $cinst.$objs.ilDisplayRecords.$listcolumn as liColRef.$ident
+
+Do method TranslateText     ;; call this here to get the translations before setting superclass labels/values
+
+Calculate icFormHeading as $cell(clLabels,'objName','ROLES_Heading','label')
+Calculate icFormIntro as $cell(clLabels,'objName','ROLES_Intro','label')
+
+Do method UserPermissions
+
+Do $DefineList(ilPermissions,'infra.tuaPermissions')
+Do ilPermissions.$fetch_all()
+Do ilPermissions.$sort($ref.PER_LABEL,0)
+
+Do $DefineList(ilUsers,'infra.tuaUsers')
+If irUserRights.allUsers
+	Do ilUsers.$fetch_all()
+Else
+	Do ilUsers.$fetchOurUsers()
+End If
+Do ilUsers.$sort($ref.UA_NAME,0)
+
+Do method FetchRecords
+
+Do ilPermissions.$cols.$findname('PER_DESC_EN') Returns liColRef
+Calculate $cinst.$objs.ilChoiceOfPermissions.$listcolumn as liColRef.$ident
+Do ilUsers.$cols.$findname('USR_NAME') Returns liColRef
+Calculate $cinst.$objs.ilChoiceOfUsers.$listcolumn as liColRef.$ident
+
+Do $getVar(nam(irKeyPress)) Returns irKeyPress     ;; get key press values for insert/edit/delete
+Do $cinst.$superObjects($cell(clLabels,'objName','disp_roles','label'),lnDisplayListCol,'','',,kTrue,$cell(clLabels,'objName','text_search_LBL','label'))
+
+Do $cinst.$container().$initToolsMenu() Returns ilMenuCommands
+Do $cinst.$container().$setupToolsMenu('uaRole',ilMenuCommands)
+
+Do $cinst.$behaviour()

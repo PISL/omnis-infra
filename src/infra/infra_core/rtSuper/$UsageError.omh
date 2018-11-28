@@ -1,0 +1,6 @@
+Do $cinst.$EnvironmentInfoToTextBlock()
+Get text block lcDiagnosticInfo
+
+Do $SendEmail(tConstants.EmailAddressWebmaster,con(tcCurrentLibrary,' Web User Error: ',pSubjectSuffix),con(pMessage,kCr,kCr,lcDiagnosticInfo),#NULL,#NULL,#NULL,#NULL)
+
+Do $root.$itasks.[tcCurrentLibrary].$LogWebError(con(tcCurrentLibrary,' Web User Error'),con(pMessage,kCr,kCr,lcDiagnosticInfo)) Returns tConstants

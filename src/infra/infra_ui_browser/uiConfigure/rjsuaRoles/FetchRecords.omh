@@ -1,0 +1,13 @@
+If len(icSearch)>0
+	Do ilDisplayRecords.$fetchOnString(icSearch)
+Else
+	Do ilDisplayRecords.$fetch_all()
+End If
+
+If ilDisplayRecords.irErrorSQL.NativeErrorText<>''
+	Calculate icDisplayMessage as ilDisplayRecords.irErrorSQL.NativeErrorText
+End If
+
+Do ilDisplayRecords.$sort($ref.ROL_NAME,0)
+
+Calculate inSearchCount as ilDisplayRecords.$linecount

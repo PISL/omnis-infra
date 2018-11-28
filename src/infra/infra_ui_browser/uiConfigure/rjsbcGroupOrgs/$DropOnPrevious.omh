@@ -1,0 +1,17 @@
+Calculate lrUpdate as irCurrentStructure
+Do lrUpdate.$assignrow(irDragValue)
+Calculate lrUpdate.GS_SUPERIOR_GS_REF as lrParentOfParent.GS_SEQ
+Do lrUpdate.$update() Returns lbOK
+If not(lbOK)
+	OK message  {failed to update record}
+	Quit event handler (Discard event)
+End If
+
+;  now update user interface
+Do ilNow.$remove(ilNow.$line)
+Calculate ilNow.$line as 0
+Do ilPrevious.$add()
+Calculate ilPrevious.[ilPrevious.$linecount] as lrUpdate
+Do ilPrevious.$sort($ref.GS_ORDER,0,$ref.GS_SEQ,0)
+
+Do $cinst.$behaviour()

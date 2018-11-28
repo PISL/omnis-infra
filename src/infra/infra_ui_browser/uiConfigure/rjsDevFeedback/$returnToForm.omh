@@ -1,0 +1,8 @@
+
+;  as trCurrentForm should be pointing to original form
+;  Breakpoint {not tested}
+If len(trCurrentForm.class)
+	Do irefContainer.$navMenuClick(trCurrentForm.class,-1)     ;; second parameter tells $navMenuClick to use the previous Ident
+Else
+	Do toStrings.$StringTableEntry('MSG_CANCWITHOUTRETURN',icDisplayMessage,'cancelled without a form to return to')
+End If

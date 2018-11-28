@@ -1,0 +1,3 @@
+;  callback from $clientNoYesMsg for flag false
+
+Do toStrings.$StringTableEntry('MSG_SUBMITCANCELLED',icDisplayMessage,'Submission cancelled')

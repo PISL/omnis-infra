@@ -1,0 +1,20 @@
+If iList.$line=0
+	OK message  {please select a line before clicking ok}
+	Quit event handler (Discard event)
+End If
+
+If icDoMethodOnOK<>''
+	;  make local copies of key variables because we are going to close window before executing the callback methods
+	Set reference lrefCallingWindow to irefCallingWindow
+	Calculate lcCallbackMethod as icDoMethodOnOK
+	Calculate llList as iList
+	
+	Close window instance $cinst
+	If lrefCallingWindow
+		Do lrefCallingWindow.[lcCallbackMethod](llList)
+	Else
+		Do [lcCallbackMethod](llList)
+	End If
+Else
+	Close window instance $cinst
+End If

@@ -1,0 +1,23 @@
+Do llPrivsUsedInThisForm.$cols.$add('permission',kCharacter,kSimplechar,100)
+Do llPrivsUsedInThisForm.$cols.$add('colName',kCharacter,kSimplechar,100)
+
+Do llPrivsUsedInThisForm.$add('rol_insert','canInsert')
+Do llPrivsUsedInThisForm.$add('rol_update','canEdit')
+Do llPrivsUsedInThisForm.$add('rol_delete','canDelete')
+
+Do llPrivsUsedInThisForm.$add('ur_insert','canAddUserRole')
+Do llPrivsUsedInThisForm.$add('ur_delete','canDeleteUserRole')
+
+Do llPrivsUsedInThisForm.$add('rp_insert','canAddRolePermission')
+Do llPrivsUsedInThisForm.$add('rp_delete','canDeleteRolePermission')
+
+Do $cinst.$setPermissions(llPrivsUsedInThisForm)     ;; irUserRights
+
+Do $cinst.$setControlEvent(99)     ;; reset
+Do $cinst.$setControlEvent(irUserRights.canAddUserRole,nam(ilChoiceOfUsers),evDrag,nam(ilRoleUsers),evDrop)
+Do $cinst.$setControlEvent(irUserRights.canDeleteUserRole,nam(ilRoleUsers),evDrag,nam(ilChoiceOfUsers),evDrop)
+Do $cinst.$setControlEvent(irUserRights.canAddRolePermission,nam(ilChoiceOfPermissions),evDrag,nam(ilRolePermissions),evDrop)
+Do $cinst.$setControlEvent(irUserRights.canDeleteRolePermission,nam(ilRolePermissions),evDrag,nam(ilChoiceOfPermissions),evDrop)
+Do $cinst.$setControlEvent(100)     ;; apply
+
+;  Calculate $cinst.$objs.ROL_SU.$visible as trCurrUser.USR_SU

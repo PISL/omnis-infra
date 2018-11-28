@@ -1,0 +1,25 @@
+
+
+;  #############################
+Quit method kTrue     ;; ### GRS 10/10/14  put this in during TM integration as we are not yet running the PCODES lib
+;  ############################
+
+
+Do $DefineList(lrPostcodeVerify,con('PCODES.t',pCountry))
+If oSessionPCODES.$state=kSessionStateLoggedOn
+	;  already set
+Else
+	Do $DynamicSession(oSessionPCODES,oStatementPCODES,'PCODES') Returns lbProceed
+End If
+If oSessionPCODES.$state=kSessionStateLoggedOn
+	Do lrPostcodeVerify.$SetSession(oSessionPCODES,oStatementPCODES)
+	
+	Do lrPostcodeVerify.$fetch_pk(pPostcode)     ;; lrPostcodeVerify
+	If lrPostcodeVerify.[lrPostcodeVerify.icPrimarykey]=pPostcode
+		Quit method kTrue
+	Else
+		Quit method kFalse
+	End If
+Else
+	Quit method kTrue     ;; return ok if there is a failure in connecting to postcode db
+End If

@@ -1,0 +1,4 @@
+Calculate icPrefix as 'LG_'
+Calculate icPrimarykey as 'LG_SEQ'
+Calculate ibHasSequence as kTrue
+Do inherited

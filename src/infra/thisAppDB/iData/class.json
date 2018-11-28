@@ -1,0 +1,20 @@
+{
+	"classtype": "kSchema",
+	"internalversion": 2,
+	"nextident": 32002,
+	"properties": {
+		"componenticon": 0,
+		"componenttype": "kCompStoreHidden",
+		"createdate": "2017-11-16 15:53:49",
+		"createinstancewhensubtype": false,
+		"desc": "WEBSERVICE schema for encrypted data",
+		"editor": "",
+		"editordata": "",
+		"external": true,
+		"moddate": "2015-12-02 10:51:05",
+		"servertablename": "",
+		"showascheckedout": false,
+		"userinfo": "",
+		"version": "2"
+	}
+}

@@ -1,0 +1,20 @@
+{
+	"classtype": "kSchema",
+	"internalversion": 5,
+	"nextident": 32037,
+	"properties": {
+		"componenticon": 0,
+		"componenttype": "kCompStoreHidden",
+		"createdate": "2017-10-27 11:20:27",
+		"createinstancewhensubtype": true,
+		"desc": "",
+		"editor": "",
+		"editordata": "",
+		"external": false,
+		"moddate": "2018-05-21 15:08:18",
+		"servertablename": "infra.importtemplate",
+		"showascheckedout": false,
+		"userinfo": "",
+		"version": "2"
+	}
+}

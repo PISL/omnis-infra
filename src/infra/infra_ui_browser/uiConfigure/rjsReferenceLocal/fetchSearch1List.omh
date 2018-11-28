@@ -1,0 +1,8 @@
+Do ilDisplayRecords.$ClassList() Returns ilSearch1
+If len(pcSelect)
+	Do ilSearch1.$search($ref.RFL_CLASS=pcSelect,1,0,0,0)
+Else
+	Calculate ilSearch1.$line as 1
+End If
+
+Do method displaySearchCount

@@ -1,0 +1,28 @@
+{
+	"ident": 1002,
+	"order": 2,
+	"objtype": "kSection",
+	"sectiontype": "kEndreport",
+	"properties": {
+		"backcolor": "RGB(0,0,0)",
+		"backpattern": 15,
+		"bordercolor": "RGB(0,0,0)",
+		"bottommargin": 0.0,
+		"effect": "kBorderNone",
+		"firstpage": false,
+		"forecolor": "RGB(0,0,0)",
+		"leftmargin": 0.0,
+		"lineno": 4,
+		"linestyle": 1,
+		"pagemode": "kNobreak",
+		"pagespacing": 0.0,
+		"printheight": 0.0,
+		"printif": "",
+		"rightmargin": 0.0,
+		"startmode": "kFollow",
+		"startspacing": 0.0,
+		"topmargin": 0.0,
+		"userecspacing": false,
+		"userinfo": ""
+	}
+}

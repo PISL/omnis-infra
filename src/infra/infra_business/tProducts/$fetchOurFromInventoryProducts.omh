@@ -1,0 +1,88 @@
+If tlDatabases.DAM='WebService'
+	If pbReturnCount
+		Do ioWeb.$callFetch(lnCount,irErrorSQL,row($cinst.$class().$name,$cmethod().$name,row(pcSearchString,pcExtraCols,pbReturnCount),lnCount.$type,0,ilRESTextensions))
+		If ioWeb.irResponse.httpStatusCode=200
+			;  the result should be in this object     ;; however there may be a SQL error
+			If irErrorSQL.NativeErrorText<>''
+				Quit method kFalse
+			End If
+			Quit method lnCount
+		Else
+			Quit method kFalse
+		End If
+	Else
+		Do ioWeb.$callFetch($cinst,irErrorSQL,row($cinst.$class().$name,$cmethod().$name,row(pcSearchString,pcExtraCols,pbReturnCount),$cinst.$type,0,ilRESTextensions))
+		If ioWeb.irResponse.httpStatusCode=200
+			;  the result should be in this object     ;; however there may be a SQL error
+			If irErrorSQL.NativeErrorText<>''
+				Quit method kFalse
+			End If
+			Quit method kTrue
+		Else
+			Quit method kFalse
+		End If
+	End If
+End If
+
+If $ctask.trGroupOrg.GO_SEQ>0
+	;  proceed
+Else
+	Quit method kFalse
+End If
+
+Do $cinst.$ImmediateSession(loSession,loStatement) Returns lbImmediateSession
+If lbImmediateSession
+	Do $cinst.$SetSession(loSession,loStatement)
+Else If not(ibGoodConnectionToDb)
+	Quit method kFalse
+End If
+
+If pcExtraCols<>''&left(pcExtraCols,1)<>','
+	Calculate pcExtraCols as con(',',pcExtraCols)
+End If
+
+;  out of Products
+;  a.  purchased     ;; they have a supplier number
+;       ;; PRD_SUPP_CODE will have a value
+;  b.  by-product     ;; is a product we make but not for sale - it is for input into another process
+;       ;; PRD_SUPP_CODE will be null
+;  c.  product     ;; something that we sell
+;  from inventory includes a. and b.
+
+Begin statement
+If pbReturnCount
+	Sta: {select count(*) from (}
+End If
+;  pcExtraCols can contain a comma separated list of PID column names
+Sta: {select [$cinst.$selectnames()] [pcExtraCols]}
+Sta: {from [$cinst.$servertablenames]}
+Sta: {left outer join [lrInternalData.$servertablenames] on ( PRD_SEQ = PID_PRD_REF )}
+Sta: {where  PRD_GO_REF = @[$ctask.trGroupOrg.GO_SEQ]}
+If tcCurrentLibrary<>'CONFERENCE'
+	Sta: {and PRD_META = @[inMeta]}
+End If
+If pcSearchString<>''
+	Calculate pcSearchString as upp(con(pcSearchString,'%'))
+	Sta: {and  (upper(PRD_NAME) ilike @[pcSearchString] or upper(PRD_INT_PRODCODE) ilike @[pcSearchString])}
+End If
+Sta: {order by PRD_NAME}
+If pbReturnCount
+	;  postgres insists on an alias (optional in Oracle)
+	Sta: {) count_records}
+End If
+End statement
+
+If pbReturnCount
+	Do $cinst.$executesqlandfetchinto(lnCount) Returns lbOK
+Else
+	Do $cinst.$executesqlandfetch() Returns lbOK
+End If
+If lbImmediateSession
+	Do $cinst.$SetSession(#NULL,#NULL,kTrue)
+End If
+
+If pbReturnCount
+	Quit method lnCount
+Else
+	Quit method lbOK
+End If

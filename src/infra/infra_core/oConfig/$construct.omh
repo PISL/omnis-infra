@@ -1,0 +1,2 @@
+Calculate icConfigFile as $getLibPath()
+Calculate icConfigFile as con(mid(icConfigFile,1,rpos(sys(9),icConfigFile)),tcCurrentLibrary,'_config.xml')
