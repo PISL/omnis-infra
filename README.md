@@ -37,7 +37,7 @@ The key features include:
 
 ## Introduction
 
-Please read the Introduction pdf to provide an orientation to this library.
+Please read the [Introduction pdf](Introduction.pdf) to provide an orientation to this library.
 
 
 ![IDE Screenshot](/resources/IDE_example.png)
