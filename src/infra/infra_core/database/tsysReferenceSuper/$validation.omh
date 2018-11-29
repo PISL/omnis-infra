@@ -1,6 +1,13 @@
 Calculate icValidationMessage as ''
 Do ilValidation.$clear()
 
+If $cinst.[icPrefix]EFFECTIVE<=dat('1-JAN-2000')
+	Calculate $cinst.[icPrefix]EFFECTIVE as #NULL
+End If
+If $cinst.[icPrefix]EXPIRES<=dat('1-JAN-2000')
+	Calculate $cinst.[icPrefix]EXPIRES as #NULL
+End If
+
 If $cinst.[icPrefix]CLASS<>''
 	;  good
 	Do ioFormatData.$FormatRef($cinst.[icPrefix]CLASS,ibInvisible) Returns lcResponse
