@@ -106,6 +106,20 @@
 				"sublen": 10
 			},
 			{
+				"name": "lcPassword",
+				"order": 16,
+				"type": "kCharacter",
+				"subtype": "kSimplechar",
+				"sublen": 50
+			},
+			{
+				"name": "lcUserName",
+				"order": 8,
+				"type": "kCharacter",
+				"subtype": "kSimplechar",
+				"sublen": 50
+			},
+			{
 				"name": "liColRef",
 				"order": 15,
 				"type": "kItemref",
