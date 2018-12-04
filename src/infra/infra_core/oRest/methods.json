@@ -90,5 +90,16 @@
 		"lvardefs": [
 
 		]
+	},
+	{
+		"name": "--- COPYRIGHT ---",
+		"ident": 5,
+		"order": 10,
+		"pvardefs": [
+
+		],
+		"lvardefs": [
+
+		]
 	}
 ]

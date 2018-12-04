@@ -24,5 +24,17 @@
 
 		],
 		"empty": true
+	},
+	{
+		"name": "--- COPYRIGHT ---",
+		"ident": 2,
+		"order": 3,
+		"clientexec": false,
+		"pvardefs": [
+
+		],
+		"lvardefs": [
+
+		]
 	}
 ]

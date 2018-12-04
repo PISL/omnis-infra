@@ -1,6 +1,6 @@
 {
 	"classtype": "kObjectclass",
-	"internalversion": 9,
+	"internalversion": 10,
 	"designtaskname": "rtBusinessApp",
 	"cvardefs": [
 
@@ -81,7 +81,7 @@
 		"editordata": "",
 		"external": true,
 		"issupercomponent": false,
-		"moddate": "2017-10-31 15:46:51",
+		"moddate": "2018-12-04 08:19:25",
 		"selfcontained": false,
 		"showascheckedout": false,
 		"userinfo": "",

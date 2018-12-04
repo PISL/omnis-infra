@@ -274,5 +274,17 @@
 				"sublen": 100
 			}
 		]
+	},
+	{
+		"name": "--- COPYRIGHT ---",
+		"ident": 8,
+		"order": 9,
+		"clientexec": false,
+		"pvardefs": [
+
+		],
+		"lvardefs": [
+
+		]
 	}
 ]

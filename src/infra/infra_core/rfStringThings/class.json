@@ -1,6 +1,6 @@
 {
 	"classtype": "kRemoteForm",
-	"internalversion": 79,
+	"internalversion": 80,
 	"designtaskname": "",
 	"nextident": 1001,
 	"lastgroupident": 0,
@@ -39,7 +39,7 @@
 		"issupercomponent": false,
 		"layouttype": "kLayoutTypeSingle",
 		"left": 905,
-		"moddate": "2018-09-17 11:27:43",
+		"moddate": "2018-12-04 08:19:25",
 		"okkeyobject": "",
 		"resizemode": "kJSformResizeModeNone",
 		"serverlessclient": false,

@@ -319,5 +319,17 @@
 				"sublen": 100000000
 			}
 		]
+	},
+	{
+		"name": "--- COPYRIGHT ---",
+		"ident": 9,
+		"order": 13,
+		"clientexec": false,
+		"pvardefs": [
+
+		],
+		"lvardefs": [
+
+		]
 	}
 ]

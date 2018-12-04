@@ -430,5 +430,17 @@
 		"lvardefs": [
 
 		]
+	},
+	{
+		"name": "--- COPYRIGHT ---",
+		"ident": 14,
+		"order": 15,
+		"clientexec": false,
+		"pvardefs": [
+
+		],
+		"lvardefs": [
+
+		]
 	}
 ]

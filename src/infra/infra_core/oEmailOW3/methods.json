@@ -684,5 +684,16 @@
 				"sublen": 0
 			}
 		]
+	},
+	{
+		"name": "--- COPYRIGHT ---",
+		"ident": 16,
+		"order": 17,
+		"pvardefs": [
+
+		],
+		"lvardefs": [
+
+		]
 	}
 ]

@@ -2161,5 +2161,16 @@
 		"lvardefs": [
 
 		]
+	},
+	{
+		"name": "--- COPYRIGHT ---",
+		"ident": 25,
+		"order": 26,
+		"pvardefs": [
+
+		],
+		"lvardefs": [
+
+		]
 	}
 ]

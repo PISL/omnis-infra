@@ -1,6 +1,6 @@
 {
 	"classtype": "kTable",
-	"internalversion": 7,
+	"internalversion": 8,
 	"superclass": "tMaster",
 	"designtaskname": "Startup_Task",
 	"cvardefs": [
@@ -39,7 +39,7 @@
 		"editordata": "",
 		"external": false,
 		"issupercomponent": false,
-		"moddate": "2018-09-17 11:27:43",
+		"moddate": "2018-12-04 08:19:25",
 		"showascheckedout": false,
 		"sqlclassname": "_pg_user",
 		"userinfo": "",

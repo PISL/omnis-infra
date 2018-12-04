@@ -1,6 +1,6 @@
 {
 	"classtype": "kObjectclass",
-	"internalversion": 54,
+	"internalversion": 55,
 	"superclass": "oSMTPOW3",
 	"designtaskname": "Startup_Task",
 	"cvardefs": [
@@ -287,7 +287,7 @@
 		"editordata": "",
 		"external": true,
 		"issupercomponent": false,
-		"moddate": "2018-11-08 11:12:32",
+		"moddate": "2018-12-04 08:19:25",
 		"selfcontained": false,
 		"showascheckedout": false,
 		"userinfo": "",

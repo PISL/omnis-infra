@@ -1,6 +1,6 @@
 {
 	"classtype": "kRemoteForm",
-	"internalversion": 171,
+	"internalversion": 172,
 	"designtaskname": "rtBusinessApp",
 	"nextident": 1149,
 	"lastgroupident": 1,
@@ -400,7 +400,7 @@
 		"issupercomponent": false,
 		"layouttype": "kLayoutTypeScreen",
 		"left": 141,
-		"moddate": "2018-11-01 15:22:04",
+		"moddate": "2018-12-04 08:19:25",
 		"okkeyobject": "",
 		"resizemode": "kJSformResizeModeNone",
 		"screensize": "kSSZDesktop",

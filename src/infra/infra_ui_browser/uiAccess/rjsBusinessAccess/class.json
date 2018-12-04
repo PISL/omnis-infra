@@ -1,6 +1,6 @@
 {
 	"classtype": "kRemoteForm",
-	"internalversion": 66,
+	"internalversion": 67,
 	"designtaskname": "rtBusinessApp",
 	"nextident": 1005,
 	"lastgroupident": 0,
@@ -120,7 +120,7 @@
 		"layoutbreakpoints": "320,375,480,667,768,1024,1280",
 		"layouttype": "kLayoutTypeResponsive",
 		"left": 1084,
-		"moddate": "2018-01-31 12:59:11",
+		"moddate": "2018-12-04 08:19:25",
 		"okkeyobject": "",
 		"serverlessclient": false,
 		"showascheckedout": false,

@@ -1,6 +1,6 @@
 {
 	"classtype": "kWindow",
-	"internalversion": 88,
+	"internalversion": 89,
 	"superclass": "wRefSuper",
 	"designtaskname": "Startup_Task",
 	"nextident": 1091,
@@ -54,7 +54,7 @@
 		"menunames": "",
 		"minimizebox": false,
 		"minimizeiconid": 2006,
-		"moddate": "2018-08-21 14:54:52",
+		"moddate": "2018-12-04 08:19:25",
 		"modelessdata": true,
 		"showascheckedout": false,
 		"showcommands": false,

@@ -635,5 +635,16 @@
 				"sublen": 100000000
 			}
 		]
+	},
+	{
+		"name": "--- COPYRIGHT ---",
+		"ident": 0,
+		"order": 19,
+		"pvardefs": [
+
+		],
+		"lvardefs": [
+
+		]
 	}
 ]

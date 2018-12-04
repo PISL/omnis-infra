@@ -1,6 +1,6 @@
 {
 	"classtype": "kTask",
-	"internalversion": 125,
+	"internalversion": 126,
 	"tvardefs": [
 		{
 			"name": "tbDbConnectionOK",
@@ -492,7 +492,7 @@
 		"editordata": "",
 		"external": false,
 		"issupercomponent": true,
-		"moddate": "2018-12-03 12:09:51",
+		"moddate": "2018-12-04 08:19:25",
 		"showascheckedout": false,
 		"userinfo": "",
 		"version": "2"

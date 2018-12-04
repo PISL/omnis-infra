@@ -1,6 +1,6 @@
 {
 	"classtype": "kTable",
-	"internalversion": 8,
+	"internalversion": 9,
 	"superclass": "tMaster",
 	"designtaskname": "Startup_Task",
 	"cvardefs": [
@@ -39,7 +39,7 @@
 		"editordata": "",
 		"external": false,
 		"issupercomponent": false,
-		"moddate": "2018-09-17 11:27:43",
+		"moddate": "2018-12-04 08:19:25",
 		"showascheckedout": false,
 		"sqlclassname": "_administration",
 		"userinfo": "Copyright © 1999-2012 Platform Independent Systems Limited, registered company number 3155091, UK",

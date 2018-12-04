@@ -1,6 +1,6 @@
 {
 	"classtype": "kObjectclass",
-	"internalversion": 21,
+	"internalversion": 22,
 	"designtaskname": "Startup_Task",
 	"cvardefs": [
 		{
@@ -47,7 +47,7 @@
 		"editordata": "",
 		"external": true,
 		"issupercomponent": false,
-		"moddate": "2018-09-17 11:27:43",
+		"moddate": "2018-12-04 08:19:25",
 		"selfcontained": false,
 		"showascheckedout": false,
 		"userinfo": "Copyright © 1999-2012 Platform Independent Systems Limited, registered company number 3155091, UK",

@@ -59,5 +59,16 @@
 
 		],
 		"empty": true
+	},
+	{
+		"name": "--- COPYRIGHT ---",
+		"ident": 3,
+		"order": 4,
+		"pvardefs": [
+
+		],
+		"lvardefs": [
+
+		]
 	}
 ]

@@ -1,6 +1,6 @@
 {
 	"classtype": "kObjectclass",
-	"internalversion": 7,
+	"internalversion": 8,
 	"superclass": ".OW3.OW3 Worker Objects\\SMTPClientWorker",
 	"designtaskname": "Startup_Task",
 	"cvardefs": [
@@ -25,7 +25,7 @@
 		"editordata": "",
 		"external": true,
 		"issupercomponent": false,
-		"moddate": "2018-09-17 11:27:43",
+		"moddate": "2018-12-04 08:19:25",
 		"selfcontained": false,
 		"showascheckedout": false,
 		"userinfo": "",

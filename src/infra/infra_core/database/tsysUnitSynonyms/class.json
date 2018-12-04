@@ -1,6 +1,6 @@
 {
 	"classtype": "kTable",
-	"internalversion": 3,
+	"internalversion": 4,
 	"superclass": "tMaster",
 	"designtaskname": "Startup_Task",
 	"cvardefs": [
@@ -31,7 +31,7 @@
 		"editordata": "",
 		"external": true,
 		"issupercomponent": false,
-		"moddate": "2016-05-19 14:11:47",
+		"moddate": "2018-12-04 08:19:25",
 		"showascheckedout": false,
 		"sqlclassname": "ssysUnitSynonyms",
 		"userinfo": "",
