@@ -110,14 +110,16 @@
 				"order": 16,
 				"type": "kCharacter",
 				"subtype": "kSimplechar",
-				"sublen": 50
+				"sublen": 50,
+				"desc": "Enter the password for lcUserName here"
 			},
 			{
 				"name": "lcUserName",
 				"order": 8,
 				"type": "kCharacter",
 				"subtype": "kSimplechar",
-				"sublen": 50
+				"sublen": 50,
+				"desc": "Enter a postgres login role that has read only access to the stb database"
 			},
 			{
 				"name": "liColRef",

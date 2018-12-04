@@ -25,8 +25,11 @@ If lnLine
 		Do method getStringsFromServer Returns llStrings
 		
 	Else
-		Calculate lcUserName as "Enter a postgres login role that has read only access to the stb database"
-		Calculate lcPassword as "Enter the password for lcUserName here"
+		If isclear(lcUserName)
+			OK message Warning {You will need to enter a Postgres username and password before the string table can be loaded}
+			Breakpoint
+			Quit method
+		End If
 		
 		Do method $ConnectToDb (llDBList.Host,lcUserName,lcPassword,,llDBList.DAM,llDBList.DB,llDBList.port,loSession,loStatement,0) Returns lbOK
 		Do $DefineList(llStrings,'infra.tomStrings')
