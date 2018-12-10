@@ -25,17 +25,9 @@ If trCurrUser.USR_SEQ>0&$ctask.trCurrUser.USR_ACTIVE
 			;  app will use traditional one session pool functionality
 		End If
 		
-		;  Do trLogAccess.$clear()     ;; do not clear!  the remote task has inserted the users IP address into trLogAccess.ULA_IP_ADDRESS
 		Calculate trLogAccess.ULA_USR_REF as $ctask.trCurrUser.USR_SEQ
 		Calculate trLogAccess.ULA_LOGIN as $ServerTime()
-		;  Calculate trLogAccess.ULA_IP_ADDRESS as $ctask.$clientaddress
 		Do trLogAccess.$update() Returns lbOK     ;; the uaLogAccess record is now created in the remote task $construct
-		;  get the ecoaccountingmodule session ID     ;; ### GRS 12/11/14 API call with hardcoded values, not implementing employee registration at this point
-		;  Do $DefineList(lrUser,'infra.tuaUsers')
-		;  Calculate lrUser.USR_NAME as 'admin'
-		;  Calculate lrUser.USR_HASHPASS as 'admin'
-		;  Do lrUser.$Login()
-		;  Calculate $ctask.tcSessionID as lrUser.icID
 	End If
 Else If $ctask.trCurrUser.USR_SEQ>0&isclear(ctask.trCurrUser.USR_ACTIVE)
 	Do $ctask.toStrings.$StringTableEntry('MSG_LOGININVALID',icDisplayMessage,'invalid account')

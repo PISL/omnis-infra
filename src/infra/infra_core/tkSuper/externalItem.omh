@@ -4,6 +4,6 @@ If not(lbFound)
 Else
 	If pcName='ExcelFormat'
 		;  initialise libxl with our licence key
-		Do ExcelFormat.$setKey("Platform Independent Systems Ltd - 2 developers","mac-f30d09091c1e2ea5b759607943n1i1n7")
+		Do ExcelFormat.$setKey("companyName","licenceKey")
 	End If
 End If

@@ -1,7 +1,6 @@
 {
 	"classtype": "kObjectclass",
-	"internalversion": 4,
-	"superclass": ".ExcelFormat.ExcelFormat\\Worksheet",
+	"internalversion": 3,
 	"designtaskname": "Startup_Task",
 	"cvardefs": [
 
@@ -13,13 +12,13 @@
 		"collectperformancedata": false,
 		"componenticon": 0,
 		"componenttype": "kCompStoreHidden",
-		"createdate": "2018-05-16 11:01:00",
+		"createdate": "2018-12-10 11:01:25",
 		"desc": "",
 		"editor": "",
 		"editordata": "",
 		"external": true,
 		"issupercomponent": false,
-		"moddate": "2018-12-04 08:19:25",
+		"moddate": "2018-12-10 11:01:55",
 		"selfcontained": false,
 		"showascheckedout": false,
 		"userinfo": "",

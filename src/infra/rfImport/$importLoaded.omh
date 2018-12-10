@@ -32,32 +32,32 @@ Else
 	Else If low(icFileType)='application/vnd.openxmlformats'
 		;  Breakpoint
 		;  xml - probably an excel .xlsx
-		Do ioTMexcelBook.$initialize(kXLxlsx)
-		Do ioTMexcelBook.$loadraw(tbinFileUpload) Returns lbFormatExcel
-		If not(lbFormatExcel)
-			Do ioTMexcelBook.$error() Returns icDisplayMessage     ;; processed through Omnis error handler
-			If icDisplayMessage=''
-				Do toStrings.$StringTableEntry('word_file',lcMessage,'file')
-				Do toStrings.$StringTableEntry('str_oftype',lcMessage2,'is of type')
-				Do toStrings.$StringTableEntry('MSG_NOTXLSX',lcMessage3,'not recognised as a .xlsx file')
-				Calculate icDisplayMessage as con(lcMessage,' "',icFileName,'" ',lcMessage2,' "',icFileType,'": ',lcMessage3)
-			End If
-			Quit method kFalse
-		End If
+		;  Do ioTMexcelBook.$initialize(kXLxlsx)
+		;  Do ioTMexcelBook.$loadraw(tbinFileUpload) Returns lbFormatExcel
+		;  If not(lbFormatExcel)
+		;  Do ioTMexcelBook.$error() Returns icDisplayMessage     ;; processed through Omnis error handler
+		;  If icDisplayMessage=''
+		;  Do toStrings.$StringTableEntry('word_file',lcMessage,'file')
+		;  Do toStrings.$StringTableEntry('str_oftype',lcMessage2,'is of type')
+		;  Do toStrings.$StringTableEntry('MSG_NOTXLSX',lcMessage3,'not recognised as a .xlsx file')
+		;  Calculate icDisplayMessage as con(lcMessage,' "',icFileName,'" ',lcMessage2,' "',icFileType,'": ',lcMessage3)
+		;  End If
+		;  Quit method kFalse
+		;  End If
 		
 	Else If low(icFileType)='application/vnd.ms-excel'
-		Do ioTMexcelBook.$initialize(kXLxls)
-		Do ioTMexcelBook.$loadraw(tbinFileUpload) Returns lbFormatExcel
-		If not(lbFormatExcel)
-			Do ioTMexcelBook.$error() Returns icDisplayMessage     ;; processed through Omnis error handler
-			If icDisplayMessage=''
-				Do toStrings.$StringTableEntry('word_file',lcMessage,'file')
-				Do toStrings.$StringTableEntry('str_oftype',lcMessage2,'is of type')
-				Do toStrings.$StringTableEntry('MSG_NOTXLSX',lcMessage3,'not recognised as a .xlsx file')
-				Calculate icDisplayMessage as con(lcMessage,' "',icFileName,'" ',lcMessage2,' "',icFileType,'": ',lcMessage3)
-			End If
-			Quit method kFalse
-		End If
+		;  Do ioTMexcelBook.$initialize(kXLxls)
+		;  Do ioTMexcelBook.$loadraw(tbinFileUpload) Returns lbFormatExcel
+		;  If not(lbFormatExcel)
+		;  Do ioTMexcelBook.$error() Returns icDisplayMessage     ;; processed through Omnis error handler
+		;  If icDisplayMessage=''
+		;  Do toStrings.$StringTableEntry('word_file',lcMessage,'file')
+		;  Do toStrings.$StringTableEntry('str_oftype',lcMessage2,'is of type')
+		;  Do toStrings.$StringTableEntry('MSG_NOTXLSX',lcMessage3,'not recognised as a .xlsx file')
+		;  Calculate icDisplayMessage as con(lcMessage,' "',icFileName,'" ',lcMessage2,' "',icFileType,'": ',lcMessage3)
+		;  End If
+		;  Quit method kFalse
+		;  End If
 		
 	Else
 		Do toStrings.$StringTableEntry('word_file',lcMessage,'file')
