@@ -11,7 +11,7 @@ NB. Please see the [Omnis Document - Creating Web & Mobile Apps](https://www.omn
 4. NavMenuCascade - identical to NavMenu but in a cascading format for smaller screens, ie. this replaces NavMenu on layout breakpoints 320, 375, 480, 667
 5. ToolsMenu - form specific commands plus application wide options
 
-![rjsInfraMenu screenshot](/Users/gs/Documents/Git-PISL/omnis-infra/resources/rjsinframenu.png)
+![rjsInfraMenu screenshot](resources/rjsinframenu.png)
 
 Each of the menu objects has an Execute on Client $event with a single line calling its menu click method, eg.
 
