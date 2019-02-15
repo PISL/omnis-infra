@@ -1,14 +1,9 @@
 Set reference $cinst.irefContainer to $cinst.$container
 Do inherited
-Do method setTabColours
 
 Do $DefineList(ilDisplayRecords,'infra.tsysAsyncEmails')
 Do ilDisplayRecords.$addDisplayName()
 Calculate irCurrentRecord as ilDisplayRecords
-
-Do ilDisplayRecords.$cols.$findname('DisplayName') Returns liColRef
-Calculate $cinst.$objs.ilDisplayRecords.$listcolumn as liColRef.$ident
-Calculate lnDisplayListCol as liColRef.$ident
 
 ;  this is a queue, not a log, so sub-selection is much less important - irrelevant even.
 
@@ -21,6 +16,9 @@ Do method UserPermissions
 
 Do method FetchRecords
 
-Do $cinst.$superObjects($cell(clLabels,'objName','disp_users','label'),lnDisplayListCol,'','',,kTrue,$cell(clLabels,'objName','text_search_LBL','label'))
+Do $cinst.$superFoundList($cell(clLabels,'objName','disp_emails','label'),'DisplayName')     ;; ilDisplayList
+
+Do irefContainer.$initToolsMenu("") Returns ilMenuCommands     ;; this is a view only form, no need for the Tools menu
+Do irefContainer.$setupToolsMenu('asEmails',ilMenuCommands)     ;; but we need to call this to clear any previous menu
 
 Do $cinst.$behaviour()

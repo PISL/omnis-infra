@@ -1,0 +1,7 @@
+;  If clLabels.$linecount=0
+Do inherited
+If inBreakpoint<=375
+	Calculate $cinst.$objs.TabControl_Logs.$fontsize as 8
+Else
+	Calculate $cinst.$objs.TabControl_Logs.$fontsize as 12
+End If

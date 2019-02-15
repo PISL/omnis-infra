@@ -1,0 +1,18 @@
+If ilSearch2.$line=ilSearch2.$linecount
+	;  user has selected the last line - "OTHER"
+	;  prompt the user for the date range
+	If len(icUserInput)>0
+		Calculate icDateFormat as icUserInput
+	End If
+	JavaScript: inputText=prompt(__form.get("icDatePrompt"),__form.get("icDateFormat"))
+	JavaScript: { {𯿿	var __form = this.form;𯿿	__form.set("icUserInput", inputText);𯿿}𯿿}
+	
+	If isclear(icUserInput)     ;; the user has cancelled
+		Do method resetDateFormat
+	Else
+		Do $cinst.$parseJSUserInputDateRange()     ;; parse the user entry and if OK will call $search2ListClick
+	End If
+	
+Else
+	Do $cinst.$search2ListClick()
+End If

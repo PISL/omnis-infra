@@ -1,0 +1,3 @@
+;  called from JS OK-Cancel msg
+Calculate $cinst.icDisplayMessage as "Delete cancelled"
+Do $cinst.$behaviour()

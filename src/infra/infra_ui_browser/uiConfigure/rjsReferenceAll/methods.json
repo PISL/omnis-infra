@@ -1,8 +1,20 @@
 [
 	{
+		"name": "--- COPYRIGHT ---",
+		"ident": 10,
+		"order": 1,
+		"clientexec": false,
+		"pvardefs": [
+
+		],
+		"lvardefs": [
+
+		]
+	},
+	{
 		"name": "$construct",
 		"ident": 0,
-		"order": 1,
+		"order": 2,
 		"clientexec": false,
 		"pvardefs": [
 
@@ -69,7 +81,7 @@
 	{
 		"name": "$behaviour",
 		"ident": 2,
-		"order": 2,
+		"order": 3,
 		"clientexec": true,
 		"pvardefs": [
 			{
@@ -88,7 +100,7 @@
 	{
 		"name": "$event",
 		"ident": 4,
-		"order": 3,
+		"order": 4,
 		"clientexec": true,
 		"pvardefs": [
 
@@ -100,7 +112,7 @@
 	{
 		"name": "TranslateText",
 		"ident": 3,
-		"order": 4,
+		"order": 5,
 		"clientexec": false,
 		"pvardefs": [
 
@@ -153,7 +165,7 @@
 	{
 		"name": "setTabColours",
 		"ident": 1,
-		"order": 5,
+		"order": 6,
 		"clientexec": false,
 		"pvardefs": [
 
@@ -185,7 +197,7 @@
 	{
 		"name": "$preSelectClass",
 		"ident": 5,
-		"order": 6,
+		"order": 7,
 		"clientexec": false,
 		"pvardefs": [
 			{
@@ -212,7 +224,7 @@
 	{
 		"name": "handleShortcutKey",
 		"ident": 6,
-		"order": 7,
+		"order": 8,
 		"clientexec": true,
 		"pvardefs": [
 			{
@@ -237,7 +249,7 @@
 	{
 		"name": "$initToolsMenu",
 		"ident": 8,
-		"order": 8,
+		"order": 9,
 		"clientexec": false,
 		"pvardefs": [
 			{
@@ -263,7 +275,7 @@
 	{
 		"name": "$setupToolsMenu",
 		"ident": 9,
-		"order": 9,
+		"order": 10,
 		"clientexec": false,
 		"pvardefs": [
 			{
@@ -320,7 +332,7 @@
 	{
 		"name": "$adjustToolsMenu",
 		"ident": 7,
-		"order": 10,
+		"order": 11,
 		"clientexec": true,
 		"pvardefs": [
 
@@ -354,18 +366,6 @@
 				"subtype": "kSimplechar",
 				"sublen": 100000000
 			}
-		]
-	},
-	{
-		"name": "--- COPYRIGHT ---",
-		"ident": 10,
-		"order": 11,
-		"clientexec": false,
-		"pvardefs": [
-
-		],
-		"lvardefs": [
-
 		]
 	}
 ]

@@ -1,6 +1,6 @@
 {
 	"classtype": "kRemoteForm",
-	"internalversion": 94,
+	"internalversion": 112,
 	"superclass": "rjsInfraRecords",
 	"designtaskname": "rtBusinessApp",
 	"nextident": 1051,
@@ -44,6 +44,13 @@
 			"sublen": 0
 		},
 		{
+			"name": "ilMenuCommands",
+			"order": 8,
+			"type": "kList",
+			"subtype": "",
+			"sublen": 0
+		},
+		{
 			"name": "ilRoles",
 			"order": 3,
 			"type": "kList",
@@ -72,7 +79,7 @@
 		"componenttype": "kCompStoreHidden",
 		"contextmenu": "",
 		"createdate": "2018-02-13 09:24:16",
-		"currentlayoutbreakpoint": 320,
+		"currentlayoutbreakpoint": 1280,
 		"defaultappearance": "kAppearanceiOS",
 		"desc": "",
 		"disabledefaultcontextmenu": false,
@@ -85,7 +92,7 @@
 		"layoutbreakpoints": "320,375,480,667,768,1024,1280",
 		"layouttype": "kLayoutTypeResponsive",
 		"left": 168,
-		"moddate": "2018-12-04 08:19:25",
+		"moddate": "2019-02-15 10:51:51",
 		"okkeyobject": "pbSave",
 		"serverlessclient": false,
 		"showascheckedout": false,

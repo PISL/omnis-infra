@@ -1,13 +1,15 @@
 On evKeyPress
 	;  tab
-	If pKeyList.[pKeyList.$linecount].systemKey=27&pKeyList.[pKeyList.$linecount].modifiers<>kJSModShift
-		Calculate $cinst.$objs.TabControl_EO.$currenttab as 1
-		Calculate $cinst.$objs.PagedPane.$currentpage as 1
-		Do $cinst.$setcurfield('EO_NAME',kTrue)
-		Quit event handler (Discard event)
-	Else
-		Calculate $cinst.$objs.TabControl_EO.$currenttab as 1
-		Calculate $cinst.$objs.PagedPane.$currentpage as 1
-		Do $cinst.$setcurfield('EO_INSTRUCTIONS',kTrue)
-		Quit event handler (Discard event)
+	If pKeyList.[pKeyList.$linecount].systemKey=27
+		If pKeyList.[pKeyList.$linecount].modifiers<>kJSModShift
+			Calculate $cinst.$objs.TabControl_EO.$currenttab as 1
+			Calculate $cinst.$objs.PagedPane.$currentpage as 1
+			Do $cinst.$setcurfield('EO_NAME',kTrue)
+			Quit event handler (Discard event)
+		Else
+			Calculate $cinst.$objs.TabControl_EO.$currenttab as 1
+			Calculate $cinst.$objs.PagedPane.$currentpage as 1
+			Do $cinst.$setcurfield('EO_INSTRUCTIONS',kTrue)
+			Quit event handler (Discard event)
+		End If
 	End If

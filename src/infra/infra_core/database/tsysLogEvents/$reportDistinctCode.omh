@@ -28,6 +28,7 @@ Sta: {from   [$cinst.$servertablenames()]}
 If pVhostNo>0
 	Sta: {where     SLV_VHOST_REF = @[pVhostNo]}
 End If
+Sta: {order by SLV_CODE}
 End statement
 Do $cinst.$executesqlandfetch(llData) Returns lbOK
 If lbImmediateSession

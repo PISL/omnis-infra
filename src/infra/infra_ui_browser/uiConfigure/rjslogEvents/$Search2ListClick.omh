@@ -1,2 +1,11 @@
+;  set the search list display value
+If ilSearch2.$line=ilSearch2.$linecount
+	Calculate ilSearch2.desc as con(idFrom,pick(pos('-',icUserInput)>0,'',' - '),idTo)
+End If
+
+If ibExactDate
+	Calculate idTo as idFrom
+End If
+
 Do method FetchRecords
 Do $cinst.$behaviour()

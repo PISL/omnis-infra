@@ -3,4 +3,6 @@
 Calculate $cinst.icDisplayMessage as $cell($cinst.clLabels,'objName','disp_del_canc','label')
 
 Do $cinst.$behaviour()
-Do $cinst.$setFocus('rjsInfraSuper.$cancelDelete()')
+If $cinst.$setFocus.$cando
+	Do $cinst.$setFocus('rjsInfraSuper.$cancelDelete()')
+End If

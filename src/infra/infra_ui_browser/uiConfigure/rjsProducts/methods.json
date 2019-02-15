@@ -1,8 +1,20 @@
 [
 	{
+		"name": "--- COPYRIGHT ---",
+		"ident": 27,
+		"order": 1,
+		"clientexec": false,
+		"pvardefs": [
+
+		],
+		"lvardefs": [
+
+		]
+	},
+	{
 		"name": "-- Auto Save Data --",
 		"ident": 0,
-		"order": 1,
+		"order": 2,
 		"clientexec": false,
 		"pvardefs": [
 
@@ -15,7 +27,7 @@
 	{
 		"name": "$checkAutoSavedData",
 		"ident": 1,
-		"order": 2,
+		"order": 3,
 		"clientexec": false,
 		"pvardefs": [
 			{
@@ -49,7 +61,7 @@
 	{
 		"name": "$RecoverAutoSave",
 		"ident": 2,
-		"order": 3,
+		"order": 4,
 		"clientexec": false,
 		"pvardefs": [
 			{
@@ -69,7 +81,7 @@
 	{
 		"name": "$DeleteAutoSave",
 		"ident": 3,
-		"order": 4,
+		"order": 5,
 		"clientexec": false,
 		"pvardefs": [
 
@@ -87,7 +99,7 @@
 	{
 		"name": "--------------",
 		"ident": 4,
-		"order": 5,
+		"order": 6,
 		"clientexec": false,
 		"pvardefs": [
 
@@ -100,7 +112,7 @@
 	{
 		"name": "$construct",
 		"ident": 5,
-		"order": 6,
+		"order": 7,
 		"clientexec": false,
 		"pvardefs": [
 
@@ -125,7 +137,7 @@
 	{
 		"name": "$init",
 		"ident": 18,
-		"order": 7,
+		"order": 8,
 		"clientexec": true,
 		"pvardefs": [
 
@@ -150,7 +162,7 @@
 	{
 		"name": "$event",
 		"ident": 21,
-		"order": 8,
+		"order": 9,
 		"clientexec": true,
 		"pvardefs": [
 
@@ -162,7 +174,7 @@
 	{
 		"name": "setTabColours",
 		"ident": 20,
-		"order": 9,
+		"order": 10,
 		"clientexec": false,
 		"pvardefs": [
 
@@ -194,7 +206,7 @@
 	{
 		"name": "$destruct",
 		"ident": 6,
-		"order": 10,
+		"order": 11,
 		"clientexec": false,
 		"pvardefs": [
 
@@ -206,7 +218,7 @@
 	{
 		"name": "$behaviour",
 		"ident": 7,
-		"order": 11,
+		"order": 12,
 		"clientexec": false,
 		"pvardefs": [
 
@@ -218,7 +230,7 @@
 	{
 		"name": "assignEntryFieldProperties",
 		"ident": 8,
-		"order": 12,
+		"order": 13,
 		"clientexec": false,
 		"pvardefs": [
 
@@ -276,7 +288,7 @@
 	{
 		"name": "UserPermissions",
 		"ident": 9,
-		"order": 13,
+		"order": 14,
 		"clientexec": false,
 		"pvardefs": [
 
@@ -294,7 +306,7 @@
 	{
 		"name": "TranslateText",
 		"ident": 10,
-		"order": 14,
+		"order": 15,
 		"clientexec": false,
 		"pvardefs": [
 
@@ -326,7 +338,7 @@
 	{
 		"name": "$displayListClick",
 		"ident": 11,
-		"order": 15,
+		"order": 16,
 		"clientexec": false,
 		"pvardefs": [
 
@@ -351,7 +363,7 @@
 	{
 		"name": "testPIDdata",
 		"ident": 12,
-		"order": 16,
+		"order": 17,
 		"clientexec": false,
 		"pvardefs": [
 
@@ -369,7 +381,7 @@
 	{
 		"name": "$saveData",
 		"ident": 13,
-		"order": 17,
+		"order": 18,
 		"clientexec": false,
 		"pvardefs": [
 
@@ -415,7 +427,7 @@
 	{
 		"name": "$search1ListClick",
 		"ident": 14,
-		"order": 18,
+		"order": 19,
 		"clientexec": false,
 		"pvardefs": [
 
@@ -427,7 +439,7 @@
 	{
 		"name": "$search2ListClick",
 		"ident": 15,
-		"order": 19,
+		"order": 20,
 		"clientexec": false,
 		"pvardefs": [
 
@@ -439,7 +451,7 @@
 	{
 		"name": "$stringSearch",
 		"ident": 16,
-		"order": 20,
+		"order": 21,
 		"clientexec": false,
 		"pvardefs": [
 
@@ -479,7 +491,7 @@
 	{
 		"name": "------------------",
 		"ident": 17,
-		"order": 21,
+		"order": 22,
 		"clientexec": false,
 		"pvardefs": [
 
@@ -492,7 +504,7 @@
 	{
 		"name": "handleShortcutKey",
 		"ident": 19,
-		"order": 22,
+		"order": 23,
 		"clientexec": true,
 		"pvardefs": [
 			{
@@ -517,7 +529,7 @@
 	{
 		"name": "handleMenuCall",
 		"ident": 22,
-		"order": 23,
+		"order": 24,
 		"clientexec": true,
 		"pvardefs": [
 			{
@@ -536,7 +548,7 @@
 	{
 		"name": "$insertCR",
 		"ident": 23,
-		"order": 24,
+		"order": 25,
 		"clientexec": false,
 		"pvardefs": [
 
@@ -548,7 +560,7 @@
 	{
 		"name": "$editCR",
 		"ident": 24,
-		"order": 25,
+		"order": 26,
 		"clientexec": false,
 		"pvardefs": [
 
@@ -560,7 +572,7 @@
 	{
 		"name": "$deleteCR",
 		"ident": 25,
-		"order": 26,
+		"order": 27,
 		"clientexec": false,
 		"pvardefs": [
 			{
@@ -600,18 +612,6 @@
 	{
 		"name": "$duplicateCR",
 		"ident": 26,
-		"order": 27,
-		"clientexec": false,
-		"pvardefs": [
-
-		],
-		"lvardefs": [
-
-		]
-	},
-	{
-		"name": "--- COPYRIGHT ---",
-		"ident": 27,
 		"order": 28,
 		"clientexec": false,
 		"pvardefs": [

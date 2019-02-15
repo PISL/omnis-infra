@@ -1,31 +1,28 @@
 Set reference $cinst.irefContainer to $cinst.$container
 Do inherited
-Do method setTabColours
 
 Do $DefineList(ilDisplayRecords,'infra.tsysLogEvents')
 Do ilDisplayRecords.$addDisplayName()
 Calculate irCurrentRecord as ilDisplayRecords
 
-Do ilDisplayRecords.$cols.$findname('DisplayName') Returns liColRef
-Calculate $cinst.$objs.ilDisplayRecords.$listcolumn as liColRef.$ident
-Calculate lnDisplayListCol as liColRef.$ident
-
 Do method fetchSearch1List
-Do ilSearch1.$cols.$findname('desc') Returns liColRef
-Calculate $cinst.$objs.ilSearch1.$listcolumn as liColRef.$ident
 Do method fetchSearch2List
-Do ilSearch2.$cols.$findname('SLV_CODE') Returns liColRef
-Calculate $cinst.$objs.ilSearch2.$listcolumn as liColRef.$ident
 
 Do method TranslateText     ;; call this here to get the translations before setting superclass labels/values
 
-Calculate icFormHeading as $cell(clLabels,'objName','ASYNCEM_Heading','label')
-Calculate icFormIntro as $cell(clLabels,'objName','ASYNCEM_Intro','label')
+Calculate icFormHeading as $cell(clLabels,'objName','SLV_Heading','label')
+Calculate icFormIntro as $cell(clLabels,'objName','SLV_Intro','label')
 
 Do method UserPermissions
 
 Do method FetchRecords
 
-Do $cinst.$superObjects($cell(clLabels,'objName','disp_users','label'),lnDisplayListCol,'','',,kTrue,$cell(clLabels,'objName','text_search_LBL','label'))
+Do $cinst.$superText(kTrue,$cell(clLabels,'objName','text_search','label'))
+Do $cinst.$superSearchList1($cell(clLabels,'objName','sel_eventcode','label'),"SLV_CODE")     ;; ilSearch1
+Do $cinst.$superSearchList2($cell(clLabels,'objName','sel_daterange','label'),'desc')     ;; ilSearch2
+Do $cinst.$superFoundList($cell(clLabels,'objName','disp_events','label'),'DisplayName')     ;; ilDisplayList
+
+Do irefContainer.$initToolsMenu("") Returns ilMenuCommands     ;; this is a view only form, no need for the Tools menu
+Do irefContainer.$setupToolsMenu('logEvents',ilMenuCommands)     ;; but we need to call this to clear any previous menu
 
 Do $cinst.$behaviour()

@@ -1,8 +1,20 @@
 [
 	{
+		"name": "--- COPYRIGHT ---",
+		"ident": 5,
+		"order": 1,
+		"clientexec": false,
+		"pvardefs": [
+
+		],
+		"lvardefs": [
+
+		]
+	},
+	{
 		"name": "$construct",
 		"ident": 1,
-		"order": 1,
+		"order": 2,
 		"clientexec": false,
 		"pvardefs": [
 
@@ -27,7 +39,7 @@
 	{
 		"name": "UserPermissions",
 		"ident": 0,
-		"order": 2,
+		"order": 3,
 		"clientexec": false,
 		"pvardefs": [
 
@@ -45,7 +57,7 @@
 	{
 		"name": "TranslateText",
 		"ident": 2,
-		"order": 3,
+		"order": 4,
 		"clientexec": false,
 		"pvardefs": [
 
@@ -77,7 +89,7 @@
 	{
 		"name": "$behaviour",
 		"ident": 8,
-		"order": 4,
+		"order": 5,
 		"clientexec": false,
 		"pvardefs": [
 
@@ -89,7 +101,7 @@
 	{
 		"name": "fetchSearch1List",
 		"ident": 4,
-		"order": 5,
+		"order": 6,
 		"clientexec": false,
 		"pvardefs": [
 			{
@@ -115,7 +127,7 @@
 	{
 		"name": "fetchSearch2List",
 		"ident": 20,
-		"order": 6,
+		"order": 7,
 		"clientexec": false,
 		"pvardefs": [
 			{
@@ -135,7 +147,7 @@
 	{
 		"name": "$displayListClick",
 		"ident": 3,
-		"order": 7,
+		"order": 8,
 		"clientexec": false,
 		"pvardefs": [
 
@@ -167,7 +179,7 @@
 	{
 		"name": "$Search1ListClick",
 		"ident": 7,
-		"order": 8,
+		"order": 9,
 		"clientexec": false,
 		"pvardefs": [
 
@@ -179,7 +191,7 @@
 	{
 		"name": "$Search2ListClick",
 		"ident": 10,
-		"order": 9,
+		"order": 10,
 		"clientexec": false,
 		"pvardefs": [
 
@@ -191,18 +203,6 @@
 	{
 		"name": "$stringSearch",
 		"ident": 9,
-		"order": 10,
-		"clientexec": false,
-		"pvardefs": [
-
-		],
-		"lvardefs": [
-
-		]
-	},
-	{
-		"name": "passwordCheck",
-		"ident": 5,
 		"order": 11,
 		"clientexec": false,
 		"pvardefs": [
@@ -221,7 +221,13 @@
 
 		],
 		"lvardefs": [
-
+			{
+				"name": "lbOK",
+				"order": 1,
+				"type": "kBoolean",
+				"subtype": 0,
+				"sublen": 0
+			}
 		]
 	},
 	{
@@ -237,41 +243,9 @@
 		]
 	},
 	{
-		"name": "setTabColours",
-		"ident": 17,
-		"order": 14,
-		"clientexec": false,
-		"pvardefs": [
-
-		],
-		"lvardefs": [
-			{
-				"name": "lcProperty",
-				"order": 3,
-				"type": "kCharacter",
-				"subtype": "kSimplechar",
-				"sublen": 100000000
-			},
-			{
-				"name": "lnCount",
-				"order": 1,
-				"type": "kInteger",
-				"subtype": "kShortint",
-				"sublen": 0
-			},
-			{
-				"name": "lrAttributes",
-				"order": 2,
-				"type": "kRow",
-				"subtype": "",
-				"sublen": 0
-			}
-		]
-	},
-	{
 		"name": "$keyPress",
 		"ident": 19,
-		"order": 15,
+		"order": 14,
 		"clientexec": true,
 		"pvardefs": [
 			{
@@ -288,7 +262,32 @@
 		]
 	},
 	{
-		"name": "--- COPYRIGHT ---",
+		"name": "$parseJSUserInputDateRange",
+		"ident": 13,
+		"order": 15,
+		"clientexec": false,
+		"pvardefs": [
+			{
+				"name": "p",
+				"order": 1,
+				"type": "kCharacter",
+				"subtype": "kSimplechar",
+				"sublen": 100000000,
+				"param": 1
+			}
+		],
+		"lvardefs": [
+			{
+				"name": "lbOK",
+				"order": 2,
+				"type": "kBoolean",
+				"subtype": 0,
+				"sublen": 0
+			}
+		]
+	},
+	{
+		"name": "resetDateFormat",
 		"ident": 11,
 		"order": 16,
 		"clientexec": false,
@@ -298,5 +297,18 @@
 		"lvardefs": [
 
 		]
+	},
+	{
+		"name": "resetDateFormat_return",
+		"ident": 12,
+		"order": 17,
+		"clientexec": true,
+		"pvardefs": [
+
+		],
+		"lvardefs": [
+
+		],
+		"empty": true
 	}
 ]

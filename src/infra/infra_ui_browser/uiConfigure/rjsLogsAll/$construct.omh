@@ -5,15 +5,12 @@ Do llAllowed.$search(low($ref.FormPrefix)='sle',1,0,0,0) Returns lbErrorsTab
 Do llAllowed.$search(low($ref.FormPrefix)='ae',1,0,0,0) Returns lbAsyncEmailsTab
 
 Calculate $cinst.$objs.TabControl_Logs.$selectedtab as 1
-;  Calculate $cinst.$objs.TabControl_Logs.$enabled as lbUserTab
 Calculate $cinst.$objs.TabControl_Logs.$tabvisible as lbEventsTab
 
 Calculate $cinst.$objs.TabControl_Logs.$selectedtab as 2
-;  Calculate $cinst.$objs.TabControl_Logs.$enabled as lbRolesTab
 Calculate $cinst.$objs.TabControl_Logs.$tabvisible as lbErrorsTab
 
 Calculate $cinst.$objs.TabControl_Logs.$selectedtab as 3
-;  Calculate $cinst.$objs.TabControl_Logs.$enabled as lbPermissionsTab
 Calculate $cinst.$objs.TabControl_Logs.$tabvisible as lbAsyncEmailsTab
 
 If lbEventsTab

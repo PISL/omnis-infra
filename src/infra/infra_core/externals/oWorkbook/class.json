@@ -1,6 +1,7 @@
 {
 	"classtype": "kObjectclass",
 	"internalversion": 3,
+	"superclass": ".ExcelFormat.ExcelFormat\\Workbook",
 	"designtaskname": "Startup_Task",
 	"cvardefs": [
 

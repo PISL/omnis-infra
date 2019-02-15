@@ -44,7 +44,7 @@ Calculate $cinst.$objs.ilChoiceOfGroupOrgs.$listcolumn as liColRef.$ident
 
 Do method FetchRecords
 
-Do $cinst.$superObjects($cell(clLabels,'objName','disp_users','label'),lnDisplayListCol,'','',,kTrue,$cell(clLabels,'objName','text_search_LBL','label'))
+Do $cinst.$superObjects($cell(clLabels,'objName','disp_users','label'),lnDisplayListCol,'','',,kTrue,$cell(clLabels,'objName','text_search','label'))
 
 Do $cinst.$container().$initToolsMenu() Returns ilMenuCommands
 Do $cinst.$container().$setupToolsMenu('uaUser',ilMenuCommands)

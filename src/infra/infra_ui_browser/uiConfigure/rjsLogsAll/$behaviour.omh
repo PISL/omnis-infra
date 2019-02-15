@@ -5,4 +5,4 @@ If irefContainer     ;; should be rjsMenuApp
 	Do irefContainer.$behaviour(icMode)
 End If
 
-Calculate $cinst.$objs.TabControl_Logs.$enabled as $cinst.icMode=''
+Calculate $cinst.$objs.TabControl_Logs.$enabled as icMode=''

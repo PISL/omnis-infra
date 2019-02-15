@@ -1,8 +1,20 @@
 [
 	{
+		"name": "--- COPYRIGHT ---",
+		"ident": 1,
+		"order": 1,
+		"clientexec": false,
+		"pvardefs": [
+
+		],
+		"lvardefs": [
+
+		]
+	},
+	{
 		"name": "$construct",
 		"ident": 0,
-		"order": 1,
+		"order": 2,
 		"clientexec": false,
 		"pvardefs": [
 
@@ -62,7 +74,7 @@
 	{
 		"name": "$behaviour",
 		"ident": 2,
-		"order": 2,
+		"order": 3,
 		"clientexec": true,
 		"pvardefs": [
 			{
@@ -81,7 +93,7 @@
 	{
 		"name": "TranslateText",
 		"ident": 3,
-		"order": 3,
+		"order": 4,
 		"clientexec": false,
 		"pvardefs": [
 
@@ -108,18 +120,6 @@
 				"subtype": "",
 				"sublen": 0
 			}
-		]
-	},
-	{
-		"name": "--- COPYRIGHT ---",
-		"ident": 1,
-		"order": 4,
-		"clientexec": false,
-		"pvardefs": [
-
-		],
-		"lvardefs": [
-
 		]
 	}
 ]

@@ -1,8 +1,20 @@
 [
 	{
+		"name": "--- COPYRIGHT ---",
+		"ident": 32,
+		"order": 1,
+		"clientexec": false,
+		"pvardefs": [
+
+		],
+		"lvardefs": [
+
+		]
+	},
+	{
 		"name": "$construct",
 		"ident": 0,
-		"order": 1,
+		"order": 2,
 		"clientexec": false,
 		"pvardefs": [
 
@@ -34,7 +46,7 @@
 	{
 		"name": "$destruct",
 		"ident": 1,
-		"order": 2,
+		"order": 3,
 		"clientexec": false,
 		"pvardefs": [
 
@@ -46,7 +58,7 @@
 	{
 		"name": "$completed",
 		"ident": 2,
-		"order": 3,
+		"order": 4,
 		"clientexec": false,
 		"pvardefs": [
 
@@ -71,7 +83,7 @@
 	{
 		"name": "$behaviour",
 		"ident": 3,
-		"order": 4,
+		"order": 5,
 		"clientexec": false,
 		"pvardefs": [
 
@@ -131,7 +143,7 @@
 	{
 		"name": "$RegistrationFormBehaviour",
 		"ident": 4,
-		"order": 5,
+		"order": 6,
 		"clientexec": false,
 		"pvardefs": [
 
@@ -170,7 +182,7 @@
 	{
 		"name": "assignEntryFieldProperties",
 		"ident": 5,
-		"order": 6,
+		"order": 7,
 		"clientexec": false,
 		"pvardefs": [
 
@@ -228,7 +240,7 @@
 	{
 		"name": "UserPermissions",
 		"ident": 6,
-		"order": 7,
+		"order": 8,
 		"clientexec": false,
 		"pvardefs": [
 
@@ -246,7 +258,7 @@
 	{
 		"name": "TranslateText",
 		"ident": 7,
-		"order": 8,
+		"order": 9,
 		"clientexec": false,
 		"pvardefs": [
 
@@ -313,7 +325,7 @@
 	{
 		"name": "$displayListClick",
 		"ident": 8,
-		"order": 9,
+		"order": 10,
 		"clientexec": false,
 		"pvardefs": [
 
@@ -345,7 +357,7 @@
 	{
 		"name": "NewCorporatePerson",
 		"ident": 9,
-		"order": 10,
+		"order": 11,
 		"clientexec": false,
 		"pvardefs": [
 
@@ -363,7 +375,7 @@
 	{
 		"name": "DeleteCorporatePerson",
 		"ident": 10,
-		"order": 11,
+		"order": 12,
 		"clientexec": false,
 		"pvardefs": [
 
@@ -375,7 +387,7 @@
 	{
 		"name": "Register",
 		"ident": 11,
-		"order": 12,
+		"order": 13,
 		"clientexec": false,
 		"pvardefs": [
 
@@ -421,7 +433,7 @@
 	{
 		"name": "UpdateRegistration",
 		"ident": 12,
-		"order": 13,
+		"order": 14,
 		"clientexec": false,
 		"pvardefs": [
 
@@ -497,7 +509,7 @@
 	{
 		"name": "UpdateCorporatePersons",
 		"ident": 13,
-		"order": 14,
+		"order": 15,
 		"clientexec": false,
 		"pvardefs": [
 
@@ -579,7 +591,7 @@
 	{
 		"name": "RationaliseCorporatePersons",
 		"ident": 14,
-		"order": 15,
+		"order": 16,
 		"clientexec": false,
 		"pvardefs": [
 
@@ -604,7 +616,7 @@
 	{
 		"name": "refreshDisplayList",
 		"ident": 15,
-		"order": 16,
+		"order": 17,
 		"clientexec": false,
 		"pvardefs": [
 
@@ -616,7 +628,7 @@
 	{
 		"name": "$saveData",
 		"ident": 16,
-		"order": 17,
+		"order": 18,
 		"clientexec": false,
 		"pvardefs": [
 
@@ -678,7 +690,7 @@
 	{
 		"name": "$event",
 		"ident": 17,
-		"order": 18,
+		"order": 19,
 		"clientexec": true,
 		"pvardefs": [
 
@@ -696,7 +708,7 @@
 	{
 		"name": "--- groupOrg structure",
 		"ident": 25,
-		"order": 19,
+		"order": 20,
 		"clientexec": false,
 		"pvardefs": [
 
@@ -709,7 +721,7 @@
 	{
 		"name": "fetchStructure",
 		"ident": 31,
-		"order": 20,
+		"order": 21,
 		"clientexec": false,
 		"pvardefs": [
 
@@ -721,7 +733,7 @@
 	{
 		"name": "NewRecord",
 		"ident": 18,
-		"order": 21,
+		"order": 22,
 		"clientexec": false,
 		"pvardefs": [
 			{
@@ -741,7 +753,7 @@
 	{
 		"name": "FetchCurrentNode",
 		"ident": 19,
-		"order": 22,
+		"order": 23,
 		"clientexec": false,
 		"pvardefs": [
 			{
@@ -761,7 +773,7 @@
 	{
 		"name": "ChildNodeCounts",
 		"ident": 20,
-		"order": 23,
+		"order": 24,
 		"clientexec": false,
 		"pvardefs": [
 
@@ -793,7 +805,7 @@
 	{
 		"name": "SetNavigationPath",
 		"ident": 21,
-		"order": 24,
+		"order": 25,
 		"clientexec": false,
 		"pvardefs": [
 
@@ -805,7 +817,7 @@
 	{
 		"name": "$PreviousNode",
 		"ident": 22,
-		"order": 25,
+		"order": 26,
 		"clientexec": false,
 		"pvardefs": [
 
@@ -817,7 +829,7 @@
 	{
 		"name": "PopUp",
 		"ident": 23,
-		"order": 26,
+		"order": 27,
 		"clientexec": false,
 		"pvardefs": [
 
@@ -835,7 +847,7 @@
 	{
 		"name": "ClickNow",
 		"ident": 24,
-		"order": 27,
+		"order": 28,
 		"clientexec": false,
 		"pvardefs": [
 
@@ -847,7 +859,7 @@
 	{
 		"name": "AssignFieldValueOptions",
 		"ident": 26,
-		"order": 28,
+		"order": 29,
 		"clientexec": false,
 		"pvardefs": [
 
@@ -859,7 +871,7 @@
 	{
 		"name": "$DropOnPrevious",
 		"ident": 27,
-		"order": 29,
+		"order": 30,
 		"clientexec": false,
 		"pvardefs": [
 
@@ -891,7 +903,7 @@
 	{
 		"name": "$nextnode",
 		"ident": 28,
-		"order": 30,
+		"order": 31,
 		"clientexec": false,
 		"pvardefs": [
 
@@ -903,7 +915,7 @@
 	{
 		"name": "PushDown",
 		"ident": 29,
-		"order": 31,
+		"order": 32,
 		"clientexec": false,
 		"pvardefs": [
 
@@ -915,7 +927,7 @@
 	{
 		"name": "$DropOnNow",
 		"ident": 30,
-		"order": 32,
+		"order": 33,
 		"clientexec": false,
 		"pvardefs": [
 
@@ -942,18 +954,6 @@
 				"subtype": "",
 				"sublen": 0
 			}
-		]
-	},
-	{
-		"name": "--- COPYRIGHT ---",
-		"ident": 32,
-		"order": 33,
-		"clientexec": false,
-		"pvardefs": [
-
-		],
-		"lvardefs": [
-
 		]
 	}
 ]

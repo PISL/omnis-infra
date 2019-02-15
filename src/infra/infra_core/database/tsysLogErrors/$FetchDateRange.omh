@@ -1,4 +1,4 @@
-If pFrom>dat('1 JAN 2010')&pTo>dat('1 JAN 2010')&pFrom<=pTo
+If pFrom>dat('1 JAN 2010')|pTo>dat('1 JAN 2010')     ;; pFrom <= pTo should be checked in the calling mathod
 	;  sufficient criteria
 Else If pCode<>''
 	;  sufficient criteria     ;; (not really)
@@ -13,7 +13,7 @@ End If
 If tlDatabases.DAM='WebService'
 	;  pass parameters to web service
 	;  $callService (pFieldReference, row(TableClassName, CurrentMethodName, p1,...,pn) )     ;; result will be returned in pFieldReference, row() contains the parameters for the call
-	Do ioWeb.$callFetch($cinst,irErrorSQL,row($cinst.$class().$name,$cmethod().$name,row(pFrom,pTo,pCode,pVhostNo),$cinst.$type,0,ilRESTextensions))
+	Do ioWeb.$callFetch($cinst,irErrorSQL,row($cinst.$class().$name,$cmethod().$name,row(pFrom,pTo,pCode,pcSearchText,pVhostNo),$cinst.$type,0,ilRESTextensions))
 	If ioWeb.irResponse.httpStatusCode=200
 		;  the result should be in this object     ;; however there may be a SQL error
 		If irErrorSQL.NativeErrorText<>''
@@ -49,13 +49,19 @@ Else If not(ibGoodConnectionToDb)
 	Quit method kFalse
 End If
 
-Calculate pTo as dadd(kDay,1,pTo)     ;; date col to datetime
+If not(isclear(pTo))
+	Calculate pTo as dadd(kDay,1,pTo)     ;; date col to datetime
+End If
 
-Begin statement
+Begin statement (Carriage return,Linefeed)
 Sta: {select [$cinst.$selectnames()]}
 Sta: {from   [$cinst.$servertablenames()]}
 If pFrom>dat('1 JAN 2010')
-	Sta: {[lcPredicate] SLE_CWHEN between @[pFrom] and @[pTo]}
+	Sta: {[lcPredicate] SLE_CWHEN >= @[pFrom]}
+	Calculate lcPredicate as ' and '
+End If
+If pTo>dat('1 JAN 2010')
+	Sta: {[lcPredicate]  SLE_CWHEN < @[pTo]}     ;; pTo has had 1 day added to it
 	Calculate lcPredicate as ' and '
 End If
 If pCode<>''

@@ -1,3 +1,3 @@
-Do ilDisplayRecords.$reportDistinctCode() Returns ilSearch2
-Do ilSearch2.$addbefore(1)
-Calculate ilSearch2.$line as 0
+Do toValues.$GetTimePeriods() Returns ilSearch2
+;  No blank line for date options - a date range must always be present.
+Do ilSearch2.$search($ref.code='TODAY',1,0,0,0)

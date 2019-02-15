@@ -2,6 +2,6 @@ Do llPrivsUsedInThisForm.$cols.$add('permission',kCharacter,kSimplechar,100)
 Do llPrivsUsedInThisForm.$cols.$add('colName',kCharacter,kSimplechar,100)
 
 ;  This privilege is actually used for access to this form.  Not for use within the form.
-Do llPrivsUsedInThisForm.$add('SLE_select','canSelect')
+Do llPrivsUsedInThisForm.$add('sle_select','canSelect')
 
 Do $cinst.$setPermissions(llPrivsUsedInThisForm)     ;; irUserRights

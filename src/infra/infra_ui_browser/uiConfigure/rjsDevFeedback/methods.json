@@ -1,8 +1,20 @@
 [
 	{
+		"name": "--- COPYRIGHT ---",
+		"ident": 13,
+		"order": 1,
+		"clientexec": false,
+		"pvardefs": [
+
+		],
+		"lvardefs": [
+
+		]
+	},
+	{
 		"name": "$construct",
 		"ident": 1,
-		"order": 1,
+		"order": 2,
 		"clientexec": false,
 		"pvardefs": [
 
@@ -34,7 +46,7 @@
 	{
 		"name": "$init",
 		"ident": 0,
-		"order": 2,
+		"order": 3,
 		"clientexec": true,
 		"pvardefs": [
 			{
@@ -354,18 +366,6 @@
 		"ident": 9,
 		"order": 14,
 		"clientexec": true,
-		"pvardefs": [
-
-		],
-		"lvardefs": [
-
-		]
-	},
-	{
-		"name": "--- COPYRIGHT ---",
-		"ident": 13,
-		"order": 15,
-		"clientexec": false,
 		"pvardefs": [
 
 		],

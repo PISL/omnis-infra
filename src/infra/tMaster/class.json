@@ -1,6 +1,6 @@
 {
 	"classtype": "kTable",
-	"internalversion": 68,
+	"internalversion": 70,
 	"designtaskname": "Startup_Task",
 	"cvardefs": [
 
@@ -399,7 +399,7 @@
 		"editordata": "",
 		"external": true,
 		"issupercomponent": false,
-		"moddate": "2018-12-04 08:19:25",
+		"moddate": "2019-02-15 11:06:01",
 		"showascheckedout": false,
 		"sqlclassname": "",
 		"userinfo": "",

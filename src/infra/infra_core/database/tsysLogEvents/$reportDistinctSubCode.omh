@@ -29,6 +29,7 @@ If pVhostNo>0
 	Sta: {and     SLV_VHOST_REF = @[pVhostNo]}
 End If
 End statement
+Sta: {order by SLV_SUBCODE}
 Do $cinst.$executesqlandfetch(llData) Returns lbOK
 If lbImmediateSession
 	Do $cinst.$SetSession(#NULL,#NULL,kTrue)

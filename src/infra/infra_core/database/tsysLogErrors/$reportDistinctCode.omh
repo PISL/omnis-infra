@@ -22,12 +22,13 @@ Else If not(ibGoodConnectionToDb)
 	Quit method kFalse
 End If
 
-Begin statement
+Begin statement (Carriage return,Linefeed)
 Sta: {select distinct SLE_CODE}
 Sta: {from   [$cinst.$servertablenames()]}
 If pVhostNo>0
 	Sta: {where     SLE_VHOST_REF = @[pVhostNo]}
 End If
+Sta: {order by SLE_CODE}
 End statement
 Do $cinst.$executesqlandfetch(llData) Returns lbOK
 If lbImmediateSession

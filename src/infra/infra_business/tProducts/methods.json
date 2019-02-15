@@ -343,6 +343,16 @@
 				"sublen": 0,
 				"param": 8,
 				"initval": "kFalse"
+			},
+			{
+				"name": "pbIncludeGlobal",
+				"order": 26,
+				"type": "kBoolean",
+				"subtype": 0,
+				"sublen": 0,
+				"param": 9,
+				"initval": "kFalse",
+				"desc": "kTrue = include global products, eg. generic emissions"
 			}
 		],
 		"lvardefs": [

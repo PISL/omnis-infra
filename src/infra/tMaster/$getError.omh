@@ -1,0 +1,5 @@
+If len(icValidationMessage)
+	Quit method icValidationMessage
+Else
+	Quit method irErrorSQL.NativeErrorText
+End If

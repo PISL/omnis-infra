@@ -1,0 +1,5 @@
+Do inherited Returns lbOK     ;; if not OK the super class will have sent an alert to the client
+
+If lbOK
+	Do $cinst.$search2ListClick()
+End If

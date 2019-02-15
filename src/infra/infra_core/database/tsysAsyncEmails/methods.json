@@ -100,8 +100,7 @@
 				"type": "kInteger",
 				"subtype": "k32bitint",
 				"sublen": 0,
-				"param": 2,
-				"initval": "trGroupOrg.GO_SEQ"
+				"param": 2
 			}
 		],
 		"lvardefs": [

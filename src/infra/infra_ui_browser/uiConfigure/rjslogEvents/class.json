@@ -1,6 +1,6 @@
 {
 	"classtype": "kRemoteForm",
-	"internalversion": 142,
+	"internalversion": 159,
 	"superclass": "rjsInfraRecords",
 	"designtaskname": "rtBusinessApp",
 	"nextident": 1047,
@@ -23,6 +23,20 @@
 			"sublen": 100
 		},
 		{
+			"name": "icDateFormat",
+			"order": 8,
+			"type": "kCharacter",
+			"subtype": "kSimplechar",
+			"sublen": 100000000
+		},
+		{
+			"name": "icDatePrompt",
+			"order": 9,
+			"type": "kCharacter",
+			"subtype": "kSimplechar",
+			"sublen": 100000000
+		},
+		{
 			"name": "ilChoiceOfGroupOrgs",
 			"order": 6,
 			"type": "kList",
@@ -39,6 +53,13 @@
 		{
 			"name": "ilGroupOrganisations",
 			"order": 5,
+			"type": "kList",
+			"subtype": "",
+			"sublen": 0
+		},
+		{
+			"name": "ilMenuCommands",
+			"order": 10,
 			"type": "kList",
 			"subtype": "",
 			"sublen": 0
@@ -72,7 +93,7 @@
 		"componenttype": "kCompStoreHidden",
 		"contextmenu": "",
 		"createdate": "2018-02-12 17:03:32",
-		"currentlayoutbreakpoint": 320,
+		"currentlayoutbreakpoint": 1280,
 		"defaultappearance": "kAppearanceiOS",
 		"desc": "",
 		"disabledefaultcontextmenu": false,
@@ -84,8 +105,8 @@
 		"issupercomponent": false,
 		"layoutbreakpoints": "320,375,480,667,768,1024,1280",
 		"layouttype": "kLayoutTypeResponsive",
-		"left": 54,
-		"moddate": "2018-12-04 08:19:25",
+		"left": 9,
+		"moddate": "2019-02-15 10:50:27",
 		"okkeyobject": "pbSave",
 		"serverlessclient": false,
 		"showascheckedout": false,
@@ -95,7 +116,7 @@
 			"type": 0,
 			"calc": "rjsInfraRecords subclass"
 		},
-		"top": 0,
+		"top": 2,
 		"userinfo": "",
 		"version": "",
 		"vertgrid": 8
@@ -129,8 +150,8 @@
 		"animatelayouttransitions"
 	],
 	"layout": {
-		"width": 1383,
-		"height": 863,
+		"width": 1297,
+		"height": 862,
 		"320": {
 			"height": 0
 		},

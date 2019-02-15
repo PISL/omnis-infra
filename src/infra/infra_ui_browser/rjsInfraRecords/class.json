@@ -1,6 +1,6 @@
 {
 	"classtype": "kRemoteForm",
-	"internalversion": 1874,
+	"internalversion": 1876,
 	"superclass": "rjsInfraSuper",
 	"designtaskname": "rtBusinessApp",
 	"nextident": 1020,
@@ -103,6 +103,14 @@
 			"sublen": 0
 		},
 		{
+			"name": "inMaxReturnCount",
+			"order": 15,
+			"type": "kInteger",
+			"subtype": "k32bitint",
+			"sublen": 0,
+			"desc": "maximum record count for ilDisplayRecords before a text search is required to filter the records"
+		},
+		{
 			"name": "inMinSearchString",
 			"order": 1,
 			"type": "kInteger",
@@ -125,7 +133,7 @@
 		"componenttype": "kCompStoreHidden",
 		"contextmenu": "",
 		"createdate": "2018-01-05 15:27:39",
-		"currentlayoutbreakpoint": 1024,
+		"currentlayoutbreakpoint": 1280,
 		"defaultappearance": "kAppearanceiOS",
 		"desc": "",
 		"disabledefaultcontextmenu": false,
@@ -138,8 +146,8 @@
 		"issupercomponent": false,
 		"layoutbreakpoints": "320,375,480,667,768,1024,1280",
 		"layouttype": "kLayoutTypeResponsive",
-		"left": 57,
-		"moddate": "2018-12-04 08:19:25",
+		"left": 4,
+		"moddate": "2019-01-23 08:34:55",
 		"okkeyobject": "pbSave",
 		"serverlessclient": false,
 		"showascheckedout": false,

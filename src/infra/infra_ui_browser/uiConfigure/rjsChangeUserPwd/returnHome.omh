@@ -1,5 +1,6 @@
 If inPrevFormID>0
 	Do irefContainer.$navMenuClick(,inPrevFormID)
 Else
-	Do irefContainer.$navMenuClick(icPrevForm)
+	
+	Do irefContainer.$navMenuClick(pick(isclear(icPrevForm),icPrevForm,"rjsDashboardApp"))
 End If

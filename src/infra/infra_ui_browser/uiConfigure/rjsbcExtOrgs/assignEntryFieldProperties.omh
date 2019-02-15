@@ -19,6 +19,10 @@ Calculate $cinst.$objs.EO_MEC_ID.$linestyle as lnlinestyle
 Calculate $cinst.$objs.EO_MEC_ID.$backcolor as lnUnique
 Calculate $cinst.$objs.EO_MEC_ID.$backalpha as pick(icMode='',255,0)
 
+Calculate $cinst.$objs.EO_COMPANY_NO.$backcolor as lnEnterable
+Calculate $cinst.$objs.EO_COMPANY_NO.$backalpha as pick(icMode='',255,0)
+Calculate $cinst.$objs.EO_VAT_NO.$backcolor as lnEnterable
+Calculate $cinst.$objs.EO_VAT_NO.$backalpha as pick(icMode='',255,0)
 Calculate $cinst.$objs.EO_CONTACT.$backcolor as lnEnterable
 Calculate $cinst.$objs.EO_CONTACT.$backalpha as pick(icMode='',255,0)
 Calculate $cinst.$objs.EO_PHONE.$backcolor as lnEnterable

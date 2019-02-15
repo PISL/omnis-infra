@@ -1,8 +1,20 @@
 [
 	{
+		"name": "--- COPYRIGHT ---",
+		"ident": 3,
+		"order": 1,
+		"clientexec": false,
+		"pvardefs": [
+
+		],
+		"lvardefs": [
+
+		]
+	},
+	{
 		"name": "$construct",
 		"ident": 1,
-		"order": 1,
+		"order": 2,
 		"clientexec": false,
 		"pvardefs": [
 			{
@@ -27,7 +39,7 @@
 	{
 		"name": "$destruct",
 		"ident": 2,
-		"order": 2,
+		"order": 3,
 		"clientexec": false,
 		"pvardefs": [
 
@@ -39,7 +51,7 @@
 	{
 		"name": "$initialise",
 		"ident": 0,
-		"order": 3,
+		"order": 4,
 		"clientexec": false,
 		"pvardefs": [
 			{
@@ -56,12 +68,27 @@
 		]
 	},
 	{
-		"name": "--- COPYRIGHT ---",
-		"ident": 3,
-		"order": 4,
+		"name": "$setVar",
+		"ident": 5,
+		"order": 5,
 		"clientexec": false,
 		"pvardefs": [
-
+			{
+				"name": "pVarName",
+				"order": 1,
+				"type": "kCharacter",
+				"subtype": "kSimplechar",
+				"sublen": 50,
+				"param": 1
+			},
+			{
+				"name": "pVarValue",
+				"order": 2,
+				"type": "kFieldreference",
+				"subtype": 0,
+				"sublen": 0,
+				"param": 2
+			}
 		],
 		"lvardefs": [
 

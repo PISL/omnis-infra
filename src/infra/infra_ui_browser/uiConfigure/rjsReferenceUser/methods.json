@@ -1,8 +1,20 @@
 [
 	{
+		"name": "--- COPYRIGHT ---",
+		"ident": 20,
+		"order": 1,
+		"clientexec": false,
+		"pvardefs": [
+
+		],
+		"lvardefs": [
+
+		]
+	},
+	{
 		"name": "$construct",
 		"ident": 0,
-		"order": 1,
+		"order": 2,
 		"clientexec": false,
 		"pvardefs": [
 
@@ -41,7 +53,7 @@
 	{
 		"name": "$init",
 		"ident": 18,
-		"order": 2,
+		"order": 3,
 		"clientexec": true,
 		"pvardefs": [
 
@@ -73,7 +85,7 @@
 	{
 		"name": "$destruct",
 		"ident": 1,
-		"order": 3,
+		"order": 4,
 		"clientexec": false,
 		"pvardefs": [
 
@@ -85,7 +97,7 @@
 	{
 		"name": "$behaviour",
 		"ident": 2,
-		"order": 4,
+		"order": 5,
 		"clientexec": false,
 		"pvardefs": [
 
@@ -117,7 +129,7 @@
 	{
 		"name": "fetchSearch1List",
 		"ident": 3,
-		"order": 5,
+		"order": 6,
 		"clientexec": false,
 		"pvardefs": [
 			{
@@ -137,7 +149,7 @@
 	{
 		"name": "fetchDisplayList",
 		"ident": 4,
-		"order": 6,
+		"order": 7,
 		"clientexec": false,
 		"pvardefs": [
 			{
@@ -156,7 +168,7 @@
 	{
 		"name": "assignEntryFieldProperties",
 		"ident": 5,
-		"order": 7,
+		"order": 8,
 		"clientexec": false,
 		"pvardefs": [
 
@@ -221,7 +233,7 @@
 	{
 		"name": "UserPermissions",
 		"ident": 6,
-		"order": 8,
+		"order": 9,
 		"clientexec": false,
 		"pvardefs": [
 
@@ -239,7 +251,7 @@
 	{
 		"name": "TranslateText",
 		"ident": 7,
-		"order": 9,
+		"order": 10,
 		"clientexec": false,
 		"pvardefs": [
 
@@ -299,7 +311,7 @@
 	{
 		"name": "$Search1ListClick",
 		"ident": 8,
-		"order": 10,
+		"order": 11,
 		"clientexec": false,
 		"pvardefs": [
 
@@ -311,7 +323,7 @@
 	{
 		"name": "$displayListClick",
 		"ident": 9,
-		"order": 11,
+		"order": 12,
 		"clientexec": false,
 		"pvardefs": [
 
@@ -329,7 +341,7 @@
 	{
 		"name": "$deleteRFU",
 		"ident": 10,
-		"order": 12,
+		"order": 13,
 		"clientexec": false,
 		"pvardefs": [
 
@@ -347,7 +359,7 @@
 	{
 		"name": "$stringSearch",
 		"ident": 12,
-		"order": 13,
+		"order": 14,
 		"clientexec": false,
 		"pvardefs": [
 
@@ -387,7 +399,7 @@
 	{
 		"name": "DisplayBinary",
 		"ident": 13,
-		"order": 14,
+		"order": 15,
 		"clientexec": false,
 		"pvardefs": [
 
@@ -405,7 +417,7 @@
 	{
 		"name": "displaySearchCount",
 		"ident": 14,
-		"order": 15,
+		"order": 16,
 		"clientexec": false,
 		"pvardefs": [
 
@@ -417,7 +429,7 @@
 	{
 		"name": "setTabColours",
 		"ident": 15,
-		"order": 16,
+		"order": 17,
 		"clientexec": false,
 		"pvardefs": [
 
@@ -449,7 +461,7 @@
 	{
 		"name": "$event",
 		"ident": 16,
-		"order": 17,
+		"order": 18,
 		"clientexec": true,
 		"pvardefs": [
 
@@ -461,7 +473,7 @@
 	{
 		"name": "handleShortcutKey",
 		"ident": 17,
-		"order": 18,
+		"order": 19,
 		"clientexec": true,
 		"pvardefs": [
 			{
@@ -486,7 +498,7 @@
 	{
 		"name": "handleMenuCall",
 		"ident": 19,
-		"order": 19,
+		"order": 20,
 		"clientexec": true,
 		"pvardefs": [
 			{
@@ -511,7 +523,7 @@
 	{
 		"name": "$insertCR",
 		"ident": 23,
-		"order": 20,
+		"order": 21,
 		"clientexec": false,
 		"pvardefs": [
 
@@ -523,7 +535,7 @@
 	{
 		"name": "$editCR",
 		"ident": 11,
-		"order": 21,
+		"order": 22,
 		"clientexec": false,
 		"pvardefs": [
 
@@ -535,7 +547,7 @@
 	{
 		"name": "$deleteCR",
 		"ident": 24,
-		"order": 22,
+		"order": 23,
 		"clientexec": false,
 		"pvardefs": [
 			{
@@ -554,18 +566,6 @@
 				"sublen": 100,
 				"param": 2
 			}
-		],
-		"lvardefs": [
-
-		]
-	},
-	{
-		"name": "--- COPYRIGHT ---",
-		"ident": 20,
-		"order": 23,
-		"clientexec": false,
-		"pvardefs": [
-
 		],
 		"lvardefs": [
 

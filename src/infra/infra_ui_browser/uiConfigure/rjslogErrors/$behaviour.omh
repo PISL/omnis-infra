@@ -2,7 +2,4 @@ If irefContainer
 	Do irefContainer.$behaviour(icMode)     ;; set the TabControl $enabled
 End If
 
-;  Calculate $cinst.$objs.TabControl_USERS.$enabled as icMode=''
-;  Calculate $cinst.$objs.ilDisplayRecords.$enabled as icMode=''
-
 Do inherited

@@ -1,8 +1,20 @@
 [
 	{
+		"name": "--- COPYRIGHT ---",
+		"ident": 7,
+		"order": 1,
+		"clientexec": false,
+		"pvardefs": [
+
+		],
+		"lvardefs": [
+
+		]
+	},
+	{
 		"name": "$construct",
 		"ident": 0,
-		"order": 1,
+		"order": 2,
 		"clientexec": false,
 		"pvardefs": [
 
@@ -14,7 +26,7 @@
 	{
 		"name": "setFormColours",
 		"ident": 2,
-		"order": 2,
+		"order": 3,
 		"clientexec": false,
 		"pvardefs": [
 
@@ -46,7 +58,7 @@
 	{
 		"name": "$destruct",
 		"ident": 1,
-		"order": 3,
+		"order": 4,
 		"clientexec": false,
 		"pvardefs": [
 
@@ -59,7 +71,7 @@
 	{
 		"name": "$init",
 		"ident": 3,
-		"order": 4,
+		"order": 5,
 		"clientexec": true,
 		"pvardefs": [
 			{
@@ -84,7 +96,7 @@
 	{
 		"name": "$behaviour",
 		"ident": 8,
-		"order": 5,
+		"order": 6,
 		"clientexec": false,
 		"pvardefs": [
 
@@ -109,7 +121,7 @@
 	{
 		"name": "assignEntryFieldProperties",
 		"ident": 4,
-		"order": 6,
+		"order": 7,
 		"clientexec": false,
 		"pvardefs": [
 
@@ -175,7 +187,7 @@
 	{
 		"name": "TranslateText",
 		"ident": 5,
-		"order": 7,
+		"order": 8,
 		"clientexec": false,
 		"pvardefs": [
 
@@ -207,7 +219,7 @@
 	{
 		"name": "returnHome",
 		"ident": 6,
-		"order": 8,
+		"order": 9,
 		"clientexec": false,
 		"pvardefs": [
 
@@ -232,18 +244,6 @@
 				"subtype": 0,
 				"sublen": 0
 			}
-		]
-	},
-	{
-		"name": "--- COPYRIGHT ---",
-		"ident": 7,
-		"order": 11,
-		"clientexec": false,
-		"pvardefs": [
-
-		],
-		"lvardefs": [
-
 		]
 	}
 ]

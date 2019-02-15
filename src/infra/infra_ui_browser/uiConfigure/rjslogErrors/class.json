@@ -1,6 +1,6 @@
 {
 	"classtype": "kRemoteForm",
-	"internalversion": 5,
+	"internalversion": 22,
 	"superclass": "rjsInfraRecords",
 	"designtaskname": "rtBusinessApp",
 	"nextident": 1047,
@@ -23,6 +23,20 @@
 			"sublen": 100
 		},
 		{
+			"name": "icDateFormat",
+			"order": 9,
+			"type": "kCharacter",
+			"subtype": "kSimplechar",
+			"sublen": 100000000
+		},
+		{
+			"name": "icDatePrompt",
+			"order": 10,
+			"type": "kCharacter",
+			"subtype": "kSimplechar",
+			"sublen": 100000000
+		},
+		{
 			"name": "ilChoiceOfGroupOrgs",
 			"order": 6,
 			"type": "kList",
@@ -39,6 +53,13 @@
 		{
 			"name": "ilGroupOrganisations",
 			"order": 5,
+			"type": "kList",
+			"subtype": "",
+			"sublen": 0
+		},
+		{
+			"name": "ilMenuCommands",
+			"order": 8,
 			"type": "kList",
 			"subtype": "",
 			"sublen": 0
@@ -85,7 +106,7 @@
 		"layoutbreakpoints": "320,375,480,667,768,1024,1280",
 		"layouttype": "kLayoutTypeResponsive",
 		"left": 54,
-		"moddate": "2018-12-04 08:19:25",
+		"moddate": "2019-02-15 10:52:01",
 		"okkeyobject": "pbSave",
 		"serverlessclient": false,
 		"showascheckedout": false,

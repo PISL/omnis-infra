@@ -1,3 +1,5 @@
 On evTabSelected
-	Do $ctask.$setCurrentForm('code',pick(pTabNumber,'','FORM_USERS','FORM_ROLES','FORM_PERMISSIONS'))
+	;  This code has been written as though the subForm under the tab has been instantiated.
+	;  The problem is that the first time through, when a form is instantiated for the first time... this code runs BEFORE the form has been instantiated.
 	Calculate inCurrentTab as pTabNumber
+	Do method $adjustToolsMenu     ;; No use first time around.  $init in subform takes up the slack.

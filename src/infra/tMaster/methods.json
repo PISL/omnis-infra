@@ -512,9 +512,20 @@
 		]
 	},
 	{
+		"name": "$getError",
+		"ident": 94,
+		"order": 14,
+		"pvardefs": [
+
+		],
+		"lvardefs": [
+
+		]
+	},
+	{
 		"name": "$fetch_pk",
 		"ident": 6,
-		"order": 14,
+		"order": 15,
 		"pvardefs": [
 			{
 				"name": "pKey",
@@ -616,7 +627,7 @@
 	{
 		"name": "$fetch_fk_orig",
 		"ident": 15,
-		"order": 15,
+		"order": 16,
 		"pvardefs": [
 			{
 				"name": "pKey",
@@ -721,7 +732,7 @@
 	{
 		"name": "$fetch_fk",
 		"ident": 68,
-		"order": 16,
+		"order": 17,
 		"pvardefs": [
 			{
 				"name": "pKey",
@@ -840,7 +851,7 @@
 	{
 		"name": "$fetch_ck",
 		"ident": 44,
-		"order": 17,
+		"order": 18,
 		"pvardefs": [
 			{
 				"name": "pKey",
@@ -966,7 +977,7 @@
 	{
 		"name": "$fetch_",
 		"ident": 7,
-		"order": 18,
+		"order": 19,
 		"pvardefs": [
 			{
 				"name": "pWhereClause",
@@ -1056,7 +1067,7 @@
 	{
 		"name": "$fetch_all",
 		"ident": 13,
-		"order": 19,
+		"order": 20,
 		"pvardefs": [
 
 		],
@@ -1073,7 +1084,7 @@
 	{
 		"name": "populateDisplayName",
 		"ident": 92,
-		"order": 20,
+		"order": 21,
 		"pvardefs": [
 
 		],
@@ -1090,7 +1101,7 @@
 	{
 		"name": "$insert_pk",
 		"ident": 16,
-		"order": 21,
+		"order": 22,
 		"pvardefs": [
 			{
 				"name": "P_COMMIT",
@@ -1150,7 +1161,7 @@
 	{
 		"name": "$insert",
 		"ident": 9,
-		"order": 22,
+		"order": 23,
 		"pvardefs": [
 			{
 				"name": "P_COMMIT",
@@ -1248,7 +1259,7 @@
 	{
 		"name": "$insert__",
 		"ident": 28,
-		"order": 23,
+		"order": 24,
 		"pvardefs": [
 			{
 				"name": "pDoNotReportTheseErrors",
@@ -1308,7 +1319,7 @@
 	{
 		"name": "$update",
 		"ident": 10,
-		"order": 24,
+		"order": 25,
 		"pvardefs": [
 			{
 				"name": "pDoNotReportTheseErrors",
@@ -1410,7 +1421,7 @@
 	{
 		"name": "$update__",
 		"ident": 45,
-		"order": 25,
+		"order": 26,
 		"pvardefs": [
 			{
 				"name": "pDoNotReportTheseErrors",
@@ -1477,7 +1488,7 @@
 	{
 		"name": "$WhichDatabase",
 		"ident": 11,
-		"order": 26,
+		"order": 27,
 		"pvardefs": [
 
 		],
@@ -1537,7 +1548,7 @@
 	{
 		"name": "InitDebugVars",
 		"ident": 12,
-		"order": 27,
+		"order": 28,
 		"pvardefs": [
 
 		],
@@ -1548,7 +1559,7 @@
 	{
 		"name": "$dowork_",
 		"ident": 14,
-		"order": 28,
+		"order": 29,
 		"pvardefs": [
 			{
 				"name": "pbReturnCount",
@@ -1618,7 +1629,7 @@
 	{
 		"name": "$InsertCols",
 		"ident": 8,
-		"order": 29,
+		"order": 30,
 		"pvardefs": [
 
 		],
@@ -1642,7 +1653,7 @@
 	{
 		"name": "$UpdateCols",
 		"ident": 17,
-		"order": 30,
+		"order": 31,
 		"pvardefs": [
 
 		],
@@ -1659,7 +1670,7 @@
 	{
 		"name": "$FetchReport",
 		"ident": 18,
-		"order": 31,
+		"order": 32,
 		"pvardefs": [
 			{
 				"name": "pFrom",
@@ -1757,7 +1768,7 @@
 	{
 		"name": "$WhereNamesDeconstructed",
 		"ident": 4,
-		"order": 32,
+		"order": 33,
 		"pvardefs": [
 			{
 				"name": "pbReturnString",
@@ -1817,7 +1828,7 @@
 	{
 		"name": "$delete",
 		"ident": 19,
-		"order": 33,
+		"order": 34,
 		"pvardefs": [
 
 		],
@@ -1891,7 +1902,7 @@
 	{
 		"name": "$delete_pk",
 		"ident": 61,
-		"order": 34,
+		"order": 35,
 		"pvardefs": [
 			{
 				"name": "pKey",
@@ -1986,7 +1997,7 @@
 	{
 		"name": "$delete_fk",
 		"ident": 24,
-		"order": 35,
+		"order": 36,
 		"pvardefs": [
 			{
 				"name": "pKey",
@@ -2098,7 +2109,7 @@
 	{
 		"name": "$delete_all",
 		"ident": 62,
-		"order": 36,
+		"order": 37,
 		"pvardefs": [
 
 		],
@@ -2186,7 +2197,7 @@
 	{
 		"name": "$delete_in",
 		"ident": 33,
-		"order": 37,
+		"order": 38,
 		"pvardefs": [
 			{
 				"name": "pInClause",
@@ -2253,7 +2264,7 @@
 	{
 		"name": "$delete__",
 		"ident": 60,
-		"order": 38,
+		"order": 39,
 		"pvardefs": [
 
 		],
@@ -2320,7 +2331,7 @@
 	{
 		"name": "$sql_error",
 		"ident": 46,
-		"order": 39,
+		"order": 40,
 		"pvardefs": [
 			{
 				"name": "pbErrorLogged",
@@ -2358,7 +2369,7 @@
 	{
 		"name": "checkDbConnectionState",
 		"ident": 80,
-		"order": 40,
+		"order": 41,
 		"pvardefs": [
 			{
 				"name": "prefSession",
@@ -2448,7 +2459,7 @@
 	{
 		"name": "$maxpkey",
 		"ident": 20,
-		"order": 41,
+		"order": 42,
 		"pvardefs": [
 
 		],
@@ -2508,7 +2519,7 @@
 	{
 		"name": "$primarykeyvalue",
 		"ident": 21,
-		"order": 42,
+		"order": 43,
 		"pvardefs": [
 
 		],
@@ -2519,7 +2530,7 @@
 	{
 		"name": "$primarykeyname",
 		"ident": 23,
-		"order": 43,
+		"order": 44,
 		"pvardefs": [
 
 		],
@@ -2530,7 +2541,7 @@
 	{
 		"name": "$countActivity",
 		"ident": 84,
-		"order": 44,
+		"order": 45,
 		"pvardefs": [
 			{
 				"name": "pFrom",
@@ -2679,7 +2690,7 @@
 	{
 		"name": "$ConnectedTo",
 		"ident": 25,
-		"order": 45,
+		"order": 46,
 		"pvardefs": [
 
 		],
@@ -2703,7 +2714,7 @@
 	{
 		"name": "$ReturnSessionRefs",
 		"ident": 26,
-		"order": 46,
+		"order": 47,
 		"pvardefs": [
 			{
 				"name": "pReturnSession",
@@ -2729,7 +2740,7 @@
 	{
 		"name": "$TrimInvisibles",
 		"ident": 27,
-		"order": 47,
+		"order": 48,
 		"pvardefs": [
 			{
 				"name": "pString",
@@ -2774,7 +2785,7 @@
 	{
 		"name": "$WhereClause",
 		"ident": 29,
-		"order": 48,
+		"order": 49,
 		"pvardefs": [
 
 		],
@@ -2805,7 +2816,7 @@
 	{
 		"name": "$ForeignCount",
 		"ident": 30,
-		"order": 49,
+		"order": 50,
 		"pvardefs": [
 			{
 				"name": "pForeignValue",
@@ -2872,7 +2883,7 @@
 	{
 		"name": "$ErrorInformation",
 		"ident": 31,
-		"order": 50,
+		"order": 51,
 		"pvardefs": [
 
 		],
@@ -2883,7 +2894,7 @@
 	{
 		"name": "$ImmediateSession",
 		"ident": 32,
-		"order": 51,
+		"order": 52,
 		"pvardefs": [
 			{
 				"name": "pSession",
@@ -2922,7 +2933,7 @@
 	{
 		"name": "$HasTablePrivilege",
 		"ident": 79,
-		"order": 52,
+		"order": 53,
 		"pvardefs": [
 			{
 				"name": "pcPriv",
@@ -2997,7 +3008,7 @@
 	{
 		"name": "$translateValidationErrors",
 		"ident": 83,
-		"order": 53,
+		"order": 54,
 		"pvardefs": [
 
 		],
@@ -3035,7 +3046,7 @@
 	{
 		"name": "$-- dynamic SQL methods--",
 		"ident": 35,
-		"order": 54,
+		"order": 55,
 		"pvardefs": [
 
 		],
@@ -3047,7 +3058,7 @@
 	{
 		"name": "$AddLinkedCols",
 		"ident": 36,
-		"order": 55,
+		"order": 56,
 		"pvardefs": [
 			{
 				"name": "pcColString",
@@ -3151,7 +3162,7 @@
 	{
 		"name": "$AddFunction",
 		"ident": 37,
-		"order": 56,
+		"order": 57,
 		"pvardefs": [
 			{
 				"name": "pFunctionText",
@@ -3175,7 +3186,7 @@
 	{
 		"name": "$ExcludeCols",
 		"ident": 38,
-		"order": 57,
+		"order": 58,
 		"pvardefs": [
 			{
 				"name": "pcColumns",
@@ -3234,7 +3245,7 @@
 	{
 		"name": "LinksToSQL",
 		"ident": 39,
-		"order": 58,
+		"order": 59,
 		"pvardefs": [
 			{
 				"name": "pcLinks",
@@ -3331,7 +3342,7 @@
 	{
 		"name": "addTableNames",
 		"ident": 48,
-		"order": 59,
+		"order": 60,
 		"pvardefs": [
 			{
 				"name": "pTable",
@@ -3406,7 +3417,7 @@
 	{
 		"name": "ForeignSql",
 		"ident": 40,
-		"order": 60,
+		"order": 61,
 		"pvardefs": [
 			{
 				"name": "pcWhere",
@@ -3437,7 +3448,7 @@
 	{
 		"name": "$Sql",
 		"ident": 41,
-		"order": 61,
+		"order": 62,
 		"pvardefs": [
 			{
 				"name": "pcId",
@@ -3505,7 +3516,7 @@
 	{
 		"name": "-- end dynamic SQL methods --",
 		"ident": 71,
-		"order": 62,
+		"order": 63,
 		"pvardefs": [
 
 		],
@@ -3517,7 +3528,7 @@
 	{
 		"name": "$Execute",
 		"ident": 42,
-		"order": 63,
+		"order": 64,
 		"pvardefs": [
 			{
 				"name": "pbCommit",
@@ -3572,7 +3583,7 @@
 	{
 		"name": "$CheckUnique",
 		"ident": 43,
-		"order": 64,
+		"order": 65,
 		"pvardefs": [
 			{
 				"name": "pcCheckCol",
@@ -3698,7 +3709,7 @@
 	{
 		"name": "$JScleanup",
 		"ident": 47,
-		"order": 65,
+		"order": 66,
 		"pvardefs": [
 
 		],
@@ -3709,7 +3720,7 @@
 	{
 		"name": "$ServerTime",
 		"ident": 51,
-		"order": 66,
+		"order": 67,
 		"pvardefs": [
 
 		],
@@ -3769,7 +3780,7 @@
 	{
 		"name": "$beginTransaction",
 		"ident": 52,
-		"order": 67,
+		"order": 68,
 		"pvardefs": [
 			{
 				"name": "pcName",
@@ -3817,7 +3828,7 @@
 	{
 		"name": "$commitTransaction",
 		"ident": 53,
-		"order": 68,
+		"order": 69,
 		"pvardefs": [
 			{
 				"name": "pcName",
@@ -3858,7 +3869,7 @@
 	{
 		"name": "$rollbackTransaction",
 		"ident": 54,
-		"order": 69,
+		"order": 70,
 		"pvardefs": [
 			{
 				"name": "pcName",
@@ -3912,7 +3923,7 @@
 	{
 		"name": "$maxModTimestamp",
 		"ident": 55,
-		"order": 70,
+		"order": 71,
 		"pvardefs": [
 
 		],
@@ -3965,7 +3976,7 @@
 	{
 		"name": "$getTablesWithChildren",
 		"ident": 56,
-		"order": 71,
+		"order": 72,
 		"pvardefs": [
 			{
 				"name": "pbReturnString",
@@ -3985,7 +3996,7 @@
 	{
 		"name": "$fetch_all_since",
 		"ident": 34,
-		"order": 72,
+		"order": 73,
 		"pvardefs": [
 			{
 				"name": "pdTimestamp",
@@ -4009,7 +4020,7 @@
 	{
 		"name": "$FetchDistinct",
 		"ident": 57,
-		"order": 73,
+		"order": 74,
 		"pvardefs": [
 			{
 				"name": "pcDistinctColumn",
@@ -4092,7 +4103,7 @@
 	{
 		"name": "$addDisplayName",
 		"ident": 58,
-		"order": 74,
+		"order": 75,
 		"pvardefs": [
 
 		],
@@ -4109,7 +4120,7 @@
 	{
 		"name": "$displayName",
 		"ident": 59,
-		"order": 75,
+		"order": 76,
 		"pvardefs": [
 
 		],
@@ -4120,7 +4131,7 @@
 	{
 		"name": "$defaults",
 		"ident": 63,
-		"order": 76,
+		"order": 77,
 		"pvardefs": [
 
 		],
@@ -4131,7 +4142,7 @@
 	{
 		"name": "$CountSiblings",
 		"ident": 64,
-		"order": 77,
+		"order": 78,
 		"pvardefs": [
 			{
 				"name": "pKey",
@@ -4242,7 +4253,7 @@
 	{
 		"name": "$checkChildren",
 		"ident": 65,
-		"order": 78,
+		"order": 79,
 		"pvardefs": [
 			{
 				"name": "pcExclude",
@@ -4388,7 +4399,7 @@
 	{
 		"name": "$addSchemaColumns",
 		"ident": 66,
-		"order": 79,
+		"order": 80,
 		"pvardefs": [
 			{
 				"name": "pcSchemaClass",
@@ -4434,7 +4445,7 @@
 	{
 		"name": "$AboutNow",
 		"ident": 67,
-		"order": 80,
+		"order": 81,
 		"pvardefs": [
 
 		],
@@ -4451,7 +4462,7 @@
 	{
 		"name": "$-- data comparison methods --",
 		"ident": 74,
-		"order": 81,
+		"order": 82,
 		"pvardefs": [
 
 		],
@@ -4463,7 +4474,7 @@
 	{
 		"name": "$setDiffCols",
 		"ident": 75,
-		"order": 82,
+		"order": 83,
 		"pvardefs": [
 			{
 				"name": "pcKeyCols",
@@ -4489,7 +4500,7 @@
 	{
 		"name": "$getRemoteTables",
 		"ident": 69,
-		"order": 83,
+		"order": 84,
 		"pvardefs": [
 
 		],
@@ -4563,7 +4574,7 @@
 	{
 		"name": "$setRemoteDB",
 		"ident": 70,
-		"order": 84,
+		"order": 85,
 		"pvardefs": [
 			{
 				"name": "pcRemoteServer",
@@ -4589,7 +4600,7 @@
 	{
 		"name": "$HasRemotePrivilege",
 		"ident": 78,
-		"order": 85,
+		"order": 86,
 		"pvardefs": [
 			{
 				"name": "pcPriv",
@@ -4664,7 +4675,7 @@
 	{
 		"name": "$fetchDifferences",
 		"ident": 72,
-		"order": 86,
+		"order": 87,
 		"pvardefs": [
 			{
 				"name": "pcType",
@@ -4746,7 +4757,7 @@
 	{
 		"name": "buildSQLnew",
 		"ident": 76,
-		"order": 87,
+		"order": 88,
 		"pvardefs": [
 			{
 				"name": "pList",
@@ -4777,7 +4788,7 @@
 	{
 		"name": "buildSQLdiffsOnly",
 		"ident": 77,
-		"order": 88,
+		"order": 89,
 		"pvardefs": [
 			{
 				"name": "pList",
@@ -4808,7 +4819,7 @@
 	{
 		"name": "buildSQLdiffsAll",
 		"ident": 73,
-		"order": 89,
+		"order": 90,
 		"pvardefs": [
 			{
 				"name": "pList",
@@ -4839,7 +4850,7 @@
 	{
 		"name": "$GeneratePrimaryKey",
 		"ident": 85,
-		"order": 90,
+		"order": 91,
 		"pvardefs": [
 			{
 				"name": "pDoNotReportTheseErrors",
@@ -4899,7 +4910,7 @@
 	{
 		"name": "$encryptstring",
 		"ident": 89,
-		"order": 91,
+		"order": 92,
 		"pvardefs": [
 			{
 				"name": "pStringIn",
@@ -4917,7 +4928,7 @@
 	{
 		"name": "$AddDisplayTime",
 		"ident": 90,
-		"order": 92,
+		"order": 93,
 		"pvardefs": [
 
 		],
@@ -4934,7 +4945,7 @@
 	{
 		"name": "$TrackChanges",
 		"ident": 91,
-		"order": 93,
+		"order": 94,
 		"pvardefs": [
 
 		],
@@ -4945,7 +4956,7 @@
 	{
 		"name": "--- COPYRIGHT ---",
 		"ident": 93,
-		"order": 94,
+		"order": 95,
 		"pvardefs": [
 
 		],

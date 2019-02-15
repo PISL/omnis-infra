@@ -1,0 +1,2 @@
+Calculate icDateFormat as $cell(clLabels,'objName','msg_daterangeformat','label')     ;; icUserInput
+Calculate ilSearch2.[ilSearch2.$linecount].desc as $cell(clLabels,'objName','OTHER','label')

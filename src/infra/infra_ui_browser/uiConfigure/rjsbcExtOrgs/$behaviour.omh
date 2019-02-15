@@ -27,6 +27,8 @@ Calculate $cinst.$objs.EOL_FINACCT_SUID.$visible as icSUPPorCUST='SUPPLIER'
 Calculate $cinst.$objs.label_EOL_FINACCT_SUID.$visible as icSUPPorCUST='SUPPLIER'
 
 Calculate $cinst.$objs.EO_NAME.$enabled as icMode="E"|icMode="I"
+Calculate $cinst.$objs.EO_COMPANY_NO.$enabled as icMode="E"|icMode="I"
+Calculate $cinst.$objs.EO_VAT_NO.$enabled as icMode="E"|icMode="I"
 Calculate $cinst.$objs.EO_MEC_ID.$enabled as icMode="E"|icMode="I"
 Calculate $cinst.$objs.EO_CONTACT.$enabled as icMode="E"|icMode="I"
 Calculate $cinst.$objs.EO_PHONE.$enabled as icMode="E"|icMode="I"

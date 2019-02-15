@@ -1,6 +1,6 @@
 {
 	"classtype": "kTable",
-	"internalversion": 14,
+	"internalversion": 15,
 	"superclass": "tMaster",
 	"designtaskname": "Startup_Task",
 	"cvardefs": [
@@ -32,7 +32,7 @@
 		"editordata": "",
 		"external": true,
 		"issupercomponent": false,
-		"moddate": "2018-12-04 08:19:25",
+		"moddate": "2019-02-14 11:08:57",
 		"showascheckedout": false,
 		"sqlclassname": "ssysLogEvents",
 		"userinfo": "",

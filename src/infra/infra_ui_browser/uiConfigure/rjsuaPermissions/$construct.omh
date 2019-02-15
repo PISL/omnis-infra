@@ -51,6 +51,7 @@ While $Loop(ilSearch1)
 		Calculate ilSearch1.DisplayName as ilSearch1.PER_LABEL
 	End If
 End While
+Do ilSearch1.$sort(upp($ref.DisplayName))
 ;  present DisplayName to user
 Do ilSearch1.$cols.$findname('DisplayName') Returns liColRef
 Calculate $cinst.$objs.ilSearch1.$listcolumn as liColRef.$ident
@@ -58,7 +59,7 @@ Calculate $cinst.$objs.ilSearch1.$listcolumn as liColRef.$ident
 Do ilSearch1.$addbefore(1,#NULL,#NULL,#NULL)
 Calculate ilSearch1.$line as 0
 
-Do $cinst.$superObjects($cell(clLabels,'objName','disp_permissions','label'),lnDisplayListCol,$cell(clLabels,'objName','sel_prefix','label'),'',,kTrue,$cell(clLabels,'objName','text_search_LBL','label'))
+Do $cinst.$superObjects($cell(clLabels,'objName','disp_permissions','label'),lnDisplayListCol,$cell(clLabels,'objName','sel_prefix','label'),'',,kTrue,$cell(clLabels,'objName','text_search','label'))
 
 Do $cinst.$container().$initToolsMenu() Returns ilMenuCommands
 Do $cinst.$container().$setupToolsMenu('uaPerm',ilMenuCommands)

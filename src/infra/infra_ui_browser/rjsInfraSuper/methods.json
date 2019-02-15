@@ -1,8 +1,20 @@
 [
 	{
+		"name": "--- COPYRIGHT ---",
+		"ident": 25,
+		"order": 1,
+		"clientexec": false,
+		"pvardefs": [
+
+		],
+		"lvardefs": [
+
+		]
+	},
+	{
 		"name": "$construct",
 		"ident": 0,
-		"order": 1,
+		"order": 2,
 		"clientexec": false,
 		"pvardefs": [
 
@@ -20,7 +32,7 @@
 	{
 		"name": "$event",
 		"ident": 8,
-		"order": 2,
+		"order": 3,
 		"clientexec": true,
 		"pvardefs": [
 
@@ -32,7 +44,7 @@
 	{
 		"name": "$setFormColours",
 		"ident": 1,
-		"order": 3,
+		"order": 4,
 		"clientexec": false,
 		"pvardefs": [
 
@@ -78,7 +90,7 @@
 	{
 		"name": "$destruct",
 		"ident": 2,
-		"order": 4,
+		"order": 5,
 		"clientexec": false,
 		"pvardefs": [
 
@@ -90,7 +102,7 @@
 	{
 		"name": "$setPermissions",
 		"ident": 3,
-		"order": 5,
+		"order": 6,
 		"clientexec": false,
 		"pvardefs": [
 			{
@@ -129,7 +141,7 @@
 	{
 		"name": "$displayRecord",
 		"ident": 4,
-		"order": 6,
+		"order": 7,
 		"clientexec": false,
 		"pvardefs": [
 
@@ -141,7 +153,7 @@
 	{
 		"name": "$behaviour",
 		"ident": 5,
-		"order": 7,
+		"order": 8,
 		"clientexec": false,
 		"pvardefs": [
 
@@ -153,7 +165,7 @@
 	{
 		"name": "$translateLabels",
 		"ident": 6,
-		"order": 8,
+		"order": 9,
 		"clientexec": false,
 		"pvardefs": [
 			{
@@ -257,7 +269,7 @@
 	{
 		"name": "$translateColumnNames",
 		"ident": 7,
-		"order": 9,
+		"order": 10,
 		"clientexec": false,
 		"pvardefs": [
 			{
@@ -296,7 +308,7 @@
 	{
 		"name": "$assignText",
 		"ident": 9,
-		"order": 10,
+		"order": 11,
 		"clientexec": false,
 		"pvardefs": [
 			{
@@ -335,7 +347,7 @@
 	{
 		"name": "$setControlEvent",
 		"ident": 10,
-		"order": 11,
+		"order": 12,
 		"clientexec": false,
 		"pvardefs": [
 			{
@@ -406,7 +418,7 @@
 	{
 		"name": "$saveData",
 		"ident": 11,
-		"order": 12,
+		"order": 13,
 		"clientexec": false,
 		"pvardefs": [
 			{
@@ -455,7 +467,7 @@
 	{
 		"name": "$clientNoYesMsg",
 		"ident": 12,
-		"order": 13,
+		"order": 14,
 		"clientexec": false,
 		"pvardefs": [
 			{
@@ -509,7 +521,7 @@
 	{
 		"name": "$clientOkCancelMsg",
 		"ident": 13,
-		"order": 14,
+		"order": 15,
 		"clientexec": false,
 		"pvardefs": [
 			{
@@ -564,7 +576,7 @@
 	{
 		"name": "$cancelDelete",
 		"ident": 14,
-		"order": 15,
+		"order": 16,
 		"clientexec": false,
 		"pvardefs": [
 
@@ -576,7 +588,7 @@
 	{
 		"name": "$behaviour_return",
 		"ident": 20,
-		"order": 16,
+		"order": 17,
 		"clientexec": true,
 		"pvardefs": [
 
@@ -589,7 +601,7 @@
 	{
 		"name": "$getBrowser",
 		"ident": 15,
-		"order": 17,
+		"order": 18,
 		"clientexec": false,
 		"pvardefs": [
 
@@ -621,7 +633,7 @@
 	{
 		"name": "$enterData",
 		"ident": 16,
-		"order": 18,
+		"order": 19,
 		"clientexec": false,
 		"pvardefs": [
 			{
@@ -640,7 +652,7 @@
 	{
 		"name": "$enterData_return",
 		"ident": 17,
-		"order": 19,
+		"order": 20,
 		"clientexec": true,
 		"pvardefs": [
 
@@ -653,7 +665,7 @@
 	{
 		"name": "$insertCR",
 		"ident": 18,
-		"order": 20,
+		"order": 21,
 		"clientexec": false,
 		"pvardefs": [
 
@@ -665,7 +677,7 @@
 	{
 		"name": "$editCR",
 		"ident": 19,
-		"order": 21,
+		"order": 22,
 		"clientexec": false,
 		"pvardefs": [
 
@@ -690,7 +702,7 @@
 	{
 		"name": "$deleteCR",
 		"ident": 21,
-		"order": 22,
+		"order": 23,
 		"clientexec": false,
 		"pvardefs": [
 			{
@@ -728,9 +740,21 @@
 		]
 	},
 	{
+		"name": "$deleteCancelled",
+		"ident": 26,
+		"order": 24,
+		"clientexec": false,
+		"pvardefs": [
+
+		],
+		"lvardefs": [
+
+		]
+	},
+	{
 		"name": "$warnDelete",
 		"ident": 22,
-		"order": 23,
+		"order": 25,
 		"clientexec": false,
 		"pvardefs": [
 			{
@@ -757,7 +781,7 @@
 	{
 		"name": "$containerMenus",
 		"ident": 23,
-		"order": 24,
+		"order": 26,
 		"clientexec": false,
 		"pvardefs": [
 
@@ -769,7 +793,7 @@
 	{
 		"name": "$invalidCharCheck",
 		"ident": 24,
-		"order": 25,
+		"order": 27,
 		"clientexec": false,
 		"pvardefs": [
 			{
@@ -804,18 +828,6 @@
 				"subtype": "kSimplechar",
 				"sublen": 100
 			}
-		]
-	},
-	{
-		"name": "--- COPYRIGHT ---",
-		"ident": 25,
-		"order": 26,
-		"clientexec": false,
-		"pvardefs": [
-
-		],
-		"lvardefs": [
-
 		]
 	}
 ]

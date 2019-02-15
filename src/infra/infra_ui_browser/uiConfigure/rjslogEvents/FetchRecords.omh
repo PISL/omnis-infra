@@ -1,33 +1,24 @@
 Do ilDisplayRecords.$clear()
 Do irCurrentRecord.$clear()
-Calculate irOriginalRecord as irCurrentRecord
+Calculate $cinst.icDisplayMessage as ""
 
-Do toValues.$SetPeriodDates($cinst.ilSearch1,$cinst.idFrom,$cinst.idTo)
-Do ilDisplayRecords.$FetchDateRange(idFrom,idTo,ilSearch2.SLV_CODE,icSearch)
+Do toValues.$SetPeriodDates($cinst.ilSearch2,$cinst.idFrom,$cinst.idTo)
+Do ilDisplayRecords.$FetchDateRange(idFrom,idTo,ilSearch1.SLV_CODE,icSearch) Returns lbOK
 
-;  If len($cinst.icSearch)>0
-;  Do ilDisplayRecords.$fetchOnString($cinst.icSearch)
-;  Else If $cinst.ilSearch1.code<>''
-;  Do toValues.$SetPeriodDates($cinst.ilSearch1,$cinst.idFrom,$cinst.idTo)
-;  Do ilDisplayRecords.$FetchDateRange($cinst.idFrom,$cinst.idTo,ilSearch2.SLV_CODE,$cinst.icSearch)
-;  Else If $cinst.ilSearch2.SLV_CODE<>''
-;  Do ilDisplayRecords.$fetchDate($cinst.ilSearch2.SLV_CODE,$cinst.icSearch)
-;  End If
-If ilDisplayRecords.irErrorSQL.NativeErrorText<>''
-	Calculate icDisplayMessage as ilDisplayRecords.irErrorSQL.NativeErrorText
-End If
-
-If ilDisplayRecords.$linecount=0
-	Calculate icDisplayMessage as 'No records found.'
+If not(lbOK)
+	Calculate icDisplayMessage as ilDisplayRecords.$getError()
+	
 Else
-	While $Loop(ilDisplayRecords)
-		Do ilDisplayRecords.$DisplayName()
-	End While
+	If ilDisplayRecords.$linecount=0
+		Calculate icDisplayMessage as 'No records found.'
+	Else
+		While $Loop(ilDisplayRecords)
+			Do ilDisplayRecords.$DisplayName()
+		End While
+		
+		Do ilDisplayRecords.$sort($ref.SLV_CWHEN,0)
+		Calculate ilDisplayRecords.$line as 1
+		Calculate irCurrentRecord as ilDisplayRecords
+	End If
 End If
-
-Do ilDisplayRecords.$sort($ref.SLV_CWHEN,0)
-Calculate ilDisplayRecords.$line as 1
-Calculate irCurrentRecord as ilDisplayRecords
-Calculate irOriginalRecord as irCurrentRecord
-
-Calculate $cinst.inSearchCount as ilDisplayRecords.$linecount
+Calculate inSearchCount as ilDisplayRecords.$linecount

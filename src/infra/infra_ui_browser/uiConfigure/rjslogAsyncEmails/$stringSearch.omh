@@ -3,4 +3,3 @@ If len($cinst.icSearch)>=2
 End If
 
 Do $cinst.$behaviour()
-Do $cinst.$redraw()

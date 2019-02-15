@@ -76,7 +76,11 @@ End If
 
 Sta: {left outer join [lrReferenceLocal.$servertablenames] on ( PID_TAX_BAND = RFL_VALUE and rfl_class='VAT_RATE' )}
 ;  include global products
-Sta: {where (PRD_GO_REF = @[$ctask.trGroupOrg.GO_SEQ] or PRD_GO_REF = -1)}
+Sta: {where (PRD_GO_REF = @[$ctask.trGroupOrg.GO_SEQ]}
+If pbIncludeGlobal
+	Sta: {or PRD_GO_REF = -1}
+End If
+Sta: {)}     ;; closing parenthesis
 If tcCurrentLibrary<>'CONFERENCE'
 	Sta: {and PRD_META = @[inMeta]}
 End If

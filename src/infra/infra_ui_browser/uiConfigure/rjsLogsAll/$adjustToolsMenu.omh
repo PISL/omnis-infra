@@ -1,0 +1,9 @@
+If inCurrentTab=1
+	Do $cinst.$container().$adjustToolsMenu('logEvents')     ;; irefContainer does not work with execute on client
+	
+Else If inCurrentTab=2
+	Do $cinst.$container().$adjustToolsMenu('logErrors')     ;; irefContainer does not work with execute on client
+	
+Else If inCurrentTab=3
+	Do $cinst.$container().$adjustToolsMenu('asEmails')     ;; irefContainer does not work with execute on client
+End If

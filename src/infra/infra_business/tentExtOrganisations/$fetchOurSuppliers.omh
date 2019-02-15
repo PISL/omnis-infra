@@ -36,7 +36,8 @@ Sta: {where EOL_EO_REF = EO_SEQ}
 ;  join link table to groupOrganisation
 Sta: {and    EOL_GO_REF = GO_SEQ}
 ;  include global company suppliers
-Sta: {and    (GO_SEQ = @[$ctask.trGroupOrg.GO_SEQ] or GO_SEQ = -1)}
+;  Sta: {and    (GO_SEQ = @[$ctask.trGroupOrg.GO_SEQ] or GO_SEQ = -1)}     ;; 2019-01-29 remove DEFRA from suppliers list for ectrial  ###  we need to revisit this
+Sta: {and    (GO_SEQ = @[$ctask.trGroupOrg.GO_SEQ] )}
 ;  supplier code exists
 Sta: {and    EOL_FINACCT_SUID is not null}
 If len(pcMEC_ID)>0

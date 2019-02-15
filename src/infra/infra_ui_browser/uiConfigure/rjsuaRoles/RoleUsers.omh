@@ -1,6 +1,6 @@
 ;  USER ROLES - what they have
 Do ilRoleUsers.$clear()
-Do ilRoleUsers.$fetchRoleUsers(irCurrentRecord.ROL_SEQ)
+Do ilRoleUsers.$fetchOurRoleUsers(irCurrentRecord.ROL_SEQ)
 
 ;  then what they haven't got (available roles)
 Calculate ilChoiceOfUsers as ilUsers

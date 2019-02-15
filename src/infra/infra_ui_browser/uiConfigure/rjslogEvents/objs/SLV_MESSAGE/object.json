@@ -49,7 +49,7 @@
 		"systemkeys": false,
 		"textcolor": "kColorDefault",
 		"tooltip": "Users mobile phone",
-		"uppercase": true,
+		"uppercase": false,
 		"userinfo": "",
 		"vertscroll": false,
 		"visible": true,

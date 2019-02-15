@@ -1,8 +1,19 @@
 [
 	{
+		"name": "--- COPYRIGHT ---",
+		"ident": 5,
+		"order": 1,
+		"pvardefs": [
+
+		],
+		"lvardefs": [
+
+		]
+	},
+	{
 		"name": "$construct",
 		"ident": 0,
-		"order": 1,
+		"order": 2,
 		"pvardefs": [
 
 		],
@@ -13,7 +24,7 @@
 	{
 		"name": "$validation",
 		"ident": 4,
-		"order": 5,
+		"order": 3,
 		"pvardefs": [
 
 		],
@@ -30,7 +41,7 @@
 	{
 		"name": "$Links",
 		"ident": 2,
-		"order": 9,
+		"order": 4,
 		"pvardefs": [
 
 		],
@@ -47,7 +58,7 @@
 	{
 		"name": "$ForeignKeys",
 		"ident": 1,
-		"order": 10,
+		"order": 5,
 		"pvardefs": [
 
 		],
@@ -64,7 +75,7 @@
 	{
 		"name": "$insert",
 		"ident": 3,
-		"order": 11,
+		"order": 6,
 		"pvardefs": [
 
 		],
@@ -88,7 +99,7 @@
 	{
 		"name": "$fetchWithSynonyms",
 		"ident": 6,
-		"order": 13,
+		"order": 7,
 		"pvardefs": [
 
 		],
@@ -138,14 +149,34 @@
 		]
 	},
 	{
-		"name": "--- COPYRIGHT ---",
-		"ident": 5,
-		"order": 14,
+		"name": "$update",
+		"ident": 7,
+		"order": 8,
 		"pvardefs": [
-
+			{
+				"name": "pDoNotReportTheseErrors",
+				"order": 1,
+				"type": "kCharacter",
+				"subtype": "kSimplechar",
+				"sublen": 255,
+				"param": 1
+			}
 		],
 		"lvardefs": [
-
+			{
+				"name": "lbOK",
+				"order": 3,
+				"type": "kBoolean",
+				"subtype": 0,
+				"sublen": 0
+			},
+			{
+				"name": "lrSynonym",
+				"order": 2,
+				"type": "kRow",
+				"subtype": "",
+				"sublen": 0
+			}
 		]
 	}
 ]

@@ -8,6 +8,7 @@ Calculate $cinst.$objs.ilDisplayRecords.$enabled as icMode=''
 ;  If inBreakpoint<667
 Calculate $cinst.$objs.icFormHeading.$visible as icDisplayMessage=''
 Calculate $cinst.$objs.icFormIntro.$visible as icDisplayMessage=''
+Calculate $cinst.$objs.icDisplayMessage.$visible as icDisplayMessage<>""
 ;  Else
 ;  Calculate $cinst.$objs.icFormHeading.$visible as kTrue
 ;  Calculate $cinst.$objs.icFormIntro.$visible as kTrue

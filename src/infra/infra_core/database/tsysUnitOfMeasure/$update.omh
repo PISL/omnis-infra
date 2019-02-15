@@ -1,0 +1,12 @@
+;  overloaded to include the update of the associated sysUnitSynonyms record
+
+Do inherited Returns lbOK
+
+If lbOK
+	Do $DefineList(lrSynonym,'infra.tsysUnitSynonyms')
+	Do lrSynonym.$fetch_fk($cinst.UOM_CODE,"UOS_CODE") Returns lbOK
+	Calculate lrSynonym.UOS_NAME_EN as $cinst.UOM_DESC_EN
+	Do lrSynonym.$update() Returns lbOK
+End If
+
+Quit method lbOK

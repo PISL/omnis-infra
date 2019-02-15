@@ -2,8 +2,17 @@
 ;  prepare list of super class objects
 Do toValues.$formLabels() Returns llSuperLabels
 
-Do llSuperLabels.$add('ASYNCEM_Heading')
-Do llSuperLabels.$add('ASYNCEM_Intro')
+Do llSuperLabels.$add('SLV_Heading')
+Do llSuperLabels.$add('SLV_Intro')
+Do llSuperLabels.$add('sel_eventcode')
+Do llSuperLabels.$add('sel_daterange')
+Do llSuperLabels.$add('msg_enterdates')
+Do llSuperLabels.$add('msg_daterangeformat')
+Do llSuperLabels.$add('msg_invaliddate')
+Do llSuperLabels.$add('msg_invaliddaterange')
+Do llSuperLabels.$add('TP_ALL')
+Do llSuperLabels.$add('OTHER')
+Do llSuperLabels.$add('disp_events')
 
 Do $cinst.$objs.$makelist($ref.$name,$ref) Returns llLabels
 Do llLabels.$sendall($sendallref.C1.$assign(mid($sendallref.C1,1,len($sendallref.C1)-2)),isnumber(right($sendallref.C1,1))&left(right($sendallref.C1,2),1)='_')     ;; remove the "_digit" from the end of duplicated object names
@@ -21,3 +30,7 @@ Calculate clLabels as llLabels
 ;  End If
 
 Do $cinst.$assignText(llEntryFields)     ;; get the super class to set the objects' properties
+
+;  set the strings for the JS prompt
+Calculate icDatePrompt as $cell(clLabels,'objName','msg_enterdates','label')
+Calculate icDateFormat as $cell(clLabels,'objName','msg_daterangeformat','label')

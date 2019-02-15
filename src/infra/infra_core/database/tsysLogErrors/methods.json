@@ -88,21 +88,21 @@
 				"param": 3
 			},
 			{
-				"name": "pVhostNo",
-				"order": 8,
-				"type": "kInteger",
-				"subtype": "k32bitint",
-				"sublen": 0,
-				"param": 4
-			},
-			{
 				"name": "pcSearchText",
 				"order": 10,
 				"type": "kCharacter",
 				"subtype": "kSimplechar",
 				"sublen": 100,
-				"param": 5,
+				"param": 4,
 				"initval": "''"
+			},
+			{
+				"name": "pVhostNo",
+				"order": 8,
+				"type": "kInteger",
+				"subtype": "k32bitint",
+				"sublen": 0,
+				"param": 5
 			}
 		],
 		"lvardefs": [
@@ -197,8 +197,7 @@
 				"type": "kInteger",
 				"subtype": "k32bitint",
 				"sublen": 0,
-				"param": 1,
-				"initval": "trGroupOrg.GO_SEQ"
+				"param": 1
 			}
 		],
 		"lvardefs": [
@@ -251,8 +250,7 @@
 				"type": "kInteger",
 				"subtype": "k32bitint",
 				"sublen": 0,
-				"param": 1,
-				"initval": "trGroupOrg.GO_SEQ"
+				"param": 1
 			}
 		],
 		"lvardefs": [

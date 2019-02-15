@@ -4,6 +4,7 @@ Do toValues.$formLabels() Returns llSuperLabels
 
 Do llSuperLabels.$add('ASYNCEM_Heading')
 Do llSuperLabels.$add('ASYNCEM_Intro')
+Do llSuperLabels.$add('disp_emails')
 
 Do $cinst.$objs.$makelist($ref.$name,$ref) Returns llLabels
 Do llLabels.$sendall($sendallref.C1.$assign(mid($sendallref.C1,1,len($sendallref.C1)-2)),isnumber(right($sendallref.C1,1))&left(right($sendallref.C1,2),1)='_')     ;; remove the "_digit" from the end of duplicated object names

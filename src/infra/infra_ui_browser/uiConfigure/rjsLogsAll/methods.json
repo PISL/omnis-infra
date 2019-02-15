@@ -1,8 +1,20 @@
 [
 	{
+		"name": "--- COPYRIGHT ---",
+		"ident": 7,
+		"order": 1,
+		"clientexec": false,
+		"pvardefs": [
+
+		],
+		"lvardefs": [
+
+		]
+	},
+	{
 		"name": "$construct",
 		"ident": 0,
-		"order": 1,
+		"order": 2,
 		"clientexec": false,
 		"pvardefs": [
 
@@ -30,22 +42,8 @@
 				"sublen": 0
 			},
 			{
-				"name": "lbFound",
-				"order": 2,
-				"type": "kBoolean",
-				"subtype": 0,
-				"sublen": 0
-			},
-			{
 				"name": "llAllowed",
 				"order": 6,
-				"type": "kList",
-				"subtype": "",
-				"sublen": 0
-			},
-			{
-				"name": "llPrivsUsedInThisForm",
-				"order": 1,
 				"type": "kList",
 				"subtype": "",
 				"sublen": 0
@@ -55,7 +53,7 @@
 	{
 		"name": "$behaviour",
 		"ident": 2,
-		"order": 2,
+		"order": 3,
 		"clientexec": true,
 		"pvardefs": [
 			{
@@ -72,9 +70,21 @@
 		]
 	},
 	{
+		"name": "$event",
+		"ident": 8,
+		"order": 4,
+		"clientexec": true,
+		"pvardefs": [
+
+		],
+		"lvardefs": [
+
+		]
+	},
+	{
 		"name": "TranslateText",
 		"ident": 3,
-		"order": 3,
+		"order": 5,
 		"clientexec": false,
 		"pvardefs": [
 
@@ -106,7 +116,7 @@
 	{
 		"name": "setTabColours",
 		"ident": 1,
-		"order": 4,
+		"order": 6,
 		"clientexec": false,
 		"pvardefs": [
 
@@ -136,35 +146,87 @@
 		]
 	},
 	{
-		"name": "$keyPress",
+		"name": "$initToolsMenu",
 		"ident": 4,
-		"order": 5,
-		"clientexec": true,
+		"order": 7,
+		"clientexec": false,
 		"pvardefs": [
 			{
-				"name": "pKey",
+				"name": "pcDefaults",
 				"order": 1,
 				"type": "kCharacter",
 				"subtype": "kSimplechar",
-				"sublen": 1,
-				"param": 1
+				"sublen": 10,
+				"param": 1,
+				"initval": "'IED'"
 			}
 		],
 		"lvardefs": [
 			{
-				"name": "lrefSubinst",
+				"name": "llMenuItems",
 				"order": 2,
-				"type": "kItemref",
+				"type": "kList",
 				"subtype": "",
 				"sublen": 0
 			}
 		]
 	},
 	{
-		"name": "--- COPYRIGHT ---",
+		"name": "$setupToolsMenu",
 		"ident": 5,
-		"order": 6,
+		"order": 8,
 		"clientexec": false,
+		"pvardefs": [
+			{
+				"name": "pcClass",
+				"order": 3,
+				"type": "kCharacter",
+				"subtype": "kSimplechar",
+				"sublen": 100,
+				"param": 1
+			},
+			{
+				"name": "plActions",
+				"order": 8,
+				"type": "kList",
+				"subtype": "",
+				"sublen": 0,
+				"param": 2
+			},
+			{
+				"name": "plNotifications",
+				"order": 9,
+				"type": "kList",
+				"subtype": "",
+				"sublen": 0,
+				"param": 3
+			},
+			{
+				"name": "plSearch",
+				"order": 10,
+				"type": "kList",
+				"subtype": "",
+				"sublen": 0,
+				"param": 4
+			},
+			{
+				"name": "plHelp",
+				"order": 11,
+				"type": "kList",
+				"subtype": "",
+				"sublen": 0,
+				"param": 5
+			}
+		],
+		"lvardefs": [
+
+		]
+	},
+	{
+		"name": "$adjustToolsMenu",
+		"ident": 6,
+		"order": 9,
+		"clientexec": true,
 		"pvardefs": [
 
 		],

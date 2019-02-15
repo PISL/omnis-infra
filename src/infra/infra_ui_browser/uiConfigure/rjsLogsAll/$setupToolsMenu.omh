@@ -1,0 +1,2 @@
+;  Its rjsMenuApp that deals with commands in menus.
+Do $cinst.$container().$setupToolsMenu(pcClass,plActions,plNotifications,plSearch,plHelp)     ;; irefContainer does not work with execute on client
